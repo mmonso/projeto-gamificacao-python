@@ -1,0 +1,254 @@
+id: u2-l4
+unidade: u2
+ordem: 4
+versao: 1
+titulo: Convertendo valores
+objetivo: Converter valores com str, int e float para juntar textos e fazer contas.
+conceitos: [conversao, erro-tipo]
+
+exercicios:
+  - id: u2-l4-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que números entre aspas são juntados, não somados.
+    conceitos: [conversao, concatenacao]
+    dificuldade: 1
+    enunciado: Os dois valores estão entre aspas. O que este programa exibe?
+    codigo: |-
+      print("5" + "5")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          10
+        feedback: Com aspas, são textos; o + junta, não soma.
+      - id: b
+        texto: |-
+          55
+      - id: c
+        texto: |-
+          5 5
+        feedback: O + não acrescenta espaço.
+    resposta: b
+    dicas:
+      - Com aspas, os valores são textos.
+    explicacao: '"5" e "5" são textos, então o + os junta e o resultado é 55.'
+
+  - id: u2-l4-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Usar int para transformar texto em número antes de somar.
+    conceitos: [conversao]
+    dificuldade: 2
+    enunciado: O int transforma um texto com algarismos em número inteiro. O que este programa exibe?
+    codigo: |-
+      print(int("5") + 5)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          55
+        feedback: Depois do int, "5" vira o número 5, e o + soma.
+      - id: b
+        texto: |-
+          10
+      - id: c
+        erro: true
+        feedback: Depois da conversão, os dois lados são números, e a soma funciona.
+    resposta: b
+    dicas:
+      - Depois do int, os dois valores são números.
+    explicacao: int("5") converte o texto no número 5. Somado com 5, o resultado é 10.
+
+  - id: u2-l4-e03
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Usar str para juntar um número a um texto.
+    conceitos: [conversao, erro-tipo]
+    dificuldade: 2
+    enunciado: Complete para juntar o texto e a pontuação com +.
+    codigo: |-
+      pontos = 50
+      print("Pontos: " + ___1___(pontos))
+    saida_esperada: |-
+      Pontos: 50
+    lacunas:
+      - id: "1"
+        opcoes: ["str", "int", "float"]
+        resposta: "str"
+    dicas:
+      - Para juntar com +, os dois lados precisam ser texto.
+    explicacao: str(pontos) transforma 50 no texto "50", que pode ser juntado com +. int e float manteriam um número e gerariam TypeError.
+
+  - id: u2-l4-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Converter um texto decimal com float antes de calcular.
+    conceitos: [conversao, tipos-basicos]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(float("2.5") * 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5.0
+      - id: b
+        texto: |-
+          2.52.5
+        feedback: Depois do float, "2.5" é um número, e o * multiplica.
+      - id: c
+        texto: |-
+          5
+        feedback: Uma conta com float resulta em float, que aparece com .0.
+    resposta: a
+    dicas:
+      - float("2.5") resulta no número 2.5.
+    explicacao: float("2.5") converte o texto em número. Multiplicado por 2, resulta em 5.0.
+
+  - id: u2-l4-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma soma com um número guardado como texto.
+    conceitos: [conversao, erro-tipo]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      idade = "30"
+      proximo = idade + 1
+      print("Ano que vem:", proximo)
+    erro: TypeError
+    resposta: 2
+    correcao: proximo = int(idade) + 1
+    saida_esperada: |-
+      Ano que vem: 31
+    dicas:
+      - Qual é o tipo de idade?
+      - Um texto precisa ser convertido antes de entrar em uma conta.
+    explicacao: idade guarda o texto "30". Na linha 2, somar texto com número gera TypeError; int(idade) converte antes da soma.
+
+  - id: u2-l4-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que int descarta a parte decimal sem arredondar.
+    conceitos: [conversao]
+    dificuldade: 3
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(int(3.9))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          4
+        feedback: O int não arredonda; ele descarta a parte decimal.
+      - id: b
+        texto: |-
+          3.9
+        feedback: O int transforma o valor em inteiro.
+      - id: c
+        texto: |-
+          3
+    resposta: c
+    dicas:
+      - Pense no // da lição anterior.
+    explicacao: Ao converter 3.9 para inteiro, o int descarta a parte decimal. O resultado é 3, não 4.
+
+  - id: u2-l4-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Converter um texto em número, calcular e converter de volta para exibir.
+    conceitos: [conversao, concatenacao]
+    dificuldade: 3
+    enunciado: A quantidade foi guardada como texto. Monte o programa que exibe esta saída.
+    codigo_antes: |-
+      quantidade = "3"
+    saida_esperada: |-
+      Total: 15
+    blocos:
+      - id: a
+        codigo: total = int(quantidade) * 5
+      - id: b
+        codigo: 'print("Total: " + str(total))'
+      - id: c
+        codigo: 'print("Total: " + quantidade * 5)'
+      - id: d
+        codigo: 'print("Total: " + total)'
+    resposta:
+      - [a, b]
+    dicas:
+      - Para a conta, a quantidade precisa virar número.
+      - Para juntar com +, o total precisa virar texto.
+    explicacao: int(quantidade) permite a multiplicação, e str(total) permite juntar o resultado ao texto. Sem o int, o texto "3" seria repetido; sem o str, o + geraria TypeError.
+
+revisao:
+  - id: u2-l4-r01
+    versao: 1
+    variacao_de: u2-l4-e01
+    tipo: escolher_resultado
+    objetivo: Prever a junção de dois números escritos como texto.
+    conceitos: [conversao, concatenacao]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("2" + "3")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5
+        feedback: Com aspas, os valores são textos e são juntados.
+      - id: b
+        texto: |-
+          23
+      - id: c
+        texto: |-
+          2 + 3
+        feedback: O + não aparece na saída.
+    resposta: b
+    dicas:
+      - Repare nas aspas.
+    explicacao: '"2" e "3" são textos, então o + os junta: 23.'
+
+  - id: u2-l4-r02
+    versao: 1
+    variacao_de: u2-l4-e05
+    tipo: localizar_erro
+    objetivo: Encontrar uma multiplicação feita com um texto.
+    conceitos: [conversao, repeticao-texto]
+    dificuldade: 3
+    enunciado: O programa deveria exibir o dobro do preço, mas mostra outra coisa. Selecione a linha com o problema.
+    codigo: |-
+      preco = "10"
+      dobro = preco * 2
+      print("Dobro:", dobro)
+    erro: saida_incorreta
+    resposta: 2
+    correcao: dobro = int(preco) * 2
+    saida_esperada: |-
+      Dobro: 20
+    dicas:
+      - O que acontece quando um texto é multiplicado por um número?
+    explicacao: Como preco é texto, preco * 2 repete o texto e resulta em 1010. Convertendo com int, a multiplicação dá 20.
+
+  - id: u2-l4-r03
+    versao: 1
+    variacao_de: u2-l4-e03
+    tipo: completar_lacuna
+    objetivo: Usar str para exibir um número junto com texto.
+    conceitos: [conversao]
+    dificuldade: 2
+    enunciado: Complete para juntar o texto e a idade com +.
+    codigo: |-
+      idade = 25
+      print("Idade: " + ___1___(idade))
+    saida_esperada: |-
+      Idade: 25
+    lacunas:
+      - id: "1"
+        opcoes: ["int", "str", "type"]
+        resposta: "str"
+    dicas:
+      - Os dois lados do + precisam ser texto.
+    explicacao: 'str(idade) transforma 25 em texto, que pode ser juntado com "Idade: ".'

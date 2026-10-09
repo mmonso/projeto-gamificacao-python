@@ -1,0 +1,256 @@
+id: u2-l1
+unidade: u2
+ordem: 1
+versao: 1
+titulo: Tipos de valores
+objetivo: Identificar os tipos int, float, str e bool e usar ponto nas casas decimais.
+conceitos: [tipos-basicos]
+
+exercicios:
+  - id: u2-l1-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Usar type para descobrir que um número sem aspas é int.
+    conceitos: [tipos-basicos]
+    dificuldade: 1
+    enunciado: Cada valor tem um tipo, e o comando type mostra qual é. O que este programa exibe?
+    codigo: |-
+      print(type(42))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          <class 'int'>
+      - id: b
+        texto: |-
+          <class 'str'>
+        feedback: Sem aspas, 42 é um número inteiro, não um texto.
+      - id: c
+        texto: |-
+          42
+        feedback: O type mostra o tipo do valor, não o próprio valor.
+    resposta: a
+    dicas:
+      - int vem de inteiro.
+    explicacao: Números inteiros, sem casa decimal, são do tipo int. O type exibe o tipo como <class 'int'>.
+
+  - id: u2-l1-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que algarismos entre aspas formam um texto.
+    conceitos: [tipos-basicos]
+    dificuldade: 1
+    enunciado: Agora o número está entre aspas. O que este programa exibe?
+    codigo: |-
+      print(type("42"))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          <class 'int'>
+        feedback: Com aspas, é um texto, mesmo que tenha só algarismos.
+      - id: b
+        texto: |-
+          <class 'str'>
+      - id: c
+        texto: |-
+          <class 'float'>
+        feedback: float é para números com casa decimal, sem aspas.
+    resposta: b
+    dicas:
+      - str vem de string, o nome que o Python dá aos textos.
+    explicacao: Tudo o que está entre aspas é texto, do tipo str, mesmo que pareça um número.
+
+  - id: u2-l1-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Reconhecer números com casa decimal como float.
+    conceitos: [tipos-basicos]
+    dificuldade: 1
+    enunciado: Em Python, números com casa decimal usam ponto. O que este programa exibe?
+    codigo: |-
+      print(type(3.5))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          <class 'int'>
+        feedback: Um número com casa decimal não é inteiro.
+      - id: b
+        texto: |-
+          <class 'str'>
+        feedback: Não há aspas, então não é texto.
+      - id: c
+        texto: |-
+          <class 'float'>
+    resposta: c
+    dicas:
+      - O tipo para números com casa decimal se chama float.
+    explicacao: Números com casa decimal são do tipo float. Em Python, a casa decimal é separada por ponto.
+
+  - id: u2-l1-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever o valor lógico True, com T maiúsculo e sem aspas.
+    conceitos: [tipos-basicos]
+    dificuldade: 2
+    enunciado: O tipo bool tem só dois valores, True e False. Complete para exibir o tipo bool.
+    codigo: |-
+      print(type(___1___))
+    saida_esperada: |-
+      <class 'bool'>
+    lacunas:
+      - id: "1"
+        opcoes: ["True", "\"True\"", "true"]
+        resposta: "True"
+    dicas:
+      - Com aspas, seria um texto.
+      - True começa com letra maiúscula.
+    explicacao: True e False são os valores do tipo bool. Eles começam com maiúscula e não levam aspas; true, em minúsculas, seria um nome desconhecido.
+
+  - id: u2-l1-e05
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o valor que é do tipo float.
+    conceitos: [tipos-basicos]
+    dificuldade: 2
+    enunciado: "Qual programa exibe exatamente: <class 'float'>"
+    saida_esperada: |-
+      <class 'float'>
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          print(type(2))
+        feedback: 2 é um número inteiro, do tipo int.
+      - id: b
+        texto: |-
+          print(type(2.0))
+      - id: c
+        texto: |-
+          print(type("2.0"))
+        feedback: Com aspas, é um texto, do tipo str.
+    resposta: b
+    dicas:
+      - Procure um número com ponto e sem aspas.
+    explicacao: 2.0 tem casa decimal e não tem aspas, então é float, mesmo que a parte decimal seja zero.
+
+  - id: u2-l1-e06
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Reconhecer o uso de vírgula no lugar do ponto decimal.
+    conceitos: [tipos-basicos]
+    dificuldade: 3
+    enunciado: O programa deveria exibir a saída abaixo, mas mostra outra coisa. Selecione a linha com o problema.
+    codigo: |-
+      preco = 4,50
+      print("Preço:", preco)
+    erro: saida_incorreta
+    resposta: 1
+    correcao: preco = 4.50
+    saida_esperada: |-
+      Preço: 4.5
+    dicas:
+      - Em Python, a casa decimal não é separada por vírgula.
+    explicacao: Em Python, a casa decimal usa ponto. Com vírgula, 4,50 vira dois números separados, e o print exibe (4, 50).
+
+  - id: u2-l1-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Associar valores a seus tipos para produzir uma saída.
+    conceitos: [tipos-basicos]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saída.
+    saida_esperada: |-
+      <class 'str'>
+      <class 'int'>
+    blocos:
+      - id: a
+        codigo: print(type("10"))
+      - id: b
+        codigo: print(type(10))
+      - id: c
+        codigo: print(type(10.0))
+    resposta:
+      - [a, b]
+    dicas:
+      - A primeira linha é de um texto; a segunda, de um inteiro.
+    explicacao: '"10" entre aspas é texto (str) e 10 sem aspas é inteiro (int). O bloco com 10.0 exibiria float.'
+
+revisao:
+  - id: u2-l1-r01
+    versao: 1
+    variacao_de: u2-l1-e02
+    tipo: escolher_resultado
+    objetivo: Reconhecer um número decimal entre aspas como texto.
+    conceitos: [tipos-basicos]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(type("3.14"))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          <class 'float'>
+        feedback: Com aspas, é texto, mesmo com ponto decimal.
+      - id: b
+        texto: |-
+          <class 'str'>
+      - id: c
+        texto: |-
+          3.14
+        feedback: O type mostra o tipo, não o valor.
+    resposta: b
+    dicas:
+      - Repare nas aspas.
+    explicacao: Entre aspas, 3.14 é um texto, do tipo str.
+
+  - id: u2-l1-r02
+    versao: 1
+    variacao_de: u2-l1-e06
+    tipo: localizar_erro
+    objetivo: Corrigir a vírgula decimal em outro contexto.
+    conceitos: [tipos-basicos]
+    dificuldade: 3
+    enunciado: O programa deveria exibir a saída abaixo, mas mostra outra coisa. Selecione a linha com o problema.
+    codigo: |-
+      aluno = "Caio"
+      nota = 7,5
+      print("Nota:", nota)
+    erro: saida_incorreta
+    resposta: 2
+    correcao: nota = 7.5
+    saida_esperada: |-
+      Nota: 7.5
+    dicas:
+      - Como o Python separa a casa decimal?
+    explicacao: Na linha 2, a vírgula transforma 7,5 em dois números. O correto é 7.5, com ponto.
+
+  - id: u2-l1-r03
+    versao: 1
+    variacao_de: u2-l1-e04
+    tipo: escolher_resultado
+    objetivo: Reconhecer False como valor do tipo bool.
+    conceitos: [tipos-basicos]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(type(False))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          <class 'bool'>
+      - id: b
+        texto: |-
+          <class 'str'>
+        feedback: False sem aspas não é texto.
+      - id: c
+        texto: |-
+          False
+        feedback: O type mostra o tipo, não o valor.
+    resposta: a
+    dicas:
+      - True e False pertencem ao mesmo tipo.
+    explicacao: False, assim como True, é um valor do tipo bool.

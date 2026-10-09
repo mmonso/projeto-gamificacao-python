@@ -1,0 +1,298 @@
+id: u1-l4
+unidade: u1
+ordem: 4
+versao: 1
+titulo: Mudando valores
+objetivo: Prever o valor de uma variável depois de reatribuições e atualizações, respeitando a ordem das linhas.
+conceitos: [reatribuicao, atualizacao, ordem-execucao]
+
+exercicios:
+  - id: u1-l4-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que uma nova atribuição substitui o valor anterior.
+    conceitos: [reatribuicao]
+    dificuldade: 1
+    enunciado: Uma variável pode receber um novo valor. O que este programa exibe?
+    codigo: |-
+      cor = "azul"
+      cor = "verde"
+      print(cor)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          azul
+        feedback: A segunda linha guarda verde no lugar de azul.
+      - id: b
+        texto: |-
+          azul
+          verde
+        feedback: Uma variável guarda um valor por vez.
+      - id: c
+        texto: |-
+          verde
+    resposta: c
+    dicas:
+      - A variável guarda só um valor por vez.
+      - Quando o print é executado, qual foi o último valor guardado?
+    explicacao: A segunda atribuição substitui o valor anterior. Quando o print é executado, cor guarda verde.
+
+  - id: u1-l4-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que cada print usa o valor da variável naquele momento.
+    conceitos: [reatribuicao, ordem-execucao]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      nivel = 1
+      print(nivel)
+      nivel = 2
+      print(nivel)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          2
+          2
+        feedback: O primeiro print é executado antes da mudança, quando nivel ainda vale 1.
+      - id: b
+        texto: |-
+          1
+          2
+      - id: c
+        texto: |-
+          1
+          1
+        feedback: A linha 3 muda o valor antes do segundo print.
+    resposta: b
+    dicas:
+      - Siga as linhas de cima para baixo, anotando o valor de nivel.
+    explicacao: As linhas são executadas em ordem. O primeiro print acontece quando nivel vale 1; o segundo, depois da mudança para 2.
+
+  - id: u1-l4-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o resultado de uma atualização que usa o próprio valor da variável.
+    conceitos: [atualizacao]
+    dificuldade: 2
+    enunciado: À direita do =, o Python usa o valor atual da variável. O que este programa exibe?
+    codigo: |-
+      pontos = 10
+      pontos = pontos + 5
+      print(pontos)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          15
+      - id: b
+        texto: |-
+          10
+        feedback: A linha 2 calcula 10 + 5 e guarda o resultado em pontos.
+      - id: c
+        texto: |-
+          pontos + 5
+        feedback: A conta está sem aspas, então é calculada.
+    resposta: a
+    dicas:
+      - Primeiro o Python calcula o lado direito do =.
+      - Na linha 2, pontos ainda vale 10.
+    explicacao: Na linha 2, o Python calcula pontos + 5 com o valor atual, 10, e guarda 15 de volta em pontos.
+
+  - id: u1-l4-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever uma atualização que soma 1 ao valor atual.
+    conceitos: [atualizacao]
+    dificuldade: 2
+    enunciado: Complete para aumentar o número de vidas em 1.
+    codigo: |-
+      vidas = 3
+      vidas = ___1___
+      print(vidas)
+    saida_esperada: |-
+      4
+    lacunas:
+      - id: "1"
+        opcoes: ["vidas + 1", "vidas - 1", "\"vidas + 1\""]
+        resposta: "vidas + 1"
+    dicas:
+      - O novo valor é o valor atual mais 1.
+      - A conta não pode estar entre aspas.
+    explicacao: vidas = vidas + 1 calcula 3 + 1 e guarda 4 em vidas. Entre aspas, a conta viraria texto.
+
+  - id: u1-l4-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma atualização com a operação errada.
+    conceitos: [atualizacao]
+    dificuldade: 3
+    enunciado: O programa deveria exibir o saldo depois de um gasto, mas mostra outro valor. Selecione a linha com o problema.
+    codigo: |-
+      saldo = 100
+      gasto = 30
+      saldo = saldo + gasto
+      print("Saldo:", saldo)
+    erro: saida_incorreta
+    resposta: 3
+    correcao: saldo = saldo - gasto
+    saida_esperada: |-
+      Saldo: 70
+    dicas:
+      - Um gasto deve diminuir o saldo.
+      - Veja qual linha muda o valor de saldo.
+    explicacao: A linha 3 soma o gasto ao saldo. Para descontar, a conta deve ser saldo - gasto, que resulta em 70.
+
+  - id: u1-l4-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar um programa que exibe uma variável antes e depois de atualizá-la.
+    conceitos: [atualizacao, ordem-execucao, print-varios]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saída.
+    saida_esperada: |-
+      Antes: 5
+      Depois: 6
+    blocos:
+      - id: a
+        codigo: numero = 5
+      - id: b
+        codigo: print("Antes:", numero)
+      - id: c
+        codigo: numero = numero + 1
+      - id: d
+        codigo: print("Depois:", numero)
+      - id: e
+        codigo: print("Depois:", "numero")
+    resposta:
+      - [a, b, c, d]
+    dicas:
+      - O primeiro print precisa acontecer antes da atualização.
+      - No print, a variável fica sem aspas.
+    explicacao: A variável é criada, exibida, atualizada e exibida de novo. Se a atualização viesse antes do primeiro print, os dois mostrariam 6.
+
+  - id: u1-l4-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que copiar o valor de uma variável não liga as duas variáveis.
+    conceitos: [reatribuicao, ordem-execucao]
+    dificuldade: 3
+    enunciado: O que este programa exibe?
+    codigo: |-
+      preco = 4
+      preco_antigo = preco
+      preco = 10
+      print(preco_antigo)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          10
+        feedback: preco_antigo recebeu o valor 4 na linha 2. Mudar preco depois não altera preco_antigo.
+      - id: b
+        texto: |-
+          4
+      - id: c
+        texto: |-
+          preco
+        feedback: Sem aspas, preco_antigo é uma variável, e o print exibe o valor dela.
+    resposta: b
+    dicas:
+      - Na linha 2, qual valor preco guarda?
+      - A linha 3 muda só preco.
+    explicacao: Na linha 2, preco_antigo recebe o valor que preco tinha naquele momento, 4. A mudança de preco na linha 3 não altera preco_antigo.
+
+revisao:
+  - id: u1-l4-r01
+    versao: 1
+    variacao_de: u1-l4-e01
+    tipo: escolher_resultado
+    objetivo: Prever o valor após uma reatribuição de texto.
+    conceitos: [reatribuicao]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      nome = "Léo"
+      nome = "Lia"
+      print(nome)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Lia
+      - id: b
+        texto: |-
+          Léo
+        feedback: A segunda atribuição substitui Léo por Lia.
+      - id: c
+        texto: |-
+          Léo Lia
+        feedback: A variável guarda só o último valor atribuído.
+    resposta: a
+    dicas:
+      - Qual foi o último valor guardado antes do print?
+    explicacao: A segunda linha substitui o valor de nome. No momento do print, nome guarda Lia.
+
+  - id: u1-l4-r02
+    versao: 1
+    variacao_de: u1-l4-e03
+    tipo: escolher_resultado
+    objetivo: Prever o resultado de duas atualizações seguidas.
+    conceitos: [atualizacao]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      moedas = 20
+      moedas = moedas - 5
+      moedas = moedas - 5
+      print(moedas)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          15
+        feedback: Há duas atualizações; cada uma tira 5 do valor atual.
+      - id: b
+        texto: |-
+          10
+      - id: c
+        texto: |-
+          20
+        feedback: As linhas 2 e 3 alteram o valor de moedas antes do print.
+    resposta: b
+    dicas:
+      - Anote o valor de moedas depois de cada linha.
+    explicacao: A linha 2 muda moedas de 20 para 15, e a linha 3, de 15 para 10.
+
+  - id: u1-l4-r03
+    versao: 1
+    variacao_de: u1-l4-e07
+    tipo: escolher_resultado
+    objetivo: Perceber que uma cópia mantém o valor antigo depois de uma atualização.
+    conceitos: [reatribuicao, atualizacao, print-varios]
+    dificuldade: 3
+    enunciado: O que este programa exibe?
+    codigo: |-
+      meta = 3
+      copia = meta
+      meta = meta + 1
+      print(copia, meta)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          4 4
+        feedback: copia recebeu 3 antes da atualização e continua com esse valor.
+      - id: b
+        texto: |-
+          3 3
+        feedback: A linha 3 atualiza meta para 4.
+      - id: c
+        texto: |-
+          3 4
+    resposta: c
+    dicas:
+      - A linha 2 copia o valor de meta naquele momento.
+    explicacao: copia recebe 3 na linha 2. Depois, só meta é atualizada para 4. Por isso o print exibe 3 e 4.

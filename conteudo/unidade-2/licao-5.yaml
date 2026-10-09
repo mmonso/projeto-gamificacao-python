@@ -1,0 +1,210 @@
+id: u2-l5
+unidade: u2
+ordem: 5
+versao: 1
+titulo: "Desafio: conta do lanche"
+objetivo: Montar, em etapas, um programa que calcula o total de um pedido e exibe uma mensagem.
+conceitos: [tipos-basicos, precedencia, divisao, conversao, concatenacao]
+
+exercicios:
+  - id: u2-l5-e01
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Guardar um preço decimal e uma quantidade inteira.
+    conceitos: [tipos-basicos]
+    dificuldade: 2
+    enunciado: "Etapa 1: o lanche custa 12,50 reais, e foram pedidos 2. Complete para guardar os valores."
+    codigo: |-
+      preco = ___1___
+      quantidade = ___2___
+      print(preco, quantidade)
+    saida_esperada: |-
+      12.5 2
+    lacunas:
+      - id: "1"
+        opcoes: ["12.5", "12,5", "12"]
+        resposta: "12.5"
+      - id: "2"
+        opcoes: ["2", "2.0", "dois"]
+        resposta: "2"
+    dicas:
+      - A casa decimal usa ponto.
+      - A quantidade é um número inteiro, sem aspas.
+    explicacao: 12.5 é um float, escrito com ponto, e 2 é um int. Com vírgula, 12,5 viraria dois números separados.
+
+  - id: u2-l5-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o tipo do resultado de float vezes int.
+    conceitos: [tipos-basicos]
+    dificuldade: 2
+    enunciado: "Etapa 2: calcule o total. O que este programa exibe?"
+    codigo: |-
+      preco = 12.5
+      quantidade = 2
+      total = preco * quantidade
+      print(total)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          25
+        feedback: Uma conta com float resulta em float, que aparece com .0.
+      - id: b
+        texto: |-
+          25.0
+      - id: c
+        texto: |-
+          12.5 * 2
+        feedback: Sem aspas, a conta é calculada.
+    resposta: b
+    dicas:
+      - Um dos valores é float.
+    explicacao: Multiplicar um float por um int resulta em float, por isso o total aparece como 25.0.
+
+  - id: u2-l5-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Aplicar a ordem das operações ao somar a entrega.
+    conceitos: [precedencia]
+    dificuldade: 2
+    enunciado: "Etapa 3: a entrega custa 5 reais. O que este programa exibe?"
+    codigo: |-
+      total = 12.5 * 2 + 5
+      print(total)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          30.0
+      - id: b
+        texto: |-
+          87.5
+        feedback: A multiplicação acontece antes da soma.
+      - id: c
+        texto: |-
+          30
+        feedback: A conta envolve um float, então o resultado é float.
+    resposta: a
+    dicas:
+      - Primeiro a multiplicação, depois a soma.
+    explicacao: O Python calcula 12.5 * 2, que dá 25.0, e depois soma 5, resultando em 30.0.
+
+  - id: u2-l5-e04
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar a mensagem que junta texto e número sem conversão.
+    conceitos: [conversao, concatenacao]
+    dificuldade: 2
+    enunciado: "Etapa 4: a mensagem mostra um erro. Selecione a linha com o problema."
+    codigo: |-
+      total = 30.0
+      print("Total: R$ " + total)
+    erro: TypeError
+    resposta: 2
+    correcao: 'print("Total: R$ " + str(total))'
+    saida_esperada: |-
+      Total: R$ 30.0
+    dicas:
+      - Para juntar com +, o total precisa ser texto.
+    explicacao: O total é um número. Na linha 2, ele precisa ser convertido com str antes de ser juntado ao texto.
+
+  - id: u2-l5-e05
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escolher a divisão certa para dividir a conta.
+    conceitos: [divisao]
+    dificuldade: 2
+    enunciado: "Etapa 5: a conta deu 31,50 reais e vai ser dividida por 3 pessoas. Complete o cálculo."
+    codigo: |-
+      total = 31.5
+      pessoas = 3
+      print("Cada um paga:", total ___1___ pessoas)
+    saida_esperada: |-
+      Cada um paga: 10.5
+    lacunas:
+      - id: "1"
+        opcoes: ["/", "//", "%"]
+        resposta: "/"
+    dicas:
+      - O valor de cada pessoa pode ter centavos.
+    explicacao: Com /, a divisão mantém a parte decimal e resulta em 10.5. Com //, os centavos seriam descartados; com %, apareceria só o resto.
+
+  - id: u2-l5-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar o cálculo e a mensagem do total.
+    conceitos: [conversao, concatenacao]
+    dificuldade: 3
+    enunciado: "Etapa 6: monte o programa que exibe a mensagem do total."
+    codigo_antes: |-
+      preco = 12.5
+      quantidade = 2
+    saida_esperada: |-
+      Total: R$ 25.0
+    blocos:
+      - id: a
+        codigo: total = preco * quantidade
+      - id: b
+        codigo: 'mensagem = "Total: R$ " + str(total)'
+      - id: c
+        codigo: print(mensagem)
+      - id: d
+        codigo: 'mensagem = "Total: R$ " + total'
+    resposta:
+      - [a, b, c]
+    dicas:
+      - Calcule o total antes de montar a mensagem.
+      - O total precisa virar texto para ser juntado.
+    explicacao: Primeiro o total é calculado; depois, convertido com str e juntado ao texto; por fim, a mensagem é exibida.
+
+  - id: u2-l5-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o programa completo que exibe a mensagem exata.
+    conceitos: [conversao, concatenacao]
+    dificuldade: 3
+    enunciado: "Etapa final: qual programa exibe exatamente: Total: R$ 25.0"
+    saida_esperada: |-
+      Total: R$ 25.0
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          total = 12.5 * 2
+          print("Total: R$" + str(total))
+        feedback: Falta o espaço depois de R$, então a saída fica R$25.0.
+      - id: b
+        texto: |-
+          total = 12.5 * 2
+          print("Total: R$ " + str(total))
+      - id: c
+        texto: |-
+          total = "12.5" * 2
+          print("Total: R$ " + str(total))
+        feedback: Com aspas, o preço é texto, e o * repete o texto.
+    resposta: b
+    dicas:
+      - Confira o espaço e as aspas.
+    explicacao: 'O preço sem aspas permite a multiplicação, e o texto "Total: R$ " já termina com o espaço antes do valor.'
+
+revisao:
+  - id: u2-l5-r01
+    versao: 1
+    variacao_de: u2-l5-e04
+    tipo: localizar_erro
+    objetivo: Encontrar outra mensagem que junta texto e número.
+    conceitos: [conversao, erro-tipo]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      pessoas = 4
+      print("Somos " + pessoas + " pessoas")
+    erro: TypeError
+    resposta: 2
+    correcao: print("Somos " + str(pessoas) + " pessoas")
+    saida_esperada: |-
+      Somos 4 pessoas
+    dicas:
+      - Qual valor não é texto?
+    explicacao: pessoas guarda um número. Para juntar com +, ele precisa ser convertido com str.

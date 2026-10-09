@@ -1,0 +1,295 @@
+id: u3-l4
+unidade: u3
+ordem: 4
+versao: 1
+titulo: Se e senão
+objetivo: Prever qual bloco de um if/else é executado e escrever blocos com dois-pontos e recuo.
+conceitos: [if-else, indentacao]
+
+exercicios:
+  - id: u3-l4-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que o if executa seu bloco quando a condição é verdadeira.
+    conceitos: [if-else]
+    dificuldade: 1
+    enunciado: O if executa o bloco recuado quando a condição é verdadeira; senão, o else executa o dele. O que este programa exibe?
+    codigo: |-
+      idade = 20
+      if idade >= 18:
+          print("Maior de idade")
+      else:
+          print("Menor de idade")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Maior de idade
+      - id: b
+        texto: |-
+          Menor de idade
+        feedback: A condição é verdadeira, então o else não é executado.
+      - id: c
+        texto: |-
+          Maior de idade
+          Menor de idade
+        feedback: Só um dos blocos é executado.
+    resposta: a
+    dicas:
+      - 20 >= 18 é verdadeiro ou falso?
+    explicacao: Como 20 >= 18 é verdadeiro, o Python executa o bloco do if e pula o do else.
+
+  - id: u3-l4-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que o else executa quando a condição é falsa.
+    conceitos: [if-else]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      temperatura = 15
+      if temperatura > 25:
+          print("Calor")
+      else:
+          print("Frio")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Calor
+        feedback: 15 não é maior que 25.
+      - id: b
+        texto: |-
+          Frio
+      - id: c
+        texto: |-
+          Calor
+          Frio
+        feedback: Só um dos blocos é executado.
+    resposta: b
+    dicas:
+      - A condição é verdadeira?
+    explicacao: 15 > 25 é falso, então o Python pula o bloco do if e executa o do else.
+
+  - id: u3-l4-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que linhas sem recuo depois do if/else sempre executam.
+    conceitos: [if-else, indentacao]
+    dificuldade: 2
+    enunciado: A última linha não tem recuo. O que este programa exibe?
+    codigo: |-
+      nota = 4
+      if nota >= 6:
+          print("Aprovado")
+      else:
+          print("Recuperação")
+      print("Fim")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Recuperação
+          Fim
+      - id: b
+        texto: |-
+          Fim
+        feedback: O bloco do else também é executado, porque a condição é falsa.
+      - id: c
+        texto: |-
+          Aprovado
+          Fim
+        feedback: 4 não é maior ou igual a 6.
+    resposta: a
+    dicas:
+      - Uma linha sem recuo não pertence ao if nem ao else.
+    explicacao: Como a nota é 4, o else exibe Recuperação. A última linha não tem recuo, então é executada sempre, depois do if/else.
+
+  - id: u3-l4-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Terminar a linha do if com dois-pontos.
+    conceitos: [indentacao]
+    dificuldade: 2
+    enunciado: Complete o final da linha do if.
+    codigo: |-
+      saldo = 50
+      if saldo >= 30___1___
+          print("Compra aprovada")
+      else:
+          print("Saldo insuficiente")
+    saida_esperada: |-
+      Compra aprovada
+    lacunas:
+      - id: "1"
+        opcoes: [":", ";", "."]
+        resposta: ":"
+    dicas:
+      - Olhe como termina a linha do else.
+    explicacao: As linhas do if e do else terminam com dois-pontos. Eles indicam que um bloco recuado vem a seguir.
+
+  - id: u3-l4-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar um bloco do if sem recuo.
+    conceitos: [indentacao]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      pontos = 80
+      if pontos > 50:
+      print("Ganhou")
+      else:
+          print("Tente de novo")
+    erro: IndentationError
+    resposta: 3
+    correcao: '    print("Ganhou")'
+    saida_esperada: |-
+      Ganhou
+    dicas:
+      - Compare o recuo das linhas dentro do if e do else.
+    explicacao: A linha 3 pertence ao bloco do if e precisa de recuo. Sem ele, o Python mostra um erro de indentação (IndentationError).
+
+  - id: u3-l4-e06
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar um if que usa = no lugar de ==.
+    conceitos: [if-else]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      senha = "1234"
+      if senha = "1234":
+          print("Acesso liberado")
+      else:
+          print("Senha incorreta")
+    erro: SyntaxError
+    resposta: 2
+    correcao: 'if senha == "1234":'
+    saida_esperada: |-
+      Acesso liberado
+    dicas:
+      - Para comparar, são necessários dois sinais de igual.
+    explicacao: A condição do if precisa comparar com ==. Um único = tenta guardar um valor e gera um erro de sintaxe.
+
+  - id: u3-l4-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar o início de um if com condição e bloco recuado.
+    conceitos: [if-else, indentacao]
+    dificuldade: 3
+    enunciado: Monte o início do programa que diz se um número é par. O else já está pronto.
+    codigo_antes: |-
+      numero = 4
+    codigo_depois: |-
+      else:
+          print("Ímpar")
+    saida_esperada: |-
+      Par
+    blocos:
+      - id: a
+        codigo: 'if numero % 2 == 0:'
+      - id: b
+        codigo: '    print("Par")'
+      - id: c
+        codigo: print("Par")
+      - id: d
+        codigo: 'if numero % 2 = 0:'
+    resposta:
+      - [a, b]
+    dicas:
+      - Um número é par quando o resto da divisão por 2 é zero.
+      - O bloco do if precisa de recuo.
+    explicacao: A condição compara o resto com zero usando ==, e o print fica recuado dentro do if. Sem recuo, ou com um único =, o programa teria erro.
+
+revisao:
+  - id: u3-l4-r01
+    versao: 1
+    variacao_de: u3-l4-e01
+    tipo: escolher_resultado
+    objetivo: Prever qual bloco executa em outro contexto.
+    conceitos: [if-else]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      hora = 9
+      if hora < 12:
+          print("Bom dia")
+      else:
+          print("Boa tarde")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Boa tarde
+        feedback: 9 é menor que 12, então o bloco do if é executado.
+      - id: b
+        texto: |-
+          Bom dia
+      - id: c
+        texto: |-
+          Bom dia
+          Boa tarde
+        feedback: Só um dos blocos é executado.
+    resposta: b
+    dicas:
+      - 9 < 12 é verdadeiro?
+    explicacao: Como 9 < 12 é verdadeiro, o programa exibe Bom dia e pula o else.
+
+  - id: u3-l4-r02
+    versao: 1
+    variacao_de: u3-l4-e05
+    tipo: localizar_erro
+    objetivo: Encontrar um bloco do else sem recuo.
+    conceitos: [indentacao]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      chuva = True
+      if chuva:
+          print("Leve guarda-chuva")
+      else:
+      print("Aproveite o sol")
+    erro: IndentationError
+    resposta: 5
+    correcao: '    print("Aproveite o sol")'
+    saida_esperada: |-
+      Leve guarda-chuva
+    dicas:
+      - O bloco do else também precisa de recuo.
+    explicacao: A linha 5 pertence ao else e precisa de recuo, mesmo que esse bloco não seja executado agora.
+
+  - id: u3-l4-r03
+    versao: 1
+    variacao_de: u3-l4-e03
+    tipo: escolher_resultado
+    objetivo: Prever o if/else seguido de uma linha que sempre executa.
+    conceitos: [if-else, indentacao]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      estoque = 0
+      if estoque > 0:
+          print("Disponível")
+      else:
+          print("Esgotado")
+      print("Obrigado")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Esgotado
+          Obrigado
+      - id: b
+        texto: |-
+          Disponível
+          Obrigado
+        feedback: 0 não é maior que 0.
+      - id: c
+        texto: |-
+          Esgotado
+        feedback: A última linha não tem recuo e é sempre executada.
+    resposta: a
+    dicas:
+      - 0 > 0 é verdadeiro?
+    explicacao: Como 0 > 0 é falso, o else exibe Esgotado. Depois, a linha sem recuo exibe Obrigado.

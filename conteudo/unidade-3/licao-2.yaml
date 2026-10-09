@@ -1,0 +1,262 @@
+id: u3-l2
+unidade: u3
+ordem: 2
+versao: 1
+titulo: Igual ou diferente
+objetivo: Comparar valores com == e != e distinguir comparação de atribuição.
+conceitos: [igualdade, booleanos]
+
+exercicios:
+  - id: u3-l2-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Usar == para comparar igualdade.
+    conceitos: [igualdade]
+    dificuldade: 1
+    enunciado: Para comparar se dois valores são iguais, usa-se ==. O que este programa exibe?
+    codigo: |-
+      print(3 == 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3
+        feedback: O == compara e responde com True ou False.
+      - id: b
+        texto: |-
+          True
+      - id: c
+        texto: |-
+          False
+        feedback: 3 é igual a 3.
+    resposta: b
+    dicas:
+      - Os dois lados são iguais?
+    explicacao: 3 == 3 pergunta se os valores são iguais. Como são, o resultado é True.
+
+  - id: u3-l2-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que maiúsculas e minúsculas tornam textos diferentes.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("sim" == "Sim")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: Para o Python, s minúsculo e S maiúsculo são diferentes.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        erro: true
+        feedback: Comparar textos com == funciona normalmente.
+    resposta: b
+    dicas:
+      - Compare as letras uma a uma.
+    explicacao: Os textos diferem na primeira letra, maiúscula em um e minúscula no outro. Por isso não são iguais.
+
+  - id: u3-l2-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Usar != para verificar se valores são diferentes.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: O operador != significa "diferente de". O que este programa exibe?
+    codigo: |-
+      print(5 != 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+      - id: b
+        texto: |-
+          False
+        feedback: 5 e 3 são diferentes, então != responde True.
+      - id: c
+        texto: |-
+          2
+        feedback: O != compara; não faz subtração.
+    resposta: a
+    dicas:
+      - 5 é diferente de 3?
+    explicacao: 5 != 3 pergunta se os valores são diferentes. Como são, o resultado é True.
+
+  - id: u3-l2-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escolher == para conferir uma senha.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: Complete para conferir se a senha digitada é a correta.
+    codigo: |-
+      senha = "abc123"
+      print(senha ___1___ "abc123")
+    saida_esperada: |-
+      True
+    lacunas:
+      - id: "1"
+        opcoes: ["==", "=", "!="]
+        resposta: "=="
+    dicas:
+      - Um único = guarda valores; dois comparam.
+    explicacao: senha == "abc123" compara os dois textos, que são iguais. Com =, o Python mostraria um erro; com !=, o resultado seria False.
+
+  - id: u3-l2-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar o uso de = no lugar de ==.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      cor = "azul"
+      print("azul" = cor)
+    erro: SyntaxError
+    resposta: 2
+    correcao: print("azul" == cor)
+    saida_esperada: |-
+      True
+    dicas:
+      - Para comparar, são necessários dois sinais de igual.
+    explicacao: Na linha 2, um único = tenta guardar um valor dentro do print, o que é um erro. Para comparar, use ==.
+
+  - id: u3-l2-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que texto e número nunca são iguais.
+    conceitos: [igualdade, booleanos]
+    dificuldade: 3
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("10" == 10)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: Um é texto e o outro é número; para o Python, não são iguais.
+      - id: b
+        erro: true
+        feedback: Com ==, comparar texto e número não é erro; só resulta em False.
+      - id: c
+        texto: |-
+          False
+    resposta: c
+    dicas:
+      - Qual é o tipo de cada lado?
+    explicacao: '"10" é texto e 10 é número. O == não mostra erro, mas responde False, porque valores de tipos diferentes não são iguais.'
+
+  - id: u3-l2-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar comparações de texto que produzem False e True.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saída.
+    codigo_antes: |-
+      resposta = "Python"
+    saida_esperada: |-
+      False
+      True
+    blocos:
+      - id: a
+        codigo: print(resposta == "python")
+      - id: b
+        codigo: print(resposta == "Python")
+      - id: c
+        codigo: print(resposta = "Python")
+    resposta:
+      - [a, b]
+    dicas:
+      - Uma das comparações difere só na primeira letra.
+    explicacao: '"python" com p minúsculo é diferente de "Python", então a primeira comparação é False e a segunda é True. O bloco com um único = geraria erro.'
+
+revisao:
+  - id: u3-l2-r01
+    versao: 1
+    variacao_de: u3-l2-e02
+    tipo: escolher_resultado
+    objetivo: Comparar nomes com maiúsculas diferentes.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("Ana" == "ana")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: A maiúscula faz diferença na comparação.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          Ana
+        feedback: A comparação resulta em True ou False.
+    resposta: b
+    dicas:
+      - Compare a primeira letra de cada texto.
+    explicacao: '"Ana" e "ana" diferem na primeira letra, por isso a comparação resulta em False.'
+
+  - id: u3-l2-r02
+    versao: 1
+    variacao_de: u3-l2-e03
+    tipo: escolher_resultado
+    objetivo: Prever != com valores iguais.
+    conceitos: [igualdade]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(8 != 8)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: 8 não é diferente de 8.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          0
+        feedback: O != compara; não subtrai.
+    resposta: b
+    dicas:
+      - Os dois valores são diferentes?
+    explicacao: 8 != 8 pergunta se os valores são diferentes. Como são iguais, o resultado é False.
+
+  - id: u3-l2-r03
+    versao: 1
+    variacao_de: u3-l2-e06
+    tipo: escolher_resultado
+    objetivo: Comparar número com texto em outro contexto.
+    conceitos: [igualdade, booleanos]
+    dificuldade: 3
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(1 == "1")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          False
+      - id: b
+        texto: |-
+          True
+        feedback: Número e texto não são iguais, mesmo com o mesmo algarismo.
+      - id: c
+        erro: true
+        feedback: O == aceita tipos diferentes e responde False.
+    resposta: a
+    dicas:
+      - Um lado tem aspas e o outro não.
+    explicacao: 1 é número e "1" é texto. Como os tipos são diferentes, o == responde False.

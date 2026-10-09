@@ -1,0 +1,21 @@
+# Dependências e builds
+node_modules/
+.next/
+out/
+dist/
+coverage/
+
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+
+# Sistema e editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json

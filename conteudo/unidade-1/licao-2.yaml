@@ -1,0 +1,268 @@
+id: u1-l2
+unidade: u1
+ordem: 2
+versao: 1
+titulo: Números na tela
+objetivo: Exibir números e resultados de contas, distinguir uma conta de um texto e exibir vários valores em um print.
+conceitos: [print-numero, texto-vs-numero, print-varios]
+
+exercicios:
+  - id: u1-l2-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que o print exibe o resultado de uma conta escrita sem aspas.
+    conceitos: [print-numero]
+    dificuldade: 1
+    enunciado: Números são escritos sem aspas. O que este programa exibe?
+    codigo: |-
+      print(2 + 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          2 + 3
+        feedback: Sem aspas, o Python faz a conta antes de exibir.
+      - id: b
+        texto: |-
+          5
+      - id: c
+        texto: |-
+          23
+        feedback: Com números, o + soma. Ele não junta os algarismos.
+    resposta: b
+    dicas:
+      - Não há aspas, então não é um texto.
+      - O Python calcula a conta e exibe o resultado.
+    explicacao: Sem aspas, 2 + 3 é uma conta. O Python calcula o resultado e o print exibe 5.
+
+  - id: u1-l2-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Distinguir uma conta entre aspas, que é texto, de uma conta de verdade.
+    conceitos: [texto-vs-numero]
+    dificuldade: 1
+    enunciado: Agora a conta está entre aspas. O que este programa exibe?
+    codigo: |-
+      print("2 + 3")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5
+        feedback: Entre aspas, tudo é texto. O Python exibe o que está escrito, sem fazer a conta.
+      - id: b
+        texto: |-
+          "2 + 3"
+        feedback: As aspas não aparecem na saída.
+      - id: c
+        texto: |-
+          2 + 3
+    resposta: c
+    dicas:
+      - Lembre o que as aspas significam na lição anterior.
+    explicacao: Tudo o que está entre aspas é texto. O print exibe o texto exatamente como foi escrito, sem calcular nada.
+
+  - id: u1-l2-e03
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever uma multiplicação com o símbolo * e sem aspas.
+    conceitos: [print-numero, texto-vs-numero]
+    dificuldade: 2
+    enunciado: Em Python, a multiplicação usa o símbolo *. Complete para exibir o resultado 12.
+    codigo: |-
+      print(___1___)
+    saida_esperada: |-
+      12
+    lacunas:
+      - id: "1"
+        opcoes: ["3 * 4", "\"3 * 4\"", "3 x 4"]
+        resposta: "3 * 4"
+    dicas:
+      - Para o Python calcular, a conta não pode estar entre aspas.
+      - O x não é usado para multiplicar em Python.
+    explicacao: A conta 3 * 4 sem aspas é calculada e exibe 12. Entre aspas, seria só o texto 3 * 4. Com x, o Python mostraria um erro.
+
+  - id: u1-l2-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever como o print exibe dois valores separados por vírgula.
+    conceitos: [print-varios]
+    dificuldade: 2
+    enunciado: A vírgula separa valores dentro do print. O que este programa exibe?
+    codigo: |-
+      print("Idade:", 30)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Idade:30
+        feedback: O print coloca um espaço entre os valores separados por vírgula.
+      - id: b
+        texto: |-
+          Idade: 30
+      - id: c
+        texto: |-
+          Idade:, 30
+        feedback: A vírgula só separa os valores no código. Ela não aparece na saída.
+    resposta: b
+    dicas:
+      - A vírgula não aparece na tela.
+      - O print coloca algo entre os valores.
+    explicacao: Com vírgula, o print exibe os valores na mesma linha, separados por um espaço. A vírgula não aparece na saída.
+
+  - id: u1-l2-e05
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Combinar texto e o resultado de uma conta no mesmo print.
+    conceitos: [print-varios, print-numero, texto-vs-numero]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saída.
+    saida_esperada: |-
+      Total: 15
+      Fim
+    blocos:
+      - id: a
+        codigo: print("Total:", 10 + 5)
+      - id: b
+        codigo: print("Fim")
+      - id: c
+        codigo: print("Total:", "10 + 5")
+    resposta:
+      - [a, b]
+    dicas:
+      - A primeira linha precisa mostrar o resultado da conta, não a conta.
+      - Para ser calculada, a conta não pode estar entre aspas.
+    explicacao: Em print("Total:", 10 + 5), o texto vem entre aspas e a conta fica sem aspas, então o Python exibe o resultado 15. Depois, print("Fim") exibe a segunda linha.
+
+  - id: u1-l2-e06
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma conta escrita entre aspas por engano.
+    conceitos: [texto-vs-numero, print-varios]
+    dificuldade: 2
+    enunciado: O programa deveria exibir a saída abaixo, mas mostra outra coisa. Selecione a linha com o problema.
+    codigo: |-
+      print("Calculando...")
+      print("Soma:", "5 + 3")
+    erro: saida_incorreta
+    resposta: 2
+    correcao: print("Soma:", 5 + 3)
+    saida_esperada: |-
+      Calculando...
+      Soma: 8
+    dicas:
+      - A primeira linha da saída está certa.
+      - Uma conta entre aspas não é calculada.
+    explicacao: Na linha 2, a conta 5 + 3 está entre aspas e é exibida como texto. Sem as aspas, o Python calcula e exibe 8.
+
+  - id: u1-l2-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o programa que exibe dois números separados por espaço.
+    conceitos: [print-varios, print-numero]
+    dificuldade: 2
+    enunciado: "Qual programa exibe exatamente: 10 20"
+    saida_esperada: |-
+      10 20
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          print(10 + 20)
+        feedback: O + soma os números e exibe 30.
+      - id: b
+        texto: |-
+          print(10, 20)
+      - id: c
+        texto: |-
+          print("10, 20")
+        feedback: Entre aspas, a vírgula faz parte do texto e aparece na saída.
+    resposta: b
+    dicas:
+      - Para exibir os dois números lado a lado, use a vírgula do print.
+    explicacao: Em print(10, 20), a vírgula separa dois valores, e o print os exibe com um espaço entre eles.
+
+revisao:
+  - id: u1-l2-r01
+    versao: 1
+    variacao_de: u1-l2-e01
+    tipo: escolher_resultado
+    objetivo: Prever o resultado de uma subtração no print.
+    conceitos: [print-numero]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(10 - 4)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          6
+      - id: b
+        texto: |-
+          10 - 4
+        feedback: Sem aspas, a conta é calculada antes de ser exibida.
+      - id: c
+        texto: |-
+          14
+        feedback: O sinal - faz uma subtração.
+    resposta: a
+    dicas:
+      - É uma conta sem aspas.
+    explicacao: Sem aspas, 10 - 4 é uma conta. O print exibe o resultado, 6.
+
+  - id: u1-l2-r02
+    versao: 1
+    variacao_de: u1-l2-e02
+    tipo: escolher_resultado
+    objetivo: Distinguir uma multiplicação entre aspas de uma conta.
+    conceitos: [texto-vs-numero]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("4 * 2")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          8
+        feedback: Entre aspas, a conta é só texto e não é calculada.
+      - id: b
+        texto: |-
+          4 * 2
+      - id: c
+        texto: |-
+          42
+        feedback: O print exibe o texto exatamente como foi escrito.
+    resposta: b
+    dicas:
+      - Repare nas aspas.
+    explicacao: Como está entre aspas, 4 * 2 é um texto. O print exibe o texto como foi escrito.
+
+  - id: u1-l2-r03
+    versao: 1
+    variacao_de: u1-l2-e04
+    tipo: escolher_resultado
+    objetivo: Prever a saída de texto e conta separados por vírgula.
+    conceitos: [print-varios, print-numero]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("Ano:", 2000 + 26)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Ano: 2000 + 26
+        feedback: A conta está sem aspas, então é calculada.
+      - id: b
+        texto: |-
+          Ano:2026
+        feedback: A vírgula do print coloca um espaço entre os valores.
+      - id: c
+        texto: |-
+          Ano: 2026
+    resposta: c
+    dicas:
+      - Primeiro o Python calcula a conta; depois o print junta os valores.
+    explicacao: O Python calcula 2000 + 26 e o print exibe o texto e o resultado separados por um espaço.

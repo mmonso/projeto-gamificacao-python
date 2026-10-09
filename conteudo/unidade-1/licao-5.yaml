@@ -1,0 +1,235 @@
+id: u1-l5
+unidade: u1
+ordem: 5
+versao: 1
+titulo: "Desafio: cartão de apresentação"
+objetivo: Montar, em etapas, um programa que exibe um cartão com nome, idade e cidade usando variáveis e print.
+conceitos: [atribuicao, print-varios, variavel-vs-texto, ordem-execucao, atualizacao]
+
+exercicios:
+  - id: u1-l5-e01
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Guardar um texto e um número em variáveis.
+    conceitos: [atribuicao, string-aspas, print-numero]
+    dificuldade: 2
+    enunciado: "Etapa 1: guarde os dados do cartão. Complete para que o programa exiba a saída abaixo."
+    codigo: |-
+      nome = ___1___
+      idade = ___2___
+      print(nome, idade)
+    saida_esperada: |-
+      Bia 28
+    lacunas:
+      - id: "1"
+        opcoes: ["\"Bia\"", "Bia", "nome"]
+        resposta: "\"Bia\""
+      - id: "2"
+        opcoes: ["28", "idade", "\"vinte e oito\""]
+        resposta: "28"
+    dicas:
+      - Texto precisa de aspas; número não.
+      - Sem aspas, Bia e nome seriam variáveis, e elas ainda não existem nesse ponto do programa.
+    explicacao: O nome é um texto, então vai entre aspas. A idade é um número e fica sem aspas. O print exibe os dois valores separados por espaço.
+
+  - id: u1-l5-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a saída de linhas do cartão com rótulos e variáveis.
+    conceitos: [print-varios, variavel-vs-texto]
+    dificuldade: 2
+    enunciado: "Etapa 2: cada linha do cartão tem um rótulo e um valor. O que este programa exibe?"
+    codigo: |-
+      nome = "Bia"
+      idade = 28
+      print("Nome:", nome)
+      print("Idade:", idade)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Nome: nome
+          Idade: idade
+        feedback: Em cada print, o segundo valor está sem aspas, então é uma variável, e o print exibe o valor guardado nela.
+      - id: b
+        texto: |-
+          Nome: Bia
+          Idade: 28
+      - id: c
+        texto: |-
+          Nome: Bia Idade: 28
+        feedback: Cada print exibe sua própria linha.
+    resposta: b
+    dicas:
+      - Em cada print, o primeiro valor é texto e o segundo é variável.
+    explicacao: Cada print exibe um rótulo entre aspas e o valor de uma variável, em linhas separadas.
+
+  - id: u1-l5-e03
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma variável escrita com letra maiúscula por engano.
+    conceitos: [variavel-vs-texto, nomes-variaveis]
+    dificuldade: 2
+    enunciado: "Etapa 3: o cartão ganhou a cidade, mas o programa mostra um erro. Selecione a linha com o problema."
+    codigo: |-
+      nome = "Bia"
+      cidade = "Salvador"
+      print("Nome:", nome)
+      print("Cidade:", Cidade)
+    erro: NameError
+    resposta: 4
+    correcao: print("Cidade:", cidade)
+    saida_esperada: |-
+      Nome: Bia
+      Cidade: Salvador
+    dicas:
+      - Compare os nomes criados com os nomes usados.
+    explicacao: A variável criada foi cidade, com c minúsculo. Na linha 4, Cidade é outro nome, que não existe, e o Python mostra um NameError.
+
+  - id: u1-l5-e04
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar parte do cartão criando variáveis antes de usá-las, com mais de uma ordem válida.
+    conceitos: [atribuicao, ordem-execucao, print-varios]
+    dificuldade: 3
+    enunciado: "Etapa 4: monte o programa que exibe esta parte do cartão."
+    saida_esperada: |-
+      Cartão de apresentação
+      Nome: Bia
+      Cidade: Salvador
+    blocos:
+      - id: a
+        codigo: nome = "Bia"
+      - id: b
+        codigo: cidade = "Salvador"
+      - id: c
+        codigo: print("Cartão de apresentação")
+      - id: d
+        codigo: print("Nome:", nome)
+      - id: e
+        codigo: print("Cidade:", cidade)
+    resposta:
+      - [a, b, c, d, e]
+      - [a, c, b, d, e]
+      - [a, c, d, b, e]
+      - [b, a, c, d, e]
+      - [b, c, a, d, e]
+      - [c, a, b, d, e]
+      - [c, a, d, b, e]
+      - [c, b, a, d, e]
+    dicas:
+      - Os print aparecem na mesma ordem das linhas da saída.
+      - Cada variável precisa ser criada antes do print que a usa.
+    explicacao: Os três print seguem a ordem da saída, e cada variável é criada antes de ser usada. As atribuições podem vir em posições diferentes, desde que antes do seu print.
+
+  - id: u1-l5-e05
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Atualizar a idade e exibir o novo valor.
+    conceitos: [atualizacao, variavel-vs-texto]
+    dificuldade: 2
+    enunciado: "Etapa 5: Bia fez aniversário. Complete para atualizar a idade e exibir a saída abaixo."
+    codigo: |-
+      idade = 28
+      idade = ___1___
+      print("Idade:", ___2___)
+    saida_esperada: |-
+      Idade: 29
+    lacunas:
+      - id: "1"
+        opcoes: ["idade + 1", "idade - 1", "idade"]
+        resposta: "idade + 1"
+      - id: "2"
+        opcoes: ["idade", "\"idade\"", "Idade"]
+        resposta: "idade"
+    dicas:
+      - O novo valor é a idade atual mais 1.
+      - No print, use a variável sem aspas.
+    explicacao: idade = idade + 1 guarda 29 em idade. Depois, o print exibe o rótulo e o valor atualizado.
+
+  - id: u1-l5-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o programa que cria a variável antes de usá-la e a usa sem aspas.
+    conceitos: [ordem-execucao, variavel-vs-texto]
+    dificuldade: 2
+    enunciado: "Etapa 6: qual programa exibe exatamente: Cidade: Salvador"
+    saida_esperada: |-
+      Cidade: Salvador
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          print("Cidade:", cidade)
+          cidade = "Salvador"
+        feedback: A variável é usada antes de ser criada, e o Python mostra um erro.
+      - id: b
+        texto: |-
+          cidade = "Salvador"
+          print("Cidade:", "cidade")
+        feedback: Com aspas, "cidade" é um texto e aparece como está.
+      - id: c
+        texto: |-
+          cidade = "Salvador"
+          print("Cidade:", cidade)
+    resposta: c
+    dicas:
+      - Confira a ordem das linhas e as aspas.
+    explicacao: A variável precisa ser criada antes de ser usada e aparecer no print sem aspas.
+
+  - id: u1-l5-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar o cartão completo a partir de variáveis já criadas.
+    conceitos: [print-varios, ordem-execucao, variavel-vs-texto]
+    dificuldade: 3
+    enunciado: "Etapa final: os dados já estão guardados. Monte o cartão completo."
+    codigo_antes: |-
+      nome = "Bia"
+      idade = 29
+      cidade = "Salvador"
+    saida_esperada: |-
+      Cartão de apresentação
+      Nome: Bia
+      Idade: 29
+      Cidade: Salvador
+    blocos:
+      - id: a
+        codigo: print("Cartão de apresentação")
+      - id: b
+        codigo: print("Nome:", nome)
+      - id: c
+        codigo: print("Idade:", idade)
+      - id: d
+        codigo: print("Cidade:", cidade)
+      - id: e
+        codigo: print("Nome:", "nome")
+    resposta:
+      - [a, b, c, d]
+    dicas:
+      - Siga a ordem das linhas da saída.
+      - Um dos blocos exibe o texto nome em vez do valor da variável.
+    explicacao: Cada print exibe uma linha do cartão, na ordem da saída. O bloco com "nome" entre aspas exibiria a palavra nome, não Bia.
+
+revisao:
+  - id: u1-l5-r01
+    versao: 1
+    variacao_de: u1-l5-e03
+    tipo: localizar_erro
+    objetivo: Encontrar aspas não fechadas em uma linha do cartão.
+    conceitos: [string-aspas, print-varios]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      nome = "Davi"
+      print("Nome:", nome)
+      print("Cidade:, "Natal")
+    erro: SyntaxError
+    resposta: 3
+    correcao: print("Cidade:", "Natal")
+    saida_esperada: |-
+      Nome: Davi
+      Cidade: Natal
+    dicas:
+      - Confira se cada texto abre e fecha aspas.
+    explicacao: "Na linha 3, o texto Cidade: não fecha as aspas antes da vírgula. Cada texto do print precisa das próprias aspas."

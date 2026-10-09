@@ -1,0 +1,278 @@
+id: u3-l3
+unidade: u3
+ordem: 3
+versao: 1
+titulo: E, ou, não
+objetivo: Combinar condições com and, or e not.
+conceitos: [logicos, booleanos]
+
+exercicios:
+  - id: u3-l3-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que and exige as duas condições verdadeiras.
+    conceitos: [logicos]
+    dificuldade: 1
+    enunciado: O and só é verdadeiro quando os dois lados são verdadeiros. O que este programa exibe?
+    codigo: |-
+      print(True and False)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: Um dos lados é False, e o and exige os dois verdadeiros.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          True False
+        feedback: O and combina os valores e resulta em um só.
+    resposta: b
+    dicas:
+      - Os dois lados são True?
+    explicacao: Com and, basta um lado ser False para o resultado ser False.
+
+  - id: u3-l3-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que or precisa de pelo menos uma condição verdadeira.
+    conceitos: [logicos]
+    dificuldade: 1
+    enunciado: O or é verdadeiro quando pelo menos um lado é verdadeiro. O que este programa exibe?
+    codigo: |-
+      print(True or False)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+      - id: b
+        texto: |-
+          False
+        feedback: Com or, basta um lado ser True.
+      - id: c
+        texto: |-
+          True or False
+        feedback: Sem aspas, o Python calcula o resultado.
+    resposta: a
+    dicas:
+      - Algum dos lados é True?
+    explicacao: Com or, um lado verdadeiro é suficiente. Como o primeiro é True, o resultado é True.
+
+  - id: u3-l3-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Usar not para inverter um valor lógico.
+    conceitos: [logicos]
+    dificuldade: 1
+    enunciado: O not inverte o valor. O que este programa exibe?
+    codigo: |-
+      print(not True)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: O not troca True por False.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        erro: true
+        feedback: not True é válido em Python.
+    resposta: b
+    dicas:
+      - Qual é o contrário de True?
+    explicacao: O not inverte o valor lógico. O contrário de True é False.
+
+  - id: u3-l3-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Combinar uma comparação e uma variável lógica com and.
+    conceitos: [logicos, booleanos]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      idade = 20
+      tem_ingresso = True
+      print(idade >= 18 and tem_ingresso)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+      - id: b
+        texto: |-
+          False
+        feedback: As duas condições são verdadeiras.
+      - id: c
+        texto: |-
+          20
+        feedback: O and resulta em um valor lógico.
+    resposta: a
+    dicas:
+      - Avalie cada lado do and separadamente.
+    explicacao: idade >= 18 é True, e tem_ingresso também é True. Com os dois verdadeiros, o and resulta em True.
+
+  - id: u3-l3-e05
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escolher or quando basta uma condição verdadeira.
+    conceitos: [logicos]
+    dificuldade: 2
+    enunciado: Complete para que o programa exiba True quando estiver chovendo ou fazendo sol.
+    codigo: |-
+      chuva = True
+      sol = False
+      print(chuva ___1___ sol)
+    saida_esperada: |-
+      True
+    lacunas:
+      - id: "1"
+        opcoes: ["or", "and", "+"]
+        resposta: "or"
+    dicas:
+      - Basta uma das condições ser verdadeira.
+    explicacao: chuva or sol é True, porque chuva é True. Com and, o resultado seria False; com +, o Python faria uma soma.
+
+  - id: u3-l3-e06
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma condição que usa or no lugar de and.
+    conceitos: [logicos]
+    dificuldade: 3
+    enunciado: Para passar, o aluno precisa de nota de pelo menos 6 e frequência de pelo menos 75. O programa deveria exibir a saída abaixo. Selecione a linha com o problema.
+    codigo: |-
+      nota = 8
+      frequencia = 60
+      print(nota >= 6 or frequencia >= 75)
+    erro: saida_incorreta
+    resposta: 3
+    correcao: print(nota >= 6 and frequencia >= 75)
+    saida_esperada: |-
+      False
+    dicas:
+      - As duas exigências precisam ser cumpridas.
+    explicacao: As duas condições são obrigatórias, então o correto é and. Com or, a nota sozinha já tornava o resultado True.
+
+  - id: u3-l3-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o programa que combina condições corretamente.
+    conceitos: [logicos]
+    dificuldade: 2
+    enunciado: 'Hoje não é fim de semana, mas é feriado. Qual programa exibe exatamente: True'
+    saida_esperada: |-
+      True
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          fim_de_semana = False
+          feriado = True
+          print(fim_de_semana and feriado)
+        feedback: Com and, os dois precisariam ser True.
+      - id: b
+        texto: |-
+          fim_de_semana = False
+          feriado = True
+          print(fim_de_semana or feriado)
+      - id: c
+        texto: |-
+          fim_de_semana = False
+          feriado = True
+          print(not feriado)
+        feedback: not feriado inverte True para False.
+    resposta: b
+    dicas:
+      - Uma condição verdadeira basta?
+    explicacao: Com or, basta um dos lados ser True. Como feriado é True, o resultado é True.
+
+revisao:
+  - id: u3-l3-r01
+    versao: 1
+    variacao_de: u3-l3-e02
+    tipo: escolher_resultado
+    objetivo: Prever or com os dois lados falsos.
+    conceitos: [logicos]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(False or False)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: O or precisa de pelo menos um lado True.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          False False
+        feedback: O or resulta em um único valor.
+    resposta: b
+    dicas:
+      - Algum lado é True?
+    explicacao: Nenhum dos lados é True, então o or resulta em False.
+
+  - id: u3-l3-r02
+    versao: 1
+    variacao_de: u3-l3-e03
+    tipo: escolher_resultado
+    objetivo: Inverter False com not.
+    conceitos: [logicos]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(not False)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+      - id: b
+        texto: |-
+          False
+        feedback: O not inverte o valor.
+      - id: c
+        texto: |-
+          not False
+        feedback: Sem aspas, o Python calcula o resultado.
+    resposta: a
+    dicas:
+      - Qual é o contrário de False?
+    explicacao: O not inverte False, resultando em True.
+
+  - id: u3-l3-r03
+    versao: 1
+    variacao_de: u3-l3-e04
+    tipo: escolher_resultado
+    objetivo: Prever and com uma condição falsa.
+    conceitos: [logicos, booleanos]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      idade = 25
+      tem_carteira = False
+      print(idade >= 18 and tem_carteira)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: tem_carteira é False, e o and exige os dois verdadeiros.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          25
+        feedback: O and resulta em um valor lógico.
+    resposta: b
+    dicas:
+      - Avalie cada lado do and.
+    explicacao: idade >= 18 é True, mas tem_carteira é False. Com and, o resultado é False.

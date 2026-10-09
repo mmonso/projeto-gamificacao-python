@@ -1,0 +1,243 @@
+id: u3-l5
+unidade: u3
+ordem: 5
+versao: 1
+titulo: "Desafio: verificador de ingresso"
+objetivo: Montar, em etapas, um programa que decide entre meia-entrada e inteira.
+conceitos: [booleanos, comparacao, logicos, if-else, indentacao]
+
+exercicios:
+  - id: u3-l5-e01
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Guardar um número e um valor lógico em variáveis.
+    conceitos: [booleanos]
+    dificuldade: 2
+    enunciado: 'Etapa 1: a pessoa tem 16 anos e não é estudante. Complete para guardar os dados.'
+    codigo: |-
+      idade = ___1___
+      estudante = ___2___
+      print(idade, estudante)
+    saida_esperada: |-
+      16 False
+    lacunas:
+      - id: "1"
+        opcoes: ["16", "16.0", "dezesseis"]
+        resposta: "16"
+      - id: "2"
+        opcoes: ["False", "false", "Falso"]
+        resposta: "False"
+    dicas:
+      - Idade é um número inteiro.
+      - O valor lógico é escrito em inglês, com maiúscula.
+    explicacao: 16 é um inteiro, e False é o valor lógico para "não". false e Falso não são valores do Python.
+
+  - id: u3-l5-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a comparação da idade.
+    conceitos: [comparacao]
+    dificuldade: 1
+    enunciado: 'Etapa 2: menores de 18 pagam meia. O que este programa exibe?'
+    codigo: |-
+      idade = 16
+      print(idade < 18)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+      - id: b
+        texto: |-
+          False
+        feedback: 16 é menor que 18.
+      - id: c
+        texto: |-
+          16
+        feedback: A comparação resulta em True ou False.
+    resposta: a
+    dicas:
+      - 16 é menor que 18?
+    explicacao: 16 < 18 é verdadeiro, então a pessoa tem direito a meia-entrada pela idade.
+
+  - id: u3-l5-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Combinar as duas regras da meia-entrada com or.
+    conceitos: [logicos]
+    dificuldade: 2
+    enunciado: 'Etapa 3: tem meia quem é menor de 18 ou estudante. O que este programa exibe?'
+    codigo: |-
+      idade = 16
+      estudante = False
+      print(idade < 18 or estudante)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          False
+        feedback: Com or, basta uma condição verdadeira, e a idade já é.
+      - id: b
+        texto: |-
+          True
+      - id: c
+        texto: |-
+          16 False
+        feedback: O or resulta em um único valor lógico.
+    resposta: b
+    dicas:
+      - Uma das condições já é verdadeira?
+    explicacao: idade < 18 é True. Com or, isso basta para o resultado ser True, mesmo sem ser estudante.
+
+  - id: u3-l5-e04
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma regra que usa and no lugar de or.
+    conceitos: [logicos, if-else]
+    dificuldade: 3
+    enunciado: 'Etapa 4: estudantes pagam meia, mas o programa diz outra coisa. Selecione a linha com o problema.'
+    codigo: |-
+      idade = 30
+      estudante = True
+      if idade < 18 and estudante:
+          print("Meia-entrada")
+      else:
+          print("Inteira")
+    erro: saida_incorreta
+    resposta: 3
+    correcao: 'if idade < 18 or estudante:'
+    saida_esperada: |-
+      Meia-entrada
+    dicas:
+      - Para ter meia, a pessoa precisa cumprir as duas regras ou basta uma?
+    explicacao: Basta uma das regras para ter meia-entrada, então a condição usa or. Com and, a pessoa precisaria ser menor e estudante ao mesmo tempo.
+
+  - id: u3-l5-e05
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar o if/else completo com blocos recuados.
+    conceitos: [if-else, indentacao]
+    dificuldade: 3
+    enunciado: 'Etapa 5: a regra já está calculada. Monte o if/else que exibe o tipo de ingresso.'
+    codigo_antes: |-
+      idade = 30
+      estudante = False
+      meia = idade < 18 or estudante
+    saida_esperada: |-
+      Inteira
+    blocos:
+      - id: a
+        codigo: 'if meia:'
+      - id: b
+        codigo: '    print("Meia-entrada")'
+      - id: c
+        codigo: 'else:'
+      - id: d
+        codigo: '    print("Inteira")'
+      - id: e
+        codigo: 'if meia = True:'
+    resposta:
+      - [a, b, c, d]
+    dicas:
+      - O if vem antes do else, e cada um tem seu bloco recuado.
+    explicacao: Como meia é False, o Python pula o bloco do if e executa o do else. Cada bloco fica recuado logo abaixo da sua linha.
+
+  - id: u3-l5-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o programa com a condição e a sintaxe corretas.
+    conceitos: [logicos, if-else, indentacao]
+    dificuldade: 3
+    enunciado: 'Etapa 6: um estudante de 30 anos deve pagar meia. Qual programa exibe exatamente: Meia-entrada'
+    saida_esperada: |-
+      Meia-entrada
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          idade = 30
+          estudante = True
+          if idade < 18 or estudante:
+              print("Meia-entrada")
+          else:
+              print("Inteira")
+      - id: b
+        texto: |-
+          idade = 30
+          estudante = True
+          if idade < 18 and estudante:
+              print("Meia-entrada")
+          else:
+              print("Inteira")
+        feedback: Com and, o estudante de 30 anos pagaria inteira.
+      - id: c
+        texto: |-
+          idade = 30
+          estudante = True
+          if idade < 18 or estudante
+              print("Meia-entrada")
+          else:
+              print("Inteira")
+        feedback: Falta o dois-pontos no final da linha do if.
+    resposta: a
+    dicas:
+      - Confira o operador lógico e o final da linha do if.
+    explicacao: A condição usa or, porque basta uma regra, e a linha do if termina com dois-pontos.
+
+  - id: u3-l5-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a saída do verificador completo.
+    conceitos: [if-else, logicos]
+    dificuldade: 3
+    enunciado: Etapa final. O que este programa exibe?
+    codigo: |-
+      idade = 17
+      estudante = False
+      if idade < 18 or estudante:
+          tipo = "Meia-entrada"
+      else:
+          tipo = "Inteira"
+      print("Ingresso:", tipo)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Ingresso: Inteira
+        feedback: 17 é menor que 18, então a condição é verdadeira.
+      - id: b
+        texto: |-
+          Ingresso: tipo
+        feedback: Sem aspas, tipo é a variável, e o print exibe o valor dela.
+      - id: c
+        texto: |-
+          Ingresso: Meia-entrada
+    resposta: c
+    dicas:
+      - Qual bloco guarda um valor em tipo?
+    explicacao: Como idade < 18 é verdadeiro, o bloco do if guarda Meia-entrada em tipo. A última linha, sem recuo, exibe esse valor.
+
+revisao:
+  - id: u3-l5-r01
+    versao: 1
+    variacao_de: u3-l5-e04
+    tipo: localizar_erro
+    objetivo: Encontrar uma comparação invertida na regra de idade.
+    conceitos: [comparacao, if-else]
+    dificuldade: 3
+    enunciado: Uma criança de 12 anos deveria pagar meia, mas o programa diz outra coisa. Selecione a linha com o problema.
+    codigo: |-
+      idade = 12
+      estudante = False
+      if idade > 18 or estudante:
+          print("Meia-entrada")
+      else:
+          print("Inteira")
+    erro: saida_incorreta
+    resposta: 3
+    correcao: 'if idade < 18 or estudante:'
+    saida_esperada: |-
+      Meia-entrada
+    dicas:
+      - Quem tem direito a meia, os menores ou os maiores de 18?
+    explicacao: A regra é para menores de 18, então a comparação é idade < 18. Com >, a criança de 12 anos pagaria inteira.

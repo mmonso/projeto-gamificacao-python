@@ -1,0 +1,39 @@
+id: u1
+versao: 1
+ordem: 1
+titulo: Primeiros comandos
+descricao: Exiba mensagens, números e valores guardados em variáveis.
+conceitos:
+  - id: print-texto
+    nome: Exibir texto com print
+    descricao: O comando print exibe na tela o texto escrito entre aspas, sem as aspas.
+  - id: string-aspas
+    nome: Texto entre aspas
+    descricao: Todo texto precisa de aspas iguais no início e no fim; sem aspas, o Python procura um nome.
+  - id: ordem-execucao
+    nome: Ordem de execução
+    descricao: As linhas são executadas de cima para baixo, e cada print exibe uma nova linha.
+  - id: print-numero
+    nome: Números e contas no print
+    descricao: Números são escritos sem aspas, e o print exibe o resultado de uma conta.
+  - id: texto-vs-numero
+    nome: Texto ou número
+    descricao: Uma conta entre aspas é apenas texto e é exibida como foi escrita.
+  - id: print-varios
+    nome: Vários valores no print
+    descricao: Valores separados por vírgula no print são exibidos na mesma linha, separados por espaço.
+  - id: atribuicao
+    nome: Criar variáveis
+    descricao: O sinal = guarda o valor da direita no nome da esquerda.
+  - id: variavel-vs-texto
+    nome: Variável ou texto
+    descricao: Sem aspas, um nome é uma variável; com aspas, é um texto. Usar um nome que não existe gera NameError.
+  - id: nomes-variaveis
+    nome: Nomes de variáveis
+    descricao: Nomes não têm espaços, não começam com número, e maiúsculas e minúsculas fazem diferença.
+  - id: reatribuicao
+    nome: Trocar o valor de uma variável
+    descricao: Uma nova atribuição substitui o valor anterior; cada linha usa o valor do momento em que é executada.
+  - id: atualizacao
+    nome: Atualizar uma variável
+    descricao: Em pontos = pontos + 5, o Python calcula com o valor atual e guarda o resultado no mesmo nome.

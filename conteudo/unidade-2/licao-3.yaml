@@ -1,0 +1,264 @@
+id: u2-l3
+unidade: u2
+ordem: 3
+versao: 1
+titulo: Juntando textos
+objetivo: Juntar e repetir textos e reconhecer o erro de somar texto com número.
+conceitos: [concatenacao, repeticao-texto, erro-tipo]
+
+exercicios:
+  - id: u2-l3-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que o + junta textos sem colocar espaço.
+    conceitos: [concatenacao]
+    dificuldade: 1
+    enunciado: Com textos, o + junta um no outro. O que este programa exibe?
+    codigo: |-
+      print("Bom" + "dia")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Bom dia
+        feedback: O + não coloca espaço entre os textos.
+      - id: b
+        texto: |-
+          Bomdia
+      - id: c
+        texto: |-
+          Bom + dia
+        feedback: O + junta os textos e não aparece na saída.
+    resposta: b
+    dicas:
+      - Diferente da vírgula do print, o + não acrescenta nada entre os textos.
+    explicacao: O + junta os textos exatamente como estão. Como nenhum deles tem espaço, o resultado é Bomdia.
+
+  - id: u2-l3-e02
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Incluir um texto com espaço para separar palavras.
+    conceitos: [concatenacao]
+    dificuldade: 2
+    enunciado: Complete para exibir as duas palavras separadas por espaço.
+    codigo: |-
+      print("Bom" + ___1___ + "dia")
+    saida_esperada: |-
+      Bom dia
+    lacunas:
+      - id: "1"
+        opcoes: ["\" \"", "\"\"", "espaco"]
+        resposta: "\" \""
+    dicas:
+      - O espaço também é um texto e precisa de aspas.
+    explicacao: '" " é um texto com um espaço. Juntado entre as palavras, ele as separa. "" é um texto vazio, e espaco sem aspas seria um nome desconhecido.'
+
+  - id: u2-l3-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a repetição de um texto com *.
+    conceitos: [repeticao-texto]
+    dificuldade: 1
+    enunciado: Um texto vezes um número é repetido. O que este programa exibe?
+    codigo: |-
+      print("ha" * 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          hahaha
+      - id: b
+        texto: |-
+          ha ha ha
+        feedback: A repetição não coloca espaços entre as cópias.
+      - id: c
+        texto: |-
+          ha3
+        feedback: O * repete o texto; não junta o número a ele.
+    resposta: a
+    dicas:
+      - O texto aparece três vezes, colado.
+    explicacao: '"ha" * 3 repete o texto três vezes, sem espaços: hahaha.'
+
+  - id: u2-l3-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que juntar texto e número com + gera erro.
+    conceitos: [erro-tipo]
+    dificuldade: 2
+    enunciado: O que acontece quando este programa é executado?
+    codigo: |-
+      print("Idade: " + 30)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Idade: 30
+        feedback: O + não junta texto com número; o Python mostra um erro.
+      - id: b
+        erro: true
+      - id: c
+        texto: |-
+          Idade: + 30
+        feedback: O + não aparece na saída.
+    resposta: b
+    dicas:
+      - '"Idade: " é texto, e 30 é número.'
+    explicacao: O + junta textos ou soma números, mas não mistura os dois. Juntar texto com número gera um erro de tipo (TypeError).
+
+  - id: u2-l3-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar a linha que junta texto e número com +.
+    conceitos: [erro-tipo, concatenacao]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      nome = "Rui"
+      pontos = 50
+      print(nome + " fez " + pontos + " pontos")
+    erro: TypeError
+    resposta: 3
+    correcao: print(nome, "fez", pontos, "pontos")
+    saida_esperada: |-
+      Rui fez 50 pontos
+    dicas:
+      - Qual das variáveis guarda um número?
+    explicacao: Na linha 3, o + tenta juntar textos com o número 50 e gera TypeError. Com vírgulas, o print aceita texto e número juntos.
+
+  - id: u2-l3-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar uma saudação juntando textos e uma variável.
+    conceitos: [concatenacao]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saudação.
+    codigo_antes: |-
+      nome = "Bia"
+    saida_esperada: |-
+      Olá, Bia!
+    blocos:
+      - id: a
+        codigo: saudacao = "Olá, " + nome + "!"
+      - id: b
+        codigo: print(saudacao)
+      - id: c
+        codigo: print("saudacao")
+      - id: d
+        codigo: print("Olá, " + "nome" + "!")
+    resposta:
+      - [a, b]
+    dicas:
+      - O nome da variável fica sem aspas para que o valor seja usado.
+    explicacao: A saudação junta o texto "Olá, ", o valor de nome e o texto "!". Depois, o print exibe a variável saudacao, sem aspas.
+
+  - id: u2-l3-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Escolher o programa que repete um símbolo.
+    conceitos: [repeticao-texto, erro-tipo]
+    dificuldade: 2
+    enunciado: "Qual programa exibe exatamente: ==="
+    saida_esperada: |-
+      ===
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          print("=" + 3)
+        feedback: Somar texto com número gera TypeError.
+      - id: b
+        texto: |-
+          print("= = =")
+        feedback: Esse texto tem espaços entre os sinais.
+      - id: c
+        texto: |-
+          print("=" * 3)
+    resposta: c
+    dicas:
+      - Para repetir um texto, use *.
+    explicacao: '"=" * 3 repete o sinal três vezes, sem espaços.'
+
+revisao:
+  - id: u2-l3-r01
+    versao: 1
+    variacao_de: u2-l3-e01
+    tipo: escolher_resultado
+    objetivo: Prever a junção de dois textos em outro contexto.
+    conceitos: [concatenacao]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("Py" + "thon")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Py thon
+        feedback: O + não acrescenta espaço.
+      - id: b
+        texto: |-
+          Python
+      - id: c
+        texto: |-
+          Py + thon
+        feedback: O + junta os textos e não aparece.
+    resposta: b
+    dicas:
+      - Os textos são colados um no outro.
+    explicacao: O + junta "Py" e "thon" sem espaço, formando Python.
+
+  - id: u2-l3-r02
+    versao: 1
+    variacao_de: u2-l3-e04
+    tipo: escolher_resultado
+    objetivo: Prever o erro de tipo em outro contexto.
+    conceitos: [erro-tipo]
+    dificuldade: 2
+    enunciado: O que acontece quando este programa é executado?
+    codigo: |-
+      print("Nível " + 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Nível 2
+        feedback: O + não junta texto com número.
+      - id: b
+        texto: |-
+          Nível 2.0
+        feedback: O programa não chega a exibir nada.
+      - id: c
+        erro: true
+    resposta: c
+    dicas:
+      - Um lado do + é texto, e o outro é número.
+    explicacao: Juntar o texto "Nível " com o número 2 usando + gera TypeError.
+
+  - id: u2-l3-r03
+    versao: 1
+    variacao_de: u2-l3-e03
+    tipo: escolher_resultado
+    objetivo: Prever a repetição de um símbolo.
+    conceitos: [repeticao-texto]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("-" * 5)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          -----
+      - id: b
+        texto: |-
+          -5
+        feedback: Com texto, o * repete; não faz conta.
+      - id: c
+        texto: |-
+          - - - - -
+        feedback: As cópias ficam coladas, sem espaços.
+    resposta: a
+    dicas:
+      - O sinal aparece cinco vezes.
+    explicacao: '"-" * 5 repete o sinal cinco vezes, formando uma linha.'

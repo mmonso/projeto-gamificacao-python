@@ -1,0 +1,259 @@
+id: u3-l1
+unidade: u3
+ordem: 1
+versao: 1
+titulo: Verdadeiro ou falso
+objetivo: Prever o resultado de comparações com >, <, >= e <=.
+conceitos: [booleanos, comparacao]
+
+exercicios:
+  - id: u3-l1-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que uma comparação resulta em True ou False.
+    conceitos: [booleanos, comparacao]
+    dificuldade: 1
+    enunciado: Uma comparação responde com True (verdadeiro) ou False (falso). O que este programa exibe?
+    codigo: |-
+      print(5 > 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+      - id: b
+        texto: |-
+          False
+        feedback: 5 é maior que 3, então a comparação é verdadeira.
+      - id: c
+        texto: |-
+          5 > 3
+        feedback: Sem aspas, o Python avalia a comparação.
+    resposta: a
+    dicas:
+      - 5 é maior que 3?
+    explicacao: 5 > 3 é verdadeiro, e o Python responde com True.
+
+  - id: u3-l1-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever uma comparação falsa.
+    conceitos: [booleanos, comparacao]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(2 > 7)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: 2 não é maior que 7.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          7
+        feedback: Uma comparação resulta em True ou False, não em um número.
+    resposta: b
+    dicas:
+      - Leia > como "é maior que".
+    explicacao: 2 não é maior que 7, então a comparação resulta em False.
+
+  - id: u3-l1-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que >= inclui a igualdade.
+    conceitos: [comparacao]
+    dificuldade: 2
+    enunciado: O operador >= significa "maior ou igual". O que este programa exibe?
+    codigo: |-
+      print(4 >= 4)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          False
+        feedback: 4 não é maior que 4, mas é igual, e o >= aceita a igualdade.
+      - id: b
+        texto: |-
+          True
+      - id: c
+        texto: |-
+          4
+        feedback: A comparação resulta em True ou False.
+    resposta: b
+    dicas:
+      - O >= aceita valores iguais.
+    explicacao: 4 >= 4 pergunta se 4 é maior ou igual a 4. Como é igual, o resultado é True.
+
+  - id: u3-l1-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escolher o operador de comparação que torna a condição verdadeira.
+    conceitos: [comparacao]
+    dificuldade: 2
+    enunciado: Complete para verificar se a idade é maior que 18.
+    codigo: |-
+      idade = 20
+      print(idade ___1___ 18)
+    saida_esperada: |-
+      True
+    lacunas:
+      - id: "1"
+        opcoes: [">", "<", "="]
+        resposta: ">"
+    dicas:
+      - Um único = guarda valores; não compara.
+    explicacao: idade > 18 pergunta se 20 é maior que 18, o que é verdadeiro. Com <, o resultado seria False; com =, o Python mostraria um erro.
+
+  - id: u3-l1-e05
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Comparar o valor de uma variável.
+    conceitos: [comparacao, booleanos]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      x = 10
+      print(x < 5)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          False
+      - id: b
+        texto: |-
+          True
+        feedback: x vale 10, que não é menor que 5.
+      - id: c
+        texto: |-
+          10 < 5
+        feedback: O print exibe o resultado da comparação.
+    resposta: a
+    dicas:
+      - Troque x pelo valor guardado nele.
+    explicacao: x vale 10, e 10 < 5 é falso. O print exibe False.
+
+  - id: u3-l1-e06
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar a comparação entre texto e número.
+    conceitos: [comparacao]
+    dificuldade: 3
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      pontos = "10"
+      print(pontos > 5)
+    erro: TypeError
+    resposta: 2
+    correcao: print(int(pontos) > 5)
+    saida_esperada: |-
+      True
+    dicas:
+      - Qual é o tipo de pontos?
+    explicacao: pontos guarda o texto "10". O Python não compara texto e número com >, por isso a linha 2 gera TypeError. Convertendo com int, a comparação funciona.
+
+  - id: u3-l1-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar comparações que produzem True e depois False.
+    conceitos: [comparacao, booleanos]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saída.
+    codigo_antes: |-
+      nota = 7
+    saida_esperada: |-
+      True
+      False
+    blocos:
+      - id: a
+        codigo: print(nota >= 6)
+      - id: b
+        codigo: print(nota >= 8)
+      - id: c
+        codigo: print(nota => 6)
+    resposta:
+      - [a, b]
+    dicas:
+      - O operador é escrito >=, não =>.
+    explicacao: 7 >= 6 é verdadeiro e 7 >= 8 é falso. O bloco com => está escrito errado e geraria um erro.
+
+revisao:
+  - id: u3-l1-r01
+    versao: 1
+    variacao_de: u3-l1-e01
+    tipo: escolher_resultado
+    objetivo: Prever uma comparação com <.
+    conceitos: [comparacao, booleanos]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(10 < 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: 10 não é menor que 3.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          3
+        feedback: A comparação resulta em True ou False.
+    resposta: b
+    dicas:
+      - Leia < como "é menor que".
+    explicacao: 10 não é menor que 3, então o resultado é False.
+
+  - id: u3-l1-r02
+    versao: 1
+    variacao_de: u3-l1-e04
+    tipo: completar_lacuna
+    objetivo: Escolher o operador de comparação em outro contexto.
+    conceitos: [comparacao]
+    dificuldade: 2
+    enunciado: Complete para verificar se a temperatura está abaixo de 30.
+    codigo: |-
+      temperatura = 15
+      print(temperatura ___1___ 30)
+    saida_esperada: |-
+      True
+    lacunas:
+      - id: "1"
+        opcoes: ["<", ">", "=<"]
+        resposta: "<"
+    dicas:
+      - Abaixo de 30 significa menor que 30.
+    explicacao: temperatura < 30 é verdadeiro, porque 15 é menor que 30. O operador =< não existe; o certo seria <=.
+
+  - id: u3-l1-r03
+    versao: 1
+    variacao_de: u3-l1-e03
+    tipo: escolher_resultado
+    objetivo: Prever uma comparação com <=.
+    conceitos: [comparacao]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(9 <= 8)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          True
+        feedback: 9 não é menor nem igual a 8.
+      - id: b
+        texto: |-
+          False
+      - id: c
+        texto: |-
+          8
+        feedback: A comparação resulta em True ou False.
+    resposta: b
+    dicas:
+      - O <= aceita menor ou igual.
+    explicacao: 9 não é menor nem igual a 8, então o resultado é False.

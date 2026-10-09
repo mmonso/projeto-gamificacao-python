@@ -1,0 +1,24 @@
+id: u3
+versao: 1
+ordem: 3
+titulo: Decisões
+descricao: Compare valores e faça o programa escolher o que fazer.
+conceitos:
+  - id: booleanos
+    nome: Verdadeiro ou falso
+    descricao: Comparações resultam em True ou False, os valores do tipo bool.
+  - id: comparacao
+    nome: Comparar números
+    descricao: Os operadores >, <, >= e <= comparam valores; >= e <= incluem a igualdade.
+  - id: igualdade
+    nome: Igual ou diferente
+    descricao: O == compara se dois valores são iguais e o != se são diferentes; um único = guarda valores.
+  - id: logicos
+    nome: E, ou, não
+    descricao: and exige que as duas condições sejam verdadeiras, or exige pelo menos uma, e not inverte o valor.
+  - id: if-else
+    nome: Se e senão
+    descricao: O if executa um bloco quando a condição é verdadeira; o else executa outro bloco quando é falsa.
+  - id: indentacao
+    nome: Blocos e indentação
+    descricao: A linha do if e do else termina com dois-pontos, e as linhas do bloco ficam recuadas.

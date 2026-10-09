@@ -1,0 +1,30 @@
+id: u2
+versao: 1
+ordem: 2
+titulo: Valores e operações
+descricao: Trabalhe com tipos de valores, contas, textos e conversões.
+conceitos:
+  - id: tipos-basicos
+    nome: Tipos básicos
+    descricao: Valores podem ser int, float, str ou bool, e type mostra o tipo de um valor.
+  - id: divisao
+    nome: Divisão
+    descricao: A divisão com / sempre resulta em float; com //, a parte decimal é descartada.
+  - id: resto-potencia
+    nome: Resto e potência
+    descricao: O operador % dá o resto da divisão, e ** eleva um número a uma potência.
+  - id: precedencia
+    nome: Ordem das operações
+    descricao: Multiplicação e divisão acontecem antes de soma e subtração; parênteses mudam a ordem.
+  - id: concatenacao
+    nome: Juntar textos
+    descricao: O + junta textos, sem colocar espaço entre eles.
+  - id: repeticao-texto
+    nome: Repetir textos
+    descricao: Um texto multiplicado por um número inteiro é repetido.
+  - id: erro-tipo
+    nome: Texto com número
+    descricao: Juntar texto e número com + gera TypeError.
+  - id: conversao
+    nome: Converter valores
+    descricao: str, int e float convertem um valor para texto, inteiro ou número decimal.

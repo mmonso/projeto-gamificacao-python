@@ -1,0 +1,277 @@
+id: u1-l3
+unidade: u1
+ordem: 3
+versao: 1
+titulo: Guardando valores
+objetivo: Criar variáveis com =, usá-las no print, distinguir variável de texto e reconhecer nomes inválidos.
+conceitos: [atribuicao, variavel-vs-texto, nomes-variaveis]
+
+exercicios:
+  - id: u1-l3-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que o print de uma variável exibe o valor guardado nela.
+    conceitos: [atribuicao]
+    dificuldade: 1
+    enunciado: Uma variável guarda um valor com um nome. O sinal = guarda o valor da direita no nome da esquerda. O que este programa exibe?
+    codigo: |-
+      nome = "Ana"
+      print(nome)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          nome
+        feedback: Sem aspas, nome é a variável. O print exibe o valor guardado nela.
+      - id: b
+        texto: |-
+          Ana
+      - id: c
+        texto: |-
+          "Ana"
+        feedback: As aspas não aparecem na saída.
+    resposta: b
+    dicas:
+      - A primeira linha guarda o texto Ana na variável chamada nome.
+      - O print recebe a variável, sem aspas.
+    explicacao: A linha nome = "Ana" guarda o texto Ana na variável nome. O print(nome) exibe o valor guardado, Ana.
+
+  - id: u1-l3-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que o nome entre aspas é um texto e não usa a variável.
+    conceitos: [variavel-vs-texto]
+    dificuldade: 2
+    enunciado: Repare nas aspas do print. O que este programa exibe?
+    codigo: |-
+      cidade = "Recife"
+      print("cidade")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Recife
+        feedback: Com aspas, "cidade" é só um texto. A variável não é usada.
+      - id: b
+        texto: |-
+          cidade
+      - id: c
+        erro: true
+        feedback: O programa funciona. O print recebe um texto comum.
+    resposta: b
+    dicas:
+      - Com aspas é texto; sem aspas é variável.
+    explicacao: Com aspas, "cidade" é um texto como qualquer outro, e o print o exibe como está. Para exibir Recife, seria print(cidade), sem aspas.
+
+  - id: u1-l3-e03
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever uma atribuição com = e usar a variável no print.
+    conceitos: [atribuicao, variavel-vs-texto]
+    dificuldade: 2
+    enunciado: Complete para guardar 25 na variável idade e depois exibi-la.
+    codigo: |-
+      idade ___1___ 25
+      print(___2___)
+    saida_esperada: |-
+      25
+    lacunas:
+      - id: "1"
+        opcoes: ["=", "==", "=>"]
+        resposta: "="
+      - id: "2"
+        opcoes: ["idade", "\"idade\"", "Idade"]
+        resposta: "idade"
+    dicas:
+      - Para guardar um valor, usa-se um único sinal de igual.
+      - O print deve receber a variável sem aspas, escrita igual à primeira linha.
+    explicacao: O sinal = guarda 25 na variável idade. Depois, print(idade) exibe o valor guardado. Com aspas, seria exibido o texto idade; com I maiúsculo, seria outro nome.
+
+  - id: u1-l3-e04
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Reconhecer que maiúsculas e minúsculas diferenciam nomes de variáveis.
+    conceitos: [variavel-vs-texto, nomes-variaveis]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      pais = "Brasil"
+      print("Moro no")
+      print(Pais)
+    erro: NameError
+    resposta: 3
+    correcao: print(pais)
+    saida_esperada: |-
+      Moro no
+      Brasil
+    dicas:
+      - Compare o nome criado na linha 1 com o nome usado depois.
+      - Uma letra maiúscula muda o nome.
+    explicacao: Pais e pais são nomes diferentes para o Python. Como Pais nunca foi criada, a linha 3 mostra um erro de nome (NameError).
+
+  - id: u1-l3-e05
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Reconhecer nomes de variáveis válidos e inválidos.
+    conceitos: [nomes-variaveis]
+    dificuldade: 2
+    enunciado: "Nomes de variáveis não têm espaços nem começam com número. Qual programa exibe: Maria"
+    saida_esperada: |-
+      Maria
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          nome completo = "Maria"
+          print(nome completo)
+        feedback: Um nome de variável não pode ter espaço.
+      - id: b
+        texto: |-
+          1nome = "Maria"
+          print(1nome)
+        feedback: Um nome de variável não pode começar com número.
+      - id: c
+        texto: |-
+          nome_completo = "Maria"
+          print(nome_completo)
+    resposta: c
+    dicas:
+      - No lugar do espaço, é comum usar _ para separar palavras.
+    explicacao: Nomes de variáveis usam letras, números e _, mas não podem ter espaços nem começar com número. Por isso nome_completo funciona.
+
+  - id: u1-l3-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Criar variáveis antes de usá-las e aceitar ordens equivalentes.
+    conceitos: [atribuicao, print-varios]
+    dificuldade: 2
+    enunciado: Monte o programa que exibe esta saída. Lembre que uma variável precisa ser criada antes de ser usada.
+    saida_esperada: |-
+      Produto: caderno
+      Preço: 12
+    blocos:
+      - id: a
+        codigo: produto = "caderno"
+      - id: b
+        codigo: preco = 12
+      - id: c
+        codigo: print("Produto:", produto)
+      - id: d
+        codigo: print("Preço:", preco)
+      - id: e
+        codigo: print("Produto:", "produto")
+    resposta:
+      - [a, b, c, d]
+      - [a, c, b, d]
+      - [b, a, c, d]
+    dicas:
+      - Cada variável precisa aparecer em uma linha com = antes do print que a usa.
+      - O nome da variável no print fica sem aspas.
+    explicacao: Cada print só funciona depois que sua variável foi criada. Por isso as atribuições vêm antes dos print que as usam; a ordem entre elas pode variar.
+
+  - id: u1-l3-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a saída de texto e variável no mesmo print.
+    conceitos: [atribuicao, print-varios]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      pontos = 10
+      print("Pontos:", pontos)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Pontos: 10
+      - id: b
+        texto: |-
+          Pontos: pontos
+        feedback: O segundo valor não tem aspas, então é a variável. O print exibe o valor dela.
+      - id: c
+        texto: |-
+          Pontos:10
+        feedback: A vírgula do print coloca um espaço entre os valores.
+    resposta: a
+    dicas:
+      - O primeiro valor é texto; o segundo é uma variável.
+    explicacao: "O print exibe o texto Pontos: e o valor guardado em pontos, separados por um espaço."
+
+revisao:
+  - id: u1-l3-r01
+    versao: 1
+    variacao_de: u1-l3-e02
+    tipo: escolher_resultado
+    objetivo: Distinguir texto e variável com o mesmo nome no mesmo print.
+    conceitos: [variavel-vs-texto, print-varios]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      fruta = "manga"
+      print("fruta", fruta)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          fruta manga
+      - id: b
+        texto: |-
+          manga manga
+        feedback: O primeiro valor está entre aspas, então é só o texto fruta.
+      - id: c
+        texto: |-
+          fruta fruta
+        feedback: O segundo valor está sem aspas, então é a variável, que guarda manga.
+    resposta: a
+    dicas:
+      - Analise cada valor separado pela vírgula.
+    explicacao: O primeiro valor, com aspas, é o texto fruta. O segundo, sem aspas, é a variável, que guarda manga.
+
+  - id: u1-l3-r02
+    versao: 1
+    variacao_de: u1-l3-e04
+    tipo: localizar_erro
+    objetivo: Encontrar uma variável usada com o nome escrito errado.
+    conceitos: [variavel-vs-texto, nomes-variaveis]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      mensagem = "Boa sorte"
+      print(mesagem)
+    erro: NameError
+    resposta: 2
+    correcao: print(mensagem)
+    saida_esperada: |-
+      Boa sorte
+    dicas:
+      - Compare o nome letra por letra.
+    explicacao: Na linha 2 falta uma letra no nome. Para o Python, mesagem é um nome que nunca foi criado, por isso ele mostra um NameError.
+
+  - id: u1-l3-r03
+    versao: 1
+    variacao_de: u1-l3-e01
+    tipo: escolher_resultado
+    objetivo: Perceber que a variável guarda o resultado de uma conta.
+    conceitos: [atribuicao, print-numero]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      total = 3 * 5
+      print(total)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3 * 5
+        feedback: A conta é calculada antes de ser guardada na variável.
+      - id: b
+        texto: |-
+          total
+        feedback: Sem aspas, total é a variável.
+      - id: c
+        texto: |-
+          15
+    resposta: c
+    dicas:
+      - Primeiro o Python calcula o lado direito do =.
+    explicacao: O Python calcula 3 * 5 e guarda o resultado, 15, na variável total. O print exibe 15.

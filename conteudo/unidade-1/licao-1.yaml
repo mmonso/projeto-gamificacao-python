@@ -1,0 +1,251 @@
+id: u1-l1
+unidade: u1
+ordem: 1
+versao: 1
+titulo: Olá, Python
+objetivo: Prever a saída de print com texto, reconhecer aspas faltando e ordenar comandos de print.
+conceitos: [print-texto, string-aspas, ordem-execucao]
+
+exercicios:
+  - id: u1-l1-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que print exibe o texto entre aspas, sem as aspas e sem o comando.
+    conceitos: [print-texto, string-aspas]
+    dificuldade: 1
+    enunciado: O comando print mostra uma mensagem na tela. O que este programa exibe?
+    codigo: |-
+      print("Olá, mundo!")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Olá, mundo!
+      - id: b
+        texto: |-
+          "Olá, mundo!"
+        feedback: As aspas marcam onde o texto começa e termina. Elas não aparecem na tela.
+      - id: c
+        texto: |-
+          print("Olá, mundo!")
+        feedback: O comando não aparece na tela. Aparece só a mensagem que está entre os parênteses.
+    resposta: a
+    dicas:
+      - Pense no que a pessoa que usa o programa vê, não no código.
+      - As aspas só indicam onde o texto começa e termina.
+    explicacao: O print exibe na tela o texto que está entre as aspas. Nem o comando nem as aspas aparecem na saída.
+
+  - id: u1-l1-e02
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever o nome do comando print corretamente, em letras minúsculas.
+    conceitos: [print-texto]
+    dificuldade: 1
+    enunciado: Complete o programa para exibir a mensagem Bom dia.
+    codigo: |-
+      ___1___("Bom dia")
+    saida_esperada: |-
+      Bom dia
+    lacunas:
+      - id: "1"
+        opcoes: ["print", "mostrar", "Print"]
+        resposta: "print"
+    dicas:
+      - É o mesmo comando do exercício anterior.
+      - O Python diferencia letras maiúsculas de minúsculas.
+    explicacao: O comando se chama print, todo em letras minúsculas. O Python não conhece mostrar, e Print com P maiúsculo é outro nome.
+
+  - id: u1-l1-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que cada print exibe uma linha, na ordem em que aparece no código.
+    conceitos: [ordem-execucao, print-texto]
+    dificuldade: 1
+    enunciado: Um programa pode ter vários comandos. O que este programa exibe?
+    codigo: |-
+      print("Primeiro")
+      print("Segundo")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Primeiro
+          Segundo
+      - id: b
+        texto: |-
+          Segundo
+          Primeiro
+        feedback: O Python executa as linhas de cima para baixo.
+      - id: c
+        texto: |-
+          Primeiro Segundo
+        feedback: Cada print termina a linha. O próximo print começa em uma linha nova.
+    resposta: a
+    dicas:
+      - O Python lê o programa como você lê um texto, de cima para baixo.
+      - Cada print exibe sua própria linha.
+    explicacao: As linhas são executadas de cima para baixo, e cada print exibe uma linha nova. Por isso Primeiro aparece antes de Segundo, em linhas separadas.
+
+  - id: u1-l1-e04
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar um programa de duas linhas na ordem certa e descartar um bloco sem aspas.
+    conceitos: [ordem-execucao, string-aspas]
+    dificuldade: 1
+    enunciado: Monte o programa que exibe esta saída.
+    saida_esperada: |-
+      Oi
+      Tudo bem?
+    blocos:
+      - id: a
+        codigo: print("Oi")
+      - id: b
+        codigo: print("Tudo bem?")
+      - id: c
+        codigo: print(Oi)
+    resposta:
+      - [a, b]
+    dicas:
+      - A primeira linha da saída vem do primeiro print do programa.
+      - Um dos blocos não tem aspas. Sem aspas, Oi não é um texto.
+    explicacao: O programa exibe as linhas na ordem em que os print aparecem. O bloco print(Oi) não tem aspas, então o Python procuraria algo chamado Oi e mostraria um erro.
+
+  - id: u1-l1-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar um texto com as aspas não fechadas.
+    conceitos: [string-aspas]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      print("Vamos aprender Python")
+      print("Hoje é o primeiro dia)
+      print("Até logo")
+    erro: SyntaxError
+    resposta: 2
+    correcao: print("Hoje é o primeiro dia")
+    saida_esperada: |-
+      Vamos aprender Python
+      Hoje é o primeiro dia
+      Até logo
+    dicas:
+      - Confira se cada texto tem aspas no início e no fim.
+      - Olhe o final de cada linha, antes do parêntese.
+    explicacao: Na linha 2, o texto abre aspas mas não fecha. Todo texto precisa de aspas no início e no fim; sem isso, o Python mostra um erro de sintaxe (SyntaxError).
+
+  - id: u1-l1-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Reconhecer o único comando completo entre opções com erros comuns.
+    conceitos: [print-texto, string-aspas]
+    dificuldade: 2
+    enunciado: "Qual linha exibe exatamente: Python é legal"
+    saida_esperada: |-
+      Python é legal
+    opcoes_sao: codigo
+    opcoes:
+      - id: a
+        texto: |-
+          print("Python é legal")
+      - id: b
+        texto: |-
+          print(Python é legal)
+        feedback: Sem aspas, o Python tenta entender as palavras como código e mostra um erro.
+      - id: c
+        texto: |-
+          "Python é legal"
+        feedback: Sem print, o texto existe no programa, mas nada aparece na tela.
+      - id: d
+        texto: |-
+          Print("Python é legal")
+        feedback: Print com P maiúsculo não é o comando print.
+    resposta: a
+    dicas:
+      - "São necessários três itens: o comando print, os parênteses e as aspas."
+      - Confira também as letras maiúsculas e minúsculas.
+    explicacao: Para exibir um texto, use print em minúsculas, com o texto entre aspas dentro dos parênteses.
+
+revisao:
+  - id: u1-l1-r01
+    versao: 1
+    variacao_de: u1-l1-e01
+    tipo: escolher_resultado
+    objetivo: Prever a saída de print com texto em outro contexto.
+    conceitos: [print-texto, string-aspas]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("Hora do café")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          "Hora do café"
+        feedback: As aspas não aparecem na saída.
+      - id: b
+        texto: |-
+          Hora do café
+      - id: c
+        texto: |-
+          (Hora do café)
+        feedback: Os parênteses fazem parte do comando e não aparecem na saída.
+    resposta: b
+    dicas:
+      - Só o conteúdo entre as aspas aparece na tela.
+    explicacao: O print exibe só o texto entre as aspas. Parênteses e aspas fazem parte do comando.
+
+  - id: u1-l1-r02
+    versao: 1
+    variacao_de: u1-l1-e05
+    tipo: localizar_erro
+    objetivo: Reconhecer que as aspas de abertura e de fechamento precisam ser iguais.
+    conceitos: [string-aspas]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      print("Bem-vindo")
+      print('Bom dia")
+    erro: SyntaxError
+    resposta: 2
+    correcao: print('Bom dia')
+    saida_esperada: |-
+      Bem-vindo
+      Bom dia
+    dicas:
+      - O Python aceita aspas simples ou duplas.
+      - Compare a aspa do início com a do fim de cada texto.
+    explicacao: O Python aceita textos com aspas simples ou duplas, desde que o texto comece e termine com o mesmo tipo. Na linha 2, ele abre com aspas simples e tenta fechar com duplas.
+
+  - id: u1-l1-r03
+    versao: 1
+    variacao_de: u1-l1-e03
+    tipo: escolher_resultado
+    objetivo: Prever a ordem de três linhas de saída.
+    conceitos: [ordem-execucao]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print("Acordar")
+      print("Tomar café")
+      print("Estudar")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Estudar
+          Tomar café
+          Acordar
+        feedback: As linhas são executadas de cima para baixo, não de baixo para cima.
+      - id: b
+        texto: |-
+          Acordar Tomar café Estudar
+        feedback: Cada print exibe uma linha separada.
+      - id: c
+        texto: |-
+          Acordar
+          Tomar café
+          Estudar
+    resposta: c
+    dicas:
+      - Cada print gera uma linha, na ordem do código.
+    explicacao: Cada print exibe uma linha, e as linhas aparecem na mesma ordem dos comandos no programa.

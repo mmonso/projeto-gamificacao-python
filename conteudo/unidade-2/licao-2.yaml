@@ -1,0 +1,269 @@
+id: u2-l2
+unidade: u2
+ordem: 2
+versao: 1
+titulo: Contas com Python
+objetivo: Prever o resultado de /, //, %, ** e da ordem das operações.
+conceitos: [divisao, resto-potencia, precedencia]
+
+exercicios:
+  - id: u2-l2-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que a divisão com / mostra a parte decimal.
+    conceitos: [divisao]
+    dificuldade: 1
+    enunciado: Em Python, a divisão usa /. O que este programa exibe?
+    codigo: |-
+      print(7 / 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3
+        feedback: Com /, o resultado mantém a parte decimal.
+      - id: b
+        texto: |-
+          3.5
+      - id: c
+        texto: |-
+          3,5
+        feedback: O Python usa ponto para a casa decimal.
+    resposta: b
+    dicas:
+      - 7 dividido por 2 não é um número inteiro.
+    explicacao: A divisão com / mostra o resultado completo, com parte decimal separada por ponto.
+
+  - id: u2-l2-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que / sempre resulta em float, mesmo em divisão exata.
+    conceitos: [divisao, tipos-basicos]
+    dificuldade: 2
+    enunciado: A divisão agora é exata. O que este programa exibe?
+    codigo: |-
+      print(6 / 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3
+        feedback: Com /, o resultado é sempre float, então aparece com .0.
+      - id: b
+        texto: |-
+          3.0
+      - id: c
+        texto: |-
+          6 / 2
+        feedback: Sem aspas, a conta é calculada.
+    resposta: b
+    dicas:
+      - O resultado de / é sempre do tipo float.
+    explicacao: A divisão com / sempre resulta em float. Por isso 6 / 2 aparece como 3.0.
+
+  - id: u2-l2-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o resultado da divisão inteira com //.
+    conceitos: [divisao]
+    dificuldade: 2
+    enunciado: O operador // faz a divisão e descarta a parte decimal. O que este programa exibe?
+    codigo: |-
+      print(7 // 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3.5
+        feedback: Esse é o resultado de /. Com //, a parte decimal é descartada.
+      - id: b
+        texto: |-
+          4
+        feedback: O // não arredonda; ele descarta a parte decimal.
+      - id: c
+        texto: |-
+          3
+    resposta: c
+    dicas:
+      - 7 dividido por 2 é 3.5. O que sobra sem a parte decimal?
+    explicacao: 7 // 2 calcula 3.5 e descarta a parte decimal, resultando em 3.
+
+  - id: u2-l2-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o resto de uma divisão com %.
+    conceitos: [resto-potencia]
+    dificuldade: 2
+    enunciado: O operador % mostra o resto de uma divisão. O que este programa exibe?
+    codigo: |-
+      print(7 % 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          1
+      - id: b
+        texto: |-
+          3
+        feedback: 3 é quantas vezes o 2 cabe no 7. O % mostra o que sobra.
+      - id: c
+        texto: |-
+          3.5
+        feedback: O % não faz a divisão completa; mostra só o resto.
+    resposta: a
+    dicas:
+      - 2 cabe 3 vezes em 7. Quanto sobra?
+    explicacao: 7 dividido por 2 dá 3, com resto 1. O % exibe esse resto.
+
+  - id: u2-l2-e05
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Usar ** para calcular uma potência.
+    conceitos: [resto-potencia]
+    dificuldade: 2
+    enunciado: Complete para calcular 2 elevado a 3.
+    codigo: |-
+      print(2 ___1___ 3)
+    saida_esperada: |-
+      8
+    lacunas:
+      - id: "1"
+        opcoes: ["**", "^", "*"]
+        resposta: "**"
+    dicas:
+      - Em Python, a potência usa dois símbolos iguais.
+    explicacao: Em Python, a potência é escrita com **. O ^ existe, mas faz outra operação, e * é multiplicação.
+
+  - id: u2-l2-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Aplicar a ordem das operações, com multiplicação antes da soma.
+    conceitos: [precedencia]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(2 + 3 * 4)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          20
+        feedback: Somar primeiro daria 20, mas a multiplicação vem antes.
+      - id: b
+        texto: |-
+          14
+      - id: c
+        texto: |-
+          2 + 3 * 4
+        feedback: Sem aspas, a conta é calculada.
+    resposta: b
+    dicas:
+      - Como na matemática, a multiplicação vem antes da soma.
+    explicacao: O Python calcula 3 * 4 primeiro, que dá 12, e depois soma 2, resultando em 14.
+
+  - id: u2-l2-e07
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma média calculada sem parênteses.
+    conceitos: [precedencia, divisao]
+    dificuldade: 3
+    enunciado: O programa deveria exibir a média das duas notas, mas mostra outro valor. Selecione a linha com o problema.
+    codigo: |-
+      nota1 = 6
+      nota2 = 8
+      media = nota1 + nota2 / 2
+      print("Média:", media)
+    erro: saida_incorreta
+    resposta: 3
+    correcao: media = (nota1 + nota2) / 2
+    saida_esperada: |-
+      Média: 7.0
+    dicas:
+      - Qual operação acontece primeiro na linha 3?
+      - Parênteses mudam a ordem das operações.
+    explicacao: Sem parênteses, o Python divide nota2 por 2 antes de somar. Com (nota1 + nota2) / 2, a soma vem primeiro e a média fica 7.0.
+
+revisao:
+  - id: u2-l2-r01
+    versao: 1
+    variacao_de: u2-l2-e03
+    tipo: escolher_resultado
+    objetivo: Prever outra divisão inteira.
+    conceitos: [divisao]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(10 // 3)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3
+      - id: b
+        texto: |-
+          3.3333333333333335
+        feedback: Esse seria o resultado de /. O // descarta a parte decimal.
+      - id: c
+        texto: |-
+          1
+        feedback: 1 é o resto, que seria o resultado de %.
+    resposta: a
+    dicas:
+      - Quantas vezes o 3 cabe inteiro no 10?
+    explicacao: 10 // 3 descarta a parte decimal da divisão e resulta em 3.
+
+  - id: u2-l2-r02
+    versao: 1
+    variacao_de: u2-l2-e04
+    tipo: escolher_resultado
+    objetivo: Prever o resto em outra divisão.
+    conceitos: [resto-potencia]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print(10 % 4)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          2.5
+        feedback: O % mostra o resto, não o resultado da divisão.
+      - id: b
+        texto: |-
+          2
+      - id: c
+        texto: |-
+          0
+        feedback: 4 não divide 10 sem sobra.
+    resposta: b
+    dicas:
+      - 4 cabe 2 vezes em 10. Quanto sobra?
+    explicacao: 10 dividido por 4 dá 2, com resto 2. O % exibe o resto.
+
+  - id: u2-l2-r03
+    versao: 1
+    variacao_de: u2-l2-e06
+    tipo: escolher_resultado
+    objetivo: Perceber que parênteses mudam a ordem das operações.
+    conceitos: [precedencia]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      print((2 + 3) * 4)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          14
+        feedback: Os parênteses fazem a soma acontecer antes.
+      - id: b
+        texto: |-
+          20
+      - id: c
+        texto: |-
+          24
+        feedback: Primeiro 2 + 3, depois o resultado vezes 4.
+    resposta: b
+    dicas:
+      - O que está entre parênteses é calculado primeiro.
+    explicacao: Os parênteses fazem o Python calcular 2 + 3 primeiro. Depois, 5 * 4 resulta em 20.
