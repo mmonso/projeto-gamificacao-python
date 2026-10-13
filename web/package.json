@@ -9,13 +9,17 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "db:gerar": "drizzle-kit generate"
+    "db:gerar": "drizzle-kit generate",
+    "db:migrar": "drizzle-kit migrate",
+    "db:publicar": "tsx --env-file=.env.local scripts/publicar-conteudo.mts"
   },
   "dependencies": {
     "drizzle-orm": "0.45.4",
     "next": "16.4.0",
+    "postgres": "3.4.9",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "server-only": "0.0.1",
     "yaml": "2.9.1",
     "zod": "4.6.5"
   },

@@ -8,6 +8,20 @@
       "when": 1791491302005,
       "tag": "0000_inicial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791905479239,
+      "tag": "0001_rls_sem_acesso_publico",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791905596688,
+      "tag": "0002_indices_chaves_estrangeiras",
+      "breakpoints": true
     }
   ]
 }

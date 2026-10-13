@@ -56,12 +56,16 @@ export const unidades = pgTable("unidades", {
   descricao: text("descricao").notNull(),
 });
 
-export const conceitos = pgTable("conceitos", {
-  id: text("id").primaryKey(),
-  unidadeId: text("unidade_id").notNull().references(() => unidades.id),
-  nome: text("nome").notNull(),
-  descricao: text("descricao").notNull(),
-});
+export const conceitos = pgTable(
+  "conceitos",
+  {
+    id: text("id").primaryKey(),
+    unidadeId: text("unidade_id").notNull().references(() => unidades.id),
+    nome: text("nome").notNull(),
+    descricao: text("descricao").notNull(),
+  },
+  (t) => [index("conceitos_unidade").on(t.unidadeId)],
+);
 
 export const licoes = pgTable(
   "licoes",
@@ -143,6 +147,8 @@ export const sessoes = pgTable(
       .on(t.alunoId, t.licaoId)
       .where(sql`${t.tipo} = 'principal' and ${t.estado} in ('aberta', 'pausada')`),
     index("sessoes_aluno").on(t.alunoId, t.estado),
+    index("sessoes_licao").on(t.licaoId),
+    index("sessoes_versao_licao").on(t.versaoLicaoId),
   ],
 );
 
@@ -185,7 +191,7 @@ export const conclusoesLicao = pgTable(
     concluidaEm: timestamp("concluida_em", { withTimezone: true }).notNull().defaultNow(),
   },
   // Uma recompensa de primeira conclusão por aluno e lição.
-  (t) => [primaryKey({ columns: [t.alunoId, t.licaoId] })],
+  (t) => [primaryKey({ columns: [t.alunoId, t.licaoId] }), index("conclusoes_licao_licao").on(t.licaoId)],
 );
 
 export const estadoConceitos = pgTable(
@@ -198,7 +204,7 @@ export const estadoConceitos = pgTable(
     revisoes: integer("revisoes").notNull().default(0),
     estado: text("estado", { enum: ["iniciado", "praticando", "consolidando"] }).notNull().default("iniciado"),
   },
-  (t) => [primaryKey({ columns: [t.alunoId, t.conceitoId] }), index("estado_conceitos_vencidos").on(t.alunoId, t.proximaRevisao)],
+  (t) => [primaryKey({ columns: [t.alunoId, t.conceitoId] }), index("estado_conceitos_vencidos").on(t.alunoId, t.proximaRevisao), index("estado_conceitos_conceito").on(t.conceitoId)],
 );
 
 /* Gamificação */

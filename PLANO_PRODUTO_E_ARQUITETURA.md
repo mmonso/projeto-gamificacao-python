@@ -301,7 +301,7 @@ Este checklist detalha as etapas da seção 14; não acrescenta um novo cronogra
 | E01 — Especificação do MVP | Concluída | E00 | [ESPECIFICACAO_MVP.md](ESPECIFICACAO_MVP.md), seções 1 a 6 |
 | E02 — Primeira unidade detalhada | Concluída | E01 | [conteudo/unidade-1/UNIDADE.md](conteudo/unidade-1/UNIDADE.md), [FORMATO.md](conteudo/FORMATO.md) e verificador em `ferramentas/` |
 | E03 — Design e protótipo | Em andamento | E01 e E02 | [design/DESIGN.md](design/DESIGN.md) e protótipo em `design/prototipo/` |
-| E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); falta conectar Supabase |
+| E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas |
 | E05 — Motor e lição piloto | Não iniciada | E04 | A registrar |
 | E06 — Gamificação e revisão | Não iniciada | E05 | A registrar |
 | E07 — Curso completo | Em andamento | E06; autoria pode começar após E05 | Unidades 2 e 3 escritas e verificadas em [conteudo/](conteudo/); publicação depende do aplicativo |
@@ -461,3 +461,4 @@ Atualizar esta tabela quando uma etapa for iniciada, concluída ou tiver uma dep
 | 2026-10-08 | E03.1 a E03.6; E03.7 em andamento | Identidade de trabalho (Sibi), paleta com contraste AA, componentes e protótipo navegável com o conteúdo da unidade 1. Teste automatizado da jornada passou; corrigido bug que travava a lição ao verificar | [design/DESIGN.md](design/DESIGN.md) | E03.7 — teclado, leitor de tela, celular real e observação de um iniciante |
 | 2026-10-08 | E07.1 a E07.3 (antecipadas) | Unidades 2 e 3 escritas: 70 exercícios e 26 variações, sem erros no verificador. Curso do MVP com 104 exercícios e 39 variações. E07.4 e E07.5 dependem do aplicativo | [unidade-2](conteudo/unidade-2/UNIDADE.md), [unidade-3](conteudo/unidade-3/UNIDADE.md) | E03.7 com pessoas reais e contas para E04 |
 | 2026-10-09 | E04.1 e E04.4 concluídas; E04.2, E04.7 e E04.8 parciais | Repositório git iniciado. Next.js 16.4, Drizzle 0.45, Zod 4, Vitest 5. Esquema com 18 tabelas e migração inicial. Regras de domínio, corretores e publicação de conteúdo com 35 testes passando, incluindo integração em PGlite. Typecheck, lint e build ok | [web/README.md](web/README.md) | Criar projeto Supabase de desenvolvimento para E04.3 e E04.5 |
+| 2026-10-13 | E04.3 parcial | Projeto Supabase `sibi-dev` criado em sa-east-1 (plano gratuito). Migrações 0000 a 0002 aplicadas e registradas na tabela do Drizzle; RLS ativo sem políticas nas 18 tabelas; índices das chaves estrangeiras. Comandos `db:migrar` e `db:publicar` prontos | [web/README.md](web/README.md) | Senha do banco em web/.env.local; publicar conteúdo; homologação separada antes do beta |
