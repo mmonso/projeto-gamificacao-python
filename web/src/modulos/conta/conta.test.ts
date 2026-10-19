@@ -63,7 +63,7 @@ describe("destino depois de entrar (FL-02, passo 4)", () => {
   });
 
   it.each(["https://evil.com", "//evil.com", "/\\evil.com", "javascript:alert(1)", "", null, 42])("recusa %s", (valor) => {
-    expect(destinoSeguro(valor)).toBe("/perfil");
+    expect(destinoSeguro(valor)).toBe("/aprender");
   });
 });
 

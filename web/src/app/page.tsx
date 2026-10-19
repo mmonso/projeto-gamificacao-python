@@ -8,7 +8,7 @@ async function Acoes() {
   const aluno = await obterAluno();
   if (aluno) {
     return (
-      <Link className="botao" href="/perfil">
+      <Link className="botao" href="/aprender">
         Continuar
       </Link>
     );

@@ -40,12 +40,12 @@ export async function cadastrar(_anterior: EstadoFormulario, form: FormData): Pr
   const { data, error } = await supabase.auth.signUp({
     email,
     password: senha,
-    options: { emailRedirectTo: await linkDeConfirmacao("/perfil"), data: metadados },
+    options: { emailRedirectTo: await linkDeConfirmacao("/aprender"), data: metadados },
   });
   if (error) return { erro: mensagemDeErroAuth(error.code, "cadastro"), valores };
 
   // Com a confirmação de e-mail desligada no projeto, o Supabase já devolve a sessão.
-  if (data.session) redirect("/perfil");
+  if (data.session) redirect("/aprender");
 
   // E-mail já cadastrado também chega aqui, sem erro: a tela seguinte é a mesma (mensagem neutra).
   await guardarEmailPendente(email);
@@ -75,7 +75,7 @@ export async function reenviarConfirmacao(): Promise<EstadoFormulario> {
   if (!email) return { erro: "Não encontramos o e-mail do cadastro neste navegador. Entre com seu e-mail e senha para pedir um novo link." };
 
   const supabase = await criarClienteSupabase();
-  const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: await linkDeConfirmacao("/perfil") } });
+  const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: await linkDeConfirmacao("/aprender") } });
   if (error && error.code?.startsWith("over_")) return { erro: MENSAGENS.muitasTentativas };
   return { aviso: MENSAGENS.linkReenviado };
 }
@@ -101,7 +101,7 @@ export async function definirNovaSenha(_anterior: EstadoFormulario, form: FormDa
 
   const { error } = await supabase.auth.updateUser({ password: dados.data.senha });
   if (error) return { erro: mensagemDeErroAuth(error.code, "senha") };
-  redirect("/perfil");
+  redirect("/aprender");
 }
 
 export async function sair() {

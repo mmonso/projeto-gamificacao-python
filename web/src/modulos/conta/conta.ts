@@ -68,7 +68,7 @@ export function dadosIniciaisDoPerfil(metadados: unknown) {
  * Caminho interno para onde voltar depois de entrar (FL-02, saída e retomada, passo 4).
  * Recusa endereços externos e caminhos ambíguos para não servir de redirecionamento aberto.
  */
-export function destinoSeguro(valor: unknown, padrao = "/perfil"): string {
+export function destinoSeguro(valor: unknown, padrao = "/aprender"): string {
   if (typeof valor !== "string" || !valor.startsWith("/") || valor.startsWith("//") || valor.includes("\\")) return padrao;
   try {
     const url = new URL(valor, "http://sibi.local");

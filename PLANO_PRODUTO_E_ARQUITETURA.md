@@ -302,7 +302,7 @@ Este checklist detalha as etapas da seção 14; não acrescenta um novo cronogra
 | E02 — Primeira unidade detalhada | Concluída | E01 | [conteudo/unidade-1/UNIDADE.md](conteudo/unidade-1/UNIDADE.md), [FORMATO.md](conteudo/FORMATO.md) e verificador em `ferramentas/` |
 | E03 — Design e protótipo | Em andamento | E01 e E02 | [design/DESIGN.md](design/DESIGN.md) e protótipo em `design/prototipo/` |
 | E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas. E04.5 e E04.6 verificados em 19/10/2026 no `sibi-dev`: cadastro, confirmação, login com retorno à tela pedida, perfil criado no primeiro acesso, saída e duas contas vendo só o próprio perfil; API pública recusa leitura das tabelas (migração 0003). E04.7: 15 lições publicadas no `sibi-dev`; abertura da lição, desbloqueio e sessão iniciada ou retomada na versão vigente, sem gabaritos (`web/src/servidor/licoes`). E04.8: verificações no GitHub Actions (`.github/workflows/verificar.yml`); acesso entre duas contas verificado no navegador e em testes. Falta homologação (E04.3) |
-| E05 — Motor e lição piloto | Não iniciada | E04 | A registrar |
+| E05 — Motor e lição piloto | Em andamento | E04 | Trilha, quatro tipos de exercício, correção no servidor, dicas, feedback com som, repetição dos errados e conclusão (`web/src/servidor/licoes`, `web/src/app/sessao`); teste por HTTP em 20/10/2026 com contas reais: reenvio, duas abas, conclusão única e isolamento entre contas. Falta percorrer na tela (E05.6, E05.7) |
 | E06 — Gamificação e revisão | Não iniciada | E05 | A registrar |
 | E07 — Curso completo | Em andamento | E06; autoria pode começar após E05 | Unidades 2 e 3 escritas e verificadas em [conteudo/](conteudo/); publicação depende do aplicativo |
 | E08 — Qualidade e operação | Não iniciada | E06 e E07 | A registrar |
@@ -365,11 +365,11 @@ Pronto quando: uma conta autenticada pode acessar seu perfil e iniciar uma sess�
 
 ### E05 — Motor e lição piloto
 
-- [ ] E05.1 — Implementar os componentes de trilha e exercício a partir do protótipo.
-- [ ] E05.2 — Implementar início, retomada e estados da sessão vinculada à versão do conteúdo.
-- [ ] E05.3 — Implementar os quatro formatos de exercício e os corretores de servidor.
-- [ ] E05.4 — Implementar submissões identificadas, feedback e dicas, preservando o resultado da primeira resposta.
-- [ ] E05.5 — Implementar repetição dos exercícios errados e conclusão somente após resolver todos os itens.
+- [x] E05.1 — Implementar os componentes de trilha e exercício a partir do protótipo.
+- [x] E05.2 — Implementar início, retomada e estados da sessão vinculada à versão do conteúdo.
+- [x] E05.3 — Implementar os quatro formatos de exercício e os corretores de servidor.
+- [x] E05.4 — Implementar submissões identificadas, feedback e dicas, preservando o resultado da primeira resposta.
+- [x] E05.5 — Implementar repetição dos exercícios errados e conclusão somente após resolver todos os itens.
 - [ ] E05.6 — Implementar preservação da resposta temporária, reenvio sem duplicação e retomada após recarga.
 - [ ] E05.7 — Percorrer a lição piloto completa e verificar correção, reenvio, recarga, versão e acesso indevido.
 

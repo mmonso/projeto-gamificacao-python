@@ -44,5 +44,5 @@ No painel do projeto, em Authentication:
 
 - **URL Configuration**: Site URL `http://localhost:3000` em desenvolvimento e, em Redirect URLs, `http://localhost:3000/auth/confirmar**`.
 - **Providers > Email**: confirmação de e-mail ligada e senha mínima de 8 caracteres.
-- **Email Templates** (opcional): trocar `{{ .ConfirmationURL }}` por `{{ .SiteURL }}/auth/confirmar?token_hash={{ .TokenHash }}&type=email&proximo=/perfil` no de confirmação, e por `...&type=recovery&proximo=/nova-senha` no de redefinição de senha. Assim o link funciona mesmo quando aberto em outro navegador; sem a troca, o fluxo padrão (PKCE) confirma o e-mail mas só abre a sessão no navegador do cadastro.
+- **Email Templates** (opcional): trocar `{{ .ConfirmationURL }}` por `{{ .SiteURL }}/auth/confirmar?token_hash={{ .TokenHash }}&type=email&proximo=/aprender` no de confirmação, e por `...&type=recovery&proximo=/nova-senha` no de redefinição de senha. Assim o link funciona mesmo quando aberto em outro navegador; sem a troca, o fluxo padrão (PKCE) confirma o e-mail mas só abre a sessão no navegador do cadastro.
 

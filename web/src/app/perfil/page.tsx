@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { sair } from "@/app/(conta)/acoes";
-import { BotaoEnviar } from "@/componentes/formulario";
+import { BotaoEnviar, Voltar } from "@/componentes/formulario";
 import { Mascote } from "@/componentes/Mascote";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 
@@ -51,13 +51,13 @@ async function DadosDoPerfil() {
 export default function PaginaPerfil() {
   return (
     <main className="tela-centro" id="conteudo-principal">
+      <Voltar href="/aprender" />
       <Mascote humor="comemoracao" tamanho="pequeno" />
       <Suspense fallback={<div className="esqueleto h-80" aria-busy="true" />}>
         <DadosDoPerfil />
       </Suspense>
-      {/* A trilha (E05.1) substitui este atalho para a lição piloto. */}
-      <Link className="botao" href="/licao/u1-l1">
-        Estudar a primeira lição
+      <Link className="botao" href="/aprender">
+        Ir para a trilha
       </Link>
       <form action={sair} className="acoes">
         <BotaoEnviar classe="botao botao-secundario">Sair</BotaoEnviar>

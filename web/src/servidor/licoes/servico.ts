@@ -48,25 +48,92 @@ export async function obterLicaoPublica(db: Db, licaoId: string): Promise<LicaoP
   return { ...licao, versaoLicaoId: versao.id, versao: versao.versao, totalExercicios: total };
 }
 
+/** Identificadores das lições na ordem da trilha: unidade, depois lição. */
+export async function ordemDaTrilha(db: Pick<Db, "select">): Promise<string[]> {
+  const linhas = await db
+    .select({ id: t.licoes.id })
+    .from(t.licoes)
+    .innerJoin(t.unidades, eq(t.unidades.id, t.licoes.unidadeId))
+    .orderBy(asc(t.unidades.ordem), asc(t.licoes.ordem));
+  return linhas.map((l) => l.id);
+}
+
 /**
  * Lição liberada para o aluno: a primeira do curso sempre; as demais depois de concluída a anterior
  * na ordem da trilha (PLANO, seção 8: desbloqueio).
  */
 export async function licaoDisponivel(db: Db, alunoId: string, licaoId: string): Promise<boolean> {
-  const trilha = await db
-    .select({ id: t.licoes.id })
-    .from(t.licoes)
-    .innerJoin(t.unidades, eq(t.unidades.id, t.licoes.unidadeId))
-    .orderBy(asc(t.unidades.ordem), asc(t.licoes.ordem));
-  const posicao = trilha.findIndex((l) => l.id === licaoId);
+  const trilha = await ordemDaTrilha(db);
+  const posicao = trilha.indexOf(licaoId);
   if (posicao < 0) return false;
   if (posicao === 0) return true;
-  const anterior = trilha[posicao - 1].id;
+  const anterior = trilha[posicao - 1];
   const [concluida] = await db
     .select({ licaoId: t.conclusoesLicao.licaoId })
     .from(t.conclusoesLicao)
     .where(and(eq(t.conclusoesLicao.alunoId, alunoId), eq(t.conclusoesLicao.licaoId, anterior)));
   return Boolean(concluida);
+}
+
+export type EstadoNo = "concluida" | "atual" | "bloqueada";
+export type NoTrilha = { id: string; ordem: number; titulo: string; objetivo: string; estado: EstadoNo; sessaoAberta: boolean; desafio: boolean };
+export type UnidadeTrilha = { id: string; ordem: number; titulo: string; descricao: string; licoes: NoTrilha[] };
+
+/**
+ * Trilha do aluno (F-07): lições concluídas, a atual (primeira não concluída) e as bloqueadas.
+ * A quinta lição de cada unidade é o desafio final.
+ */
+export async function obterTrilha(db: Db, alunoId: string): Promise<UnidadeTrilha[]> {
+  const [licoes, concluidas, abertas] = await Promise.all([
+    db
+      .select({
+        id: t.licoes.id,
+        ordem: t.licoes.ordem,
+        titulo: t.licoes.titulo,
+        objetivo: t.licoes.objetivo,
+        unidadeId: t.unidades.id,
+        unidadeOrdem: t.unidades.ordem,
+        unidadeTitulo: t.unidades.titulo,
+        unidadeDescricao: t.unidades.descricao,
+      })
+      .from(t.licoes)
+      .innerJoin(t.unidades, eq(t.unidades.id, t.licoes.unidadeId))
+      .orderBy(asc(t.unidades.ordem), asc(t.licoes.ordem)),
+    db.select({ licaoId: t.conclusoesLicao.licaoId }).from(t.conclusoesLicao).where(eq(t.conclusoesLicao.alunoId, alunoId)),
+    db
+      .select({ licaoId: t.sessoes.licaoId })
+      .from(t.sessoes)
+      .where(and(eq(t.sessoes.alunoId, alunoId), eq(t.sessoes.tipo, "principal"), inArray(t.sessoes.estado, ["aberta", "pausada"]))),
+  ]);
+  const feitas = new Set(concluidas.map((c) => c.licaoId));
+  const emAndamento = new Set(abertas.map((s) => s.licaoId));
+  const ultimaPorUnidade = new Map(licoes.map((l) => [l.unidadeId, l.ordem]));
+
+  const unidades: UnidadeTrilha[] = [];
+  let atualDefinida = false;
+  for (const l of licoes) {
+    let estado: EstadoNo = "bloqueada";
+    if (feitas.has(l.id)) estado = "concluida";
+    else if (!atualDefinida) {
+      estado = "atual";
+      atualDefinida = true;
+    }
+    let unidade = unidades.at(-1);
+    if (unidade?.id !== l.unidadeId) {
+      unidade = { id: l.unidadeId, ordem: l.unidadeOrdem, titulo: l.unidadeTitulo, descricao: l.unidadeDescricao, licoes: [] };
+      unidades.push(unidade);
+    }
+    unidade.licoes.push({
+      id: l.id,
+      ordem: l.ordem,
+      titulo: l.titulo,
+      objetivo: l.objetivo,
+      estado,
+      sessaoAberta: emAndamento.has(l.id),
+      desafio: ultimaPorUnidade.get(l.unidadeId) === l.ordem,
+    });
+  }
+  return unidades;
 }
 
 export type ResultadoInicio = { ok: true; sessaoId: string; retomada: boolean } | { ok: false; motivo: "inexistente" | "bloqueada" };
