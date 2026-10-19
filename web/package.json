@@ -14,6 +14,8 @@
     "db:publicar": "tsx --env-file=.env.local scripts/publicar-conteudo.mts"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.2",
     "drizzle-orm": "0.45.4",
     "next": "16.4.0",
     "postgres": "3.4.9",

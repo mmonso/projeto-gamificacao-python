@@ -4,11 +4,19 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as esquema from "./esquema";
 
-const url = process.env.DATABASE_URL;
-if (!url) throw new Error("DATABASE_URL não configurada (veja web/.env.example)");
+function conectar() {
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error("DATABASE_URL não configurada (veja web/.env.example)");
+  // O pooler em modo transação não aceita prepared statements.
+  return drizzle({ client: postgres(url, { prepare: false, max: 5 }), schema: esquema });
+}
 
-// O pooler em modo transação não aceita prepared statements.
-const conexao = postgres(url, { prepare: false, max: 5 });
+export type Db = ReturnType<typeof conectar>;
 
-export const db = drizzle({ client: conexao, schema: esquema });
-export type Db = typeof db;
+let instancia: Db | undefined;
+
+/** Conexão criada no primeiro uso, para que o build não dependa do banco. */
+export function banco(): Db {
+  instancia ??= conectar();
+  return instancia;
+}

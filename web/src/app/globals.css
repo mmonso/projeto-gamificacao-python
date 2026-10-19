@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
+/* Tokens definidos em design/DESIGN.md e usados no protótipo (design/prototipo/estilos.css). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --verde: #1b7f45;
+  --verde-borda: #12592f;
+  --verde-claro: #e3f6ea;
+  --amarelo: #ffc23d;
+  --amarelo-texto: #8a5a00;
+  --vermelho: #d93a3a;
+  --vermelho-borda: #a61b1b;
+  --vermelho-claro: #fde8e8;
+  --vermelho-texto: #a61b1b;
+  --azul: #2367c9;
+  --azul-claro: #e6f0fc;
+  --texto: #1e2a32;
+  --texto-suave: #55636d;
+  --borda: #d5dde2;
+  --borda-forte: #b8c4cb;
+  --fundo: #ffffff;
+  --fundo-suave: #f4f7f8;
+  --bloqueado: #c9d2d8;
+  --bloqueado-icone: #5f6b73;
+  --foco: #2367c9;
+  --raio: 16px;
+  --raio-pequeno: 12px;
+  --sombra-botao: 0 4px 0;
+  --duracao: 180ms;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--fonte-nunito), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: var(--fonte-jetbrains), "Cascadia Code", Consolas, monospace;
+  --color-verde: var(--verde);
+  --color-azul: var(--azul);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--texto);
+    background: var(--fundo);
   }
+  h1, h2, h3 { line-height: 1.2; font-weight: 900; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.35rem; }
+  :focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; border-radius: 6px; }
+  a { color: var(--azul); font-weight: 800; }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .so-leitor {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .pular {
+    position: absolute; left: 12px; top: -60px; z-index: 50;
+    background: var(--texto); color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 800;
+  }
+  .pular:focus { top: 12px; }
+
+  .tela-centro {
+    min-height: 100dvh; max-width: 480px; margin: 0 auto; padding: 32px 16px;
+    display: flex; flex-direction: column; justify-content: center; gap: 16px;
+  }
+  .marca { font-weight: 900; font-size: 2.6rem; color: var(--verde); letter-spacing: -.02em; }
+  .subtitulo { font-size: 1.15rem; color: var(--texto-suave); }
+  .ajuda { font-size: .9rem; color: var(--texto-suave); }
+  .acoes { display: grid; gap: 12px; margin-top: 8px; }
+  .formulario { display: grid; gap: 14px; }
+
+  .botao {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 52px; padding: 12px 22px; width: 100%;
+    font: inherit; font-weight: 800; font-size: 1rem; letter-spacing: .02em; text-transform: uppercase;
+    border-radius: var(--raio); border: 2px solid transparent; cursor: pointer;
+    background: var(--verde); color: #fff; box-shadow: var(--sombra-botao) var(--verde-borda);
+    transition: transform var(--duracao), box-shadow var(--duracao), background var(--duracao);
+    text-decoration: none;
+  }
+  .botao:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--verde-borda); }
+  .botao:disabled { background: var(--bloqueado); color: var(--bloqueado-icone); box-shadow: var(--sombra-botao) #aeb9c0; cursor: not-allowed; }
+  .botao-secundario { background: var(--fundo); color: var(--azul); border-color: var(--borda); box-shadow: var(--sombra-botao) var(--borda); }
+  .botao-secundario:active:not(:disabled) { box-shadow: 0 0 0 var(--borda); }
+  .botao-fantasma { background: transparent; color: var(--azul); box-shadow: none; border-color: transparent; }
+  .botao-fantasma:active:not(:disabled) { box-shadow: none; }
+  .botao-icone {
+    display: inline-flex; align-items: center; justify-content: center; align-self: flex-start;
+    width: 44px; height: 44px; border-radius: 12px; color: var(--texto-suave);
+  }
+  .botao-icone:hover { background: var(--fundo-suave); }
+
+  .campo { display: grid; gap: 6px; }
+  .campo label { font-weight: 800; }
+  .campo input {
+    font: inherit; padding: 12px 14px; min-height: 52px; border-radius: var(--raio-pequeno);
+    border: 2px solid var(--borda-forte); background: var(--fundo-suave); color: var(--texto);
+  }
+  .campo input:focus { outline: 3px solid var(--foco); outline-offset: 1px; background: #fff; }
+  .caixa-termos { display: flex; gap: 10px; align-items: flex-start; font-size: .95rem; }
+  .caixa-termos input { width: 22px; height: 22px; margin-top: 2px; flex: none; accent-color: var(--verde); }
+
+  .mensagem-erro {
+    border: 2px solid #f3b9b9; background: var(--vermelho-claro); color: var(--vermelho-texto);
+    border-radius: var(--raio-pequeno); padding: 10px 14px; font-weight: 700;
+  }
+  .mensagem-aviso {
+    border: 2px solid #a9dcbc; background: var(--verde-claro); color: var(--verde-borda);
+    border-radius: var(--raio-pequeno); padding: 10px 14px; font-weight: 700;
+  }
+
+  .cartao { border: 2px solid var(--borda); border-radius: var(--raio); padding: 16px 18px; background: var(--fundo); }
+  .esqueleto { background: var(--fundo-suave); border-radius: var(--raio-pequeno); animation: pulsar 1.2s ease-in-out infinite; }
+}
+
+@keyframes pulsar { 50% { opacity: .55; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

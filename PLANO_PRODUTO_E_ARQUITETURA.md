@@ -301,7 +301,7 @@ Este checklist detalha as etapas da seção 14; não acrescenta um novo cronogra
 | E01 — Especificação do MVP | Concluída | E00 | [ESPECIFICACAO_MVP.md](ESPECIFICACAO_MVP.md), seções 1 a 6 |
 | E02 — Primeira unidade detalhada | Concluída | E01 | [conteudo/unidade-1/UNIDADE.md](conteudo/unidade-1/UNIDADE.md), [FORMATO.md](conteudo/FORMATO.md) e verificador em `ferramentas/` |
 | E03 — Design e protótipo | Em andamento | E01 e E02 | [design/DESIGN.md](design/DESIGN.md) e protótipo em `design/prototipo/` |
-| E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas |
+| E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas. E04.5 e E04.6 implementados (telas de conta, camada de acesso, perfil no primeiro acesso, migração 0003); falta verificar de ponta a ponta com o Supabase ativo |
 | E05 — Motor e lição piloto | Não iniciada | E04 | A registrar |
 | E06 — Gamificação e revisão | Não iniciada | E05 | A registrar |
 | E07 — Curso completo | Em andamento | E06; autoria pode começar após E05 | Unidades 2 e 3 escritas e verificadas em [conteudo/](conteudo/); publicação depende do aplicativo |
