@@ -2,6 +2,7 @@
 // o aluno daqui e passam só o identificador verificado aos serviços (E04.6).
 import "server-only";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import { banco } from "@/servidor/db/cliente";
 import { obterOuCriarPerfil, type Perfil } from "@/servidor/perfis/servico";
@@ -11,6 +12,8 @@ export type Aluno = { id: string; email: string | null; metadados: unknown };
 
 /** Aluno da sessão atual, com o token verificado, ou null. Uma leitura por requisição. */
 export const obterAluno = cache(async (): Promise<Aluno | null> => {
+  // A validade do token depende da hora da requisição: nada daqui entra em pré-renderização.
+  await connection();
   const supabase = await criarClienteSupabase();
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims?.sub) return null;
