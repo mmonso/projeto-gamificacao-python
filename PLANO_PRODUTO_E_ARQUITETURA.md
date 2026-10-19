@@ -301,7 +301,7 @@ Este checklist detalha as etapas da seção 14; não acrescenta um novo cronogra
 | E01 — Especificação do MVP | Concluída | E00 | [ESPECIFICACAO_MVP.md](ESPECIFICACAO_MVP.md), seções 1 a 6 |
 | E02 — Primeira unidade detalhada | Concluída | E01 | [conteudo/unidade-1/UNIDADE.md](conteudo/unidade-1/UNIDADE.md), [FORMATO.md](conteudo/FORMATO.md) e verificador em `ferramentas/` |
 | E03 — Design e protótipo | Em andamento | E01 e E02 | [design/DESIGN.md](design/DESIGN.md) e protótipo em `design/prototipo/` |
-| E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas. E04.5 e E04.6 verificados em 19/10/2026 no `sibi-dev`: cadastro, confirmação, login com retorno à tela pedida, perfil criado no primeiro acesso, saída e duas contas vendo só o próprio perfil; API pública recusa leitura das tabelas (migração 0003). Falta homologação (E04.3), publicação no app (E04.7) e verificações automáticas (E04.8) |
+| E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas. E04.5 e E04.6 verificados em 19/10/2026 no `sibi-dev`: cadastro, confirmação, login com retorno à tela pedida, perfil criado no primeiro acesso, saída e duas contas vendo só o próprio perfil; API pública recusa leitura das tabelas (migração 0003). E04.7: 15 lições publicadas no `sibi-dev`; abertura da lição, desbloqueio e sessão iniciada ou retomada na versão vigente, sem gabaritos (`web/src/servidor/licoes`). Falta homologação (E04.3) e verificações automáticas (E04.8) |
 | E05 — Motor e lição piloto | Não iniciada | E04 | A registrar |
 | E06 — Gamificação e revisão | Não iniciada | E05 | A registrar |
 | E07 — Curso completo | Em andamento | E06; autoria pode começar após E05 | Unidades 2 e 3 escritas e verificadas em [conteudo/](conteudo/); publicação depende do aplicativo |
@@ -358,7 +358,7 @@ Pronto quando: a experiência visual está revisável e o percurso principal é 
 - [x] E04.4 — Criar esquema e migrações para perfis, conteúdo versionado, sessões, respostas, conclusões e gamificação.
 - [x] E04.5 — Implementar cadastro, verificação de e-mail, login, recuperação de acesso e saída.
 - [x] E04.6 — Implementar autorização por usuário e manter gabaritos e segredos fora do acesso público.
-- [ ] E04.7 — Criar validação e publicação de conteúdo e carregar a lição piloto.
+- [x] E04.7 — Criar validação e publicação de conteúdo e carregar a lição piloto.
 - [ ] E04.8 — Configurar verificações de tipos, lint e build e registrar uma verificação de acesso entre duas contas.
 
 Pronto quando: uma conta autenticada pode acessar seu perfil e iniciar uma sessão com conteúdo publicado, enquanto outra conta não acessa seus dados.

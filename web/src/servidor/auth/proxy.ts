@@ -4,7 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 /** Áreas que exigem conta. A verificação definitiva fica na camada de acesso (servidor/auth/sessao). */
-const AREAS_DO_ALUNO = ["/perfil", "/nova-senha", "/aprender", "/praticar", "/licao"];
+const AREAS_DO_ALUNO = ["/perfil", "/nova-senha", "/aprender", "/praticar", "/licao", "/sessao"];
 
 export async function atualizarSessao(request: NextRequest) {
   let resposta = NextResponse.next({ request });
