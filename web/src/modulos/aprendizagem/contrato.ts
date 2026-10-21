@@ -2,7 +2,7 @@
 // Usado pelos Route Handlers para validar pedidos e pela interface para tipar as respostas.
 import { z } from "zod";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
-import { respostaEsquema } from "./corretor";
+import { respostaEsquema, type Resposta } from "./corretor";
 
 export const pedidoSubmissao = z.object({
   /** Gerado pela interface antes do envio; o reenvio usa o mesmo valor (FL-04). */
@@ -41,6 +41,8 @@ export type ResultadoSubmissao = Progresso & {
   exercicioId: string;
   /** Exercício respondido, para mostrar o feedback depois de uma recarga (FL-04, passo 3). */
   exercicio: ExercicioPublico;
+  /** Resposta gravada. Num reenvio, é a do primeiro envio, mesmo que o aluno a tenha alterado depois da falha. */
+  resposta: Resposta;
   correta: boolean;
   /** Primeira resposta deste item na sessão: define acertos de primeira e, no E06, a perda de coração. */
   primeiraTentativa: boolean;

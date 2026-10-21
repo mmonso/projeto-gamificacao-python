@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
 import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
+import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
 import { tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
 import type { ErroApi, ResultadoConclusao, ResultadoSubmissao } from "@/modulos/aprendizagem/contrato";
@@ -13,9 +14,6 @@ import type { Resposta } from "@/modulos/aprendizagem/corretor";
 import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
 
 type Fase = "respondendo" | "verificando" | "feedback" | "concluindo" | "concluida";
-
-/** Resposta guardada antes do envio, para reenviar com o mesmo id depois de falha ou recarga (FL-04, passo 1). */
-type Pendente = { id: string; exercicioId: string; resposta: Resposta };
 
 type Props = {
   sessaoId: string;
@@ -38,26 +36,9 @@ async function chamar<T>(url: string, corpo?: unknown): Promise<Chamada<T>> {
   }
 }
 
-function lerPendente(chave: string): Pendente | null {
-  try {
-    return JSON.parse(localStorage.getItem(chave) ?? "null");
-  } catch {
-    return null;
-  }
-}
-
-function guardar(chave: string, valor: Pendente | null) {
-  try {
-    if (valor) localStorage.setItem(chave, JSON.stringify(valor));
-    else localStorage.removeItem(chave);
-  } catch {
-    // Armazenamento indisponível: o reenvio só funciona sem recarregar a página.
-  }
-}
-
 export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
   const router = useRouter();
-  const chave = `sibi-pendente:${sessaoId}`;
+  const chave = `sibi-resposta:${sessaoId}`;
   const api = `/api/sessoes/${sessaoId}`;
 
   const [exercicio, setExercicio] = useState(inicial.exercicio);
@@ -75,23 +56,27 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
 
   const enunciadoRef = useRef<HTMLHeadingElement>(null);
   const feedbackRef = useRef<HTMLParagraphElement>(null);
-  // Lidos dentro de callbacks assíncronos, que precisam do valor mais recente.
+  // Lido dentro de callbacks assíncronos, que precisam do valor mais recente.
   const somRef = useRef(som);
-  const exercicioRef = useRef(exercicio);
   useEffect(() => {
     somRef.current = som;
-    exercicioRef.current = exercicio;
-  }, [som, exercicio]);
-  /** Última resposta enviada sem confirmação: Tentar novamente reusa o mesmo id. */
-  const pendenteRef = useRef<Pendente | null>(null);
+  }, [som]);
+  /**
+   * Id do envio do exercício mostrado, até o aluno tocar Continuar. Tentar novamente o reusa mesmo que a
+   * resposta tenha mudado: se o primeiro envio chegou ao servidor, vale o resultado gravado (FL-04, passo 2).
+   */
+  const envioRef = useRef<string | null>(null);
 
   const tratarErro = useCallback(
     (erro: ErroApi | null, aoFalhar: () => void) => {
       if (erro?.erro === "nao_autenticado") return router.push(`/entrar?voltar=${encodeURIComponent(`/sessao/${sessaoId}`)}`);
-      if (erro?.erro === "sessao_inexistente") return router.replace("/aprender");
+      if (erro?.erro === "sessao_inexistente") {
+        guardar(chave, null);
+        return router.replace("/aprender");
+      }
       aoFalhar();
     },
-    [router, sessaoId],
+    [router, sessaoId, chave],
   );
 
   const concluirLicao = useCallback(async () => {
@@ -111,6 +96,8 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
   const recarregar = useCallback(async () => {
     const r = await chamar<{ exercicio: ExercicioPublico | null; resolvidos: number; totalItens: number }>(api);
     if (!r.ok) return tratarErro(r.erro, () => setFalha("Sem conexão. Tente de novo em instantes."));
+    guardar(chave, null);
+    envioRef.current = null;
     setAviso("Atualizamos a lição com o que foi feito em outra aba ou aparelho.");
     setProgresso({ resolvidos: r.dados.resolvidos, total: r.dados.totalItens });
     setResultado(null);
@@ -119,31 +106,27 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
     setExercicio(r.dados.exercicio);
     if (r.dados.exercicio) setFase("respondendo");
     else void concluirLicao();
-  }, [api, tratarErro, concluirLicao]);
+  }, [api, chave, tratarErro, concluirLicao]);
 
   const verificar = useCallback(
-    async (pendente: Pendente) => {
-      guardar(chave, pendente);
-      pendenteRef.current = pendente;
+    async (envio: Envio) => {
+      // Guardada antes do envio (FL-04, passo 1): uma recarga a reenvia com o mesmo id.
+      guardar(chave, envio);
+      envioRef.current = envio.envioId;
       setFase("verificando");
       setFalha(null);
-      const r = await chamar<ResultadoSubmissao>(`${api}/submissoes`, pendente);
+      const r = await chamar<ResultadoSubmissao>(`${api}/submissoes`, { id: envio.envioId, exercicioId: envio.exercicio.id, resposta: envio.resposta });
       if (!r.ok) {
-        if (r.erro?.erro === "desatualizada" || r.erro?.erro === "invalida") {
-          guardar(chave, null);
-          return void recarregar();
-        }
+        if (r.erro?.erro === "desatualizada" || r.erro?.erro === "invalida") return void recarregar();
         return tratarErro(r.erro, () => {
-          // A resposta guardada volta à tela, se for do exercício mostrado (FL-04, passo 3).
-          if (exercicioRef.current?.id === pendente.exercicioId) setResposta(pendente.resposta);
+          // A resposta continua na tela com Tentar novamente (CA-50).
           setFase("respondendo");
           setFalha("Não foi possível verificar agora. Sua resposta foi guardada.");
         });
       }
-      pendenteRef.current = null;
       const res = r.dados;
       setExercicio(res.exercicio);
-      setResposta(pendente.resposta);
+      setResposta(res.resposta);
       setResultado(res);
       setProgresso({ resolvidos: res.resolvidos, total: res.total });
       setFase("feedback");
@@ -153,13 +136,22 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
     [api, chave, recarregar, tratarErro],
   );
 
-  // Retomada depois de recarga (FL-04, passo 3): reenvia a resposta guardada; o servidor devolve o resultado gravado.
+  // Retomada depois de recarga (FL-04, passo 3): reenvia o envio guardado, cujo resultado o servidor devolve
+  // se já o gravou, ou devolve o rascunho à tela. O armazenamento do navegador só existe depois da montagem.
   useEffect(() => {
-    // Sincroniza com o armazenamento do navegador, que só existe depois da montagem.
-    const pendente = lerPendente(chave);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (pendente) void verificar(pendente);
-    else if (!inicial.exercicio) void concluirLicao();
+    const r = retomar(lerGuardada(chave), inicial.exercicio);
+    if (r.acao === "reenviar") {
+      /* eslint-disable react-hooks/set-state-in-effect */
+      setExercicio(r.envio.exercicio);
+      setResposta(r.envio.resposta);
+      /* eslint-enable react-hooks/set-state-in-effect */
+      void verificar(r.envio);
+    } else if (r.acao === "rascunho") {
+      setResposta(r.resposta);
+    } else {
+      guardar(chave, null);
+      if (!inicial.exercicio) void concluirLicao();
+    }
     // Só na montagem.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -172,6 +164,7 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
   function continuar() {
     if (!resultado) return;
     guardar(chave, null);
+    envioRef.current = null;
     if (resultado.concluida) return void concluirLicao();
     setExercicio(resultado.proximo);
     setResposta(null);
@@ -189,6 +182,15 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
     else tratarErro(r.erro, () => setFalha("Não foi possível carregar a dica agora."));
   }
 
+  /** Cada mudança fica guardada: uma recarga devolve o rascunho à tela (CA-53). */
+  function mudarResposta(nova: Resposta | null) {
+    setResposta(nova);
+    if (!exercicio) return;
+    if (nova) guardar(chave, { exercicio, resposta: nova, envioId: envioRef.current });
+    // Sem resposta, um envio sem confirmação continua guardado com a resposta anterior.
+    else if (!envioRef.current) guardar(chave, null);
+  }
+
   function alternarSom() {
     const novo = !som;
     setSom(novo);
@@ -199,11 +201,7 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
 
   function acaoPrincipal() {
     if (fase === "feedback") continuar();
-    else if (podeVerificar && exercicio && resposta) {
-      const anterior = pendenteRef.current;
-      const mesma = anterior && anterior.exercicioId === exercicio.id && JSON.stringify(anterior.resposta) === JSON.stringify(resposta);
-      void verificar({ id: mesma ? anterior.id : crypto.randomUUID(), exercicioId: exercicio.id, resposta });
-    }
+    else if (podeVerificar && exercicio && resposta) void verificar({ exercicio, resposta, envioId: envioRef.current ?? crypto.randomUUID() });
     else if (fase === "concluindo" && falha) void concluirLicao();
   }
 
@@ -271,7 +269,7 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
             <h1 id="enunciado" ref={enunciadoRef} tabIndex={-1}>
               {exercicio.enunciado}
             </h1>
-            <AreaExercicio ex={exercicio} resposta={resposta} aoMudar={setResposta} anunciar={setAnuncio} bloqueado={bloqueado} />
+            <AreaExercicio ex={exercicio} resposta={resposta} aoMudar={mudarResposta} anunciar={setAnuncio} bloqueado={bloqueado} />
             {dicas.length > 0 && (
               <div className="dicas" aria-live="polite">
                 {dicas.map((d, i) => (

@@ -11,7 +11,7 @@ import {
   type ResultadoConclusao,
   type ResultadoSubmissao,
 } from "@/modulos/aprendizagem/contrato";
-import { corrigir } from "@/modulos/aprendizagem/corretor";
+import { corrigir, type Resposta } from "@/modulos/aprendizagem/corretor";
 import { acertosDePrimeira, registrarResultado, type EstadoFila } from "@/modulos/aprendizagem/fila";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
 import * as t from "@/servidor/db/esquema";
@@ -96,6 +96,7 @@ export async function submeter(db: Db, alunoId: string, sessaoId: string, pedido
         submissaoId: gravada.id,
         exercicioId: gravada.exercicioId,
         exercicio: (await exercicioPublico(tx, sessao.versaoLicaoId, gravada.exercicioId))!,
+        resposta: gravada.resposta as Resposta,
         correta: gravada.correta,
         primeiraTentativa: anteriores === 0,
         solucao: solucaoDoGabarito(gabarito),
@@ -129,6 +130,7 @@ export async function submeter(db: Db, alunoId: string, sessaoId: string, pedido
       submissaoId: pedido.id,
       exercicioId: pedido.exercicioId,
       exercicio: (await exercicioPublico(tx, sessao.versaoLicaoId, pedido.exercicioId))!,
+      resposta: pedido.resposta,
       correta,
       primeiraTentativa,
       solucao: solucaoDoGabarito(gabarito),

@@ -91,6 +91,15 @@ describe("lição piloto do começo ao fim", () => {
     expect(n).toBe(1);
   });
 
+  it("o reenvio com resposta alterada depois da falha devolve a resposta gravada no primeiro envio (FL-04)", async () => {
+    const atualId = (await atual(ANA, sessaoId)).exercicio!.id;
+    const id = randomUUID();
+    const a = await submeter(db, ANA, sessaoId, { id, exercicioId: atualId, resposta: correta(atualId) });
+    const b = await submeter(db, ANA, sessaoId, { id, exercicioId: atualId, resposta: errada(atualId) });
+    expect(b).toEqual(a);
+    expect(b).toMatchObject({ correta: true, resposta: correta(atualId) });
+  });
+
   it("resposta para item que não é o atual pede recarga (duas abas)", async () => {
     const outro = curso[0].licoes[0].exercicios.at(-1)!.id;
     expect(await falha(submeter(db, ANA, sessaoId, { id: randomUUID(), exercicioId: outro, resposta: correta(outro) }))).toBe("desatualizada");
