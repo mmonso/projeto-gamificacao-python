@@ -1,4 +1,4 @@
-// Responder, dicas e conclusão de uma lição (E05.3 a E05.6), com PostgreSQL embutido.
+// Responder, dicas e conclusão de uma lição (E05.3 a E05.7), com PostgreSQL embutido.
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { PGlite } from "@electric-sql/pglite";
@@ -158,5 +158,38 @@ describe("isolamento entre contas (CA-42)", () => {
     expect(await falha(submeter(db, BIA, sessaoId, { id: usada.id, exercicioId: ex, resposta: correta(ex) }))).toBe("invalida");
     const [{ n }] = await db.select({ n: count() }).from(t.submissoes).where(and(eq(t.submissoes.sessaoId, sessaoId)));
     expect(n).toBe(0);
+  });
+});
+
+describe("nova versão publicada durante a sessão (FL-04)", () => {
+  const CAIO = "00000000-0000-4000-8000-0000000000c3";
+  const DANI = "00000000-0000-4000-8000-0000000000d4";
+
+  it("a sessão aberta termina na versão em que começou; a nova vale para as próximas", async () => {
+    await db.insert(t.perfis).values([{ id: CAIO }, { id: DANI }]);
+    const antiga = ((await iniciarSessao(db, CAIO, "u1-l1")) as { sessaoId: string }).sessaoId;
+    const primeiro = (await atual(CAIO, antiga)).exercicio!;
+    expect(primeiro).toMatchObject({ id: "u1-l1-e01", versao: 1 });
+
+    // Versão 2 da lição piloto, em que o gabarito do primeiro exercício muda.
+    const [{ unidade, licoes }] = curso;
+    const v2 = structuredClone(licoes[0]);
+    v2.versao = 2;
+    const e01 = v2.exercicios[0];
+    if (e01.tipo !== "escolher_resultado") throw new Error("O primeiro exercício da lição piloto deveria ser de escolha");
+    e01.versao = 2;
+    e01.resposta = e01.opcoes.find((o) => o.id !== e01.resposta)!.id;
+    expect((await publicarCurso(db, [{ unidade, licoes: [v2] }])).publicadas).toEqual(["u1-l1@2"]);
+
+    // Na sessão antiga, o exercício e a correção continuam os da versão 1.
+    expect((await atual(CAIO, antiga)).exercicio).toEqual(primeiro);
+    const r = await submeter(db, CAIO, antiga, { id: randomUUID(), exercicioId: primeiro.id, resposta: correta(primeiro.id) });
+    expect(r.correta).toBe(true);
+
+    // Uma sessão nova usa a versão 2: a resposta certa da versão 1 passa a ser errada.
+    const nova = ((await iniciarSessao(db, DANI, "u1-l1")) as { sessaoId: string }).sessaoId;
+    expect((await atual(DANI, nova)).exercicio).toMatchObject({ id: "u1-l1-e01", versao: 2 });
+    const s = await submeter(db, DANI, nova, { id: randomUUID(), exercicioId: e01.id, resposta: correta(e01.id) });
+    expect(s).toMatchObject({ correta: false, solucao: { opcao: e01.resposta } });
   });
 });
