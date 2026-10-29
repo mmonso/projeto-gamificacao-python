@@ -13,13 +13,17 @@ async function SessaoAtual({ params }: { params: Promise<{ id: string }> }) {
   const { aluno, perfil } = await obterPerfilAtual();
   const sessao = await obterSessaoAtual(banco(), aluno.id, id);
   if (!sessao) notFound();
+  const principal = sessao.tipo === "principal";
   return (
     <Licao
       // Uma nova montagem por sessão: o estado da lição anterior não vaza para a próxima.
       key={sessao.id}
       sessaoId={sessao.id}
-      titulo={sessao.licao.titulo}
+      tipo={sessao.tipo}
+      titulo={sessao.licao?.titulo ?? "Recuperar corações"}
       inicial={{ exercicio: sessao.exercicio, resolvidos: sessao.resolvidos, total: sessao.totalItens }}
+      coracoesIniciais={principal ? perfil.coracoes : null}
+      semCoracoes={principal && sessao.exercicio !== null && (sessao.estado === "pausada" || perfil.coracoes === 0)}
       somInicial={perfil.som}
     />
   );

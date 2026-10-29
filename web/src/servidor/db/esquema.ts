@@ -214,7 +214,8 @@ export const lancamentos = pgTable(
   {
     id: serial("id").primaryKey(),
     alunoId: uuid("aluno_id").notNull().references(() => perfis.id, { onDelete: "cascade" }),
-    moeda: text("moeda", { enum: ["xp"] }).notNull().default("xp"),
+    // XP concedido ou corações devolvidos por uma recuperação.
+    moeda: text("moeda", { enum: ["xp", "coracoes"] }).notNull().default("xp"),
     causa: text("causa").notNull(),
     valor: integer("valor").notNull(),
     diaEstudo: date("dia_estudo").notNull(),

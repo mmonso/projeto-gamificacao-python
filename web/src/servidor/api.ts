@@ -10,6 +10,7 @@ const STATUS: Record<ErroApi["erro"], number> = {
   sessao_inexistente: 404,
   desatualizada: 409,
   incompleta: 409,
+  sem_coracoes: 409,
   invalida: 400,
   limite: 429,
 };

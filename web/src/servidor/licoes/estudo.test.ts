@@ -12,7 +12,7 @@ import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
 import { concluir, ErroEstudo, itensDaSessao, pedirDica, submeter } from "./estudo";
-import { iniciarSessao, licaoDisponivel, obterSessaoAtual, obterTrilha } from "./servico";
+import { iniciarRecuperacao, iniciarSessao, licaoDisponivel, obterSessaoAtual, obterTrilha } from "./servico";
 
 const ANA = "00000000-0000-4000-8000-0000000000a1";
 const BIA = "00000000-0000-4000-8000-0000000000b2";
@@ -210,6 +210,112 @@ describe("XP da conclusão (E06.1)", () => {
     expect(await xpTotal(ELI)).toBe(50);
     const lancados = await db.select({ causa: t.lancamentos.causa }).from(t.lancamentos).where(eq(t.lancamentos.alunoId, ELI));
     expect(lancados.map((l) => l.causa).sort()).toEqual(["pratica", "pratica", "pratica", "primeira_conclusao"]);
+  });
+});
+
+describe("corações e recuperação (E06.2)", () => {
+  const FABI = "00000000-0000-4000-8000-0000000000f6";
+  let principal: string;
+  let recuperacao: string;
+
+  async function coracoes(aluno: string) {
+    const [p] = await db.select({ c: t.perfis.coracoes }).from(t.perfis).where(eq(t.perfis.id, aluno));
+    return p.c;
+  }
+
+  it("só o primeiro erro de cada item custa um coração; reenvio e nova tentativa não (CA-32, 4.9)", async () => {
+    await db.insert(t.perfis).values({ id: FABI });
+    principal = ((await iniciarSessao(db, FABI, "u1-l1")) as { sessaoId: string }).sessaoId;
+    const primeiro = (await atual(FABI, principal)).exercicio!.id;
+    const id = randomUUID();
+    const a = await submeter(db, FABI, principal, { id, exercicioId: primeiro, resposta: errada(primeiro) });
+    expect(a).toMatchObject({ perdeuCoracao: true, coracoes: 4, pausada: false });
+    expect(await submeter(db, FABI, principal, { id, exercicioId: primeiro, resposta: errada(primeiro) })).toEqual(a);
+    expect(await coracoes(FABI)).toBe(4);
+  });
+
+  it("com o último coração perdido, a sessão pausa e recusa respostas, dicas e lições novas (CA-38, CA-39)", async () => {
+    // Erra de primeira os itens seguintes até zerar; o primeiro item, já errado, volta sem custo.
+    let r;
+    do {
+      const ex = (await atual(FABI, principal)).exercicio!.id;
+      r = await submeter(db, FABI, principal, { id: randomUUID(), exercicioId: ex, resposta: errada(ex) });
+    } while (!r.pausada);
+    expect(r).toMatchObject({ perdeuCoracao: true, coracoes: 0 });
+    expect(await coracoes(FABI)).toBe(0);
+    const s = (await obterSessaoAtual(db, FABI, principal))!;
+    expect(s.estado).toBe("pausada");
+
+    const ex = s.exercicio!.id;
+    expect(await falha(submeter(db, FABI, principal, { id: randomUUID(), exercicioId: ex, resposta: correta(ex) }))).toBe("sem_coracoes");
+    expect(await falha(pedirDica(db, FABI, principal, ex, 1))).toBe("sem_coracoes");
+    // A lição atual devolve a sessão pausada, sem criar outra.
+    expect(await iniciarSessao(db, FABI, "u1-l1")).toEqual({ ok: true, sessaoId: principal, retomada: true });
+  });
+
+  it("a recuperação junta cinco itens já vistos e não usa corações (FL-06)", async () => {
+    const r = await iniciarRecuperacao(db, FABI);
+    expect(r.ok).toBe(true);
+    recuperacao = (r as { sessaoId: string }).sessaoId;
+    const s = (await obterSessaoAtual(db, FABI, recuperacao))!;
+    expect(s).toMatchObject({ tipo: "recuperacao", licao: null, totalItens: 5 });
+    const ex = s.exercicio!.id;
+    const e = await submeter(db, FABI, recuperacao, { id: randomUUID(), exercicioId: ex, resposta: errada(ex) });
+    expect(e).toMatchObject({ correta: false, perdeuCoracao: false, coracoes: null, pausada: false });
+  });
+
+  it("abandonar a recuperação não devolve corações, e a próxima monta outra revisão (CA-82)", async () => {
+    const outra = ((await iniciarRecuperacao(db, FABI)) as { sessaoId: string }).sessaoId;
+    expect(outra).not.toBe(recuperacao);
+    const [antiga] = await db.select({ estado: t.sessoes.estado }).from(t.sessoes).where(eq(t.sessoes.id, recuperacao));
+    expect(antiga.estado).toBe("descartada");
+    expect(await coracoes(FABI)).toBe(0);
+    recuperacao = outra;
+  });
+
+  it("concluir a recuperação devolve dois corações, conta como prática e reabre a lição pausada (CA-81, CA-84)", async () => {
+    for (let s = await atual(FABI, recuperacao); s.exercicio; s = await atual(FABI, recuperacao)) {
+      await submeter(db, FABI, recuperacao, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+    }
+    const a = await concluir(db, FABI, recuperacao);
+    expect(a).toMatchObject({ tipo: "recuperacao", licaoId: null, primeiraConclusao: false, xp: 10, coracoesRecuperados: 2, voltarSessaoId: principal });
+    expect(await concluir(db, FABI, recuperacao)).toEqual(a);
+    expect(await coracoes(FABI)).toBe(2);
+
+    // A lição continua no mesmo item em que parou.
+    const s = (await obterSessaoAtual(db, FABI, principal))!;
+    expect(s.estado).toBe("aberta");
+    const r = await submeter(db, FABI, principal, { id: randomUUID(), exercicioId: s.exercicio!.id, resposta: correta(s.exercicio!.id) });
+    expect(r).toMatchObject({ correta: true, perdeuCoracao: false, coracoes: 2 });
+  });
+
+  it("com quatro corações, a recuperação devolve só um; com cinco, é recusada (CA-80, CA-81)", async () => {
+    await db.update(t.perfis).set({ coracoes: 4 }).where(eq(t.perfis.id, FABI));
+    const id = ((await iniciarRecuperacao(db, FABI)) as { sessaoId: string }).sessaoId;
+    for (let s = await atual(FABI, id); s.exercicio; s = await atual(FABI, id)) {
+      await submeter(db, FABI, id, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+    }
+    expect((await concluir(db, FABI, id)).coracoesRecuperados).toBe(1);
+    expect(await coracoes(FABI)).toBe(5);
+    expect(await iniciarRecuperacao(db, FABI)).toEqual({ ok: false, motivo: "coracoes_cheios" });
+  });
+
+  it("o banco recusa saldo fora de zero a cinco (CA-101)", async () => {
+    await expect(db.update(t.perfis).set({ coracoes: -1 }).where(eq(t.perfis.id, FABI))).rejects.toThrow();
+    await expect(db.update(t.perfis).set({ coracoes: 6 }).where(eq(t.perfis.id, FABI))).rejects.toThrow();
+  });
+
+  it("sem corações, a prática de lição concluída continua e a lição nova é recusada (CA-39, CA-71)", async () => {
+    const ELI = "00000000-0000-4000-8000-0000000000e5";
+    await db.update(t.perfis).set({ coracoes: 0 }).where(eq(t.perfis.id, ELI));
+    expect(await iniciarSessao(db, ELI, "u1-l2")).toEqual({ ok: false, motivo: "sem_coracoes" });
+
+    const pratica = ((await iniciarSessao(db, ELI, "u1-l1")) as { sessaoId: string }).sessaoId;
+    const s = (await obterSessaoAtual(db, ELI, pratica))!;
+    expect(s.tipo).toBe("pratica");
+    const r = await submeter(db, ELI, pratica, { id: randomUUID(), exercicioId: s.exercicio!.id, resposta: errada(s.exercicio!.id) });
+    expect(r).toMatchObject({ perdeuCoracao: false, coracoes: null });
+    expect(await coracoes(ELI)).toBe(0);
   });
 });
 

@@ -7,13 +7,13 @@ import { Mascote } from "@/componentes/Mascote";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { obterLicaoPublica, obterTrilha } from "@/servidor/licoes/servico";
-import { BotaoComecar } from "./botao";
+import { BotaoComecar, BotaoRecuperar } from "./botao";
 
 export const metadata: Metadata = { title: "Lição" };
 
 async function AberturaDaLicao({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { aluno } = await obterPerfilAtual();
+  const { aluno, perfil } = await obterPerfilAtual();
   const [licao, trilha] = await Promise.all([obterLicaoPublica(banco(), id), obterTrilha(banco(), aluno.id)]);
   const licoes = trilha.flatMap((u) => u.licoes);
   const no = licoes.find((l) => l.id === id);
@@ -29,11 +29,21 @@ async function AberturaDaLicao({ params }: { params: Promise<{ id: string }> }) 
       <h1>{licao.titulo}</h1>
       <p className="subtitulo">{licao.objetivo}</p>
       <p className="ajuda">{licao.totalExercicios} exercícios, cerca de 5 minutos.</p>
-      {no.estado === "atual" && <BotaoComecar licaoId={licao.id} rotulo={no.sessaoAberta ? "Continuar" : "Começar"} />}
+      {no.estado === "atual" &&
+        (perfil.coracoes === 0 ? (
+          <>
+            {/* Sem corações, a lição oferece a recuperação no lugar de Começar (CA-39). */}
+            <p className="mensagem-aviso">Você está sem corações. Uma revisão rápida de 5 exercícios devolve 2.</p>
+            <BotaoRecuperar />
+          </>
+        ) : (
+          <BotaoComecar licaoId={licao.id} rotulo={no.sessaoAberta ? "Continuar" : "Começar"} />
+        ))}
       {no.estado === "bloqueada" && <p className="mensagem-aviso">Conclua “{anterior?.titulo}” para liberar esta lição.</p>}
       {no.estado === "concluida" && (
         <>
-          <p className="mensagem-aviso">Você já concluiu esta lição. A prática das lições concluídas chega em breve.</p>
+          <p className="mensagem-aviso">Você já concluiu esta lição. Praticar não gasta corações e rende XP de prática.</p>
+          <BotaoComecar licaoId={licao.id} rotulo="Praticar" />
           <div className="acoes">
             <Link className="botao botao-secundario" href="/aprender">
               Voltar à trilha

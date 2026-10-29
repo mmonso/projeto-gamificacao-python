@@ -1,9 +1,10 @@
 "use client";
-// Lição em andamento (FL-03, FL-04; estados da seção 3.1 da especificação).
+// Lição em andamento (FL-03, FL-04, FL-06; estados da seção 3.1 da especificação).
 // O servidor corrige e decide; a interface só mostra o que ele confirmou.
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+import { BotaoRecuperar } from "@/app/licao/[id]/botao";
 import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
 import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
@@ -13,16 +14,27 @@ import type { ErroApi, ResultadoConclusao, ResultadoSubmissao } from "@/modulos/
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
 import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
 
-type Fase = "respondendo" | "verificando" | "feedback" | "concluindo" | "concluida";
+type Fase = "respondendo" | "verificando" | "feedback" | "concluindo" | "concluida" | "sem_coracoes";
 
 type Props = {
   sessaoId: string;
+  tipo: ResultadoConclusao["tipo"];
   titulo: string;
   inicial: { exercicio: ExercicioPublico | null; resolvidos: number; total: number };
+  /** Saldo do aluno, mostrado só na sessão principal, a única que usa corações; null nas demais. */
+  coracoesIniciais: number | null;
+  /** Sessão principal sem corações para continuar: abre na tela Sem corações. */
+  semCoracoes: boolean;
   somInicial: boolean;
 };
 
 const TITULOS_ACERTO = ["Muito bem!", "Isso mesmo!", "Correto!"];
+const TITULOS_CONCLUSAO: Record<ResultadoConclusao["tipo"], string> = {
+  principal: "Lição concluída!",
+  pratica: "Prática concluída!",
+  revisao: "Revisão concluída!",
+  recuperacao: "Corações recuperados!",
+};
 
 type Chamada<T> = { ok: true; dados: T } | { ok: false; erro: ErroApi | null };
 
@@ -36,14 +48,15 @@ async function chamar<T>(url: string, corpo?: unknown): Promise<Chamada<T>> {
   }
 }
 
-export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
+export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCoracoes, somInicial }: Props) {
   const router = useRouter();
   const chave = `sibi-resposta:${sessaoId}`;
   const api = `/api/sessoes/${sessaoId}`;
 
   const [exercicio, setExercicio] = useState(inicial.exercicio);
   const [resposta, setResposta] = useState<Resposta | null>(null);
-  const [fase, setFase] = useState<Fase>(inicial.exercicio ? "respondendo" : "concluindo");
+  const [fase, setFase] = useState<Fase>(semCoracoes ? "sem_coracoes" : inicial.exercicio ? "respondendo" : "concluindo");
+  const [coracoes, setCoracoes] = useState(coracoesIniciais);
   const [progresso, setProgresso] = useState({ resolvidos: inicial.resolvidos, total: inicial.total });
   const [resultado, setResultado] = useState<ResultadoSubmissao | null>(null);
   const [conclusao, setConclusao] = useState<ResultadoConclusao | null>(null);
@@ -73,6 +86,13 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
       if (erro?.erro === "sessao_inexistente") {
         guardar(chave, null);
         return router.replace("/aprender");
+      }
+      // Corações acabaram nesta ou em outra lição: a resposta não foi gravada (FL-06).
+      if (erro?.erro === "sem_coracoes") {
+        guardar(chave, null);
+        envioRef.current = null;
+        setCoracoes(0);
+        return setFase("sem_coracoes");
       }
       aoFalhar();
     },
@@ -129,6 +149,7 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
       setResposta(res.resposta);
       setResultado(res);
       setProgresso({ resolvidos: res.resolvidos, total: res.total });
+      if (res.coracoes !== null) setCoracoes(res.coracoes);
       setFase("feedback");
       setAnuncio(res.correta ? "Resposta correta." : "Resposta incorreta.");
       if (somRef.current) tocar(res.correta ? "acerto" : "erro");
@@ -166,6 +187,7 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
     guardar(chave, null);
     envioRef.current = null;
     if (resultado.concluida) return void concluirLicao();
+    if (resultado.pausada) return setFase("sem_coracoes");
     setExercicio(resultado.proximo);
     setResposta(null);
     setResultado(null);
@@ -217,12 +239,36 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
     return () => document.removeEventListener("keydown", aoTeclar);
   }, []);
 
+  if (fase === "sem_coracoes") {
+    return (
+      <main className="tela-centro text-center" id="conteudo-principal">
+        <Mascote humor="atencao" tamanho="grande" />
+        <h1>Você ficou sem corações</h1>
+        <p className="subtitulo">Seu progresso na lição está salvo. Faça uma revisão rápida de 5 exercícios para recuperar 2 corações.</p>
+        <BotaoRecuperar />
+        <div className="acoes">
+          <Link className="botao botao-secundario" href="/aprender">
+            Voltar à trilha
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   if (fase === "concluida" && conclusao) {
     return (
       <main className="tela-centro text-center" id="conteudo-principal">
         <Mascote humor="comemoracao" tamanho="grande" />
-        <h1>Lição concluída!</h1>
-        <p className="subtitulo">{titulo}</p>
+        <h1>{TITULOS_CONCLUSAO[conclusao.tipo]}</h1>
+        {conclusao.licaoId && <p className="subtitulo">{titulo}</p>}
+        {conclusao.coracoesRecuperados > 0 && (
+          <p className="subtitulo">
+            <span className="indicador indicador-coracoes">
+              <Icone nome="coracao" pequeno />
+            </span>{" "}
+            Você recuperou {conclusao.coracoesRecuperados} {conclusao.coracoesRecuperados === 1 ? "coração" : "corações"}.
+          </p>
+        )}
         <div className="estatisticas">
           <div className="estatistica xp">
             <p className="topo">XP</p>
@@ -238,10 +284,22 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
           </div>
         </div>
         {conclusao.primeiraConclusao && conclusao.proximaLicaoId && <p className="mensagem-aviso">A próxima lição foi liberada.</p>}
+        {conclusao.tipo !== "principal" && conclusao.xp === 0 && <p>Você já recebeu XP de prática três vezes hoje. Pode continuar praticando, sem XP.</p>}
         <div className="acoes">
-          <Link className="botao" href="/aprender">
-            Continuar
-          </Link>
+          {conclusao.voltarSessaoId ? (
+            <>
+              <Link className="botao" href={`/sessao/${conclusao.voltarSessaoId}`}>
+                Voltar à lição
+              </Link>
+              <Link className="botao botao-secundario" href="/aprender">
+                Voltar à trilha
+              </Link>
+            </>
+          ) : (
+            <Link className="botao" href="/aprender">
+              Continuar
+            </Link>
+          )}
         </div>
       </main>
     );
@@ -263,6 +321,13 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
         <button type="button" className="botao-icone" aria-label={som ? "Desligar som" : "Ligar som"} aria-pressed={som} onClick={alternarSom}>
           <Icone nome={som ? "som" : "semSom"} />
         </button>
+        {coracoes !== null && (
+          <span className="indicador indicador-coracoes">
+            <Icone nome="coracao" />
+            <span>{coracoes}</span>
+            <span className="so-leitor">corações</span>
+          </span>
+        )}
       </header>
 
       <main className="licao-corpo" id="conteudo-principal">
@@ -270,6 +335,7 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
         {exercicio ? (
           <>
             <p className="etiqueta-tipo">
+              {tipo === "pratica" && "Prática · "}
               {titulo} · {NOME_TIPO[exercicio.tipo]}
             </p>
             <h1 id="enunciado" ref={enunciadoRef} tabIndex={-1}>
@@ -321,6 +387,11 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
               )}
               <p className="feedback-texto">{resultado.explicacao}</p>
               {!resultado.correta && <p className="retorno-aviso">Este exercício volta no fim da lição.</p>}
+              {resultado.perdeuCoracao && (
+                <p className="retorno-aviso">
+                  <Icone nome="coracao" pequeno /> Você perdeu um coração. {resultado.coracoes === 0 ? "Seus corações acabaram." : `Restam ${resultado.coracoes}.`}
+                </p>
+              )}
             </div>
             <button type="button" className="botao" onClick={continuar}>
               Continuar

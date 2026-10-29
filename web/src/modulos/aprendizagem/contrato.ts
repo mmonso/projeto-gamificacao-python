@@ -44,8 +44,13 @@ export type ResultadoSubmissao = Progresso & {
   /** Resposta gravada. Num reenvio, é a do primeiro envio, mesmo que o aluno a tenha alterado depois da falha. */
   resposta: Resposta;
   correta: boolean;
-  /** Primeira resposta deste item na sessão: define acertos de primeira e, no E06, a perda de coração. */
+  /** Primeira resposta deste item na sessão: define acertos de primeira e a perda de coração. */
   primeiraTentativa: boolean;
+  perdeuCoracao: boolean;
+  /** Saldo depois da resposta, nas sessões que usam corações (só a principal); null nas demais. */
+  coracoes: number | null;
+  /** O saldo chegou a zero: depois do feedback, a sessão fica pausada até a recuperação (FL-06). */
+  pausada: boolean;
   solucao: Solucao;
   explicacao: string;
   /** Comentário da opção escolhida, quando o conteúdo traz um (escolher_resultado). */
@@ -53,14 +58,23 @@ export type ResultadoSubmissao = Progresso & {
 };
 
 export type ResultadoConclusao = {
-  licaoId: string;
+  tipo: "principal" | "pratica" | "revisao" | "recuperacao";
+  /** Lição da sessão; null numa recuperação, que junta itens de várias lições. */
+  licaoId: string | null;
   total: number;
   acertosPrimeira: number;
   /** Primeira vez que o aluno conclui esta lição: é o que concede o XP de primeira conclusão. */
   primeiraConclusao: boolean;
   /** XP lançado por esta conclusão, já gravado no servidor. Zero depois do limite diário de prática. */
   xp: number;
+  /** Corações devolvidos por uma recuperação; zero nas demais sessões. */
+  coracoesRecuperados: number;
+  /** Depois de uma recuperação, a sessão principal aberta para onde Voltar à lição leva (FL-06, passo 5). */
+  voltarSessaoId: string | null;
   proximaLicaoId: string | null;
 };
 
-export type ErroApi = { erro: "nao_autenticado" | "sessao_inexistente" | "desatualizada" | "invalida" | "incompleta" | "limite"; mensagem: string };
+export type ErroApi = {
+  erro: "nao_autenticado" | "sessao_inexistente" | "desatualizada" | "invalida" | "incompleta" | "sem_coracoes" | "limite";
+  mensagem: string;
+};
