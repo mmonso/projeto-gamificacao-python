@@ -224,6 +224,12 @@ export function Licao({ sessaoId, titulo, inicial, somInicial }: Props) {
         <h1>Lição concluída!</h1>
         <p className="subtitulo">{titulo}</p>
         <div className="estatisticas">
+          <div className="estatistica xp">
+            <p className="topo">XP</p>
+            <p className="valor">
+              <Icone nome="raio" pequeno />+{conclusao.xp}
+            </p>
+          </div>
           <div className="estatistica acertos">
             <p className="topo">Acertos de primeira</p>
             <p className="valor">

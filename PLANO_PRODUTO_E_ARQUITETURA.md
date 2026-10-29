@@ -303,7 +303,7 @@ Este checklist detalha as etapas da seção 14; não acrescenta um novo cronogra
 | E03 — Design e protótipo | Em andamento | E01 e E02 | [design/DESIGN.md](design/DESIGN.md) e protótipo em `design/prototipo/` |
 | E04 — Fundação técnica | Em andamento | E03 | Projeto em [web/](web/README.md); Supabase `sibi-dev` com migrações aplicadas. E04.5 e E04.6 verificados em 19/10/2026 no `sibi-dev`: cadastro, confirmação, login com retorno à tela pedida, perfil criado no primeiro acesso, saída e duas contas vendo só o próprio perfil; API pública recusa leitura das tabelas (migração 0003). E04.7: 15 lições publicadas no `sibi-dev`; abertura da lição, desbloqueio e sessão iniciada ou retomada na versão vigente, sem gabaritos (`web/src/servidor/licoes`). E04.8: verificações no GitHub Actions (`.github/workflows/verificar.yml`); acesso entre duas contas verificado no navegador e em testes. Falta homologação (E04.3) |
 | E05 — Motor e lição piloto | Em andamento | E04 | Trilha, quatro tipos de exercício, correção no servidor, dicas, feedback com som, repetição dos errados e conclusão (`web/src/servidor/licoes`, `web/src/app/sessao`); teste por HTTP em 20/10/2026 com contas reais: reenvio, duas abas, conclusão única e isolamento entre contas. Rascunho e envio guardados no navegador, com reenvio pelo mesmo id e retomada após recarga (`web/src/componentes/licao/guardada.ts`). Falta percorrer na tela (E05.7) |
-| E06 — Gamificação e revisão | Não iniciada | E05 | A registrar |
+| E06 — Gamificação e revisão | Em andamento | E05 | XP lançado na conclusão, com evento único por sessão e na mesma transação da conclusão e do desbloqueio; refazer uma lição concluída vale como prática, com limite diário (`web/src/servidor/licoes/estudo.ts`) |
 | E07 — Curso completo | Em andamento | E06; autoria pode começar após E05 | Unidades 2 e 3 escritas e verificadas em [conteudo/](conteudo/); publicação depende do aplicativo |
 | E08 — Qualidade e operação | Não iniciada | E06 e E07 | A registrar |
 | E09 — Beta e ajustes | Não iniciada | E08 | A registrar |
@@ -377,7 +377,7 @@ Pronto quando: a primeira lição funciona de ponta a ponta com persistência e 
 
 ### E06 — Gamificação e revisão
 
-- [ ] E06.1 — Implementar lançamentos de recompensas, unicidade e atualização transacional da conclusão e do desbloqueio.
+- [x] E06.1 — Implementar lançamentos de recompensas, unicidade e atualização transacional da conclusão e do desbloqueio.
 - [ ] E06.2 — Implementar perda de corações, pausa com saldo zero e recuperação por revisão.
 - [ ] E06.3 — Implementar agenda de revisão por conceito e limites de XP de prática.
 - [ ] E06.4 — Implementar atividade diária, meta e sequência com a política de fuso definida em E01.

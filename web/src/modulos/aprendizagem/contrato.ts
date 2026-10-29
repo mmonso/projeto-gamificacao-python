@@ -56,8 +56,10 @@ export type ResultadoConclusao = {
   licaoId: string;
   total: number;
   acertosPrimeira: number;
-  /** Primeira vez que o aluno conclui esta lição: no E06, é o que concede o XP de primeira conclusão. */
+  /** Primeira vez que o aluno conclui esta lição: é o que concede o XP de primeira conclusão. */
   primeiraConclusao: boolean;
+  /** XP lançado por esta conclusão, já gravado no servidor. Zero depois do limite diário de prática. */
+  xp: number;
   proximaLicaoId: string | null;
 };
 

@@ -1,7 +1,7 @@
 // Operações de estudo de uma sessão: responder, pedir dica e concluir (FL-03, FL-04; E05.3 a E05.6).
 // Cada operação trava a linha da sessão, confere o dono e é segura para reenvio:
 // repetir o mesmo pedido devolve o resultado já gravado, sem novo efeito.
-// Corações, XP, atividade e sequência entram no E06, dentro destas mesmas transações.
+// O XP é lançado na conclusão (E06.1); corações, atividade e sequência entram no E06, dentro destas mesmas transações.
 import { and, asc, count, eq, lt, sql } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import {
@@ -14,6 +14,8 @@ import {
 import { corrigir, type Resposta } from "@/modulos/aprendizagem/corretor";
 import { acertosDePrimeira, registrarResultado, type EstadoFila } from "@/modulos/aprendizagem/fila";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
+import { diaDeEstudo, fusoVigente } from "@/modulos/gamificacao/dias";
+import { xpDaConclusao } from "@/modulos/gamificacao/regras";
 import * as t from "@/servidor/db/esquema";
 import { ordemDaTrilha } from "./servico";
 
@@ -161,8 +163,34 @@ export async function pedirDica(db: Db, alunoId: string, sessaoId: string, exerc
 }
 
 /**
- * Conclui a sessão depois de todos os itens resolvidos (FL-03, passo 7) e registra a conclusão da lição,
- * que desbloqueia a próxima. Pedidos repetidos ou de outra aba devolvem o mesmo resultado.
+ * Lança o XP da conclusão (4.2) no dia de estudo do momento da conclusão. O perfil fica travado até o fim
+ * da transação, para que conclusões simultâneas de outras sessões contem o limite diário de prática.
+ * O identificador do evento é único: a sessão nunca recebe dois lançamentos.
+ */
+async function lancarXp(tx: Tx, alunoId: string, sessao: { id: string; tipo: (typeof t.sessoes.$inferSelect)["tipo"] }, primeiraConclusao: boolean, agora: Date) {
+  const [perfil] = await tx
+    .select({ fuso: t.perfis.fuso, fusoPendente: t.perfis.fusoPendente, pendenteAPartirDe: t.perfis.pendenteAPartirDe, ultimoDiaEstudo: t.perfis.ultimoDiaEstudo })
+    .from(t.perfis)
+    .where(eq(t.perfis.id, alunoId))
+    .for("update");
+  const dia = diaDeEstudo(agora, fusoVigente(perfil, agora).fuso, perfil.ultimoDiaEstudo);
+  const [{ praticas }] = await tx
+    .select({ praticas: count() })
+    .from(t.lancamentos)
+    .where(and(eq(t.lancamentos.alunoId, alunoId), eq(t.lancamentos.diaEstudo, dia), eq(t.lancamentos.causa, "pratica")));
+  const { xp, causa } = xpDaConclusao(sessao.tipo, !primeiraConclusao, praticas);
+  if (xp === 0) return 0;
+  await tx.insert(t.lancamentos).values({ alunoId, causa, valor: xp, diaEstudo: dia, eventoId: eventoConclusao(sessao.id) });
+  await tx.update(t.perfis).set({ xpTotal: sql`${t.perfis.xpTotal} + ${xp}` }).where(eq(t.perfis.id, alunoId));
+  return xp;
+}
+
+const eventoConclusao = (sessaoId: string) => `conclusao:${sessaoId}`;
+
+/**
+ * Conclui a sessão depois de todos os itens resolvidos (FL-03, passo 7): registra a conclusão da lição,
+ * que desbloqueia a próxima, e lança o XP, tudo na mesma transação (CA-35, CA-36).
+ * Pedidos repetidos ou de outra aba devolvem o mesmo resultado.
  */
 export async function concluir(db: Db, alunoId: string, sessaoId: string): Promise<ResultadoConclusao> {
   return db.transaction(async (tx) => {
@@ -170,12 +198,15 @@ export async function concluir(db: Db, alunoId: string, sessaoId: string): Promi
     if (sessao.fila.fila.length > 0) throw new ErroEstudo("incompleta", "Ainda há exercícios para resolver nesta lição.");
 
     let primeiraConclusao: boolean;
+    let xp: number;
     if (sessao.estado === "concluida") {
       const [c] = await tx
         .select({ sessaoId: t.conclusoesLicao.sessaoId })
         .from(t.conclusoesLicao)
         .where(and(eq(t.conclusoesLicao.alunoId, alunoId), eq(t.conclusoesLicao.licaoId, sessao.licaoId)));
       primeiraConclusao = c?.sessaoId === sessao.id;
+      const [l] = await tx.select({ valor: t.lancamentos.valor }).from(t.lancamentos).where(eq(t.lancamentos.eventoId, eventoConclusao(sessao.id)));
+      xp = l?.valor ?? 0;
     } else {
       const agora = new Date();
       await tx.update(t.sessoes).set({ estado: "concluida", concluidaEm: agora, atualizadoEm: agora }).where(eq(t.sessoes.id, sessao.id));
@@ -185,6 +216,7 @@ export async function concluir(db: Db, alunoId: string, sessaoId: string): Promi
         .onConflictDoNothing()
         .returning({ licaoId: t.conclusoesLicao.licaoId });
       primeiraConclusao = inserida.length > 0;
+      xp = await lancarXp(tx, alunoId, sessao, primeiraConclusao, agora);
     }
 
     const trilha = await ordemDaTrilha(tx);
@@ -194,6 +226,7 @@ export async function concluir(db: Db, alunoId: string, sessaoId: string): Promi
       total: sessao.totalItens,
       acertosPrimeira: acertosDePrimeira(sessao.fila),
       primeiraConclusao,
+      xp,
       proximaLicaoId: trilha[posicao + 1] ?? null,
     };
   });

@@ -55,6 +55,20 @@ async function atual(aluno: string, sessaoId: string) {
   return (await obterSessaoAtual(db, aluno, sessaoId))!;
 }
 
+async function xpTotal(aluno: string) {
+  const [p] = await db.select({ xp: t.perfis.xpTotal }).from(t.perfis).where(eq(t.perfis.id, aluno));
+  return p.xp;
+}
+
+/** Inicia a sessão de uma lição e resolve todos os itens de primeira, sem concluir. */
+async function resolverTudo(aluno: string, licaoId: string) {
+  const { sessaoId } = (await iniciarSessao(db, aluno, licaoId)) as { sessaoId: string };
+  for (let s = await atual(aluno, sessaoId); s.exercicio; s = await atual(aluno, sessaoId)) {
+    await submeter(db, aluno, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+  }
+  return sessaoId;
+}
+
 async function falha(promessa: Promise<unknown>): Promise<string> {
   try {
     await promessa;
@@ -123,8 +137,12 @@ describe("lição piloto do começo ao fim", () => {
     }
     const [a, b] = await Promise.all([concluir(db, ANA, sessaoId), concluir(db, ANA, sessaoId)]);
     expect(a).toEqual(b);
-    expect(a).toMatchObject({ licaoId: "u1-l1", primeiraConclusao: true, proximaLicaoId: "u1-l2" });
+    expect(a).toMatchObject({ licaoId: "u1-l1", primeiraConclusao: true, xp: 20, proximaLicaoId: "u1-l2" });
     expect(a.acertosPrimeira).toBe(a.total - 1);
+    expect(await concluir(db, ANA, sessaoId)).toEqual(a);
+    const lancados = await db.select().from(t.lancamentos).where(eq(t.lancamentos.alunoId, ANA));
+    expect(lancados).toMatchObject([{ causa: "primeira_conclusao", valor: 20, eventoId: `conclusao:${sessaoId}` }]);
+    expect(await xpTotal(ANA)).toBe(20);
     expect(await licaoDisponivel(db, ANA, "u1-l2")).toBe(true);
 
     const [u1] = await obterTrilha(db, ANA);
@@ -158,6 +176,40 @@ describe("isolamento entre contas (CA-42)", () => {
     expect(await falha(submeter(db, BIA, sessaoId, { id: usada.id, exercicioId: ex, resposta: correta(ex) }))).toBe("invalida");
     const [{ n }] = await db.select({ n: count() }).from(t.submissoes).where(and(eq(t.submissoes.sessaoId, sessaoId)));
     expect(n).toBe(0);
+  });
+});
+
+describe("XP da conclusão (E06.1)", () => {
+  const ELI = "00000000-0000-4000-8000-0000000000e5";
+
+  it("uma falha no meio da conclusão não grava nenhum efeito (CA-36)", async () => {
+    await db.insert(t.perfis).values({ id: ELI });
+    const sessaoId = await resolverTudo(ELI, "u1-l1");
+    // Um lançamento com o mesmo evento faz a transação falhar depois de gravar sessão e conclusão.
+    await db.insert(t.lancamentos).values({ alunoId: ELI, causa: "teste", valor: 0, diaEstudo: "2026-01-01", eventoId: `conclusao:${sessaoId}` });
+    await expect(concluir(db, ELI, sessaoId)).rejects.toThrow();
+
+    const [s] = await db.select({ estado: t.sessoes.estado }).from(t.sessoes).where(eq(t.sessoes.id, sessaoId));
+    expect(s.estado).toBe("aberta");
+    expect(await licaoDisponivel(db, ELI, "u1-l2")).toBe(false);
+    expect(await xpTotal(ELI)).toBe(0);
+
+    await db.delete(t.lancamentos).where(eq(t.lancamentos.alunoId, ELI));
+    expect(await concluir(db, ELI, sessaoId)).toMatchObject({ primeiraConclusao: true, xp: 20 });
+    expect(await xpTotal(ELI)).toBe(20);
+  });
+
+  it("refazer a lição vale como prática: 10 XP nas três primeiras do dia e zero depois (4.2, 4.9)", async () => {
+    const ganhos: number[] = [];
+    for (let i = 0; i < 4; i++) {
+      const r = await concluir(db, ELI, await resolverTudo(ELI, "u1-l1"));
+      expect(r.primeiraConclusao).toBe(false);
+      ganhos.push(r.xp);
+    }
+    expect(ganhos).toEqual([10, 10, 10, 0]);
+    expect(await xpTotal(ELI)).toBe(50);
+    const lancados = await db.select({ causa: t.lancamentos.causa }).from(t.lancamentos).where(eq(t.lancamentos.alunoId, ELI));
+    expect(lancados.map((l) => l.causa).sort()).toEqual(["pratica", "pratica", "pratica", "primeira_conclusao"]);
   });
 });
 
