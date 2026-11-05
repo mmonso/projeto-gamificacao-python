@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { dadosIniciaisDoPerfil } from "@/modulos/conta/conta";
 import * as t from "@/servidor/db/esquema";
+import { registrarEvento } from "@/servidor/eventos";
 
 type Db = PgDatabase<PgQueryResultHKT, typeof t>;
 
@@ -17,10 +18,12 @@ export async function obterOuCriarPerfil(db: Db, alunoId: string, metadadosCadas
   const [existente] = await db.select().from(t.perfis).where(eq(t.perfis.id, alunoId));
   if (existente) return existente;
 
-  await db
+  const criado = await db
     .insert(t.perfis)
     .values({ id: alunoId, ...dadosIniciaisDoPerfil(metadadosCadastro) })
-    .onConflictDoNothing({ target: t.perfis.id });
-  const [criado] = await db.select().from(t.perfis).where(eq(t.perfis.id, alunoId));
-  return criado;
+    .onConflictDoNothing({ target: t.perfis.id })
+    .returning({ id: t.perfis.id });
+  if (criado.length > 0) await registrarEvento(db, "conta_criada", alunoId);
+  const [perfil] = await db.select().from(t.perfis).where(eq(t.perfis.id, alunoId));
+  return perfil;
 }

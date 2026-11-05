@@ -6,6 +6,7 @@ import { iniciarFila } from "@/modulos/aprendizagem/fila";
 import { diaDeEstudo, fusoVigente } from "@/modulos/gamificacao/dias";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import * as t from "@/servidor/db/esquema";
+import { registrarEvento } from "@/servidor/eventos";
 
 type Db = PgDatabase<PgQueryResultHKT, typeof t>;
 type Perfil = typeof t.perfis.$inferSelect;
@@ -47,7 +48,10 @@ export async function iniciarRevisao(db: Db, alunoId: string, agora = new Date()
       .where(and(eq(t.sessoes.alunoId, alunoId), eq(t.sessoes.tipo, "revisao"), eq(t.sessoes.estado, "aberta"), gt(t.sessoes.atualizadoEm, limite)))
       .orderBy(desc(t.sessoes.atualizadoEm))
       .limit(1);
-    if (aberta) return { ok: true, sessaoId: aberta.id, recomendada: vencidos.length > 0 } as const;
+    if (aberta) {
+      await registrarEvento(tx, "sessao_retomada", alunoId, { tipo: "revisao", sessaoId: aberta.id });
+      return { ok: true, sessaoId: aberta.id, recomendada: vencidos.length > 0 } as const;
+    }
 
     const conhecidos = new Set(ordem);
     const candidatos = await exerciciosDosConceitos(tx, conhecidos);
@@ -64,6 +68,7 @@ export async function iniciarRevisao(db: Db, alunoId: string, agora = new Date()
       .values({ alunoId, tipo: "revisao", fila: iniciarFila(escolhidos.map((e) => e.id)), totalItens: escolhidos.length })
       .returning({ id: t.sessoes.id });
     await tx.insert(t.itensSessao).values(escolhidos.map((e, i) => ({ sessaoId: sessao.id, exercicioId: e.id, versaoLicaoId: e.versaoLicaoId, posicaoOriginal: i + 1 })));
+    await registrarEvento(tx, "licao_iniciada", alunoId, { tipo: "revisao", sessaoId: sessao.id, recomendada: vencidos.length > 0 });
     return { ok: true, sessaoId: sessao.id, recomendada: vencidos.length > 0 } as const;
   });
 }

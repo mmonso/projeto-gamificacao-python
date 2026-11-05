@@ -2,6 +2,7 @@
 // Demonstração anônima (FL-01): a mesma tela da lição, com o motor local e sem corações.
 import { useEffect, useState } from "react";
 import { exercicioAtual, lerDemo, motorDemo, novaDemo, resultadoDaDemo, type EstadoDemo } from "@/componentes/licao/demo";
+import { chamar } from "@/componentes/licao/motor";
 import { Resultado } from "@/componentes/licao/Resultado";
 import type { LicaoDemo } from "@/servidor/demo/servico";
 import { Licao } from "../sessao/[id]/Licao";
@@ -12,6 +13,7 @@ export function Demonstracao({ licao }: { licao: LicaoDemo }) {
   // A demonstração guardada continua do item em que parou e na versão em que começou (CA-04).
   useEffect(() => {
     const guardada = lerDemo();
+    if (!guardada) void chamar("/api/demo/inicio", { licaoId: licao.licaoId });
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setEstado(guardada ?? novaDemo(licao));
   }, [licao]);

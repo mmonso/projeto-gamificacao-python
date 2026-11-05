@@ -7,6 +7,7 @@ import { iniciarFila, type EstadoFila } from "@/modulos/aprendizagem/fila";
 import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import * as t from "@/servidor/db/esquema";
+import { registrarEvento } from "@/servidor/eventos";
 
 type Db = PgDatabase<PgQueryResultHKT, typeof t>;
 
@@ -145,6 +146,12 @@ export type ResultadoInicio = { ok: true; sessaoId: string; retomada: boolean } 
  * começa com saldo zero (4.3). A sessão fica presa à versão vigente no início.
  */
 export async function iniciarSessao(db: Db, alunoId: string, licaoId: string): Promise<ResultadoInicio> {
+  const r = await iniciarOuRetomar(db, alunoId, licaoId);
+  if (r.ok) await registrarEvento(db, r.retomada ? "sessao_retomada" : "licao_iniciada", alunoId, { licaoId, sessaoId: r.sessaoId });
+  return r;
+}
+
+async function iniciarOuRetomar(db: Db, alunoId: string, licaoId: string): Promise<ResultadoInicio> {
   const aberta = await sessaoPrincipalAberta(db, alunoId, licaoId);
   if (aberta) return { ok: true, sessaoId: aberta, retomada: true };
 
@@ -263,6 +270,7 @@ export async function iniciarRecuperacao(db: Db, alunoId: string): Promise<Resul
       .values({ alunoId, tipo: "recuperacao", fila: iniciarFila(escolhidos.map((e) => e.id)), totalItens: escolhidos.length })
       .returning({ id: t.sessoes.id });
     await tx.insert(t.itensSessao).values(escolhidos.map((e, i) => ({ sessaoId: sessao.id, exercicioId: e.id, versaoLicaoId: e.versaoLicaoId, posicaoOriginal: i + 1 })));
+    await registrarEvento(tx, "licao_iniciada", alunoId, { tipo: "recuperacao", sessaoId: sessao.id });
     return { ok: true, sessaoId: sessao.id } as const;
   });
 }

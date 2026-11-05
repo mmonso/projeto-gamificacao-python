@@ -16,6 +16,7 @@ import { acertosDePrimeira, registrarResultado, type EstadoFila } from "@/modulo
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
 import { coracoesAposRecuperacao, coracoesAposResposta, xpDaConclusao } from "@/modulos/gamificacao/regras";
 import * as t from "@/servidor/db/esquema";
+import { registrarEvento } from "@/servidor/eventos";
 import { aplicarEfeitos, diaDaConclusao } from "@/servidor/gamificacao/efeitos";
 import { ordemDaTrilha } from "./servico";
 
@@ -153,6 +154,7 @@ export async function submeter(db: Db, alunoId: string, sessaoId: string, pedido
     const pausada = coracoes === 0 && fila.fila.length > 0;
 
     await tx.insert(t.submissoes).values({ id: pedido.id, sessaoId: sessao.id, exercicioId: pedido.exercicioId, resposta: pedido.resposta, correta, perdeuCoracao });
+    await registrarEvento(tx, "exercicio_respondido", alunoId, { sessaoId: sessao.id, tipo: sessao.tipo, exercicioId: pedido.exercicioId, correta, primeiraTentativa });
     await tx
       .update(t.itensSessao)
       .set({
@@ -196,6 +198,7 @@ export async function pedirDica(db: Db, alunoId: string, sessaoId: string, exerc
       .update(t.itensSessao)
       .set({ dicasUsadas: sql`greatest(${t.itensSessao.dicasUsadas}, ${numero})` })
       .where(and(eq(t.itensSessao.sessaoId, sessao.id), eq(t.itensSessao.exercicioId, exercicioId)));
+    await registrarEvento(tx, "dica_pedida", alunoId, { sessaoId: sessao.id, exercicioId, numero });
     return dica;
   });
 }
@@ -309,6 +312,14 @@ export async function efetivarConclusao(
     ...efeitos,
   };
   await tx.update(t.sessoes).set({ resultado }).where(eq(t.sessoes.id, sessao.id));
+  await registrarEvento(tx, sessao.tipo === "principal" || sessao.tipo === "pratica" ? "licao_concluida" : "revisao_concluida", alunoId, {
+    sessaoId: sessao.id,
+    tipo: sessao.tipo,
+    licaoId: sessao.licaoId,
+    acertosPrimeira: resultado.acertosPrimeira,
+    total: resultado.total,
+    unidadeConcluida: resultado.unidadeConcluida?.id ?? null,
+  });
   return resultado;
 }
 
