@@ -20,7 +20,7 @@ async function SessaoAtual({ params }: { params: Promise<{ id: string }> }) {
       key={sessao.id}
       sessaoId={sessao.id}
       tipo={sessao.tipo}
-      titulo={sessao.licao?.titulo ?? "Recuperar corações"}
+      titulo={sessao.licao?.titulo ?? (sessao.tipo === "revisao" ? "Revisão" : "Recuperar corações")}
       inicial={{ exercicio: sessao.exercicio, resolvidos: sessao.resolvidos, total: sessao.totalItens }}
       coracoesIniciais={principal ? perfil.coracoes : null}
       semCoracoes={principal && sessao.exercicio !== null && (sessao.estado === "pausada" || perfil.coracoes === 0)}

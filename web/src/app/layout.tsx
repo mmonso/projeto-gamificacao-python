@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Nunito } from "next/font/google";
+import { AvisoConexao } from "@/componentes/AvisoConexao";
 import "./globals.css";
 
 const nunito = Nunito({ variable: "--fonte-nunito", subsets: ["latin"], weight: ["400", "600", "700", "800", "900"] });
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="pular" href="#conteudo-principal">
           Pular para o conteúdo
         </a>
+        <AvisoConexao />
         {children}
       </body>
     </html>

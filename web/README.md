@@ -24,10 +24,15 @@ Aplicação Next.js do MVP. Planejamento em [../PLANO_PRODUTO_E_ARQUITETURA.md](
 | `src/modulos/aprendizagem` | Corretores e fila da sessão |
 | `src/modulos/gamificacao` | Regras de XP, corações, meta, sequência, fuso, conquistas e revisão |
 | `src/servidor/auth` | Supabase Auth: cliente com cookies, renovação da sessão no proxy e camada de acesso (`obterAluno`, `exigirAluno`, `obterPerfilAtual`) |
-| `src/servidor/perfis` | Perfil do aluno, criado no primeiro acesso com os dados do cadastro |
 | `src/servidor/db` | Esquema do banco (Drizzle) e conexão criada no primeiro uso |
+| `src/app` | Apresentação, introdução, demonstração, Aprender, Praticar, Perfil, lição e rotas da API |
 | `src/app/(conta)` | Telas e ações de cadastro, verificação de e-mail, login, recuperação e nova senha |
 | `src/servidor/conteudo` | Leitura e publicação do conteúdo de `../conteudo` |
+| `src/servidor/licoes` | Trilha, sessões, correção, dicas e conclusão (`estudo.ts`), revisão recomendada e tela Praticar (`revisao.ts`) |
+| `src/servidor/gamificacao` | Efeitos da conclusão: atividade diária, meta, sequência, agenda de conceitos, conquistas e o resumo do aluno |
+| `src/servidor/demo` | Demonstração anônima (correção sem gravar, limite de frequência) e transferência para a conta |
+| `src/servidor/perfis` | Perfil, preferências (meta, fuso, som), exportação do histórico e exclusão da conta |
+| `src/componentes/licao` | Tela da lição, motores (API da sessão ou demonstração local), resultado e celebrações |
 | `drizzle/` | Migrações SQL versionadas |
 
 Os módulos de domínio são funções puras; serviços e rotas aplicam essas regras dentro de transações no servidor.
