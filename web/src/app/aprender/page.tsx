@@ -62,7 +62,7 @@ async function Trilha() {
   return (
     <Moldura atual="aprender" resumo={resumo}>
       <h1 className="so-leitor">Aprender</h1>
-      <OfertaTransferencia />
+      <OfertaTransferencia licao1NaConta={unidades[0]?.licoes[0]?.estado === "concluida"} />
       {perfil.nome && <p className="subtitulo">Olá, {perfil.nome}!</p>}
       {resumo.coracoes === 0 && (
         <div className="aviso-conta">

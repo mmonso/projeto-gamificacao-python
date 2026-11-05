@@ -61,7 +61,7 @@ export function Preferencias({ nome, meta, fuso, fusoPendente, som: somInicial }
       <form action={acaoNome} className="campo">
         <label htmlFor="p-nome">Nome ou apelido</label>
         <div className="flex gap-2">
-          <input id="p-nome" name="nome" className="min-w-0 flex-1" defaultValue={nome} maxLength={40} autoComplete="nickname" />
+          <input id="p-nome" name="nome" className="min-w-0 flex-1" size={1} defaultValue={nome} maxLength={40} autoComplete="nickname" />
           <BotaoEnviar classe="botao botao-secundario botao-pequeno">Salvar</BotaoEnviar>
         </div>
         <Mensagens erro={estadoNome.erro} aviso={estadoNome.aviso} />

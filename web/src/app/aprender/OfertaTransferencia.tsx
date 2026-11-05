@@ -18,7 +18,8 @@ const AVISOS: Record<Exclude<ResultadoTransferencia["resultado"], "registrada">,
   recusada: "Tudo bem. A lição 1 continua disponível.",
 };
 
-export function OfertaTransferencia() {
+/** `licao1NaConta`: a conta já concluiu a lição da demonstração; não há o que transferir (CA-20). */
+export function OfertaTransferencia({ licao1NaConta }: { licao1NaConta: boolean }) {
   const router = useRouter();
   const [fase, setFase] = useState<Fase>({ tipo: "nada" });
 
@@ -26,9 +27,13 @@ export function OfertaTransferencia() {
     const demo = lerDemo();
     if (!demo) return;
     if (!demo.concluida) return apagarDemo();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (licao1NaConta) {
+      apagarDemo();
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      return setFase({ tipo: "aviso", texto: AVISOS.ja_concluida });
+    }
     setFase({ tipo: "oferta", demo, enviando: false, falha: null });
-  }, []);
+  }, [licao1NaConta]);
 
   async function salvar(demo: EstadoDemo) {
     setFase({ tipo: "oferta", demo, enviando: true, falha: null });

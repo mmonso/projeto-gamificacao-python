@@ -98,10 +98,10 @@
   }
   .botao-icone:hover { background: var(--fundo-suave); }
 
-  .campo { display: grid; gap: 6px; }
+  .campo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .campo label { font-weight: 800; }
   .campo input {
-    font: inherit; padding: 12px 14px; min-height: 52px; border-radius: var(--raio-pequeno);
+    min-width: 0; font: inherit; padding: 12px 14px; min-height: 52px; border-radius: var(--raio-pequeno);
     border: 2px solid var(--borda-forte); background: var(--fundo-suave); color: var(--texto);
   }
   .campo input:focus { outline: 3px solid var(--foco); outline-offset: 1px; background: #fff; }
@@ -281,7 +281,7 @@
     .feedback { flex: 1; }
   }
 
-  .estatisticas { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+  .estatisticas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   .estatistica { border: 2px solid var(--borda); border-radius: var(--raio); overflow: hidden; text-align: center; }
   .estatistica .topo { color: #fff; font-weight: 900; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; padding: 6px 4px; }
   .estatistica .valor { font-weight: 900; font-size: 1.35rem; padding: 10px 4px; }
@@ -342,7 +342,7 @@
   .cartao-destaque { border-color: #b9d3f5; background: var(--azul-claro); }
   .progresso-meta { height: 14px; background: var(--trilho); border-radius: 999px; overflow: hidden; margin-top: 8px; }
   .progresso-meta > span { display: block; height: 100%; background: var(--amarelo); border-radius: 999px; }
-  .pilha { display: grid; gap: 16px; }
+  .pilha { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 
   .botao-perigo { background: var(--vermelho); box-shadow: var(--sombra-botao) var(--vermelho-borda); }
   .botao-perigo:active:not(:disabled) { box-shadow: 0 0 0 var(--vermelho-borda); }
@@ -362,7 +362,7 @@
   .selo-provisorio { display: inline-block; font-size: .7rem; font-weight: 900; text-transform: uppercase; background: var(--fundo-suave); color: var(--texto-suave); border: 1px solid var(--borda-forte); border-radius: 6px; padding: 1px 6px; margin-bottom: 8px; }
 
   .campo select {
-    font: inherit; padding: 12px 14px; min-height: 52px; border-radius: var(--raio-pequeno);
+    width: 100%; min-width: 0; font: inherit; padding: 12px 14px; min-height: 52px; border-radius: var(--raio-pequeno);
     border: 2px solid var(--borda-forte); background: var(--fundo-suave); color: var(--texto);
   }
   .campo select:focus { outline: 3px solid var(--foco); outline-offset: 1px; background: #fff; }
