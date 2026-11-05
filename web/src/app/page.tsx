@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Mascote } from "@/componentes/Mascote";
 import { obterAluno } from "@/servidor/auth/sessao";
+import { AcoesVisitante } from "./AcoesVisitante";
 
-// Apresentação (F-01). A introdução e a demonstração entram em E06.6; por ora, Começar leva ao cadastro.
+// Apresentação (F-01): Começar leva à introdução e à demonstração; Já tenho conta, ao login.
 async function Acoes() {
   const aluno = await obterAluno();
   if (aluno) {
@@ -13,16 +14,7 @@ async function Acoes() {
       </Link>
     );
   }
-  return (
-    <>
-      <Link className="botao" href="/cadastro">
-        Começar
-      </Link>
-      <Link className="botao botao-secundario" href="/entrar">
-        Já tenho conta
-      </Link>
-    </>
-  );
+  return <AcoesVisitante />;
 }
 
 export default function Apresentacao() {

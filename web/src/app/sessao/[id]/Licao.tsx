@@ -8,6 +8,8 @@ import { BotaoRecuperar } from "@/app/licao/[id]/botao";
 import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
 import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
+import { motorDaSessao, type Motor } from "@/componentes/licao/motor";
+import { Resultado } from "@/componentes/licao/Resultado";
 import { tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
 import type { ErroApi, ResultadoConclusao, ResultadoSubmissao } from "@/modulos/aprendizagem/contrato";
@@ -26,32 +28,17 @@ type Props = {
   /** Sessão principal sem corações para continuar: abre na tela Sem corações. */
   semCoracoes: boolean;
   somInicial: boolean;
+  /** Demonstração anônima: o motor é local e o resultado mostra o XP como provisório (FL-01). */
+  demo?: boolean;
+  /** Motor criado no navegador; sem ele, a lição usa a API da sessão. */
+  criarMotor?: () => Motor;
 };
 
 const TITULOS_ACERTO = ["Muito bem!", "Isso mesmo!", "Correto!"];
-const TITULOS_CONCLUSAO: Record<ResultadoConclusao["tipo"], string> = {
-  principal: "Lição concluída!",
-  pratica: "Prática concluída!",
-  revisao: "Revisão concluída!",
-  recuperacao: "Corações recuperados!",
-};
-
-type Chamada<T> = { ok: true; dados: T } | { ok: false; erro: ErroApi | null };
-
-async function chamar<T>(url: string, corpo?: unknown): Promise<Chamada<T>> {
-  try {
-    const r = await fetch(url, corpo === undefined ? { cache: "no-store" } : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
-    const dados = await r.json();
-    return r.ok ? { ok: true, dados } : { ok: false, erro: dados as ErroApi };
-  } catch {
-    return { ok: false, erro: null };
-  }
-}
-
-export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCoracoes, somInicial }: Props) {
+export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCoracoes, somInicial, demo = false, criarMotor }: Props) {
   const router = useRouter();
   const chave = `sibi-resposta:${sessaoId}`;
-  const api = `/api/sessoes/${sessaoId}`;
+  const [motor] = useState(() => (criarMotor ? criarMotor() : motorDaSessao(sessaoId)));
 
   const [exercicio, setExercicio] = useState(inicial.exercicio);
   const [resposta, setResposta] = useState<Resposta | null>(null);
@@ -95,6 +82,8 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
         return setFase("sem_coracoes");
       }
       aoFalhar();
+      // Limite de frequência da demonstração: a mensagem do servidor explica quanto esperar.
+      if (erro?.erro === "limite") setFalha(erro.mensagem);
     },
     [router, sessaoId, chave],
   );
@@ -102,7 +91,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   const concluirLicao = useCallback(async () => {
     setFase("concluindo");
     setFalha(null);
-    const r = await chamar<ResultadoConclusao>(`${api}/conclusao`, {});
+    const r = await motor.concluir();
     if (r.ok) {
       setConclusao(r.dados);
       setFase("concluida");
@@ -110,11 +99,11 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
       return;
     }
     tratarErro(r.erro, () => setFalha("Não foi possível registrar a conclusão. Seu progresso está salvo."));
-  }, [api, tratarErro]);
+  }, [motor, tratarErro]);
 
   /** Outra aba ou aparelho mudou a sessão: recarrega o estado do servidor (FL-04). */
   const recarregar = useCallback(async () => {
-    const r = await chamar<{ exercicio: ExercicioPublico | null; resolvidos: number; totalItens: number }>(api);
+    const r = await motor.estado();
     if (!r.ok) return tratarErro(r.erro, () => setFalha("Sem conexão. Tente de novo em instantes."));
     guardar(chave, null);
     envioRef.current = null;
@@ -126,7 +115,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     setExercicio(r.dados.exercicio);
     if (r.dados.exercicio) setFase("respondendo");
     else void concluirLicao();
-  }, [api, chave, tratarErro, concluirLicao]);
+  }, [motor, chave, tratarErro, concluirLicao]);
 
   const verificar = useCallback(
     async (envio: Envio) => {
@@ -135,7 +124,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
       envioRef.current = envio.envioId;
       setFase("verificando");
       setFalha(null);
-      const r = await chamar<ResultadoSubmissao>(`${api}/submissoes`, { id: envio.envioId, exercicioId: envio.exercicio.id, resposta: envio.resposta });
+      const r = await motor.submeter({ id: envio.envioId, exercicioId: envio.exercicio.id, resposta: envio.resposta });
       if (!r.ok) {
         if (r.erro?.erro === "desatualizada" || r.erro?.erro === "invalida") return void recarregar();
         return tratarErro(r.erro, () => {
@@ -154,7 +143,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
       setAnuncio(res.correta ? "Resposta correta." : "Resposta incorreta.");
       if (somRef.current) tocar(res.correta ? "acerto" : "erro");
     },
-    [api, chave, recarregar, tratarErro],
+    [motor, chave, recarregar, tratarErro],
   );
 
   // Retomada depois de recarga (FL-04, passo 3): reenvia o envio guardado, cujo resultado o servidor devolve
@@ -198,7 +187,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
 
   async function pedirDica() {
     if (!exercicio) return;
-    const r = await chamar<{ dica: string }>(`${api}/dicas`, { exercicioId: exercicio.id, numero: dicas.length + 1 });
+    const r = await motor.dica(exercicio.id, dicas.length + 1);
     if (r.ok) setDicas((d) => [...d, r.dados.dica]);
     else if (r.erro?.erro === "desatualizada") void recarregar();
     else tratarErro(r.erro, () => setFalha("Não foi possível carregar a dica agora."));
@@ -216,7 +205,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   function alternarSom() {
     const novo = !som;
     setSom(novo);
-    void chamar(`/api/perfil/som`, { som: novo });
+    void motor.som(novo);
   }
 
   const podeVerificar = fase === "respondendo" && exercicio !== null && respostaCompleta(exercicio, resposta);
@@ -256,53 +245,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   }
 
   if (fase === "concluida" && conclusao) {
-    return (
-      <main className="tela-centro text-center" id="conteudo-principal">
-        <Mascote humor="comemoracao" tamanho="grande" />
-        <h1>{TITULOS_CONCLUSAO[conclusao.tipo]}</h1>
-        {conclusao.licaoId && <p className="subtitulo">{titulo}</p>}
-        {conclusao.coracoesRecuperados > 0 && (
-          <p className="subtitulo">
-            <span className="indicador indicador-coracoes">
-              <Icone nome="coracao" pequeno />
-            </span>{" "}
-            Você recuperou {conclusao.coracoesRecuperados} {conclusao.coracoesRecuperados === 1 ? "coração" : "corações"}.
-          </p>
-        )}
-        <div className="estatisticas">
-          <div className="estatistica xp">
-            <p className="topo">XP</p>
-            <p className="valor">
-              <Icone nome="raio" pequeno />+{conclusao.xp}
-            </p>
-          </div>
-          <div className="estatistica acertos">
-            <p className="topo">Acertos de primeira</p>
-            <p className="valor">
-              {conclusao.acertosPrimeira} de {conclusao.total}
-            </p>
-          </div>
-        </div>
-        {conclusao.primeiraConclusao && conclusao.proximaLicaoId && <p className="mensagem-aviso">A próxima lição foi liberada.</p>}
-        {conclusao.tipo !== "principal" && conclusao.xp === 0 && <p>Você já recebeu XP de prática três vezes hoje. Pode continuar praticando, sem XP.</p>}
-        <div className="acoes">
-          {conclusao.voltarSessaoId ? (
-            <>
-              <Link className="botao" href={`/sessao/${conclusao.voltarSessaoId}`}>
-                Voltar à lição
-              </Link>
-              <Link className="botao botao-secundario" href="/aprender">
-                Voltar à trilha
-              </Link>
-            </>
-          ) : (
-            <Link className="botao" href="/aprender">
-              Continuar
-            </Link>
-          )}
-        </div>
-      </main>
-    );
+    return <Resultado conclusao={conclusao} titulo={titulo} demo={demo} som={som} />;
   }
 
   const percentual = progresso.total ? Math.round((progresso.resolvidos / progresso.total) * 100) : 0;
@@ -335,6 +278,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
         {exercicio ? (
           <>
             <p className="etiqueta-tipo">
+              {demo && "Demonstração · "}
               {tipo === "pratica" && "Prática · "}
               {titulo} · {NOME_TIPO[exercicio.tipo]}
             </p>
@@ -434,7 +378,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
             <button type="button" className="botao" autoFocus onClick={() => setConfirmarSaida(false)}>
               Continuar estudando
             </button>
-            <Link className="botao botao-secundario" href="/aprender">
+            <Link className="botao botao-secundario" href={demo ? "/" : "/aprender"}>
               Sair
             </Link>
           </div>

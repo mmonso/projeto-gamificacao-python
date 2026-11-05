@@ -2,6 +2,7 @@
 import { redirect } from "next/navigation";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
+import { iniciarRevisao } from "@/servidor/licoes/revisao";
 import { iniciarRecuperacao, iniciarSessao } from "@/servidor/licoes/servico";
 
 export type EstadoInicio = { erro?: string };
@@ -17,6 +18,14 @@ export async function comecarLicao(licaoId: string): Promise<EstadoInicio> {
   const { aluno } = await obterPerfilAtual();
   const resultado = await iniciarSessao(banco(), aluno.id, licaoId);
   if (!resultado.ok) return { erro: ERROS_INICIO[resultado.motivo] };
+  redirect(`/sessao/${resultado.sessaoId}`);
+}
+
+/** Monta (ou retoma) a revisão recomendada (FL-05) e leva a ela. */
+export async function comecarRevisao(): Promise<EstadoInicio> {
+  const { aluno } = await obterPerfilAtual();
+  const resultado = await iniciarRevisao(banco(), aluno.id);
+  if (!resultado.ok) return { erro: "As revisões aparecem depois da sua primeira lição." };
   redirect(`/sessao/${resultado.sessaoId}`);
 }
 

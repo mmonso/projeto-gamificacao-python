@@ -31,6 +31,8 @@ const ICONES = {
     </>
   ),
   casa: <path d="M4 11 12 4l8 7v9h-5v-6H9v6H4v-9z" fill="currentColor" />,
+  halter: <path d="M3 10v4M6 7v10M18 7v10M21 10v4M6 12h12" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />,
+  revisao: <path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />,
   lampada: <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
   som: (
     <>
