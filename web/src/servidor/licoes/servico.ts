@@ -23,7 +23,7 @@ export type LicaoPublica = {
 };
 
 /** Versão vigente de uma lição: a mais recente publicada e não retirada. */
-async function versaoVigente(db: Db, licaoId: string) {
+export async function versaoVigente(db: Db, licaoId: string) {
   const [v] = await db
     .select({ id: t.versoesLicao.id, versao: t.versoesLicao.versao })
     .from(t.versoesLicao)

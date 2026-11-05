@@ -140,6 +140,8 @@ export const sessoes = pgTable(
     criadoEm: criadoEm(),
     atualizadoEm: timestamp("atualizado_em", { withTimezone: true }).notNull().defaultNow(),
     concluidaEm: timestamp("concluida_em", { withTimezone: true }),
+    // Resultado confirmado na conclusão (ResultadoConclusao): pedidos repetidos devolvem o mesmo (4.9).
+    resultado: jsonb("resultado"),
   },
   (t) => [
     // D-07: no máximo uma sessão principal aberta por aluno e lição.

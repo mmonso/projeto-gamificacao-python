@@ -101,3 +101,21 @@ export function proximoIntervalo(intervaloAtual: number | null, acertouDePrimeir
 export function estadoAposRevisao(intervaloAnterior: number, acertouDePrimeiraSemDica: boolean): EstadoConceito {
   return acertouDePrimeiraSemDica && intervaloAnterior >= PARAMETROS.intervalosRevisao[2] ? "consolidando" : "praticando";
 }
+
+export type AgendaConceito = { intervaloDias: number; proximaRevisao: string; estado: EstadoConceito; revisoes: number };
+
+/**
+ * Agenda de um conceito depois de uma sessão concluída no dia de estudo `dia` (4.8).
+ * O conceito entra na agenda na primeira sessão principal concluída em que aparece, com revisão em um dia.
+ * Depois, qualquer sessão que o contenha atualiza a agenda: erro de primeira ou dica volta o intervalo para
+ * um dia; acerto de todos os itens, sem dica, avança o intervalo só quando a revisão já venceu, para que
+ * repetir a mesma prática no mesmo dia não pule etapas. Devolve null quando o conceito não entra na agenda.
+ */
+export function agendaAposSessao(atual: AgendaConceito | null, tipo: TipoSessao, acertouDePrimeiraSemDica: boolean, dia: string): AgendaConceito | null {
+  const [i1] = PARAMETROS.intervalosRevisao;
+  if (!atual) return tipo === "principal" ? { intervaloDias: i1, proximaRevisao: somarDias(dia, i1), estado: "iniciado", revisoes: 0 } : null;
+  if (!acertouDePrimeiraSemDica) return { intervaloDias: i1, proximaRevisao: somarDias(dia, i1), estado: "praticando", revisoes: atual.revisoes + 1 };
+  if (atual.proximaRevisao > dia) return atual;
+  const intervaloDias = proximoIntervalo(atual.intervaloDias, true);
+  return { intervaloDias, proximaRevisao: somarDias(dia, intervaloDias), estado: estadoAposRevisao(atual.intervaloDias, true), revisoes: atual.revisoes + 1 };
+}

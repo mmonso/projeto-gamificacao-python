@@ -2,6 +2,7 @@
 // Usado pelos Route Handlers para validar pedidos e pela interface para tipar as respostas.
 import { z } from "zod";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
+import type { Conquista } from "@/modulos/gamificacao/regras";
 import { respostaEsquema, type Resposta } from "./corretor";
 
 export const pedidoSubmissao = z.object({
@@ -69,9 +70,20 @@ export type ResultadoConclusao = {
   xp: number;
   /** Corações devolvidos por uma recuperação; zero nas demais sessões. */
   coracoesRecuperados: number;
+  /** Prática, revisão ou recuperação concluída depois das três recompensadas do dia (4.2). */
+  limitePratica: boolean;
   /** Depois de uma recuperação, a sessão principal aberta para onde Voltar à lição leva (FL-06, passo 5). */
   voltarSessaoId: string | null;
   proximaLicaoId: string | null;
+  /** Sequência depois da conclusão e se ela aumentou agora, na primeira sessão do dia (4.5). */
+  sequencia: number;
+  sequenciaAumentou: boolean;
+  /** Meta do dia depois da conclusão; cumpridaAgora só na sessão que a completa (4.4). */
+  meta: { feitas: number; meta: number; cumpridaAgora: boolean };
+  /** Conquistas concedidas por esta conclusão (4.7). */
+  conquistas: Conquista[];
+  /** Unidade que esta conclusão completou, para a celebração (CA-44). */
+  unidadeConcluida: { id: string; titulo: string } | null;
 };
 
 export type ErroApi = {

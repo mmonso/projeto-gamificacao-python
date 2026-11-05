@@ -29,6 +29,13 @@
       "when": 1792375140757,
       "tag": "0003_revogar_acesso_publico",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793891171211,
+      "tag": "0004_resultado_da_sessao",
+      "breakpoints": true
     }
   ]
 }

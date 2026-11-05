@@ -1,8 +1,8 @@
 // Operações de estudo de uma sessão: responder, pedir dica e concluir (FL-03, FL-04, FL-06; E05.3 a E06.2).
 // Cada operação trava a linha da sessão, confere o dono e é segura para reenvio:
 // repetir o mesmo pedido devolve o resultado já gravado, sem novo efeito.
-// Corações mudam na resposta; XP e corações recuperados, na conclusão. Atividade e sequência entram no E06.4.
-import { and, asc, count, desc, eq, inArray, lt, sql } from "drizzle-orm";
+// Corações mudam na resposta; XP, corações recuperados, atividade, sequência, agenda e conquistas, na conclusão.
+import { and, asc, count, desc, eq, lt, sql } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import {
   solucaoDoGabarito,
@@ -14,9 +14,9 @@ import {
 import { corrigir, type Resposta } from "@/modulos/aprendizagem/corretor";
 import { acertosDePrimeira, registrarResultado, type EstadoFila } from "@/modulos/aprendizagem/fila";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
-import { diaDeEstudo, fusoVigente } from "@/modulos/gamificacao/dias";
 import { coracoesAposRecuperacao, coracoesAposResposta, xpDaConclusao } from "@/modulos/gamificacao/regras";
 import * as t from "@/servidor/db/esquema";
+import { aplicarEfeitos, diaDaConclusao } from "@/servidor/gamificacao/efeitos";
 import { ordemDaTrilha } from "./servico";
 
 type Db = PgDatabase<PgQueryResultHKT, typeof t>;
@@ -213,16 +213,17 @@ async function lancarXp(tx: Tx, perfil: typeof t.perfis.$inferSelect, sessao: { 
     .select({ praticas: count() })
     .from(t.lancamentos)
     .where(and(eq(t.lancamentos.alunoId, perfil.id), eq(t.lancamentos.diaEstudo, dia), eq(t.lancamentos.causa, "pratica")));
-  const { xp, causa } = xpDaConclusao(sessao.tipo, !primeiraConclusao, praticas);
-  if (xp === 0) return 0;
-  await tx.insert(t.lancamentos).values({ alunoId: perfil.id, causa, valor: xp, diaEstudo: dia, eventoId: eventoConclusao(sessao.id) });
-  await tx.update(t.perfis).set({ xpTotal: sql`${t.perfis.xpTotal} + ${xp}` }).where(eq(t.perfis.id, perfil.id));
-  return xp;
+  const concessao = xpDaConclusao(sessao.tipo, !primeiraConclusao, praticas);
+  if (concessao.xp > 0) {
+    await tx.insert(t.lancamentos).values({ alunoId: perfil.id, causa: concessao.causa, valor: concessao.xp, diaEstudo: dia, eventoId: eventoConclusao(sessao.id) });
+    await tx.update(t.perfis).set({ xpTotal: sql`${t.perfis.xpTotal} + ${concessao.xp}` }).where(eq(t.perfis.id, perfil.id));
+  }
+  return concessao;
 }
 
 /**
  * Devolve os corações da recuperação (FL-06, passo 4), sem passar do máximo, e reabre a sessão principal
- * pausada. A devolução fica no livro de lançamentos, para que um pedido repetido mostre o mesmo valor.
+ * pausada. A devolução fica no livro de lançamentos.
  */
 async function devolverCoracoes(tx: Tx, perfil: typeof t.perfis.$inferSelect, sessaoId: string, dia: string, agora: Date) {
   const devolvidos = coracoesAposRecuperacao(perfil.coracoes) - perfil.coracoes;
@@ -249,63 +250,66 @@ async function licaoParaVoltar(tx: Tx, alunoId: string) {
 }
 
 /**
- * Conclui a sessão depois de todos os itens resolvidos (FL-03, passo 7): registra a conclusão da lição,
- * que desbloqueia a próxima, lança o XP e, numa recuperação, devolve corações, tudo na mesma transação
- * (CA-35, CA-36). Pedidos repetidos ou de outra aba devolvem o mesmo resultado.
+ * Conclui a sessão depois de todos os itens resolvidos (FL-03, passo 7). Pedidos repetidos ou de outra aba
+ * devolvem o resultado gravado na primeira conclusão (CA-56).
  */
 export async function concluir(db: Db, alunoId: string, sessaoId: string): Promise<ResultadoConclusao> {
   return db.transaction(async (tx) => {
     const sessao = await travarSessao(tx, alunoId, sessaoId);
     if (sessao.fila.fila.length > 0) throw new ErroEstudo("incompleta", "Ainda há exercícios para resolver nesta lição.");
-
-    let primeiraConclusao = false;
-    let xp: number;
-    let coracoesRecuperados = 0;
     if (sessao.estado === "concluida") {
-      if (sessao.licaoId) {
-        const [c] = await tx
-          .select({ sessaoId: t.conclusoesLicao.sessaoId })
-          .from(t.conclusoesLicao)
-          .where(and(eq(t.conclusoesLicao.alunoId, alunoId), eq(t.conclusoesLicao.licaoId, sessao.licaoId)));
-        primeiraConclusao = c?.sessaoId === sessao.id;
-      }
-      const lancados = await tx
-        .select({ eventoId: t.lancamentos.eventoId, valor: t.lancamentos.valor })
-        .from(t.lancamentos)
-        .where(inArray(t.lancamentos.eventoId, [eventoConclusao(sessao.id), eventoRecuperacao(sessao.id)]));
-      xp = lancados.find((l) => l.eventoId === eventoConclusao(sessao.id))?.valor ?? 0;
-      coracoesRecuperados = lancados.find((l) => l.eventoId === eventoRecuperacao(sessao.id))?.valor ?? 0;
-    } else {
-      const agora = new Date();
-      await tx.update(t.sessoes).set({ estado: "concluida", concluidaEm: agora, atualizadoEm: agora }).where(eq(t.sessoes.id, sessao.id));
-      if (sessao.licaoId) {
-        const inserida = await tx
-          .insert(t.conclusoesLicao)
-          .values({ alunoId, licaoId: sessao.licaoId, sessaoId: sessao.id, concluidaEm: agora })
-          .onConflictDoNothing()
-          .returning({ licaoId: t.conclusoesLicao.licaoId });
-        primeiraConclusao = inserida.length > 0;
-      }
-      const perfil = await travarPerfil(tx, alunoId);
-      const dia = diaDeEstudo(agora, fusoVigente(perfil, agora).fuso, perfil.ultimoDiaEstudo);
-      xp = await lancarXp(tx, perfil, sessao, primeiraConclusao, dia);
-      if (sessao.tipo === "recuperacao") coracoesRecuperados = await devolverCoracoes(tx, perfil, sessao.id, dia, agora);
+      if (sessao.resultado) return sessao.resultado as ResultadoConclusao;
+      throw new ErroEstudo("desatualizada", "Esta sessão já foi concluída.");
     }
-
-    const trilha = await ordemDaTrilha(tx);
-    const posicao = sessao.licaoId ? trilha.indexOf(sessao.licaoId) : -1;
-    return {
-      tipo: sessao.tipo,
-      licaoId: sessao.licaoId,
-      total: sessao.totalItens,
-      acertosPrimeira: acertosDePrimeira(sessao.fila),
-      primeiraConclusao,
-      xp,
-      coracoesRecuperados,
-      voltarSessaoId: sessao.tipo === "recuperacao" ? await licaoParaVoltar(tx, alunoId) : null,
-      proximaLicaoId: posicao >= 0 ? (trilha[posicao + 1] ?? null) : null,
-    };
+    if (sessao.estado === "descartada") throw new ErroEstudo("sessao_inexistente", "Sessão não encontrada.");
+    return efetivarConclusao(tx, alunoId, sessao, new Date());
   });
+}
+
+/**
+ * Registra a conclusão de uma sessão já resolvida, na transação recebida: conclusão da lição, que desbloqueia
+ * a próxima, XP, corações recuperados, atividade do dia, meta, sequência, agenda e conquistas (CA-35, CA-36).
+ * Usada pela conclusão normal e pela transferência da demonstração (FL-02).
+ */
+export async function efetivarConclusao(
+  tx: Tx,
+  alunoId: string,
+  sessao: { id: string; tipo: TipoSessao; licaoId: string | null; fila: EstadoFila; totalItens: number },
+  agora: Date,
+): Promise<ResultadoConclusao> {
+  await tx.update(t.sessoes).set({ estado: "concluida", concluidaEm: agora, atualizadoEm: agora }).where(eq(t.sessoes.id, sessao.id));
+  let primeiraConclusao = false;
+  if (sessao.licaoId) {
+    const inserida = await tx
+      .insert(t.conclusoesLicao)
+      .values({ alunoId, licaoId: sessao.licaoId, sessaoId: sessao.id, concluidaEm: agora })
+      .onConflictDoNothing()
+      .returning({ licaoId: t.conclusoesLicao.licaoId });
+    primeiraConclusao = inserida.length > 0;
+  }
+  const perfil = await travarPerfil(tx, alunoId);
+  const { dia, toleranciaFuso } = await diaDaConclusao(tx, perfil, agora);
+  const concessao = await lancarXp(tx, perfil, sessao, primeiraConclusao, dia);
+  const coracoesRecuperados = sessao.tipo === "recuperacao" ? await devolverCoracoes(tx, perfil, sessao.id, dia, agora) : 0;
+  const efeitos = await aplicarEfeitos(tx, perfil, sessao, { dia, toleranciaFuso, primeiraConclusao, praticaRecompensada: concessao.causa === "pratica" });
+
+  const trilha = await ordemDaTrilha(tx);
+  const posicao = sessao.licaoId ? trilha.indexOf(sessao.licaoId) : -1;
+  const resultado: ResultadoConclusao = {
+    tipo: sessao.tipo,
+    licaoId: sessao.licaoId,
+    total: sessao.totalItens,
+    acertosPrimeira: acertosDePrimeira(sessao.fila),
+    primeiraConclusao,
+    xp: concessao.xp,
+    coracoesRecuperados,
+    limitePratica: concessao.causa === "pratica_sem_xp",
+    voltarSessaoId: sessao.tipo === "recuperacao" ? await licaoParaVoltar(tx, alunoId) : null,
+    proximaLicaoId: posicao >= 0 ? (trilha[posicao + 1] ?? null) : null,
+    ...efeitos,
+  };
+  await tx.update(t.sessoes).set({ resultado }).where(eq(t.sessoes.id, sessao.id));
+  return resultado;
 }
 
 /** Itens da sessão, para relatórios e testes. */
