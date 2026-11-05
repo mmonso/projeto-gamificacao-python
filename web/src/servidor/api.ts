@@ -15,8 +15,20 @@ const STATUS: Record<ErroApi["erro"], number> = {
   limite: 429,
 };
 
+/** Respostas da API trazem dados do aluno: nunca ficam em cache compartilhado nem no navegador. */
+const SEM_CACHE = { "Cache-Control": "private, no-store" };
+
 export function erro(codigo: ErroApi["erro"], mensagem: string) {
-  return Response.json({ erro: codigo, mensagem } satisfies ErroApi, { status: STATUS[codigo] });
+  return Response.json({ erro: codigo, mensagem } satisfies ErroApi, { status: STATUS[codigo], headers: SEM_CACHE });
+}
+
+/**
+ * Falha inesperada (F-39): registra só a rota e a mensagem técnica, sem corpo do pedido, respostas
+ * ou dados da conta (CA-117), e devolve uma mensagem neutra.
+ */
+export function falhaInesperada(rota: string, e: unknown) {
+  console.error(`[sibi] falha em ${rota}: ${e instanceof Error ? e.message : String(e)}`);
+  return Response.json({ erro: "invalida", mensagem: "Algo deu errado do nosso lado. Tente de novo em instantes." }, { status: 500, headers: SEM_CACHE });
 }
 
 /**
@@ -42,9 +54,9 @@ export async function acaoDoAluno<T extends z.ZodType>(
   if (!dados.success) return erro("invalida", "Pedido inválido.");
 
   try {
-    return Response.json(await acao(aluno, dados.data));
+    return Response.json(await acao(aluno, dados.data), { headers: SEM_CACHE });
   } catch (e) {
     if (e instanceof ErroEstudo) return erro(e.codigo, e.message);
-    throw e;
+    return falhaInesperada(new URL(request.url).pathname, e);
   }
 }

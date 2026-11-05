@@ -1,7 +1,7 @@
 // Apoio às rotas anônimas da demonstração: corpo JSON validado e limite de frequência por endereço (CA-06).
 import "server-only";
 import type { z } from "zod";
-import { erro } from "@/servidor/api";
+import { erro, falhaInesperada } from "@/servidor/api";
 import { banco } from "@/servidor/db/cliente";
 import { dentroDoLimite } from "@/servidor/demo/servico";
 
@@ -25,5 +25,9 @@ export async function acaoAnonima<T extends z.ZodType>(request: Request, esquema
   }
   const dados = esquema.safeParse(corpo);
   if (!dados.success) return erro("invalida", "Pedido inválido.");
-  return acao(dados.data);
+  try {
+    return await acao(dados.data);
+  } catch (e) {
+    return falhaInesperada(new URL(request.url).pathname, e);
+  }
 }

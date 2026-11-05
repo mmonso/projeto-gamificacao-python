@@ -371,7 +371,7 @@ Pronto quando: uma conta autenticada pode acessar seu perfil e iniciar uma sess�
 - [x] E05.4 — Implementar submissões identificadas, feedback e dicas, preservando o resultado da primeira resposta.
 - [x] E05.5 — Implementar repetição dos exercícios errados e conclusão somente após resolver todos os itens.
 - [x] E05.6 — Implementar preservação da resposta temporária, reenvio sem duplicação e retomada após recarga.
-- [ ] E05.7 — Percorrer a lição piloto completa e verificar correção, reenvio, recarga, versão e acesso indevido.
+- [x] E05.7 — Percorrer a lição piloto completa e verificar correção, reenvio, recarga, versão e acesso indevido.
 
 Pronto quando: a primeira lição funciona de ponta a ponta com persistência e recuperação de sessão. A expansão do curso ainda não é necessária para validar esse marco.
 
@@ -379,11 +379,11 @@ Pronto quando: a primeira lição funciona de ponta a ponta com persistência e 
 
 - [x] E06.1 — Implementar lançamentos de recompensas, unicidade e atualização transacional da conclusão e do desbloqueio.
 - [x] E06.2 — Implementar perda de corações, pausa com saldo zero e recuperação por revisão.
-- [ ] E06.3 — Implementar agenda de revisão por conceito e limites de XP de prática.
-- [ ] E06.4 — Implementar atividade diária, meta e sequência com a política de fuso definida em E01.
-- [ ] E06.5 — Implementar conquistas e tela de celebração com valores confirmados pelo servidor.
-- [ ] E06.6 — Implementar demonstração anônima e transferência revalidada de seu resultado para a conta.
-- [ ] E06.7 — Verificar duas abas, submissões repetidas, zero corações, limite de prática e virada do dia.
+- [x] E06.3 — Implementar agenda de revisão por conceito e limites de XP de prática.
+- [x] E06.4 — Implementar atividade diária, meta e sequência com a política de fuso definida em E01.
+- [x] E06.5 — Implementar conquistas e tela de celebração com valores confirmados pelo servidor.
+- [x] E06.6 — Implementar demonstração anônima e transferência revalidada de seu resultado para a conta.
+- [x] E06.7 — Verificar duas abas, submissões repetidas, zero corações, limite de prática e virada do dia.
 - [ ] E06.8 — Validar a jornada completa: entrada, conta, lição, recompensa, desbloqueio, revisão e retomada em outro dispositivo.
 
 Pronto quando: existe uma experiência completa de estudo com recompensas consistentes e sem perda ou crédito duplicados. Este é o primeiro marco funcional completo do produto.
@@ -393,8 +393,8 @@ Pronto quando: existe uma experiência completa de estudo com recompensas consis
 - [x] E07.1 — Escrever objetivos, exercícios, dicas e explicações das unidades 2 e 3.
 - [x] E07.2 — Completar o banco de revisão e os desafios finais das três unidades.
 - [x] E07.3 — Revisar exemplos, gabaritos, distratores e variações com o formato estabilizado em E05.
-- [ ] E07.4 — Publicar as quinze lições com identificadores e versões estáveis.
-- [ ] E07.5 — Percorrer o curso inteiro verificando ordem, desbloqueios, revisões e recompensas.
+- [x] E07.4 — Publicar as quinze lições com identificadores e versões estáveis.
+- [x] E07.5 — Percorrer o curso inteiro verificando ordem, desbloqueios, revisões e recompensas.
 
 Pronto quando: as três unidades podem ser concluídas e não existem lacunas de conteúdo ou bloqueios de progressão.
 
@@ -404,8 +404,8 @@ Pronto quando: as três unidades podem ser concluídas e não existem lacunas de
 - [ ] E08.2 — Verificar celular e desktop, navegação por teclado, controle de som e redução de movimento.
 - [ ] E08.3 — Verificar carregamento, respostas da API e retomada em conexão instável, corrigindo problemas encontrados.
 - [ ] E08.4 — Revisar exposição de gabaritos, segredos, limites de requisição e cache de dados pessoais.
-- [ ] E08.5 — Implementar exclusão de conta e exportação de histórico e validar seus efeitos.
-- [ ] E08.6 — Configurar eventos mínimos de produto e diagnóstico de falhas sem dados pessoais desnecessários nos logs.
+- [x] E08.5 — Implementar exclusão de conta e exportação de histórico e validar seus efeitos.
+- [x] E08.6 — Configurar eventos mínimos de produto e diagnóstico de falhas sem dados pessoais desnecessários nos logs.
 - [ ] E08.7 — Verificar isolamento de ambientes, pipeline, migrações e procedimento de retorno da aplicação.
 - [ ] E08.8 — Levantar custos, configurar backup e registrar um exercício de restauração.
 - [ ] E08.9 — Redigir termos de uso e política de privacidade, considerando o uso por menores (PR-02), e publicá-los antes do beta.
