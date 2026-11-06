@@ -47,6 +47,17 @@ Copie `.env.example` para `.env.local`. O projeto de desenvolvimento no Supabase
 
 As variáveis são lidas e validadas em um só lugar, `src/servidor/config.ts`. Se faltar alguma, o primeiro pedido falha com a lista das que faltam, sem mostrar valores. `SIBI_AMBIENTE` separa desenvolvimento, homologação e produção. Fora do desenvolvimento, `URL_DO_SITE` é obrigatória.
 
+### Publicação na Vercel
+
+- **Projeto:** `sibi`, no time "Marcelo's projects". Está ligado ao repositório `mmonso/projeto-gamificacao-python`, com a pasta `web` como raiz e Node 24. As funções rodam em São Paulo (`gru1`, em `vercel.json`).
+- **Publicação:** cada push no `main` publica em https://sibi-three.vercel.app.
+- **Ambiente:** `SIBI_AMBIENTE=homologacao`, com o mesmo banco `sibi-dev` do desenvolvimento.
+- **Variáveis na Vercel:** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SIBI_AMBIENTE` e `DATABASE_URL`. A última é secreta e vale só em produção.
+- **Endereço do site:** `URL_DO_SITE` não é definida lá. O endereço vem de `VERCEL_PROJECT_PRODUCTION_URL`, que a Vercel fornece.
+- **Supabase Auth:** as Redirect URLs incluem `https://sibi-three.vercel.app/**`.
+- **E-mails:** o envio padrão do Supabase só entrega e-mails a membros da organização. Outras pessoas só conseguem criar conta depois de configurado um SMTP próprio.
+- **Verificação no site publicado:** `BASE=https://sibi-three.vercel.app node ferramentas/verificar_navegador.mjs tudo`.
+
 ### Supabase Auth
 
 No painel do projeto, em Authentication:
