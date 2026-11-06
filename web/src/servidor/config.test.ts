@@ -50,6 +50,12 @@ describe("configuração por ambiente (E04.2)", () => {
     });
   });
 
+  it("na Vercel, sem URL_DO_SITE, usa o domínio de produção do projeto", () => {
+    const vercel = { ...base, NODE_ENV: "production", SIBI_AMBIENTE: "homologacao", VERCEL_PROJECT_PRODUCTION_URL: "sibi.vercel.app" };
+    expect(lerConfiguracao(vercel).urlDoSite).toBe("https://sibi.vercel.app");
+    expect(lerConfiguracao({ ...vercel, URL_DO_SITE: "https://sibi.app" }).urlDoSite).toBe("https://sibi.app");
+  });
+
   it("recusa ambiente desconhecido e endereços malformados", () => {
     expect(erroDe({ ...base, SIBI_AMBIENTE: "staging" })).toContain("SIBI_AMBIENTE");
     expect(erroDe({ ...base, NEXT_PUBLIC_SUPABASE_URL: "abcdefgh.supabase.co" })).toContain("NEXT_PUBLIC_SUPABASE_URL: precisa ser um endereço completo");

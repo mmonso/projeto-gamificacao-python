@@ -19,13 +19,17 @@ const esquema = z
     NEXT_PUBLIC_SUPABASE_URL: endereco,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(20, "parece incompleta"),
     URL_DO_SITE: endereco.optional(),
+    /** Domínio de produção do projeto, que a Vercel fornece sozinha (sem https://). */
+    VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
   })
   .transform((e, ctx) => {
     const ambiente: Ambiente = e.SIBI_AMBIENTE ?? (e.NODE_ENV === "production" ? "producao" : "desenvolvimento");
-    if (ambiente !== "desenvolvimento" && !e.URL_DO_SITE) {
+    // Na Vercel, sem URL_DO_SITE, vale o domínio de produção do projeto.
+    const urlDoSite = e.URL_DO_SITE ?? (e.VERCEL_PROJECT_PRODUCTION_URL ? `https://${e.VERCEL_PROJECT_PRODUCTION_URL}` : undefined);
+    if (ambiente !== "desenvolvimento" && !urlDoSite) {
       ctx.addIssue({ code: "custom", path: ["URL_DO_SITE"], message: `obrigatória em ${ambiente}: os links dos e-mails de conta não podem depender do endereço da requisição` });
     }
-    if (ambiente === "producao" && e.URL_DO_SITE && !e.URL_DO_SITE.startsWith("https://")) {
+    if (ambiente === "producao" && urlDoSite && !urlDoSite.startsWith("https://")) {
       ctx.addIssue({ code: "custom", path: ["URL_DO_SITE"], message: "precisa usar https em produção" });
     }
     return {
@@ -33,7 +37,7 @@ const esquema = z
       bancoUrl: e.DATABASE_URL,
       supabaseUrl: e.NEXT_PUBLIC_SUPABASE_URL,
       supabaseChave: e.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-      urlDoSite: e.URL_DO_SITE?.replace(/\/$/, "") ?? null,
+      urlDoSite: urlDoSite?.replace(/\/$/, "") ?? null,
     };
   });
 
