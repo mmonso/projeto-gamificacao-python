@@ -21,7 +21,7 @@ export default function PaginaPrivacidade() {
       <h2>1. Quem cuida dos seus dados</h2>
       <p>
         O responsável pelo tratamento dos dados (o controlador, na LGPD) é <Definir valor={responsavel} oQue="responsável pelo Sibi" />, pessoa física, que mantém o Sibi
-        como projeto pessoal e sem fins lucrativos.
+        como projeto pessoal.
       </p>
       <p>
         Como agente de tratamento de pequeno porte (Resolução CD/ANPD nº 2/2022), o Sibi não tem encarregado de dados. O canal para qualquer pedido ou dúvida sobre seus dados é

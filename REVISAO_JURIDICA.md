@@ -6,7 +6,7 @@ Pontos para um advogado conferir antes de o Sibi ser aberto ao público (E08.9).
 
 - Curso gratuito de Python para iniciantes. Não tem anúncios, compras, chat, perfil público nem ranking.
 - Tem gamificação: XP, corações (vidas), sequência de dias e conquistas.
-- É mantido por uma pessoa física, Marcelo Linhares Monsó, de Florianópolis/SC, sem empresa e sem receita.
+- É mantido por uma pessoa física, Marcelo Linhares Monsó, de Florianópolis/SC, ainda sem empresa e sem receita. Ele pretende cobrar no futuro (ver ponto 10).
 - O primeiro beta é para 10 a 20 adultos convidados.
 - Dados guardados: e-mail, senha (com o Supabase Auth), nome ou apelido, meta, fuso, respostas, progresso e eventos de uso só com identificadores.
 - Na demonstração sem conta, o servidor guarda apenas um resumo (hash) do IP, por cerca de 1 hora.
@@ -40,7 +40,7 @@ Pontos para um advogado conferir antes de o Sibi ser aberto ao público (E08.9).
    - Avaliar se é preciso registrar o teste de balanceamento do legítimo interesse (art. 10).
 5. **Registros de acesso (Marco Civil, art. 15).**
    - A guarda por 6 meses vale para provedor "constituído na forma de pessoa jurídica" com fins econômicos.
-   - O rascunho parte do princípio de que uma pessoa física sem fins econômicos não precisa guardar esses registros, e diz apenas que a hospedagem os guarda por pouco tempo. Confirmar.
+   - O rascunho parte do princípio de que uma pessoa física não precisa guardar esses registros, e diz apenas que a hospedagem os guarda por pouco tempo. Confirmar. Se o Sibi passar a ser mantido por uma empresa com fins econômicos, a guarda passa a ser obrigatória.
 6. **Cópias de segurança.**
    - O plano gratuito do Supabase não faz backup automático. O plano Pro guarda 7 dias.
    - A política fixa "até 30 dias" como limite para dados de contas excluídas ainda existirem em cópias. A rotina de backup (E08.8) precisa respeitar esse limite.
@@ -56,6 +56,15 @@ Pontos para um advogado conferir antes de o Sibi ser aberto ao público (E08.9).
    - Avaliar se é preciso guardar também a versão e a cópia do texto aceito.
 9. **Registro das operações de tratamento** (LGPD, art. 37; Resolução 2/2022, art. 9º).
    - Ainda não foi feito. A ANPD oferece modelo simplificado para agentes de pequeno porte.
+10. **Cobrança no futuro.**
+    - Quando houver funções pagas, provavelmente com abertura de empresa, mudam:
+      - o responsável nos dois documentos;
+      - a aplicação plena do CDC, inclusive o direito de arrependimento em compras pela internet;
+      - os termos comerciais, como preço, cancelamento e reembolso;
+      - a lista de fornecedores, que passa a incluir o processador de pagamentos;
+      - a guarda de registros (ponto 5).
+    - O plano gratuito da Vercel não permite uso comercial.
+    - Uma empresa ME ou EPP continua sendo agente de pequeno porte.
 
 ## Fontes consultadas
 

@@ -16,8 +16,8 @@ export default function PaginaTermos() {
         Estes termos explicam as regras para usar o Sibi. Ao criar uma conta, você concorda com eles e com a <Link href="/privacidade">política de privacidade</Link>.
       </p>
       <p>
-        O Sibi é um projeto pessoal de <Definir valor={responsavel} oQue="responsável pelo Sibi" />, pessoa física, oferecido de graça e sem fins lucrativos. Nestes
-        termos, &ldquo;nós&rdquo; se refere a ele.
+        O Sibi é um projeto pessoal de <Definir valor={responsavel} oQue="responsável pelo Sibi" />, pessoa física, e por enquanto é oferecido de graça. Nestes termos,
+        &ldquo;nós&rdquo; se refere a ele.
       </p>
 
       <h2>1. O que é o Sibi</h2>
