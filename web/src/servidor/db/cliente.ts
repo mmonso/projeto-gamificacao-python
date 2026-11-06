@@ -10,10 +10,12 @@ function conectar() {
   // Pooler do Supabase em modo sessão (porta 5432). No modo transação (6543), consultas encadeadas pelo
   // postgres.js na mesma conexão às vezes ficavam sem resposta e a página travava. prepare: false mantém
   // a conexão compatível com os dois modos; conexões ociosas são devolvidas ao pooler depois de 20 s.
-  // No modo sessão, cada conexão aberta ocupa uma das poucas do pooler (15 no plano gratuito). Na Vercel
-  // podem existir várias instâncias ao mesmo tempo, então cada uma abre no máximo 4.
-  const max = ambiente === "desenvolvimento" ? 10 : 4;
-  return drizzle({ client: postgres(bancoUrl, { prepare: false, max, idle_timeout: 20 }), schema: esquema });
+  // No modo sessão, cada conexão aberta ocupa uma das 15 do pooler do plano gratuito, e elas são divididas
+  // entre o site publicado, o servidor local e os scripts, que usam o mesmo banco. Com mais que isso, chega
+  // "max clients reached in session mode". Por isso cada processo abre poucas conexões, devolvidas depois
+  // de 10 s paradas; consultas a mais esperam na fila do postgres.js.
+  const max = ambiente === "desenvolvimento" ? 4 : 3;
+  return drizzle({ client: postgres(bancoUrl, { prepare: false, max, idle_timeout: 10 }), schema: esquema });
 }
 
 export type Db = ReturnType<typeof conectar>;
