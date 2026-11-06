@@ -1,7 +1,7 @@
 id: u2-l1
 unidade: u2
 ordem: 1
-versao: 1
+versao: 2
 titulo: Tipos de valores
 objetivo: Identificar os tipos int, float, str e bool e usar ponto nas casas decimais.
 conceitos: [tipos-basicos]

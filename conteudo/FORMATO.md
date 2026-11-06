@@ -93,6 +93,8 @@ O código tem marcadores `___1___`, `___2___` e `___3___`. O aluno escolhe uma o
 | `lacunas` | Lista com `id` (`"1"`, `"2"`…), `opcoes` (duas a quatro, como texto) e `resposta` |
 | `saida_esperada` | Saída produzida com as respostas corretas |
 
+A publicação embaralha as opções de cada lacuna, sempre do mesmo modo para a mesma versão. A ordem escrita no arquivo não chega ao aluno.
+
 ### 5.3 `ordenar_blocos`
 
 O aluno monta um programa escolhendo e ordenando blocos de uma linha. Blocos que não aparecem em nenhuma ordem aceita são distratores.
@@ -103,6 +105,10 @@ O aluno monta um programa escolhendo e ordenando blocos de uma linha. Blocos que
 | `codigo_antes`, `codigo_depois` | Linhas fixas exibidas antes ou depois da área de montagem |
 | `resposta` | Lista de ordens aceitas, cada uma como lista de `id` |
 | `saida_esperada` | Saída que o programa montado deve produzir |
+
+Na publicação, os blocos recebem identificadores opacos e uma ordem embaralhada em que nenhuma resposta aceita aparece já montada. Os `id` do arquivo servem só para escrever as respostas.
+
+Mudar como a publicação embaralha ou nomeia blocos e opções muda a parte pública das lições afetadas. Por isso aumenta a versão delas, como qualquer outra mudança.
 
 ### 5.4 `localizar_erro`
 

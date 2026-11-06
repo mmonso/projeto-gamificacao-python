@@ -4,5 +4,5 @@ import { banco } from "@/servidor/db/cliente";
 import { pedidoTransferencia, transferirDemo } from "@/servidor/demo/servico";
 
 export async function POST(request: Request) {
-  return acaoDoAluno(request, pedidoTransferencia, (aluno, pedido) => transferirDemo(banco(), aluno.id, pedido));
+  return acaoDoAluno(request, pedidoTransferencia, (aluno, pedido) => transferirDemo(banco(), aluno.id, pedido), "raro");
 }

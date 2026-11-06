@@ -1,7 +1,7 @@
 id: u1-l5
 unidade: u1
 ordem: 5
-versao: 1
+versao: 2
 titulo: "Desafio: cartão de apresentação"
 objetivo: Montar, em etapas, um programa que exibe um cartão com nome, idade e cidade usando variáveis e print.
 conceitos: [atribuicao, print-varios, variavel-vs-texto, ordem-execucao, atualizacao]

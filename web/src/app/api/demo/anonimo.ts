@@ -3,10 +3,7 @@ import "server-only";
 import type { z } from "zod";
 import { erro, falhaInesperada } from "@/servidor/api";
 import { banco } from "@/servidor/db/cliente";
-import { dentroDoLimite } from "@/servidor/demo/servico";
-
-/** Pedidos por minuto e endereço: uma lição tem cerca de dez exercícios, com dicas e novas tentativas. */
-const LIMITE_POR_MINUTO = 40;
+import { dentroDoLimite, LIMITES } from "@/servidor/limites";
 
 function endereco(request: Request) {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "local";
@@ -14,7 +11,7 @@ function endereco(request: Request) {
 
 export async function acaoAnonima<T extends z.ZodType>(request: Request, esquema: T, acao: (corpo: z.infer<T>) => Promise<Response>) {
   if (!request.headers.get("content-type")?.startsWith("application/json")) return erro("invalida", "Envie os dados em JSON.");
-  if (!(await dentroDoLimite(banco(), `demo:${endereco(request)}`, LIMITE_POR_MINUTO))) {
+  if (!(await dentroDoLimite(banco(), `demo:${endereco(request)}`, LIMITES.demo))) {
     return erro("limite", "Muitas respostas em pouco tempo. Espere um minuto e tente de novo.");
   }
   let corpo: unknown;

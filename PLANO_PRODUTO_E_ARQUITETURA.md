@@ -403,7 +403,7 @@ Pronto quando: as três unidades podem ser concluídas e não existem lacunas de
 - [ ] E08.1 — Consolidar testes das regras de negócio, transações, permissões e jornadas principais.
 - [ ] E08.2 — Verificar celular e desktop, navegação por teclado, controle de som e redução de movimento.
 - [ ] E08.3 — Verificar carregamento, respostas da API e retomada em conexão instável, corrigindo problemas encontrados.
-- [ ] E08.4 — Revisar exposição de gabaritos, segredos, limites de requisição e cache de dados pessoais.
+- [x] E08.4 — Revisar exposição de gabaritos, segredos, limites de requisição e cache de dados pessoais.
 - [x] E08.5 — Implementar exclusão de conta e exportação de histórico e validar seus efeitos.
 - [x] E08.6 — Configurar eventos mínimos de produto e diagnóstico de falhas sem dados pessoais desnecessários nos logs.
 - [ ] E08.7 — Verificar isolamento de ambientes, pipeline, migrações e procedimento de retorno da aplicação.

@@ -3,7 +3,9 @@ import "server-only";
 import type { z } from "zod";
 import type { ErroApi } from "@/modulos/aprendizagem/contrato";
 import { obterAluno, type Aluno } from "@/servidor/auth/sessao";
+import { banco } from "@/servidor/db/cliente";
 import { ErroEstudo } from "@/servidor/licoes/estudo";
+import { dentroDoLimite, LIMITES } from "@/servidor/limites";
 
 const STATUS: Record<ErroApi["erro"], number> = {
   nao_autenticado: 401,
@@ -16,7 +18,7 @@ const STATUS: Record<ErroApi["erro"], number> = {
 };
 
 /** Respostas da API trazem dados do aluno: nunca ficam em cache compartilhado nem no navegador. */
-const SEM_CACHE = { "Cache-Control": "private, no-store" };
+export const SEM_CACHE = { "Cache-Control": "private, no-store" };
 
 export function erro(codigo: ErroApi["erro"], mensagem: string) {
   return Response.json({ erro: codigo, mensagem } satisfies ErroApi, { status: STATUS[codigo], headers: SEM_CACHE });
@@ -31,6 +33,16 @@ export function falhaInesperada(rota: string, e: unknown) {
   return Response.json({ erro: "invalida", mensagem: "Algo deu errado do nosso lado. Tente de novo em instantes." }, { status: 500, headers: SEM_CACHE });
 }
 
+/** Aluno autenticado e dentro do limite de pedidos por minuto, ou a resposta de erro. */
+export async function alunoDoPedido(tipo: "aluno" | "raro" = "aluno"): Promise<Aluno | Response> {
+  const aluno = await obterAluno();
+  if (!aluno) return erro("nao_autenticado", "Sua sessão expirou. Entre de novo para continuar.");
+  if (!(await dentroDoLimite(banco(), `${tipo}:${aluno.id}`, LIMITES[tipo]))) {
+    return erro("limite", "Muitos pedidos em pouco tempo. Espere um minuto e tente de novo.");
+  }
+  return aluno;
+}
+
 /**
  * Executa uma ação do aluno autenticado. Só aceita corpo JSON: formulários de outros sites
  * não conseguem enviar esse tipo sem permissão do navegador, e os cookies de sessão são SameSite=Lax.
@@ -39,10 +51,11 @@ export async function acaoDoAluno<T extends z.ZodType>(
   request: Request,
   esquema: T,
   acao: (aluno: Aluno, corpo: z.infer<T>) => Promise<unknown>,
+  limite: "aluno" | "raro" = "aluno",
 ): Promise<Response> {
   if (!request.headers.get("content-type")?.startsWith("application/json")) return erro("invalida", "Envie os dados em JSON.");
-  const aluno = await obterAluno();
-  if (!aluno) return erro("nao_autenticado", "Sua sessão expirou. Entre de novo para continuar.");
+  const aluno = await alunoDoPedido(limite);
+  if (aluno instanceof Response) return aluno;
 
   let corpo: unknown;
   try {

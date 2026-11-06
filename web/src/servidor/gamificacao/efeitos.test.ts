@@ -13,6 +13,7 @@ import type { Exercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
+import { respostaCorreta } from "@/testes/respostas";
 import { concluir, pedirDica, submeter } from "@/servidor/licoes/estudo";
 import { estadoPraticar, iniciarRevisao } from "@/servidor/licoes/revisao";
 import { iniciarSessao, obterSessaoAtual } from "@/servidor/licoes/servico";
@@ -26,17 +27,7 @@ const exercicios = new Map<string, Exercicio>(curso.flatMap((u) => u.licoes.flat
 const licoesU1 = curso[0].licoes.map((l) => l.id);
 
 function correta(id: string): Resposta {
-  const ex = exercicios.get(id)!;
-  switch (ex.tipo) {
-    case "escolher_resultado":
-      return { tipo: ex.tipo, opcao: ex.resposta };
-    case "completar_lacuna":
-      return { tipo: ex.tipo, lacunas: Object.fromEntries(ex.lacunas.map((l) => [l.id, l.resposta])) };
-    case "ordenar_blocos":
-      return { tipo: ex.tipo, blocos: ex.resposta[0] };
-    case "localizar_erro":
-      return { tipo: ex.tipo, linha: ex.resposta };
-  }
+  return respostaCorreta(exercicios.get(id)!);
 }
 
 function errada(id: string): Resposta {

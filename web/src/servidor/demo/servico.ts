@@ -3,7 +3,7 @@
 // frequência (CA-06); o gabarito nunca sai do servidor antes da resposta (CA-02).
 // A transferência corrige de novo as respostas guardadas no navegador e só registra a conclusão se todas
 // estiverem certas (CA-18), uma única vez por conta (CA-19).
-import { and, asc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { z } from "zod";
 import { solucaoDoGabarito, type ResultadoConclusao, type Solucao } from "@/modulos/aprendizagem/contrato";
@@ -76,21 +76,6 @@ export async function corrigirDemo(db: Db, pedido: z.infer<typeof pedidoCorrecao
 export async function dicaDemo(db: Db, versaoLicaoId: number, exercicioId: string, numero: number): Promise<string | null> {
   if (!(await versaoDaDemo(db, versaoLicaoId))) return null;
   return (await exercicioDaDemo(db, versaoLicaoId, exercicioId))?.dicas[numero - 1] ?? null;
-}
-
-/**
- * Limite de frequência por chave numa janela de um minuto (CA-06). A contagem fica no banco para valer
- * entre instâncias do servidor; janelas antigas são apagadas aos poucos.
- */
-export async function dentroDoLimite(db: Db, chave: string, maximo: number, agora = new Date()): Promise<boolean> {
-  const janela = new Date(Math.floor(agora.getTime() / 60_000) * 60_000);
-  const [linha] = await db
-    .insert(t.limitesFrequencia)
-    .values({ chave, janela, contagem: 1 })
-    .onConflictDoUpdate({ target: [t.limitesFrequencia.chave, t.limitesFrequencia.janela], set: { contagem: sql`${t.limitesFrequencia.contagem} + 1` } })
-    .returning({ contagem: t.limitesFrequencia.contagem });
-  if (Math.random() < 0.02) await db.delete(t.limitesFrequencia).where(sql`${t.limitesFrequencia.janela} < ${new Date(agora.getTime() - 3_600_000)}`);
-  return linha.contagem <= maximo;
 }
 
 export const pedidoTransferencia = z.object({

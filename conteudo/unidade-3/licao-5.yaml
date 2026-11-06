@@ -1,7 +1,7 @@
 id: u3-l5
 unidade: u3
 ordem: 5
-versao: 1
+versao: 2
 titulo: "Desafio: verificador de ingresso"
 objetivo: Montar, em etapas, um programa que decide entre meia-entrada e inteira.
 conceitos: [booleanos, comparacao, logicos, if-else, indentacao]

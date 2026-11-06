@@ -93,6 +93,58 @@ export type ExercicioPublico =
 
 type PublicoBase = { id: string; versao: number; enunciado: string; codigo?: string; saidaEsperada?: string; totalDicas: number };
 
+/** FNV-1a de 32 bits: semente estável para embaralhar e nomear o que a publicação gera. */
+function hash(texto: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < texto.length; i++) {
+    h ^= texto.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+/** Embaralhamento determinístico (mulberry32 + Fisher-Yates): a mesma versão é publicada sempre igual. */
+function embaralhar<T>(itens: readonly T[], semente: string, aceitavel: (ordem: T[]) => boolean = () => true): T[] {
+  let estado = hash(semente);
+  const aleatorio = () => {
+    estado = (estado + 0x6d2b79f5) | 0;
+    let x = Math.imul(estado ^ (estado >>> 15), 1 | estado);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4_294_967_296;
+  };
+  let ordem = [...itens];
+  for (let tentativa = 0; tentativa < 50; tentativa++) {
+    ordem = [...itens];
+    for (let i = ordem.length - 1; i > 0; i--) {
+      const j = Math.floor(aleatorio() * (i + 1));
+      [ordem[i], ordem[j]] = [ordem[j], ordem[i]];
+    }
+    if (aceitavel(ordem)) return ordem;
+  }
+  return ordem;
+}
+
+/**
+ * Blocos como o aluno os recebe: identificadores opacos, para que a ordem não se deduza dos nomes do
+ * conteúdo (a, b, c…), e uma ordem em que nenhuma resposta aceita aparece já montada, nem com os
+ * distratores intercalados.
+ */
+function blocosPublicos(ex: Extract<Exercicio, { tipo: "ordenar_blocos" }>) {
+  const ids = new Map<string, string>();
+  for (const b of ex.blocos) {
+    let id = `b${hash(`${ex.id}:${b.id}`).toString(36).slice(0, 5)}`;
+    while ([...ids.values()].includes(id)) id += "x";
+    ids.set(b.id, id);
+  }
+  const ordens = ex.resposta.map((r) => r.map((id) => ids.get(id)!));
+  const blocos = embaralhar(
+    ex.blocos.map((b) => ({ id: ids.get(b.id)!, codigo: b.codigo })),
+    ex.id,
+    (ordem) => ordens.every((r) => ordem.map((b) => b.id).filter((id) => r.includes(id)).join() !== r.join()),
+  );
+  return { blocos, ordens };
+}
+
 export function separarExercicio(ex: Exercicio): { publico: ExercicioPublico; gabarito: Gabarito; explicacao: string; dicas: string[] } {
   const comum: PublicoBase = {
     id: ex.id,
@@ -117,15 +169,18 @@ export function separarExercicio(ex: Exercicio): { publico: ExercicioPublico; ga
     case "completar_lacuna":
       return {
         ...resto,
-        publico: { ...comum, tipo: ex.tipo, lacunas: ex.lacunas.map(({ id, opcoes }) => ({ id, opcoes })) },
+        // As opções saem embaralhadas: no conteúdo, a certa costuma vir primeiro.
+        publico: { ...comum, tipo: ex.tipo, lacunas: ex.lacunas.map(({ id, opcoes }) => ({ id, opcoes: embaralhar(opcoes, `${ex.id}:${id}`) })) },
         gabarito: { tipo: ex.tipo, lacunas: Object.fromEntries(ex.lacunas.map((l) => [l.id, l.resposta])) },
       };
-    case "ordenar_blocos":
+    case "ordenar_blocos": {
+      const { blocos, ordens } = blocosPublicos(ex);
       return {
         ...resto,
-        publico: { ...comum, tipo: ex.tipo, blocos: ex.blocos, codigoAntes: ex.codigo_antes, codigoDepois: ex.codigo_depois },
-        gabarito: { tipo: ex.tipo, ordens: ex.resposta },
+        publico: { ...comum, tipo: ex.tipo, blocos, codigoAntes: ex.codigo_antes, codigoDepois: ex.codigo_depois },
+        gabarito: { tipo: ex.tipo, ordens },
       };
+    }
     case "localizar_erro":
       return {
         ...resto,

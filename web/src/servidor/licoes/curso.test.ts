@@ -12,6 +12,7 @@ import { separarExercicio, type Exercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
+import { respostaCorreta } from "@/testes/respostas";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
 import { concluir, submeter } from "./estudo";
 import { iniciarRevisao } from "./revisao";
@@ -24,17 +25,7 @@ const todos = curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...
 const exercicios = new Map<string, Exercicio>(todos.map((e) => [e.id, e]));
 
 function correta(id: string): Resposta {
-  const ex = exercicios.get(id)!;
-  switch (ex.tipo) {
-    case "escolher_resultado":
-      return { tipo: ex.tipo, opcao: ex.resposta };
-    case "completar_lacuna":
-      return { tipo: ex.tipo, lacunas: Object.fromEntries(ex.lacunas.map((l) => [l.id, l.resposta])) };
-    case "ordenar_blocos":
-      return { tipo: ex.tipo, blocos: ex.resposta[0] };
-    case "localizar_erro":
-      return { tipo: ex.tipo, linha: ex.resposta };
-  }
+  return respostaCorreta(exercicios.get(id)!);
 }
 
 let db: ReturnType<typeof drizzle<typeof t>>;

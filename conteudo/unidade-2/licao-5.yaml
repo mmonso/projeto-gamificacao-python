@@ -1,7 +1,7 @@
 id: u2-l5
 unidade: u2
 ordem: 5
-versao: 1
+versao: 2
 titulo: "Desafio: conta do lanche"
 objetivo: Montar, em etapas, um programa que calcula o total de um pedido e exibe uma mensagem.
 conceitos: [tipos-basicos, precedencia, divisao, conversao, concatenacao]

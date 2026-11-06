@@ -2,17 +2,9 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { separarExercicio, type Exercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
+import { respostaCorreta } from "@/testes/respostas";
 import { corrigir, respostaEsquema, type Resposta } from "./corretor";
 import { acertosDePrimeira, iniciarFila, registrarResultado } from "./fila";
-
-function respostaCorreta(ex: Exercicio): Resposta {
-  switch (ex.tipo) {
-    case "escolher_resultado": return { tipo: ex.tipo, opcao: ex.resposta };
-    case "completar_lacuna": return { tipo: ex.tipo, lacunas: Object.fromEntries(ex.lacunas.map((l) => [l.id, l.resposta])) };
-    case "ordenar_blocos": return { tipo: ex.tipo, blocos: ex.resposta[0] };
-    case "localizar_erro": return { tipo: ex.tipo, linha: ex.resposta };
-  }
-}
 
 describe("conteúdo publicado", () => {
   const licoes = carregarCurso(join(__dirname, "../../../../conteudo")).flatMap((u) => u.licoes);
@@ -40,6 +32,27 @@ describe("conteúdo publicado", () => {
       const { gabarito } = separarExercicio(ex);
       expect(corrigir(gabarito, respostaEsquema.parse(respostaCorreta(ex))), ex.id).toBe(true);
     }
+  });
+
+  it("a ordem dos blocos e das opções de lacuna não entrega a resposta, e a publicação é sempre igual", () => {
+    let lacunas = 0;
+    let certaPrimeiro = 0;
+    for (const ex of exercicios) {
+      const { publico, gabarito } = separarExercicio(ex);
+      expect(separarExercicio(ex), ex.id).toEqual(separarExercicio(ex));
+      if (publico.tipo === "ordenar_blocos" && gabarito.tipo === "ordenar_blocos" && ex.tipo === "ordenar_blocos") {
+        const ids = publico.blocos.map((b) => b.id);
+        for (const r of gabarito.ordens) expect(ids.filter((id) => r.includes(id)), ex.id).not.toEqual(r);
+        expect(ids.some((id) => ex.blocos.some((b) => b.id === id)), `${ex.id}: ids do conteúdo`).toBe(false);
+      }
+      if (publico.tipo === "completar_lacuna" && gabarito.tipo === "completar_lacuna") {
+        for (const l of publico.lacunas) {
+          lacunas++;
+          if (l.opcoes[0] === gabarito.lacunas[l.id]) certaPrimeiro++;
+        }
+      }
+    }
+    expect(certaPrimeiro).toBeLessThan(lacunas / 2);
   });
 });
 

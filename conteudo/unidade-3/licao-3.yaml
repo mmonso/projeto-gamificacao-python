@@ -1,7 +1,7 @@
 id: u3-l3
 unidade: u3
 ordem: 3
-versao: 1
+versao: 2
 titulo: E, ou, não
 objetivo: Combinar condições com and, or e not.
 conceitos: [logicos, booleanos]

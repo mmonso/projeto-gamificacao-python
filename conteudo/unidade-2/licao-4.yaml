@@ -1,7 +1,7 @@
 id: u2-l4
 unidade: u2
 ordem: 4
-versao: 1
+versao: 2
 titulo: Convertendo valores
 objetivo: Converter valores com str, int e float para juntar textos e fazer contas.
 conceitos: [conversao, erro-tipo]

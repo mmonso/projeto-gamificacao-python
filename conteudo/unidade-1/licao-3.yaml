@@ -1,7 +1,7 @@
 id: u1-l3
 unidade: u1
 ordem: 3
-versao: 1
+versao: 2
 titulo: Guardando valores
 objetivo: Criar variáveis com =, usá-las no print, distinguir variável de texto e reconhecer nomes inválidos.
 conceitos: [atribuicao, variavel-vs-texto, nomes-variaveis]

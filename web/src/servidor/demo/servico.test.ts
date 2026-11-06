@@ -10,8 +10,10 @@ import type { Exercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
+import { respostaCorreta } from "@/testes/respostas";
 import { licaoDisponivel } from "@/servidor/licoes/servico";
-import { corrigirDemo, dentroDoLimite, licaoDemo, recusarDemo, transferirDemo, type LicaoDemo } from "./servico";
+import { dentroDoLimite } from "@/servidor/limites";
+import { corrigirDemo, licaoDemo, recusarDemo, transferirDemo, type LicaoDemo } from "./servico";
 
 const EVA = "00000000-0000-4000-8000-0000000000e5";
 const FABIO = "00000000-0000-4000-8000-0000000000f6";
@@ -22,17 +24,7 @@ const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 const exercicios = new Map<string, Exercicio>(curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...l.revisao])).map((e) => [e.id, e]));
 
 function correta(id: string): Resposta {
-  const ex = exercicios.get(id)!;
-  switch (ex.tipo) {
-    case "escolher_resultado":
-      return { tipo: ex.tipo, opcao: ex.resposta };
-    case "completar_lacuna":
-      return { tipo: ex.tipo, lacunas: Object.fromEntries(ex.lacunas.map((l) => [l.id, l.resposta])) };
-    case "ordenar_blocos":
-      return { tipo: ex.tipo, blocos: ex.resposta[0] };
-    case "localizar_erro":
-      return { tipo: ex.tipo, linha: ex.resposta };
-  }
+  return respostaCorreta(exercicios.get(id)!);
 }
 
 let db: ReturnType<typeof drizzle<typeof t>>;

@@ -1,7 +1,7 @@
 id: u2-l3
 unidade: u2
 ordem: 3
-versao: 1
+versao: 2
 titulo: Juntando textos
 objetivo: Juntar e repetir textos e reconhecer o erro de somar texto com número.
 conceitos: [concatenacao, repeticao-texto, erro-tipo]

@@ -11,6 +11,7 @@ import type { Exercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
+import { respostaCorreta } from "@/testes/respostas";
 import { concluir, ErroEstudo, itensDaSessao, pedirDica, submeter } from "./estudo";
 import { iniciarRecuperacao, iniciarSessao, licaoDisponivel, obterSessaoAtual, obterTrilha } from "./servico";
 
@@ -21,17 +22,7 @@ const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 const exercicios = new Map<string, Exercicio>(curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...l.revisao])).map((e) => [e.id, e]));
 
 function correta(id: string): Resposta {
-  const ex = exercicios.get(id)!;
-  switch (ex.tipo) {
-    case "escolher_resultado":
-      return { tipo: ex.tipo, opcao: ex.resposta };
-    case "completar_lacuna":
-      return { tipo: ex.tipo, lacunas: Object.fromEntries(ex.lacunas.map((l) => [l.id, l.resposta])) };
-    case "ordenar_blocos":
-      return { tipo: ex.tipo, blocos: ex.resposta[0] };
-    case "localizar_erro":
-      return { tipo: ex.tipo, linha: ex.resposta };
-  }
+  return respostaCorreta(exercicios.get(id)!);
 }
 
 function errada(id: string): Resposta {
@@ -332,12 +323,12 @@ describe("nova versão publicada durante a sessão (FL-04)", () => {
     // Versão 2 da lição piloto, em que o gabarito do primeiro exercício muda.
     const [{ unidade, licoes }] = curso;
     const v2 = structuredClone(licoes[0]);
-    v2.versao = 2;
+    v2.versao = licoes[0].versao + 1;
     const e01 = v2.exercicios[0];
     if (e01.tipo !== "escolher_resultado") throw new Error("O primeiro exercício da lição piloto deveria ser de escolha");
     e01.versao = 2;
     e01.resposta = e01.opcoes.find((o) => o.id !== e01.resposta)!.id;
-    expect((await publicarCurso(db, [{ unidade, licoes: [v2] }])).publicadas).toEqual(["u1-l1@2"]);
+    expect((await publicarCurso(db, [{ unidade, licoes: [v2] }])).publicadas).toEqual([`u1-l1@${v2.versao}`]);
 
     // Na sessão antiga, o exercício e a correção continuam os da versão 1.
     expect((await atual(CAIO, antiga)).exercicio).toEqual(primeiro);

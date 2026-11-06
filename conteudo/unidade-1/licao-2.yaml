@@ -1,7 +1,7 @@
 id: u1-l2
 unidade: u1
 ordem: 2
-versao: 1
+versao: 2
 titulo: Números na tela
 objetivo: Exibir números e resultados de contas, distinguir uma conta de um texto e exibir vários valores em um print.
 conceitos: [print-numero, texto-vs-numero, print-varios]

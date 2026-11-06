@@ -1,7 +1,7 @@
 id: u1-l1
 unidade: u1
 ordem: 1
-versao: 1
+versao: 2
 titulo: Olá, Python
 objetivo: Prever a saída de print com texto, reconhecer aspas faltando e ordenar comandos de print.
 conceitos: [print-texto, string-aspas, ordem-execucao]

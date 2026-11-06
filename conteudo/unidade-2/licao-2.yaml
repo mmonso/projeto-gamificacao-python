@@ -1,7 +1,7 @@
 id: u2-l2
 unidade: u2
 ordem: 2
-versao: 1
+versao: 2
 titulo: Contas com Python
 objetivo: Prever o resultado de /, //, %, ** e da ordem das operações.
 conceitos: [divisao, resto-potencia, precedencia]

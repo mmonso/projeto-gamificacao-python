@@ -25,7 +25,7 @@ beforeAll(async () => {
 describe("lição publicada", () => {
   it("traz a versão vigente da lição piloto com seus exercícios principais", async () => {
     const l = await obterLicaoPublica(db, "u1-l1");
-    expect(l).toMatchObject({ id: "u1-l1", unidadeId: "u1", ordem: 1, versao: 1 });
+    expect(l).toMatchObject({ id: "u1-l1", unidadeId: "u1", ordem: 1, versao: carregarCurso(join(__dirname, "../../../../conteudo"))[0].licoes[0].versao });
     expect(l!.totalExercicios).toBeGreaterThanOrEqual(5);
   });
 
