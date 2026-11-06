@@ -37,7 +37,8 @@ print(type(42))
 
   - Feedback: O type mostra o tipo do valor, não o próprio valor.
 
-- Dica 1: int vem de inteiro.
+- Dica 1: 42 é um número sem casa decimal e sem aspas.
+- Dica 2: Cada tipo tem um nome curto: int para inteiros, float para números com ponto, str para textos e bool para True e False.
 
 **Explicação:** Números inteiros, sem casa decimal, são do tipo int. O type exibe o tipo como <class 'int'>.
 
@@ -72,7 +73,8 @@ print(type("42"))
 
   - Feedback: float é para números com casa decimal, sem aspas.
 
-- Dica 1: str vem de string, o nome que o Python dá aos textos.
+- Dica 1: Repare: agora o número está entre aspas.
+- Dica 2: Tudo o que está entre aspas é texto, do tipo str, mesmo que pareça um número. O nome str vem de string, como o Python chama os textos.
 
 **Explicação:** Tudo o que está entre aspas é texto, do tipo str, mesmo que pareça um número.
 
@@ -107,7 +109,8 @@ print(type(3.5))
   ```
 
 
-- Dica 1: O tipo para números com casa decimal se chama float.
+- Dica 1: 3.5 tem casa decimal e não tem aspas.
+- Dica 2: Números com casa decimal são do tipo float, e inteiros são do tipo int. Por exemplo, 1.0 é float e 1 é int.
 
 **Explicação:** Números com casa decimal são do tipo float. Em Python, a casa decimal é separada por ponto.
 
@@ -130,7 +133,7 @@ Saída esperada:
 - Lacuna 1: **`True`**, `"True"`, `true`
 
 - Dica 1: Com aspas, seria um texto.
-- Dica 2: True começa com letra maiúscula.
+- Dica 2: Os valores do tipo bool são True e False, sempre com a primeira letra maiúscula e sem aspas.
 
 **Explicação:** True e False são os valores do tipo bool. Eles começam com maiúscula e não levam aspas; true, em minúsculas, seria um nome desconhecido.
 
@@ -168,6 +171,7 @@ Saída esperada:
   - Feedback: Com aspas, é um texto, do tipo str.
 
 - Dica 1: Procure um número com ponto e sem aspas.
+- Dica 2: Ter casa decimal basta para ser float, mesmo que ela seja zero: 5.0 é float, e 5 é int.
 
 **Explicação:** 2.0 tem casa decimal e não tem aspas, então é float, mesmo que a parte decimal seja zero.
 
@@ -190,7 +194,8 @@ Preço: 4.5
 
 Resposta: linha 1 (saida_incorreta). Correção: `preco = 4.50`
 
-- Dica 1: Em Python, a casa decimal não é separada por vírgula.
+- Dica 1: Confira como os números com casa decimal estão escritos.
+- Dica 2: Em Python, a casa decimal usa ponto, como em 9.90. Com vírgula, o Python entende dois números separados.
 
 **Explicação:** Em Python, a casa decimal usa ponto. Com vírgula, 4,50 vira dois números separados, e o print exibe (4, 50).
 
@@ -213,7 +218,8 @@ Saída esperada:
 
 Ordens aceitas: a → b
 
-- Dica 1: A primeira linha é de um texto; a segunda, de um inteiro.
+- Dica 1: A primeira linha da saída é o tipo de um texto; a segunda, o de um inteiro.
+- Dica 2: O tipo depende de como o valor é escrito: com aspas é str, sem aspas e sem ponto é int, com ponto é float.
 
 **Explicação:** "10" entre aspas é texto (str) e 10 sem aspas é inteiro (int). O bloco com 10.0 exibiria float.
 
@@ -253,6 +259,7 @@ print(type("3.14"))
   - Feedback: O type mostra o tipo, não o valor.
 
 - Dica 1: Repare nas aspas.
+- Dica 2: Entre aspas, qualquer valor é texto, do tipo str, mesmo que seja um número com ponto.
 
 **Explicação:** Entre aspas, 3.14 é um texto, do tipo str.
 
@@ -279,6 +286,7 @@ Nota: 7.5
 Resposta: linha 2 (saida_incorreta). Correção: `nota = 7.5`
 
 - Dica 1: Como o Python separa a casa decimal?
+- Dica 2: Em Python, a casa decimal usa ponto, como em 8.5. A vírgula serve para separar valores.
 
 **Explicação:** Na linha 2, a vírgula transforma 7,5 em dois números. O correto é 7.5, com ponto.
 
@@ -315,7 +323,8 @@ print(type(False))
 
   - Feedback: O type mostra o tipo, não o valor.
 
-- Dica 1: True e False pertencem ao mesmo tipo.
+- Dica 1: False é um dos dois valores de um tipo especial.
+- Dica 2: True e False pertencem ao tipo bool, usado para verdadeiro e falso.
 
 **Explicação:** False, assim como True, é um valor do tipo bool.
 
@@ -356,7 +365,8 @@ print(7 / 2)
 
   - Feedback: O Python usa ponto para a casa decimal.
 
-- Dica 1: 7 dividido por 2 não é um número inteiro.
+- Dica 1: 7 dividido por 2 não dá um número inteiro.
+- Dica 2: A divisão com / mostra o resultado completo, com a parte decimal separada por ponto. Por exemplo, 5 / 2 dá 2.5.
 
 **Explicação:** A divisão com / mostra o resultado completo, com parte decimal separada por ponto.
 
@@ -391,7 +401,8 @@ print(6 / 2)
 
   - Feedback: Sem aspas, a conta é calculada.
 
-- Dica 1: O resultado de / é sempre do tipo float.
+- Dica 1: Repare no operador: é a divisão com uma barra só.
+- Dica 2: A divisão com / sempre resulta em float, mesmo quando é exata: 8 / 4 dá 2.0.
 
 **Explicação:** A divisão com / sempre resulta em float. Por isso 6 / 2 aparece como 3.0.
 
@@ -426,7 +437,8 @@ print(7 // 2)
   ```
 
 
-- Dica 1: 7 dividido por 2 é 3.5. O que sobra sem a parte decimal?
+- Dica 1: Primeiro pense em 7 dividido por 2; depois tire a parte decimal.
+- Dica 2: O // divide e descarta a parte decimal, sem arredondar para cima: 9 // 2 dá 4.
 
 **Explicação:** 7 // 2 calcula 3.5 e descarta a parte decimal, resultando em 3.
 
@@ -461,7 +473,8 @@ print(7 % 2)
 
   - Feedback: O % não faz a divisão completa; mostra só o resto.
 
-- Dica 1: 2 cabe 3 vezes em 7. Quanto sobra?
+- Dica 1: Pense em quantas vezes o 2 cabe no 7 e quanto sobra.
+- Dica 2: O % mostra o que sobra da divisão: 10 % 3 dá 1, porque o 3 cabe 3 vezes no 10 e sobra 1.
 
 **Explicação:** 7 dividido por 2 dá 3, com resto 1. O % exibe esse resto.
 
@@ -484,6 +497,7 @@ Saída esperada:
 - Lacuna 1: **`**`**, `^`, `*`
 
 - Dica 1: Em Python, a potência usa dois símbolos iguais.
+- Dica 2: Um asterisco multiplica; dois asteriscos elevam a uma potência. Por exemplo, 3 ** 2 dá 9.
 
 **Explicação:** Em Python, a potência é escrita com **. O ^ existe, mas faz outra operação, e * é multiplicação.
 
@@ -518,7 +532,8 @@ print(2 + 3 * 4)
 
   - Feedback: Sem aspas, a conta é calculada.
 
-- Dica 1: Como na matemática, a multiplicação vem antes da soma.
+- Dica 1: Como na matemática, uma das operações vem antes da outra.
+- Dica 2: Multiplicação e divisão são feitas antes de soma e subtração: 1 + 2 * 5 dá 11, e não 15.
 
 **Explicação:** O Python calcula 3 * 4 primeiro, que dá 12, e depois soma 2, resultando em 14.
 
@@ -544,7 +559,7 @@ Média: 7.0
 Resposta: linha 3 (saida_incorreta). Correção: `media = (nota1 + nota2) / 2`
 
 - Dica 1: Qual operação acontece primeiro na linha 3?
-- Dica 2: Parênteses mudam a ordem das operações.
+- Dica 2: A divisão acontece antes da soma, a não ser que haja parênteses: em (1 + 3) * 2, a soma vem primeiro.
 
 **Explicação:** Sem parênteses, o Python divide nota2 por 2 antes de somar. Com (nota1 + nota2) / 2, a soma vem primeiro e a média fica 7.0.
 
@@ -584,6 +599,7 @@ print(10 // 3)
   - Feedback: 1 é o resto, que seria o resultado de %.
 
 - Dica 1: Quantas vezes o 3 cabe inteiro no 10?
+- Dica 2: O // divide e descarta a parte decimal: 7 // 2 dá 3.
 
 **Explicação:** 10 // 3 descarta a parte decimal da divisão e resulta em 3.
 
@@ -620,7 +636,8 @@ print(10 % 4)
 
   - Feedback: 4 não divide 10 sem sobra.
 
-- Dica 1: 4 cabe 2 vezes em 10. Quanto sobra?
+- Dica 1: Pense em quantas vezes o 4 cabe no 10 e quanto sobra.
+- Dica 2: O % mostra o resto da divisão: 9 % 4 dá 1, porque o 4 cabe 2 vezes no 9 e sobra 1.
 
 **Explicação:** 10 dividido por 4 dá 2, com resto 2. O % exibe o resto.
 
@@ -658,6 +675,7 @@ print((2 + 3) * 4)
   - Feedback: Primeiro 2 + 3, depois o resultado vezes 4.
 
 - Dica 1: O que está entre parênteses é calculado primeiro.
+- Dica 2: Os parênteses mudam a ordem normal das contas: em (1 + 1) * 3, a soma vem antes e o resultado é 6.
 
 **Explicação:** Os parênteses fazem o Python calcular 2 + 3 primeiro. Depois, 5 * 4 resulta em 20.
 
@@ -698,7 +716,8 @@ print("Bom" + "dia")
 
   - Feedback: O + junta os textos e não aparece na saída.
 
-- Dica 1: Diferente da vírgula do print, o + não acrescenta nada entre os textos.
+- Dica 1: Repare: nenhum dos dois textos tem espaço.
+- Dica 2: O + cola um texto no outro, sem acrescentar nada entre eles: "sol" + "dado" forma soldado.
 
 **Explicação:** O + junta os textos exatamente como estão. Como nenhum deles tem espaço, o resultado é Bomdia.
 
@@ -721,6 +740,7 @@ Bom dia
 - Lacuna 1: **`" "`**, `""`, `espaco`
 
 - Dica 1: O espaço também é um texto e precisa de aspas.
+- Dica 2: Um texto pode ter só um espaço dentro das aspas. Já "", sem nada dentro, é um texto vazio.
 
 **Explicação:** " " é um texto com um espaço. Juntado entre as palavras, ele as separa. "" é um texto vazio, e espaco sem aspas seria um nome desconhecido.
 
@@ -755,7 +775,8 @@ print("ha" * 3)
 
   - Feedback: O * repete o texto; não junta o número a ele.
 
-- Dica 1: O texto aparece três vezes, colado.
+- Dica 1: O texto será repetido três vezes.
+- Dica 2: Multiplicar um texto por um número repete o texto, colado, sem espaços: "oi" * 2 forma oioi.
 
 **Explicação:** "ha" * 3 repete o texto três vezes, sem espaços: hahaha.
 
@@ -785,7 +806,8 @@ print("Idade: " + 30)
 
   - Feedback: O + não aparece na saída.
 
-- Dica 1: "Idade: " é texto, e 30 é número.
+- Dica 1: Repare no tipo de cada lado do +.
+- Dica 2: O + junta dois textos ou soma dois números, mas não mistura os dois. Texto mais número gera um erro de tipo (TypeError).
 
 **Explicação:** O + junta textos ou soma números, mas não mistura os dois. Juntar texto com número gera um erro de tipo (TypeError).
 
@@ -804,6 +826,7 @@ Conceitos: Texto com número. Objetivo: Prever que juntar texto e número com + 
 Resposta: linha 3 (TypeError). Correção: `print(nome, "fez", pontos, "pontos")`
 
 - Dica 1: Qual das variáveis guarda um número?
+- Dica 2: Juntar texto e número com + gera TypeError. Com vírgulas, o print aceita texto e número juntos.
 
 **Explicação:** Na linha 3, o + tenta juntar textos com o número 50 e gera TypeError. Com vírgulas, o print aceita texto e número juntos.
 
@@ -832,7 +855,8 @@ Olá, Bia!
 
 Ordens aceitas: a → b
 
-- Dica 1: O nome da variável fica sem aspas para que o valor seja usado.
+- Dica 1: A mensagem precisa usar o valor de nome, e não a palavra nome.
+- Dica 2: Sem aspas, o nome da variável é trocado pelo valor guardado. Primeiro monte a saudação, depois exiba a variável.
 
 **Explicação:** A saudação junta o texto "Olá, ", o valor de nome e o texto "!". Depois, o print exibe a variável saudacao, sem aspas.
 
@@ -869,7 +893,8 @@ Saída esperada:
   ```
 
 
-- Dica 1: Para repetir um texto, use *.
+- Dica 1: A saída tem o mesmo sinal três vezes, colado.
+- Dica 2: Para repetir um texto, multiplique-o por um número inteiro. Somar texto com número gera erro.
 
 **Explicação:** "=" * 3 repete o sinal três vezes, sem espaços.
 
@@ -909,6 +934,7 @@ print("Py" + "thon")
   - Feedback: O + junta os textos e não aparece.
 
 - Dica 1: Os textos são colados um no outro.
+- Dica 2: O + junta os textos exatamente como estão, sem colocar espaço entre eles.
 
 **Explicação:** O + junta "Py" e "thon" sem espaço, formando Python.
 
@@ -941,6 +967,7 @@ print("Nível " + 2)
 - ✅ c: O programa mostra um erro
 
 - Dica 1: Um lado do + é texto, e o outro é número.
+- Dica 2: O + não mistura texto com número. Para juntar, o número precisaria virar texto antes.
 
 **Explicação:** Juntar o texto "Nível " com o número 2 usando + gera TypeError.
 
@@ -977,7 +1004,8 @@ print("-" * 5)
 
   - Feedback: As cópias ficam coladas, sem espaços.
 
-- Dica 1: O sinal aparece cinco vezes.
+- Dica 1: O sinal será repetido cinco vezes.
+- Dica 2: Um texto multiplicado por um número aparece repetido, colado, sem espaços.
 
 **Explicação:** "-" * 5 repete o sinal cinco vezes, formando uma linha.
 
@@ -1019,6 +1047,7 @@ print("5" + "5")
   - Feedback: O + não acrescenta espaço.
 
 - Dica 1: Com aspas, os valores são textos.
+- Dica 2: Com textos, o + junta em vez de somar: "1" + "2" forma 12.
 
 **Explicação:** "5" e "5" são textos, então o + os junta e o resultado é 55.
 
@@ -1049,6 +1078,7 @@ print(int("5") + 5)
   - Feedback: Depois da conversão, os dois lados são números, e a soma funciona.
 
 - Dica 1: Depois do int, os dois valores são números.
+- Dica 2: O int transforma um texto com algarismos em número inteiro, que pode entrar em contas: int("3") + 1 dá 4.
 
 **Explicação:** int("5") converte o texto no número 5. Somado com 5, o resultado é 10.
 
@@ -1072,6 +1102,7 @@ Pontos: 50
 - Lacuna 1: **`str`**, `int`, `float`
 
 - Dica 1: Para juntar com +, os dois lados precisam ser texto.
+- Dica 2: Cada conversão tem seu nome: str transforma em texto, int em inteiro e float em número com casa decimal.
 
 **Explicação:** str(pontos) transforma 50 no texto "50", que pode ser juntado com +. int e float manteriam um número e gerariam TypeError.
 
@@ -1106,7 +1137,8 @@ print(float("2.5") * 2)
 
   - Feedback: Uma conta com float resulta em float, que aparece com .0.
 
-- Dica 1: float("2.5") resulta no número 2.5.
+- Dica 1: Primeiro o float transforma o texto em número.
+- Dica 2: Depois da conversão, a conta é uma multiplicação comum, e float vezes int resulta em float: 1.5 * 2 dá 3.0.
 
 **Explicação:** float("2.5") converte o texto em número. Multiplicado por 2, resulta em 5.0.
 
@@ -1125,7 +1157,7 @@ Conceitos: Converter valores, Tipos básicos. Objetivo: Converter um texto decim
 Resposta: linha 2 (TypeError). Correção: `proximo = int(idade) + 1`
 
 - Dica 1: Qual é o tipo de idade?
-- Dica 2: Um texto precisa ser convertido antes de entrar em uma conta.
+- Dica 2: Um texto precisa ser convertido antes de entrar numa conta: int("7") + 1 dá 8.
 
 **Explicação:** idade guarda o texto "30". Na linha 2, somar texto com número gera TypeError; int(idade) converte antes da soma.
 
@@ -1160,7 +1192,8 @@ print(int(3.9))
   ```
 
 
-- Dica 1: Pense no // da lição anterior.
+- Dica 1: O int não arredonda.
+- Dica 2: Ao converter para inteiro, o int simplesmente descarta a parte decimal: int(7.8) dá 7.
 
 **Explicação:** Ao converter 3.9 para inteiro, o int descarta a parte decimal. O resultado é 3, não 4.
 
@@ -1190,7 +1223,7 @@ Total: 15
 Ordens aceitas: a → b
 
 - Dica 1: Para a conta, a quantidade precisa virar número.
-- Dica 2: Para juntar com +, o total precisa virar texto.
+- Dica 2: Depois da conta, o total precisa virar texto com str para ser juntado com +. Um texto multiplicado por número seria repetido, e não multiplicado.
 
 **Explicação:** int(quantidade) permite a multiplicação, e str(total) permite juntar o resultado ao texto. Sem o int, o texto "3" seria repetido; sem o str, o + geraria TypeError.
 
@@ -1230,6 +1263,7 @@ print("2" + "3")
   - Feedback: O + não aparece na saída.
 
 - Dica 1: Repare nas aspas.
+- Dica 2: Com textos, o + cola um no outro: "4" + "4" forma 44.
 
 **Explicação:** "2" e "3" são textos, então o + os junta: 23.
 
@@ -1256,6 +1290,7 @@ Dobro: 20
 Resposta: linha 2 (saida_incorreta). Correção: `dobro = int(preco) * 2`
 
 - Dica 1: O que acontece quando um texto é multiplicado por um número?
+- Dica 2: Um texto vezes um número é repetido. Para multiplicar de verdade, converta antes com int, como em int("4") * 2.
 
 **Explicação:** Como preco é texto, preco * 2 repete o texto e resulta em 1010. Convertendo com int, a multiplicação dá 20.
 
@@ -1281,6 +1316,7 @@ Idade: 25
 - Lacuna 1: `int`, **`str`**, `type`
 
 - Dica 1: Os dois lados do + precisam ser texto.
+- Dica 2: Das opções, só uma transforma um valor em texto. As outras convertem em inteiro ou mostram o tipo.
 
 **Explicação:** str(idade) transforma 25 em texto, que pode ser juntado com "Idade: ".
 
@@ -1312,7 +1348,7 @@ Saída esperada:
 - Lacuna 2: **`2`**, `2.0`, `dois`
 
 - Dica 1: A casa decimal usa ponto.
-- Dica 2: A quantidade é um número inteiro, sem aspas.
+- Dica 2: A quantidade é um número inteiro, escrito em algarismos e sem aspas. Com vírgula, 12,5 viraria dois números.
 
 **Explicação:** 12.5 é um float, escrito com ponto, e 2 é um int. Com vírgula, 12,5 viraria dois números separados.
 
@@ -1351,6 +1387,7 @@ print(total)
   - Feedback: Sem aspas, a conta é calculada.
 
 - Dica 1: Um dos valores é float.
+- Dica 2: Uma conta com pelo menos um float resulta em float: 1.5 * 2 dá 3.0.
 
 **Explicação:** Multiplicar um float por um int resulta em float, por isso o total aparece como 25.0.
 
@@ -1387,6 +1424,7 @@ print(total)
   - Feedback: A conta envolve um float, então o resultado é float.
 
 - Dica 1: Primeiro a multiplicação, depois a soma.
+- Dica 2: Como um dos números tem ponto, o resultado também terá casa decimal.
 
 **Explicação:** O Python calcula 12.5 * 2, que dá 25.0, e depois soma 5, resultando em 30.0.
 
@@ -1403,7 +1441,8 @@ Conceitos: Ordem das operações. Objetivo: Aplicar a ordem das operações ao s
 
 Resposta: linha 2 (TypeError). Correção: `print("Total: R$ " + str(total))`
 
-- Dica 1: Para juntar com +, o total precisa ser texto.
+- Dica 1: Repare no tipo de total e no que o + está juntando.
+- Dica 2: Para juntar um número a um texto com +, converta o número com str antes, como em "Nota: " + str(9).
 
 **Explicação:** O total é um número. Na linha 2, ele precisa ser convertido com str antes de ser juntado ao texto.
 
@@ -1428,6 +1467,7 @@ Cada um paga: 10.5
 - Lacuna 1: **`/`**, `//`, `%`
 
 - Dica 1: O valor de cada pessoa pode ter centavos.
+- Dica 2: O / mantém a parte decimal, o // a descarta e o % mostra só o resto da divisão.
 
 **Explicação:** Com /, a divisão mantém a parte decimal e resulta em 10.5. Com //, os centavos seriam descartados; com %, apareceria só o resto.
 
@@ -1458,7 +1498,7 @@ Total: R$ 25.0
 Ordens aceitas: a → b → c
 
 - Dica 1: Calcule o total antes de montar a mensagem.
-- Dica 2: O total precisa virar texto para ser juntado.
+- Dica 2: O total é um número; para juntá-lo ao texto com +, ele precisa virar texto com str.
 
 **Explicação:** Primeiro o total é calculado; depois, convertido com str e juntado ao texto; por fim, a mensagem é exibida.
 
@@ -1499,6 +1539,7 @@ Total: R$ 25.0
   - Feedback: Com aspas, o preço é texto, e o * repete o texto.
 
 - Dica 1: Confira o espaço e as aspas.
+- Dica 2: O + não coloca espaço entre os textos: o espaço precisa estar dentro das aspas. E um número entre aspas não é multiplicado como número.
 
 **Explicação:** O preço sem aspas permite a multiplicação, e o texto "Total: R$ " já termina com o espaço antes do valor.
 
@@ -1520,6 +1561,7 @@ Variação de u2-l5-e04.
 Resposta: linha 2 (TypeError). Correção: `print("Somos " + str(pessoas) + " pessoas")`
 
 - Dica 1: Qual valor não é texto?
+- Dica 2: Para juntar um número com textos usando +, converta o número com str antes.
 
 **Explicação:** pessoas guarda um número. Para juntar com +, ele precisa ser convertido com str.
 

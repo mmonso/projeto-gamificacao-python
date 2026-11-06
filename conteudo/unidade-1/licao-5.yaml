@@ -1,7 +1,7 @@
 id: u1-l5
 unidade: u1
 ordem: 5
-versao: 2
+versao: 3
 titulo: "Desafio: cartão de apresentação"
 objetivo: Montar, em etapas, um programa que exibe um cartão com nome, idade e cidade usando variáveis e print.
 conceitos: [atribuicao, print-varios, variavel-vs-texto, ordem-execucao, atualizacao]
@@ -29,7 +29,7 @@ exercicios:
         resposta: "28"
     dicas:
       - Texto precisa de aspas; número não.
-      - Sem aspas, Bia e nome seriam variáveis, e elas ainda não existem nesse ponto do programa.
+      - Sem aspas, o Python entende um nome como variável, e ainda não existe nenhuma variável chamada Bia nesse ponto do programa.
     explicacao: O nome é um texto, então vai entre aspas. A idade é um número e fica sem aspas. O print exibe os dois valores separados por espaço.
 
   - id: u1-l5-e02
@@ -62,6 +62,7 @@ exercicios:
     resposta: b
     dicas:
       - Em cada print, o primeiro valor é texto e o segundo é variável.
+      - A variável é trocada pelo valor guardado, e cada print exibe uma linha separada.
     explicacao: Cada print exibe um rótulo entre aspas e o valor de uma variável, em linhas separadas.
 
   - id: u1-l5-e03
@@ -84,6 +85,7 @@ exercicios:
       Cidade: Salvador
     dicas:
       - Compare os nomes criados com os nomes usados.
+      - "O Python diferencia maiúsculas de minúsculas: usar um nome com uma letra diferente é usar um nome que não existe."
     explicacao: A variável criada foi cidade, com c minúsculo. Na linha 4, Cidade é outro nome, que não existe, e o Python mostra um NameError.
 
   - id: u1-l5-e04
@@ -119,7 +121,7 @@ exercicios:
       - [c, b, a, d, e]
     dicas:
       - Os print aparecem na mesma ordem das linhas da saída.
-      - Cada variável precisa ser criada antes do print que a usa.
+      - Cada variável precisa ser criada antes do print que a usa. A posição das atribuições pode variar, desde que venham antes.
     explicacao: Os três print seguem a ordem da saída, e cada variável é criada antes de ser usada. As atribuições podem vir em posições diferentes, desde que antes do seu print.
 
   - id: u1-l5-e05
@@ -143,8 +145,8 @@ exercicios:
         opcoes: ["idade", "\"idade\"", "Idade"]
         resposta: "idade"
     dicas:
-      - O novo valor é a idade atual mais 1.
-      - No print, use a variável sem aspas.
+      - Depois do aniversário, a idade é a atual mais 1.
+      - Atualize usando o próprio nome, como em x = x + 1. No print, a variável vai sem aspas e com o mesmo nome criado.
     explicacao: idade = idade + 1 guarda 29 em idade. Depois, o print exibe o rótulo e o valor atualizado.
 
   - id: u1-l5-e06
@@ -174,7 +176,8 @@ exercicios:
           print("Cidade:", cidade)
     resposta: c
     dicas:
-      - Confira a ordem das linhas e as aspas.
+      - Confira a ordem das linhas e as aspas no print.
+      - Uma variável só pode ser usada depois de criada, e no print ela fica sem aspas para mostrar o valor guardado.
     explicacao: A variável precisa ser criada antes de ser usada e aparecer no print sem aspas.
 
   - id: u1-l5-e07
@@ -208,7 +211,7 @@ exercicios:
       - [a, b, c, d]
     dicas:
       - Siga a ordem das linhas da saída.
-      - Um dos blocos exibe o texto nome em vez do valor da variável.
+      - 'Repare nas aspas: print("Nome:", "nome") exibiria a palavra nome, e não o valor da variável.'
     explicacao: Cada print exibe uma linha do cartão, na ordem da saída. O bloco com "nome" entre aspas exibiria a palavra nome, não Bia.
 
 revisao:
@@ -231,5 +234,6 @@ revisao:
       Nome: Davi
       Cidade: Natal
     dicas:
-      - Confira se cada texto abre e fecha aspas.
+      - Confira se cada texto abre e fecha as próprias aspas.
+      - 'Num print com vários valores, cada texto tem as suas aspas, e a vírgula fica fora delas: print("A", "B").'
     explicacao: "Na linha 3, o texto Cidade: não fecha as aspas antes da vírgula. Cada texto do print precisa das próprias aspas."

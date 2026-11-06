@@ -1,7 +1,7 @@
 id: u3-l4
 unidade: u3
 ordem: 4
-versao: 2
+versao: 3
 titulo: Se e senão
 objetivo: Prever qual bloco de um if/else é executado e escrever blocos com dois-pontos e recuo.
 conceitos: [if-else, indentacao]
@@ -37,6 +37,7 @@ exercicios:
     resposta: a
     dicas:
       - 20 >= 18 é verdadeiro ou falso?
+      - Quando a condição do if é verdadeira, o Python executa o bloco do if e pula o do else. Só um dos dois blocos é executado.
     explicacao: Como 20 >= 18 é verdadeiro, o Python executa o bloco do if e pula o do else.
 
   - id: u3-l4-e02
@@ -68,7 +69,8 @@ exercicios:
         feedback: Só um dos blocos é executado.
     resposta: b
     dicas:
-      - A condição é verdadeira?
+      - A condição do if é verdadeira?
+      - Quando a condição é falsa, o Python pula o bloco do if e executa o bloco do else.
     explicacao: 15 > 25 é falso, então o Python pula o bloco do if e executa o do else.
 
   - id: u3-l4-e03
@@ -103,6 +105,7 @@ exercicios:
     resposta: a
     dicas:
       - Uma linha sem recuo não pertence ao if nem ao else.
+      - Primeiro o Python executa um dos blocos, do if ou do else. Depois segue para as linhas sem recuo, que são executadas sempre.
     explicacao: Como a nota é 4, o else exibe Recuperação. A última linha não tem recuo, então é executada sempre, depois do if/else.
 
   - id: u3-l4-e04
@@ -126,6 +129,7 @@ exercicios:
         resposta: ":"
     dicas:
       - Olhe como termina a linha do else.
+      - As linhas do if e do else terminam com dois-pontos, que avisam que um bloco recuado vem a seguir.
     explicacao: As linhas do if e do else terminam com dois-pontos. Eles indicam que um bloco recuado vem a seguir.
 
   - id: u3-l4-e05
@@ -148,6 +152,7 @@ exercicios:
       Ganhou
     dicas:
       - Compare o recuo das linhas dentro do if e do else.
+      - As linhas que pertencem a um bloco ficam recuadas, com quatro espaços. Sem o recuo, o Python mostra um erro de indentação.
     explicacao: A linha 3 pertence ao bloco do if e precisa de recuo. Sem ele, o Python mostra um erro de indentação (IndentationError).
 
   - id: u3-l4-e06
@@ -169,7 +174,8 @@ exercicios:
     saida_esperada: |-
       Acesso liberado
     dicas:
-      - Para comparar, são necessários dois sinais de igual.
+      - Repare no sinal usado na condição do if.
+      - A condição do if precisa comparar, e comparar se faz com ==. Um único = tenta guardar um valor e gera erro.
     explicacao: A condição do if precisa comparar com ==. Um único = tenta guardar um valor e gera um erro de sintaxe.
 
   - id: u3-l4-e07
@@ -199,7 +205,7 @@ exercicios:
       - [a, b]
     dicas:
       - Um número é par quando o resto da divisão por 2 é zero.
-      - O bloco do if precisa de recuo.
+      - A condição compara com ==, e o print que pertence ao if fica recuado na linha de baixo.
     explicacao: A condição compara o resto com zero usando ==, e o print fica recuado dentro do if. Sem recuo, ou com um único =, o programa teria erro.
 
 revisao:
@@ -234,6 +240,7 @@ revisao:
     resposta: b
     dicas:
       - 9 < 12 é verdadeiro?
+      - Com a condição verdadeira, só o bloco do if é executado; o else é pulado.
     explicacao: Como 9 < 12 é verdadeiro, o programa exibe Bom dia e pula o else.
 
   - id: u3-l4-r02
@@ -257,6 +264,7 @@ revisao:
       Leve guarda-chuva
     dicas:
       - O bloco do else também precisa de recuo.
+      - Toda linha que pertence a um if ou a um else fica recuada, mesmo que aquele bloco não seja executado agora.
     explicacao: A linha 5 pertence ao else e precisa de recuo, mesmo que esse bloco não seja executado agora.
 
   - id: u3-l4-r03
@@ -292,4 +300,5 @@ revisao:
     resposta: a
     dicas:
       - 0 > 0 é verdadeiro?
+      - Um número não é maior que ele mesmo. Depois do if/else, a linha sem recuo é executada sempre.
     explicacao: Como 0 > 0 é falso, o else exibe Esgotado. Depois, a linha sem recuo exibe Obrigado.

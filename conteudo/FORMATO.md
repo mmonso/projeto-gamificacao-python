@@ -69,6 +69,13 @@ A versão da lição aumenta sempre que um exercício muda, entra, sai ou troca 
 
 Campos marcados como não visíveis, a resposta e o feedback das opções ficam no servidor até a submissão (F-15).
 
+Cada exercício tem duas dicas, que se bastam sozinhas, porque o mesmo item aparece em práticas e revisões, longe da lição de origem:
+
+1. **A primeira aponta onde olhar.** Exemplo: "Repare nas aspas."
+2. **A segunda explica a regra com um exemplo diferente do exercício.** Exemplo: "Entre aspas, tudo é texto: print(\"9 - 2\") exibe 9 - 2."
+
+As dicas nunca entregam a resposta. Elas também não citam outra lição ou outro exercício: nada de "lembre da lição anterior" (design/ANALISE_UX_GAMIFICACAO.md).
+
 Antes da primeira publicação, lições e exercícios ficam na versão 1, mesmo quando editados. Depois de publicados, toda mudança aumenta a versão.
 
 ## 5. Tipos de exercício

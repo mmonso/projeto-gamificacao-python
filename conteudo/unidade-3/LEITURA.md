@@ -37,7 +37,8 @@ print(5 > 3)
 
   - Feedback: Sem aspas, o Python avalia a comparação.
 
-- Dica 1: 5 é maior que 3?
+- Dica 1: Leia > como "é maior que". 5 é maior que 3?
+- Dica 2: Uma comparação não mostra os números: ela responde True quando é verdadeira e False quando é falsa.
 
 **Explicação:** 5 > 3 é verdadeiro, e o Python responde com True.
 
@@ -73,6 +74,7 @@ print(2 > 7)
   - Feedback: Uma comparação resulta em True ou False, não em um número.
 
 - Dica 1: Leia > como "é maior que".
+- Dica 2: Se a comparação não for verdadeira, a resposta é False. Por exemplo, 1 > 9 resulta em False.
 
 **Explicação:** 2 não é maior que 7, então a comparação resulta em False.
 
@@ -107,7 +109,8 @@ print(4 >= 4)
 
   - Feedback: A comparação resulta em True ou False.
 
-- Dica 1: O >= aceita valores iguais.
+- Dica 1: O >= significa maior ou igual.
+- Dica 2: Com >= basta uma das duas coisas: ser maior ou ser igual. Por exemplo, 7 >= 7 é True.
 
 **Explicação:** 4 >= 4 pergunta se 4 é maior ou igual a 4. Como é igual, o resultado é True.
 
@@ -131,6 +134,7 @@ True
 - Lacuna 1: **`>`**, `<`, `=`
 
 - Dica 1: Um único = guarda valores; não compara.
+- Dica 2: O > pergunta se o lado esquerdo é maior que o direito, e o < pergunta se é menor.
 
 **Explicação:** idade > 18 pergunta se 20 é maior que 18, o que é verdadeiro. Com <, o resultado seria False; com =, o Python mostraria um erro.
 
@@ -167,6 +171,7 @@ print(x < 5)
   - Feedback: O print exibe o resultado da comparação.
 
 - Dica 1: Troque x pelo valor guardado nele.
+- Dica 2: Leia < como "é menor que". Se a comparação for falsa, o resultado é False.
 
 **Explicação:** x vale 10, e 10 < 5 é falso. O print exibe False.
 
@@ -184,6 +189,7 @@ Conceitos: Comparar números, Verdadeiro ou falso. Objetivo: Comparar o valor de
 Resposta: linha 2 (TypeError). Correção: `print(int(pontos) > 5)`
 
 - Dica 1: Qual é o tipo de pontos?
+- Dica 2: O Python não compara texto com número usando > ou <. O texto precisa ser convertido com int antes.
 
 **Explicação:** pontos guarda o texto "10". O Python não compara texto e número com >, por isso a linha 2 gera TypeError. Convertendo com int, a comparação funciona.
 
@@ -212,7 +218,8 @@ False
 
 Ordens aceitas: a → b
 
-- Dica 1: O operador é escrito >=, não =>.
+- Dica 1: Confira como o operador "maior ou igual" está escrito em cada bloco.
+- Dica 2: O sinal de maior vem sempre primeiro: >=. O mesmo vale para o menor ou igual: <=.
 
 **Explicação:** 7 >= 6 é verdadeiro e 7 >= 8 é falso. O bloco com => está escrito errado e geraria um erro.
 
@@ -252,6 +259,7 @@ print(10 < 3)
   - Feedback: A comparação resulta em True ou False.
 
 - Dica 1: Leia < como "é menor que".
+- Dica 2: Uma comparação responde True ou False. 2 < 8 é True, porque 2 é menor que 8.
 
 **Explicação:** 10 não é menor que 3, então o resultado é False.
 
@@ -277,6 +285,7 @@ True
 - Lacuna 1: **`<`**, `>`, `=<`
 
 - Dica 1: Abaixo de 30 significa menor que 30.
+- Dica 2: O < pergunta se é menor, e o > pergunta se é maior. O menor ou igual se escreve <=, nunca =<.
 
 **Explicação:** temperatura < 30 é verdadeiro, porque 15 é menor que 30. O operador =< não existe; o certo seria <=.
 
@@ -313,7 +322,8 @@ print(9 <= 8)
 
   - Feedback: A comparação resulta em True ou False.
 
-- Dica 1: O <= aceita menor ou igual.
+- Dica 1: O <= significa menor ou igual.
+- Dica 2: Com <=, a resposta é True se o lado esquerdo for menor ou igual ao direito. Se for maior, é False.
 
 **Explicação:** 9 não é menor nem igual a 8, então o resultado é False.
 
@@ -355,6 +365,7 @@ print(3 == 3)
   - Feedback: 3 é igual a 3.
 
 - Dica 1: Os dois lados são iguais?
+- Dica 2: O == compara e responde True quando os valores são iguais e False quando são diferentes.
 
 **Explicação:** 3 == 3 pergunta se os valores são iguais. Como são, o resultado é True.
 
@@ -384,7 +395,8 @@ print("sim" == "Sim")
 - ▫️ c: O programa mostra um erro
   - Feedback: Comparar textos com == funciona normalmente.
 
-- Dica 1: Compare as letras uma a uma.
+- Dica 1: Compare os textos letra por letra.
+- Dica 2: Para o Python, maiúsculas e minúsculas fazem diferença: "Oi" e "oi" não são iguais.
 
 **Explicação:** Os textos diferem na primeira letra, maiúscula em um e minúscula no outro. Por isso não são iguais.
 
@@ -419,7 +431,8 @@ print(5 != 3)
 
   - Feedback: O != compara; não faz subtração.
 
-- Dica 1: 5 é diferente de 3?
+- Dica 1: O != significa "diferente de".
+- Dica 2: O != responde True quando os valores são diferentes e False quando são iguais.
 
 **Explicação:** 5 != 3 pergunta se os valores são diferentes. Como são, o resultado é True.
 
@@ -443,6 +456,7 @@ True
 - Lacuna 1: **`==`**, `=`, `!=`
 
 - Dica 1: Um único = guarda valores; dois comparam.
+- Dica 2: Para conferir se dois valores são iguais, use ==. O != faz a pergunta contrária: se são diferentes.
 
 **Explicação:** senha == "abc123" compara os dois textos, que são iguais. Com =, o Python mostraria um erro; com !=, o resultado seria False.
 
@@ -459,7 +473,8 @@ Conceitos: Igual ou diferente. Objetivo: Escolher == para conferir uma senha.
 
 Resposta: linha 2 (SyntaxError). Correção: `print("azul" == cor)`
 
-- Dica 1: Para comparar, são necessários dois sinais de igual.
+- Dica 1: Repare no sinal usado para comparar dentro do print.
+- Dica 2: Um único = serve para guardar um valor numa variável. Para comparar, são necessários dois: ==.
 
 **Explicação:** Na linha 2, um único = tenta guardar um valor dentro do print, o que é um erro. Para comparar, use ==.
 
@@ -490,6 +505,7 @@ print("10" == 10)
 
 
 - Dica 1: Qual é o tipo de cada lado?
+- Dica 2: Um texto e um número nunca são iguais, mesmo com os mesmos algarismos. O == não dá erro: ele só responde False.
 
 **Explicação:** "10" é texto e 10 é número. O == não mostra erro, mas responde False, porque valores de tipos diferentes não são iguais.
 
@@ -519,6 +535,7 @@ True
 Ordens aceitas: a → b
 
 - Dica 1: Uma das comparações difere só na primeira letra.
+- Dica 2: Maiúsculas e minúsculas fazem diferença na comparação. E, para comparar, use ==, nunca um único =.
 
 **Explicação:** "python" com p minúsculo é diferente de "Python", então a primeira comparação é False e a segunda é True. O bloco com um único = geraria erro.
 
@@ -558,6 +575,7 @@ print("Ana" == "ana")
   - Feedback: A comparação resulta em True ou False.
 
 - Dica 1: Compare a primeira letra de cada texto.
+- Dica 2: Uma letra maiúscula muda o texto: "Rio" e "rio" não são iguais para o Python.
 
 **Explicação:** "Ana" e "ana" diferem na primeira letra, por isso a comparação resulta em False.
 
@@ -595,6 +613,7 @@ print(8 != 8)
   - Feedback: O != compara; não subtrai.
 
 - Dica 1: Os dois valores são diferentes?
+- Dica 2: O != só responde True quando os valores são diferentes. Valores iguais dão False.
 
 **Explicação:** 8 != 8 pergunta se os valores são diferentes. Como são iguais, o resultado é False.
 
@@ -627,6 +646,7 @@ print(1 == "1")
   - Feedback: O == aceita tipos diferentes e responde False.
 
 - Dica 1: Um lado tem aspas e o outro não.
+- Dica 2: Número e texto são tipos diferentes, então nunca são iguais para o ==, que responde False sem dar erro.
 
 **Explicação:** 1 é número e "1" é texto. Como os tipos são diferentes, o == responde False.
 
@@ -668,6 +688,7 @@ print(True and False)
   - Feedback: O and combina os valores e resulta em um só.
 
 - Dica 1: Os dois lados são True?
+- Dica 2: O and só é verdadeiro quando os dois lados são verdadeiros. Basta um lado False para o resultado ser False.
 
 **Explicação:** Com and, basta um lado ser False para o resultado ser False.
 
@@ -703,6 +724,7 @@ print(True or False)
   - Feedback: Sem aspas, o Python calcula o resultado.
 
 - Dica 1: Algum dos lados é True?
+- Dica 2: O or é verdadeiro quando pelo menos um lado é verdadeiro. Só dá False se os dois forem False.
 
 **Explicação:** Com or, um lado verdadeiro é suficiente. Como o primeiro é True, o resultado é True.
 
@@ -733,6 +755,7 @@ print(not True)
   - Feedback: not True é válido em Python.
 
 - Dica 1: Qual é o contrário de True?
+- Dica 2: O not inverte o valor: transforma True em False e False em True.
 
 **Explicação:** O not inverte o valor lógico. O contrário de True é False.
 
@@ -770,6 +793,7 @@ print(idade >= 18 and tem_ingresso)
   - Feedback: O and resulta em um valor lógico.
 
 - Dica 1: Avalie cada lado do and separadamente.
+- Dica 2: Primeiro descubra se idade >= 18 é True ou False. O and só é True quando os dois lados são True.
 
 **Explicação:** idade >= 18 é True, e tem_ingresso também é True. Com os dois verdadeiros, o and resulta em True.
 
@@ -794,6 +818,7 @@ True
 - Lacuna 1: **`or`**, `and`, `+`
 
 - Dica 1: Basta uma das condições ser verdadeira.
+- Dica 2: O or precisa de pelo menos um lado verdadeiro; o and precisa dos dois. O + não combina condições.
 
 **Explicação:** chuva or sol é True, porque chuva é True. Com and, o resultado seria False; com +, o Python faria uma soma.
 
@@ -818,6 +843,7 @@ False
 Resposta: linha 3 (saida_incorreta). Correção: `print(nota >= 6 and frequencia >= 75)`
 
 - Dica 1: As duas exigências precisam ser cumpridas.
+- Dica 2: Quando as duas condições são obrigatórias, use and. O or aceita qualquer uma delas sozinha.
 
 **Explicação:** As duas condições são obrigatórias, então o correto é and. Com or, a nota sozinha já tornava o resultado True.
 
@@ -861,6 +887,7 @@ True
   - Feedback: not feriado inverte True para False.
 
 - Dica 1: Uma condição verdadeira basta?
+- Dica 2: Com or, basta um lado True; com and, os dois precisam ser True; o not inverte um valor.
 
 **Explicação:** Com or, basta um dos lados ser True. Como feriado é True, o resultado é True.
 
@@ -900,6 +927,7 @@ print(False or False)
   - Feedback: O or resulta em um único valor.
 
 - Dica 1: Algum lado é True?
+- Dica 2: O or só resulta em False quando os dois lados são False.
 
 **Explicação:** Nenhum dos lados é True, então o or resulta em False.
 
@@ -937,6 +965,7 @@ print(not False)
   - Feedback: Sem aspas, o Python calcula o resultado.
 
 - Dica 1: Qual é o contrário de False?
+- Dica 2: O not inverte o valor lógico: o que era falso vira verdadeiro.
 
 **Explicação:** O not inverte False, resultando em True.
 
@@ -976,6 +1005,7 @@ print(idade >= 18 and tem_carteira)
   - Feedback: O and resulta em um valor lógico.
 
 - Dica 1: Avalie cada lado do and.
+- Dica 2: Com and, basta um dos lados ser False para o resultado inteiro ser False.
 
 **Explicação:** idade >= 18 é True, mas tem_carteira é False. Com and, o resultado é False.
 
@@ -1022,6 +1052,7 @@ else:
   - Feedback: Só um dos blocos é executado.
 
 - Dica 1: 20 >= 18 é verdadeiro ou falso?
+- Dica 2: Quando a condição do if é verdadeira, o Python executa o bloco do if e pula o do else. Só um dos dois blocos é executado.
 
 **Explicação:** Como 20 >= 18 é verdadeiro, o Python executa o bloco do if e pula o do else.
 
@@ -1061,7 +1092,8 @@ else:
 
   - Feedback: Só um dos blocos é executado.
 
-- Dica 1: A condição é verdadeira?
+- Dica 1: A condição do if é verdadeira?
+- Dica 2: Quando a condição é falsa, o Python pula o bloco do if e executa o bloco do else.
 
 **Explicação:** 15 > 25 é falso, então o Python pula o bloco do if e executa o do else.
 
@@ -1104,6 +1136,7 @@ print("Fim")
   - Feedback: 4 não é maior ou igual a 6.
 
 - Dica 1: Uma linha sem recuo não pertence ao if nem ao else.
+- Dica 2: Primeiro o Python executa um dos blocos, do if ou do else. Depois segue para as linhas sem recuo, que são executadas sempre.
 
 **Explicação:** Como a nota é 4, o else exibe Recuperação. A última linha não tem recuo, então é executada sempre, depois do if/else.
 
@@ -1130,6 +1163,7 @@ Compra aprovada
 - Lacuna 1: **`:`**, `;`, `.`
 
 - Dica 1: Olhe como termina a linha do else.
+- Dica 2: As linhas do if e do else terminam com dois-pontos, que avisam que um bloco recuado vem a seguir.
 
 **Explicação:** As linhas do if e do else terminam com dois-pontos. Eles indicam que um bloco recuado vem a seguir.
 
@@ -1150,6 +1184,7 @@ Conceitos: Blocos e indentação. Objetivo: Terminar a linha do if com dois-pont
 Resposta: linha 3 (IndentationError). Correção: `print("Ganhou")`
 
 - Dica 1: Compare o recuo das linhas dentro do if e do else.
+- Dica 2: As linhas que pertencem a um bloco ficam recuadas, com quatro espaços. Sem o recuo, o Python mostra um erro de indentação.
 
 **Explicação:** A linha 3 pertence ao bloco do if e precisa de recuo. Sem ele, o Python mostra um erro de indentação (IndentationError).
 
@@ -1169,7 +1204,8 @@ Conceitos: Blocos e indentação. Objetivo: Encontrar um bloco do if sem recuo.
 
 Resposta: linha 2 (SyntaxError). Correção: `if senha == "1234":`
 
-- Dica 1: Para comparar, são necessários dois sinais de igual.
+- Dica 1: Repare no sinal usado na condição do if.
+- Dica 2: A condição do if precisa comparar, e comparar se faz com ==. Um único = tenta guardar um valor e gera erro.
 
 **Explicação:** A condição do if precisa comparar com ==. Um único = tenta guardar um valor e gera um erro de sintaxe.
 
@@ -1206,7 +1242,7 @@ else:
 Ordens aceitas: a → b
 
 - Dica 1: Um número é par quando o resto da divisão por 2 é zero.
-- Dica 2: O bloco do if precisa de recuo.
+- Dica 2: A condição compara com ==, e o print que pertence ao if fica recuado na linha de baixo.
 
 **Explicação:** A condição compara o resto com zero usando ==, e o print fica recuado dentro do if. Sem recuo, ou com um único =, o programa teria erro.
 
@@ -1251,6 +1287,7 @@ else:
   - Feedback: Só um dos blocos é executado.
 
 - Dica 1: 9 < 12 é verdadeiro?
+- Dica 2: Com a condição verdadeira, só o bloco do if é executado; o else é pulado.
 
 **Explicação:** Como 9 < 12 é verdadeiro, o programa exibe Bom dia e pula o else.
 
@@ -1273,6 +1310,7 @@ Variação de u3-l4-e05.
 Resposta: linha 5 (IndentationError). Correção: `print("Aproveite o sol")`
 
 - Dica 1: O bloco do else também precisa de recuo.
+- Dica 2: Toda linha que pertence a um if ou a um else fica recuada, mesmo que aquele bloco não seja executado agora.
 
 **Explicação:** A linha 5 pertence ao else e precisa de recuo, mesmo que esse bloco não seja executado agora.
 
@@ -1317,6 +1355,7 @@ print("Obrigado")
   - Feedback: A última linha não tem recuo e é sempre executada.
 
 - Dica 1: 0 > 0 é verdadeiro?
+- Dica 2: Um número não é maior que ele mesmo. Depois do if/else, a linha sem recuo é executada sempre.
 
 **Explicação:** Como 0 > 0 é falso, o else exibe Esgotado. Depois, a linha sem recuo exibe Obrigado.
 
@@ -1348,7 +1387,7 @@ Saída esperada:
 - Lacuna 2: **`False`**, `false`, `Falso`
 
 - Dica 1: Idade é um número inteiro.
-- Dica 2: O valor lógico é escrito em inglês, com maiúscula.
+- Dica 2: Os valores lógicos do Python são escritos em inglês e com a primeira letra maiúscula: True e False.
 
 **Explicação:** 16 é um inteiro, e False é o valor lógico para "não". false e Falso não são valores do Python.
 
@@ -1385,6 +1424,7 @@ print(idade < 18)
   - Feedback: A comparação resulta em True ou False.
 
 - Dica 1: 16 é menor que 18?
+- Dica 2: A comparação responde True quando é verdadeira e False quando é falsa.
 
 **Explicação:** 16 < 18 é verdadeiro, então a pessoa tem direito a meia-entrada pela idade.
 
@@ -1422,6 +1462,7 @@ print(idade < 18 or estudante)
   - Feedback: O or resulta em um único valor lógico.
 
 - Dica 1: Uma das condições já é verdadeira?
+- Dica 2: Com or, basta um lado ser True para o resultado ser True.
 
 **Explicação:** idade < 18 é True. Com or, isso basta para o resultado ser True, mesmo sem ser estudante.
 
@@ -1449,6 +1490,7 @@ Meia-entrada
 Resposta: linha 3 (saida_incorreta). Correção: `if idade < 18 or estudante:`
 
 - Dica 1: Para ter meia, a pessoa precisa cumprir as duas regras ou basta uma?
+- Dica 2: O and exige as duas condições ao mesmo tempo; o or aceita qualquer uma delas.
 
 **Explicação:** Basta uma das regras para ter meia-entrada, então a condição usa or. Com and, a pessoa precisaria ser menor e estudante ao mesmo tempo.
 
@@ -1480,7 +1522,8 @@ Inteira
 
 Ordens aceitas: a → b → c → d
 
-- Dica 1: O if vem antes do else, e cada um tem seu bloco recuado.
+- Dica 1: O if vem antes do else, e cada um tem o seu bloco recuado.
+- Dica 2: Uma variável que já guarda True ou False pode ser usada direto na condição, como em if chovendo:. Um único = nunca entra numa condição.
 
 **Explicação:** Como meia é False, o Python pula o bloco do if e executa o do else. Cada bloco fica recuado logo abaixo da sua linha.
 
@@ -1533,6 +1576,7 @@ Meia-entrada
   - Feedback: Falta o dois-pontos no final da linha do if.
 
 - Dica 1: Confira o operador lógico e o final da linha do if.
+- Dica 2: Quando basta uma regra, a condição usa or; quando as duas são obrigatórias, and. E toda linha de if termina com dois-pontos.
 
 **Explicação:** A condição usa or, porque basta uma regra, e a linha do if termina com dois-pontos.
 
@@ -1573,7 +1617,8 @@ print("Ingresso:", tipo)
   ```
 
 
-- Dica 1: Qual bloco guarda um valor em tipo?
+- Dica 1: Qual bloco é executado: o do if ou o do else?
+- Dica 2: O bloco executado guarda um valor em tipo, e o print, sem recuo, exibe esse valor depois.
 
 **Explicação:** Como idade < 18 é verdadeiro, o bloco do if guarda Meia-entrada em tipo. A última linha, sem recuo, exibe esse valor.
 
@@ -1605,6 +1650,7 @@ Meia-entrada
 Resposta: linha 3 (saida_incorreta). Correção: `if idade < 18 or estudante:`
 
 - Dica 1: Quem tem direito a meia, os menores ou os maiores de 18?
+- Dica 2: O < pergunta se é menor; o > pergunta se é maior. Para menores de 18, o valor precisa ser menor que 18.
 
 **Explicação:** A regra é para menores de 18, então a comparação é idade < 18. Com >, a criança de 12 anos pagaria inteira.
 

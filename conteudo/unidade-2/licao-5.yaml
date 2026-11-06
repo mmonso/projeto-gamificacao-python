@@ -1,7 +1,7 @@
 id: u2-l5
 unidade: u2
 ordem: 5
-versao: 2
+versao: 3
 titulo: "Desafio: conta do lanche"
 objetivo: Montar, em etapas, um programa que calcula o total de um pedido e exibe uma mensagem.
 conceitos: [tipos-basicos, precedencia, divisao, conversao, concatenacao]
@@ -29,7 +29,7 @@ exercicios:
         resposta: "2"
     dicas:
       - A casa decimal usa ponto.
-      - A quantidade é um número inteiro, sem aspas.
+      - A quantidade é um número inteiro, escrito em algarismos e sem aspas. Com vírgula, 12,5 viraria dois números.
     explicacao: 12.5 é um float, escrito com ponto, e 2 é um int. Com vírgula, 12,5 viraria dois números separados.
 
   - id: u2-l5-e02
@@ -60,6 +60,7 @@ exercicios:
     resposta: b
     dicas:
       - Um dos valores é float.
+      - "Uma conta com pelo menos um float resulta em float: 1.5 * 2 dá 3.0."
     explicacao: Multiplicar um float por um int resulta em float, por isso o total aparece como 25.0.
 
   - id: u2-l5-e03
@@ -88,6 +89,7 @@ exercicios:
     resposta: a
     dicas:
       - Primeiro a multiplicação, depois a soma.
+      - Como um dos números tem ponto, o resultado também terá casa decimal.
     explicacao: O Python calcula 12.5 * 2, que dá 25.0, e depois soma 5, resultando em 30.0.
 
   - id: u2-l5-e04
@@ -106,7 +108,8 @@ exercicios:
     saida_esperada: |-
       Total: R$ 30.0
     dicas:
-      - Para juntar com +, o total precisa ser texto.
+      - Repare no tipo de total e no que o + está juntando.
+      - 'Para juntar um número a um texto com +, converta o número com str antes, como em "Nota: " + str(9).'
     explicacao: O total é um número. Na linha 2, ele precisa ser convertido com str antes de ser juntado ao texto.
 
   - id: u2-l5-e05
@@ -128,6 +131,7 @@ exercicios:
         resposta: "/"
     dicas:
       - O valor de cada pessoa pode ter centavos.
+      - O / mantém a parte decimal, o // a descarta e o % mostra só o resto da divisão.
     explicacao: Com /, a divisão mantém a parte decimal e resulta em 10.5. Com //, os centavos seriam descartados; com %, apareceria só o resto.
 
   - id: u2-l5-e06
@@ -155,7 +159,7 @@ exercicios:
       - [a, b, c]
     dicas:
       - Calcule o total antes de montar a mensagem.
-      - O total precisa virar texto para ser juntado.
+      - O total é um número; para juntá-lo ao texto com +, ele precisa virar texto com str.
     explicacao: Primeiro o total é calculado; depois, convertido com str e juntado ao texto; por fim, a mensagem é exibida.
 
   - id: u2-l5-e07
@@ -186,6 +190,7 @@ exercicios:
     resposta: b
     dicas:
       - Confira o espaço e as aspas.
+      - "O + não coloca espaço entre os textos: o espaço precisa estar dentro das aspas. E um número entre aspas não é multiplicado como número."
     explicacao: 'O preço sem aspas permite a multiplicação, e o texto "Total: R$ " já termina com o espaço antes do valor.'
 
 revisao:
@@ -207,4 +212,5 @@ revisao:
       Somos 4 pessoas
     dicas:
       - Qual valor não é texto?
+      - Para juntar um número com textos usando +, converta o número com str antes.
     explicacao: pessoas guarda um número. Para juntar com +, ele precisa ser convertido com str.

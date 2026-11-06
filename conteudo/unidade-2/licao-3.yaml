@@ -1,7 +1,7 @@
 id: u2-l3
 unidade: u2
 ordem: 3
-versao: 2
+versao: 3
 titulo: Juntando textos
 objetivo: Juntar e repetir textos e reconhecer o erro de somar texto com número.
 conceitos: [concatenacao, repeticao-texto, erro-tipo]
@@ -31,7 +31,8 @@ exercicios:
         feedback: O + junta os textos e não aparece na saída.
     resposta: b
     dicas:
-      - Diferente da vírgula do print, o + não acrescenta nada entre os textos.
+      - "Repare: nenhum dos dois textos tem espaço."
+      - 'O + cola um texto no outro, sem acrescentar nada entre eles: "sol" + "dado" forma soldado.'
     explicacao: O + junta os textos exatamente como estão. Como nenhum deles tem espaço, o resultado é Bomdia.
 
   - id: u2-l3-e02
@@ -51,6 +52,7 @@ exercicios:
         resposta: "\" \""
     dicas:
       - O espaço também é um texto e precisa de aspas.
+      - Um texto pode ter só um espaço dentro das aspas. Já "", sem nada dentro, é um texto vazio.
     explicacao: '" " é um texto com um espaço. Juntado entre as palavras, ele as separa. "" é um texto vazio, e espaco sem aspas seria um nome desconhecido.'
 
   - id: u2-l3-e03
@@ -77,7 +79,8 @@ exercicios:
         feedback: O * repete o texto; não junta o número a ele.
     resposta: a
     dicas:
-      - O texto aparece três vezes, colado.
+      - O texto será repetido três vezes.
+      - 'Multiplicar um texto por um número repete o texto, colado, sem espaços: "oi" * 2 forma oioi.'
     explicacao: '"ha" * 3 repete o texto três vezes, sem espaços: hahaha.'
 
   - id: u2-l3-e04
@@ -103,7 +106,8 @@ exercicios:
         feedback: O + não aparece na saída.
     resposta: b
     dicas:
-      - '"Idade: " é texto, e 30 é número.'
+      - Repare no tipo de cada lado do +.
+      - O + junta dois textos ou soma dois números, mas não mistura os dois. Texto mais número gera um erro de tipo (TypeError).
     explicacao: O + junta textos ou soma números, mas não mistura os dois. Juntar texto com número gera um erro de tipo (TypeError).
 
   - id: u2-l3-e05
@@ -124,6 +128,7 @@ exercicios:
       Rui fez 50 pontos
     dicas:
       - Qual das variáveis guarda um número?
+      - Juntar texto e número com + gera TypeError. Com vírgulas, o print aceita texto e número juntos.
     explicacao: Na linha 3, o + tenta juntar textos com o número 50 e gera TypeError. Com vírgulas, o print aceita texto e número juntos.
 
   - id: u2-l3-e06
@@ -149,7 +154,8 @@ exercicios:
     resposta:
       - [a, b]
     dicas:
-      - O nome da variável fica sem aspas para que o valor seja usado.
+      - A mensagem precisa usar o valor de nome, e não a palavra nome.
+      - Sem aspas, o nome da variável é trocado pelo valor guardado. Primeiro monte a saudação, depois exiba a variável.
     explicacao: A saudação junta o texto "Olá, ", o valor de nome e o texto "!". Depois, o print exibe a variável saudacao, sem aspas.
 
   - id: u2-l3-e07
@@ -176,7 +182,8 @@ exercicios:
           print("=" * 3)
     resposta: c
     dicas:
-      - Para repetir um texto, use *.
+      - A saída tem o mesmo sinal três vezes, colado.
+      - Para repetir um texto, multiplique-o por um número inteiro. Somar texto com número gera erro.
     explicacao: '"=" * 3 repete o sinal três vezes, sem espaços.'
 
 revisao:
@@ -206,6 +213,7 @@ revisao:
     resposta: b
     dicas:
       - Os textos são colados um no outro.
+      - O + junta os textos exatamente como estão, sem colocar espaço entre eles.
     explicacao: O + junta "Py" e "thon" sem espaço, formando Python.
 
   - id: u2-l3-r02
@@ -233,6 +241,7 @@ revisao:
     resposta: c
     dicas:
       - Um lado do + é texto, e o outro é número.
+      - O + não mistura texto com número. Para juntar, o número precisaria virar texto antes.
     explicacao: Juntar o texto "Nível " com o número 2 usando + gera TypeError.
 
   - id: u2-l3-r03
@@ -260,5 +269,6 @@ revisao:
         feedback: As cópias ficam coladas, sem espaços.
     resposta: a
     dicas:
-      - O sinal aparece cinco vezes.
+      - O sinal será repetido cinco vezes.
+      - Um texto multiplicado por um número aparece repetido, colado, sem espaços.
     explicacao: '"-" * 5 repete o sinal cinco vezes, formando uma linha.'

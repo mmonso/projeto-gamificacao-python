@@ -1,7 +1,7 @@
 id: u3-l5
 unidade: u3
 ordem: 5
-versao: 2
+versao: 3
 titulo: "Desafio: verificador de ingresso"
 objetivo: Montar, em etapas, um programa que decide entre meia-entrada e inteira.
 conceitos: [booleanos, comparacao, logicos, if-else, indentacao]
@@ -29,7 +29,7 @@ exercicios:
         resposta: "False"
     dicas:
       - Idade é um número inteiro.
-      - O valor lógico é escrito em inglês, com maiúscula.
+      - "Os valores lógicos do Python são escritos em inglês e com a primeira letra maiúscula: True e False."
     explicacao: 16 é um inteiro, e False é o valor lógico para "não". false e Falso não são valores do Python.
 
   - id: u3-l5-e02
@@ -58,6 +58,7 @@ exercicios:
     resposta: a
     dicas:
       - 16 é menor que 18?
+      - A comparação responde True quando é verdadeira e False quando é falsa.
     explicacao: 16 < 18 é verdadeiro, então a pessoa tem direito a meia-entrada pela idade.
 
   - id: u3-l5-e03
@@ -87,6 +88,7 @@ exercicios:
     resposta: b
     dicas:
       - Uma das condições já é verdadeira?
+      - Com or, basta um lado ser True para o resultado ser True.
     explicacao: idade < 18 é True. Com or, isso basta para o resultado ser True, mesmo sem ser estudante.
 
   - id: u3-l5-e04
@@ -110,6 +112,7 @@ exercicios:
       Meia-entrada
     dicas:
       - Para ter meia, a pessoa precisa cumprir as duas regras ou basta uma?
+      - O and exige as duas condições ao mesmo tempo; o or aceita qualquer uma delas.
     explicacao: Basta uma das regras para ter meia-entrada, então a condição usa or. Com and, a pessoa precisaria ser menor e estudante ao mesmo tempo.
 
   - id: u3-l5-e05
@@ -139,7 +142,8 @@ exercicios:
     resposta:
       - [a, b, c, d]
     dicas:
-      - O if vem antes do else, e cada um tem seu bloco recuado.
+      - O if vem antes do else, e cada um tem o seu bloco recuado.
+      - Uma variável que já guarda True ou False pode ser usada direto na condição, como em if chovendo:. Um único = nunca entra numa condição.
     explicacao: Como meia é False, o Python pula o bloco do if e executa o do else. Cada bloco fica recuado logo abaixo da sua linha.
 
   - id: u3-l5-e06
@@ -182,6 +186,7 @@ exercicios:
     resposta: a
     dicas:
       - Confira o operador lógico e o final da linha do if.
+      - Quando basta uma regra, a condição usa or; quando as duas são obrigatórias, and. E toda linha de if termina com dois-pontos.
     explicacao: A condição usa or, porque basta uma regra, e a linha do if termina com dois-pontos.
 
   - id: u3-l5-e07
@@ -214,7 +219,8 @@ exercicios:
           Ingresso: Meia-entrada
     resposta: c
     dicas:
-      - Qual bloco guarda um valor em tipo?
+      - "Qual bloco é executado: o do if ou o do else?"
+      - O bloco executado guarda um valor em tipo, e o print, sem recuo, exibe esse valor depois.
     explicacao: Como idade < 18 é verdadeiro, o bloco do if guarda Meia-entrada em tipo. A última linha, sem recuo, exibe esse valor.
 
 revisao:
@@ -240,4 +246,5 @@ revisao:
       Meia-entrada
     dicas:
       - Quem tem direito a meia, os menores ou os maiores de 18?
+      - O < pergunta se é menor; o > pergunta se é maior. Para menores de 18, o valor precisa ser menor que 18.
     explicacao: A regra é para menores de 18, então a comparação é idade < 18. Com >, a criança de 12 anos pagaria inteira.

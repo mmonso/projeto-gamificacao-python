@@ -1,7 +1,7 @@
 id: u1-l2
 unidade: u1
 ordem: 2
-versao: 2
+versao: 3
 titulo: Números na tela
 objetivo: Exibir números e resultados de contas, distinguir uma conta de um texto e exibir vários valores em um print.
 conceitos: [print-numero, texto-vs-numero, print-varios]
@@ -32,7 +32,7 @@ exercicios:
     resposta: b
     dicas:
       - Não há aspas, então não é um texto.
-      - O Python calcula a conta e exibe o resultado.
+      - Sem aspas, o Python faz a conta antes de exibir. Por exemplo, print(1 + 1) exibe 2.
     explicacao: Sem aspas, 2 + 3 é uma conta. O Python calcula o resultado e o print exibe 5.
 
   - id: u1-l2-e02
@@ -59,7 +59,8 @@ exercicios:
           2 + 3
     resposta: c
     dicas:
-      - Lembre o que as aspas significam na lição anterior.
+      - "Repare: agora a conta está entre aspas."
+      - Tudo o que está entre aspas é texto e aparece exatamente como foi escrito. Por exemplo, print("1 + 1") exibe 1 + 1, sem calcular.
     explicacao: Tudo o que está entre aspas é texto. O print exibe o texto exatamente como foi escrito, sem calcular nada.
 
   - id: u1-l2-e03
@@ -79,7 +80,7 @@ exercicios:
         resposta: "3 * 4"
     dicas:
       - Para o Python calcular, a conta não pode estar entre aspas.
-      - O x não é usado para multiplicar em Python.
+      - Em Python, a multiplicação usa o asterisco *. O x não é um símbolo de conta para o Python.
     explicacao: A conta 3 * 4 sem aspas é calculada e exibe 12. Entre aspas, seria só o texto 3 * 4. Com x, o Python mostraria um erro.
 
   - id: u1-l2-e04
@@ -106,8 +107,8 @@ exercicios:
         feedback: A vírgula só separa os valores no código. Ela não aparece na saída.
     resposta: b
     dicas:
-      - A vírgula não aparece na tela.
-      - O print coloca algo entre os valores.
+      - "Repare no que acontece com a vírgula: ela aparece na tela?"
+      - A vírgula separa os valores dentro do print e não aparece na saída. Entre um valor e outro, o print coloca um espaço.
     explicacao: Com vírgula, o print exibe os valores na mesma linha, separados por um espaço. A vírgula não aparece na saída.
 
   - id: u1-l2-e05
@@ -130,8 +131,8 @@ exercicios:
     resposta:
       - [a, b]
     dicas:
-      - A primeira linha precisa mostrar o resultado da conta, não a conta.
-      - Para ser calculada, a conta não pode estar entre aspas.
+      - A primeira linha da saída mostra o resultado da conta, não a conta.
+      - 'Uma conta sem aspas é calculada; entre aspas, ela vira texto. Por exemplo, print("Valor:", 2 + 2) exibe Valor: 4.'
     explicacao: Em print("Total:", 10 + 5), o texto vem entre aspas e a conta fica sem aspas, então o Python exibe o resultado 15. Depois, print("Fim") exibe a segunda linha.
 
   - id: u1-l2-e06
@@ -151,8 +152,8 @@ exercicios:
       Calculando...
       Soma: 8
     dicas:
-      - A primeira linha da saída está certa.
-      - Uma conta entre aspas não é calculada.
+      - A primeira linha da saída já está certa. O problema está na conta.
+      - 'Entre aspas, uma conta vira texto e não é calculada: print("1 + 1") exibe 1 + 1, e não 2.'
     explicacao: Na linha 2, a conta 5 + 3 está entre aspas e é exibida como texto. Sem as aspas, o Python calcula e exibe 8.
 
   - id: u1-l2-e07
@@ -179,7 +180,8 @@ exercicios:
         feedback: Entre aspas, a vírgula faz parte do texto e aparece na saída.
     resposta: b
     dicas:
-      - Para exibir os dois números lado a lado, use a vírgula do print.
+      - Na saída, os dois números aparecem lado a lado, separados por um espaço, sem conta.
+      - A vírgula do print exibe vários valores na mesma linha, com um espaço entre eles. Já o + soma os números.
     explicacao: Em print(10, 20), a vírgula separa dois valores, e o print os exibe com um espaço entre eles.
 
 revisao:
@@ -209,6 +211,7 @@ revisao:
     resposta: a
     dicas:
       - É uma conta sem aspas.
+      - "Sem aspas, o Python calcula antes de exibir: print(9 - 2) exibe 7."
     explicacao: Sem aspas, 10 - 4 é uma conta. O print exibe o resultado, 6.
 
   - id: u1-l2-r02
@@ -237,6 +240,7 @@ revisao:
     resposta: b
     dicas:
       - Repare nas aspas.
+      - 'Entre aspas, tudo é texto, inclusive contas: print("9 - 2") exibe 9 - 2.'
     explicacao: Como está entre aspas, 4 * 2 é um texto. O print exibe o texto como foi escrito.
 
   - id: u1-l2-r03
@@ -265,4 +269,5 @@ revisao:
     resposta: c
     dicas:
       - Primeiro o Python calcula a conta; depois o print junta os valores.
+      - 'A vírgula não aparece na tela: o print coloca um espaço entre os valores. print("Total:", 1 + 1) exibe Total: 2.'
     explicacao: O Python calcula 2000 + 26 e o print exibe o texto e o resultado separados por um espaço.

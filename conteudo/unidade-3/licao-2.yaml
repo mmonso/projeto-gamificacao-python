@@ -1,7 +1,7 @@
 id: u3-l2
 unidade: u3
 ordem: 2
-versao: 2
+versao: 3
 titulo: Igual ou diferente
 objetivo: Comparar valores com == e != e distinguir comparação de atribuição.
 conceitos: [igualdade, booleanos]
@@ -32,6 +32,7 @@ exercicios:
     resposta: b
     dicas:
       - Os dois lados são iguais?
+      - O == compara e responde True quando os valores são iguais e False quando são diferentes.
     explicacao: 3 == 3 pergunta se os valores são iguais. Como são, o resultado é True.
 
   - id: u3-l2-e02
@@ -57,7 +58,8 @@ exercicios:
         feedback: Comparar textos com == funciona normalmente.
     resposta: b
     dicas:
-      - Compare as letras uma a uma.
+      - Compare os textos letra por letra.
+      - 'Para o Python, maiúsculas e minúsculas fazem diferença: "Oi" e "oi" não são iguais.'
     explicacao: Os textos diferem na primeira letra, maiúscula em um e minúscula no outro. Por isso não são iguais.
 
   - id: u3-l2-e03
@@ -84,7 +86,8 @@ exercicios:
         feedback: O != compara; não faz subtração.
     resposta: a
     dicas:
-      - 5 é diferente de 3?
+      - O != significa "diferente de".
+      - O != responde True quando os valores são diferentes e False quando são iguais.
     explicacao: 5 != 3 pergunta se os valores são diferentes. Como são, o resultado é True.
 
   - id: u3-l2-e04
@@ -105,6 +108,7 @@ exercicios:
         resposta: "=="
     dicas:
       - Um único = guarda valores; dois comparam.
+      - "Para conferir se dois valores são iguais, use ==. O != faz a pergunta contrária: se são diferentes."
     explicacao: senha == "abc123" compara os dois textos, que são iguais. Com =, o Python mostraria um erro; com !=, o resultado seria False.
 
   - id: u3-l2-e05
@@ -123,7 +127,8 @@ exercicios:
     saida_esperada: |-
       True
     dicas:
-      - Para comparar, são necessários dois sinais de igual.
+      - Repare no sinal usado para comparar dentro do print.
+      - "Um único = serve para guardar um valor numa variável. Para comparar, são necessários dois: ==."
     explicacao: Na linha 2, um único = tenta guardar um valor dentro do print, o que é um erro. Para comparar, use ==.
 
   - id: u3-l2-e06
@@ -150,6 +155,7 @@ exercicios:
     resposta: c
     dicas:
       - Qual é o tipo de cada lado?
+      - "Um texto e um número nunca são iguais, mesmo com os mesmos algarismos. O == não dá erro: ele só responde False."
     explicacao: '"10" é texto e 10 é número. O == não mostra erro, mas responde False, porque valores de tipos diferentes não são iguais.'
 
   - id: u3-l2-e07
@@ -175,6 +181,7 @@ exercicios:
       - [a, b]
     dicas:
       - Uma das comparações difere só na primeira letra.
+      - Maiúsculas e minúsculas fazem diferença na comparação. E, para comparar, use ==, nunca um único =.
     explicacao: '"python" com p minúsculo é diferente de "Python", então a primeira comparação é False e a segunda é True. O bloco com um único = geraria erro.'
 
 revisao:
@@ -204,6 +211,7 @@ revisao:
     resposta: b
     dicas:
       - Compare a primeira letra de cada texto.
+      - 'Uma letra maiúscula muda o texto: "Rio" e "rio" não são iguais para o Python.'
     explicacao: '"Ana" e "ana" diferem na primeira letra, por isso a comparação resulta em False.'
 
   - id: u3-l2-r02
@@ -232,6 +240,7 @@ revisao:
     resposta: b
     dicas:
       - Os dois valores são diferentes?
+      - O != só responde True quando os valores são diferentes. Valores iguais dão False.
     explicacao: 8 != 8 pergunta se os valores são diferentes. Como são iguais, o resultado é False.
 
   - id: u3-l2-r03
@@ -259,4 +268,5 @@ revisao:
     resposta: a
     dicas:
       - Um lado tem aspas e o outro não.
+      - Número e texto são tipos diferentes, então nunca são iguais para o ==, que responde False sem dar erro.
     explicacao: 1 é número e "1" é texto. Como os tipos são diferentes, o == responde False.

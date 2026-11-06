@@ -1,7 +1,7 @@
 id: u1-l4
 unidade: u1
 ordem: 4
-versao: 2
+versao: 3
 titulo: Mudando valores
 objetivo: Prever o valor de uma variável depois de reatribuições e atualizações, respeitando a ordem das linhas.
 conceitos: [reatribuicao, atualizacao, ordem-execucao]
@@ -34,8 +34,8 @@ exercicios:
           verde
     resposta: c
     dicas:
-      - A variável guarda só um valor por vez.
-      - Quando o print é executado, qual foi o último valor guardado?
+      - Uma variável guarda só um valor por vez.
+      - Uma nova atribuição apaga o valor antigo. Depois de x = 1 e x = 2, x vale 2.
     explicacao: A segunda atribuição substitui o valor anterior. Quando o print é executado, cor guarda verde.
 
   - id: u1-l4-e02
@@ -69,6 +69,7 @@ exercicios:
     resposta: b
     dicas:
       - Siga as linhas de cima para baixo, anotando o valor de nivel.
+      - Cada print mostra o valor que a variável tem naquele momento. Mudar a variável depois não altera o que já foi exibido.
     explicacao: As linhas são executadas em ordem. O primeiro print acontece quando nivel vale 1; o segundo, depois da mudança para 2.
 
   - id: u1-l4-e03
@@ -98,7 +99,7 @@ exercicios:
     resposta: a
     dicas:
       - Primeiro o Python calcula o lado direito do =.
-      - Na linha 2, pontos ainda vale 10.
+      - Em x = x + 1, o Python usa o valor atual de x, soma 1 e guarda o resultado de volta em x.
     explicacao: Na linha 2, o Python calcula pontos + 5 com o valor atual, 10, e guarda 15 de volta em pontos.
 
   - id: u1-l4-e04
@@ -119,8 +120,8 @@ exercicios:
         opcoes: ["vidas + 1", "vidas - 1", "\"vidas + 1\""]
         resposta: "vidas + 1"
     dicas:
-      - O novo valor é o valor atual mais 1.
-      - A conta não pode estar entre aspas.
+      - O novo valor de vidas é o valor atual mais 1.
+      - "Para atualizar uma variável, use o próprio nome no lado direito, sem aspas: x = x + 2 aumenta x em 2."
     explicacao: vidas = vidas + 1 calcula 3 + 1 e guarda 4 em vidas. Entre aspas, a conta viraria texto.
 
   - id: u1-l4-e05
@@ -141,8 +142,8 @@ exercicios:
     saida_esperada: |-
       Saldo: 70
     dicas:
-      - Um gasto deve diminuir o saldo.
-      - Veja qual linha muda o valor de saldo.
+      - Um gasto deve diminuir o saldo. Procure a linha que muda o saldo.
+      - Para descontar um valor, a conta usa o sinal de menos, como em total = total - 10.
     explicacao: A linha 3 soma o gasto ao saldo. Para descontar, a conta deve ser saldo - gasto, que resulta em 70.
 
   - id: u1-l4-e06
@@ -170,7 +171,7 @@ exercicios:
       - [a, b, c, d]
     dicas:
       - O primeiro print precisa acontecer antes da atualização.
-      - No print, a variável fica sem aspas.
+      - "As linhas rodam em ordem: crie a variável, exiba, atualize e exiba de novo. No print, a variável fica sem aspas."
     explicacao: A variável é criada, exibida, atualizada e exibida de novo. Se a atualização viesse antes do primeiro print, os dois mostrariam 6.
 
   - id: u1-l4-e07
@@ -201,7 +202,7 @@ exercicios:
     resposta: b
     dicas:
       - Na linha 2, qual valor preco guarda?
-      - A linha 3 muda só preco.
+      - Copiar uma variável guarda o valor daquele momento. Se a original mudar depois, a cópia continua com o valor antigo.
     explicacao: Na linha 2, preco_antigo recebe o valor que preco tinha naquele momento, 4. A mudança de preco na linha 3 não altera preco_antigo.
 
 revisao:
@@ -233,6 +234,7 @@ revisao:
     resposta: a
     dicas:
       - Qual foi o último valor guardado antes do print?
+      - Uma nova atribuição substitui o valor antigo; a variável não guarda os dois.
     explicacao: A segunda linha substitui o valor de nome. No momento do print, nome guarda Lia.
 
   - id: u1-l4-r02
@@ -264,6 +266,7 @@ revisao:
     resposta: b
     dicas:
       - Anote o valor de moedas depois de cada linha.
+      - "Cada linha usa o valor atual: se x vale 10, x = x - 1 deixa x com 9, e repetir a linha deixa com 8."
     explicacao: A linha 2 muda moedas de 20 para 15, e a linha 3, de 15 para 10.
 
   - id: u1-l4-r03
@@ -295,4 +298,5 @@ revisao:
     resposta: c
     dicas:
       - A linha 2 copia o valor de meta naquele momento.
+      - "Mudar meta depois não muda copia: cada variável guarda o seu próprio valor."
     explicacao: copia recebe 3 na linha 2. Depois, só meta é atualizada para 4. Por isso o print exibe 3 e 4.

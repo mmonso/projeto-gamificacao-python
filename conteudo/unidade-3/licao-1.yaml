@@ -1,7 +1,7 @@
 id: u3-l1
 unidade: u3
 ordem: 1
-versao: 2
+versao: 3
 titulo: Verdadeiro ou falso
 objetivo: Prever o resultado de comparações com >, <, >= e <=.
 conceitos: [booleanos, comparacao]
@@ -31,7 +31,8 @@ exercicios:
         feedback: Sem aspas, o Python avalia a comparação.
     resposta: a
     dicas:
-      - 5 é maior que 3?
+      - Leia > como "é maior que". 5 é maior que 3?
+      - "Uma comparação não mostra os números: ela responde True quando é verdadeira e False quando é falsa."
     explicacao: 5 > 3 é verdadeiro, e o Python responde com True.
 
   - id: u3-l1-e02
@@ -59,6 +60,7 @@ exercicios:
     resposta: b
     dicas:
       - Leia > como "é maior que".
+      - Se a comparação não for verdadeira, a resposta é False. Por exemplo, 1 > 9 resulta em False.
     explicacao: 2 não é maior que 7, então a comparação resulta em False.
 
   - id: u3-l1-e03
@@ -85,7 +87,8 @@ exercicios:
         feedback: A comparação resulta em True ou False.
     resposta: b
     dicas:
-      - O >= aceita valores iguais.
+      - O >= significa maior ou igual.
+      - "Com >= basta uma das duas coisas: ser maior ou ser igual. Por exemplo, 7 >= 7 é True."
     explicacao: 4 >= 4 pergunta se 4 é maior ou igual a 4. Como é igual, o resultado é True.
 
   - id: u3-l1-e04
@@ -106,6 +109,7 @@ exercicios:
         resposta: ">"
     dicas:
       - Um único = guarda valores; não compara.
+      - O > pergunta se o lado esquerdo é maior que o direito, e o < pergunta se é menor.
     explicacao: idade > 18 pergunta se 20 é maior que 18, o que é verdadeiro. Com <, o resultado seria False; com =, o Python mostraria um erro.
 
   - id: u3-l1-e05
@@ -134,6 +138,7 @@ exercicios:
     resposta: a
     dicas:
       - Troque x pelo valor guardado nele.
+      - Leia < como "é menor que". Se a comparação for falsa, o resultado é False.
     explicacao: x vale 10, e 10 < 5 é falso. O print exibe False.
 
   - id: u3-l1-e06
@@ -153,6 +158,7 @@ exercicios:
       True
     dicas:
       - Qual é o tipo de pontos?
+      - O Python não compara texto com número usando > ou <. O texto precisa ser convertido com int antes.
     explicacao: pontos guarda o texto "10". O Python não compara texto e número com >, por isso a linha 2 gera TypeError. Convertendo com int, a comparação funciona.
 
   - id: u3-l1-e07
@@ -177,7 +183,8 @@ exercicios:
     resposta:
       - [a, b]
     dicas:
-      - O operador é escrito >=, não =>.
+      - Confira como o operador "maior ou igual" está escrito em cada bloco.
+      - "O sinal de maior vem sempre primeiro: >=. O mesmo vale para o menor ou igual: <=."
     explicacao: 7 >= 6 é verdadeiro e 7 >= 8 é falso. O bloco com => está escrito errado e geraria um erro.
 
 revisao:
@@ -207,6 +214,7 @@ revisao:
     resposta: b
     dicas:
       - Leia < como "é menor que".
+      - Uma comparação responde True ou False. 2 < 8 é True, porque 2 é menor que 8.
     explicacao: 10 não é menor que 3, então o resultado é False.
 
   - id: u3-l1-r02
@@ -228,6 +236,7 @@ revisao:
         resposta: "<"
     dicas:
       - Abaixo de 30 significa menor que 30.
+      - O < pergunta se é menor, e o > pergunta se é maior. O menor ou igual se escreve <=, nunca =<.
     explicacao: temperatura < 30 é verdadeiro, porque 15 é menor que 30. O operador =< não existe; o certo seria <=.
 
   - id: u3-l1-r03
@@ -255,5 +264,6 @@ revisao:
         feedback: A comparação resulta em True ou False.
     resposta: b
     dicas:
-      - O <= aceita menor ou igual.
+      - O <= significa menor ou igual.
+      - Com <=, a resposta é True se o lado esquerdo for menor ou igual ao direito. Se for maior, é False.
     explicacao: 9 não é menor nem igual a 8, então o resultado é False.

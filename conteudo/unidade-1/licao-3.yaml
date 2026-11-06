@@ -1,7 +1,7 @@
 id: u1-l3
 unidade: u1
 ordem: 3
-versao: 2
+versao: 3
 titulo: Guardando valores
 objetivo: Criar variáveis com =, usá-las no print, distinguir variável de texto e reconhecer nomes inválidos.
 conceitos: [atribuicao, variavel-vs-texto, nomes-variaveis]
@@ -32,8 +32,8 @@ exercicios:
         feedback: As aspas não aparecem na saída.
     resposta: b
     dicas:
-      - A primeira linha guarda o texto Ana na variável chamada nome.
-      - O print recebe a variável, sem aspas.
+      - A primeira linha guarda um valor na variável nome.
+      - O print de uma variável, sem aspas, exibe o valor guardado nela. Depois de cor = "azul", print(cor) exibe azul.
     explicacao: A linha nome = "Ana" guarda o texto Ana na variável nome. O print(nome) exibe o valor guardado, Ana.
 
   - id: u1-l3-e02
@@ -60,7 +60,8 @@ exercicios:
         feedback: O programa funciona. O print recebe um texto comum.
     resposta: b
     dicas:
-      - Com aspas é texto; sem aspas é variável.
+      - Repare nas aspas dentro do print.
+      - Com aspas é texto; sem aspas é variável. print("cor") exibe a palavra cor, mesmo que exista uma variável com esse nome.
     explicacao: Com aspas, "cidade" é um texto como qualquer outro, e o print o exibe como está. Para exibir Recife, seria print(cidade), sem aspas.
 
   - id: u1-l3-e03
@@ -83,8 +84,8 @@ exercicios:
         opcoes: ["idade", "\"idade\"", "Idade"]
         resposta: "idade"
     dicas:
-      - Para guardar um valor, usa-se um único sinal de igual.
-      - O print deve receber a variável sem aspas, escrita igual à primeira linha.
+      - Para guardar um valor numa variável, usa-se um único sinal de igual.
+      - No print, a variável vai sem aspas e escrita exatamente como foi criada, com as mesmas letras maiúsculas e minúsculas.
     explicacao: O sinal = guarda 25 na variável idade. Depois, print(idade) exibe o valor guardado. Com aspas, seria exibido o texto idade; com I maiúsculo, seria outro nome.
 
   - id: u1-l3-e04
@@ -106,7 +107,7 @@ exercicios:
       Brasil
     dicas:
       - Compare o nome criado na linha 1 com o nome usado depois.
-      - Uma letra maiúscula muda o nome.
+      - "Para o Python, uma letra maiúscula muda o nome: nota e Nota são variáveis diferentes."
     explicacao: Pais e pais são nomes diferentes para o Python. Como Pais nunca foi criada, a linha 3 mostra um erro de nome (NameError).
 
   - id: u1-l3-e05
@@ -136,7 +137,8 @@ exercicios:
           print(nome_completo)
     resposta: c
     dicas:
-      - No lugar do espaço, é comum usar _ para separar palavras.
+      - Nomes de variáveis não podem ter espaços nem começar com número.
+      - No lugar do espaço, use _ para separar as palavras, como em data_nascimento.
     explicacao: Nomes de variáveis usam letras, números e _, mas não podem ter espaços nem começar com número. Por isso nome_completo funciona.
 
   - id: u1-l3-e06
@@ -165,8 +167,8 @@ exercicios:
       - [a, c, b, d]
       - [b, a, c, d]
     dicas:
-      - Cada variável precisa aparecer em uma linha com = antes do print que a usa.
-      - O nome da variável no print fica sem aspas.
+      - Cada variável precisa ser criada, com =, antes do print que a usa.
+      - No print, o nome da variável fica sem aspas. Com aspas, o print exibiria o próprio nome, e não o valor guardado.
     explicacao: Cada print só funciona depois que sua variável foi criada. Por isso as atribuições vêm antes dos print que as usam; a ordem entre elas pode variar.
 
   - id: u1-l3-e07
@@ -194,7 +196,8 @@ exercicios:
         feedback: A vírgula do print coloca um espaço entre os valores.
     resposta: a
     dicas:
-      - O primeiro valor é texto; o segundo é uma variável.
+      - O primeiro valor do print é texto; o segundo é uma variável.
+      - A variável é trocada pelo valor guardado nela, e a vírgula coloca um espaço entre os valores.
     explicacao: "O print exibe o texto Pontos: e o valor guardado em pontos, separados por um espaço."
 
 revisao:
@@ -225,6 +228,7 @@ revisao:
     resposta: a
     dicas:
       - Analise cada valor separado pela vírgula.
+      - O valor com aspas é exibido como está; o valor sem aspas é uma variável e mostra o que ela guarda.
     explicacao: O primeiro valor, com aspas, é o texto fruta. O segundo, sem aspas, é a variável, que guarda manga.
 
   - id: u1-l3-r02
@@ -245,6 +249,7 @@ revisao:
       Boa sorte
     dicas:
       - Compare o nome letra por letra.
+      - Se o nome usado não for exatamente igual ao criado, o Python não encontra a variável e mostra um NameError.
     explicacao: Na linha 2 falta uma letra no nome. Para o Python, mesagem é um nome que nunca foi criado, por isso ele mostra um NameError.
 
   - id: u1-l3-r03
@@ -274,4 +279,5 @@ revisao:
     resposta: c
     dicas:
       - Primeiro o Python calcula o lado direito do =.
+      - "A variável guarda o resultado da conta, não a conta: depois de x = 2 + 2, x vale 4."
     explicacao: O Python calcula 3 * 5 e guarda o resultado, 15, na variável total. O print exibe 15.

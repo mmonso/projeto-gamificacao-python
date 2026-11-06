@@ -1,7 +1,7 @@
 id: u2-l4
 unidade: u2
 ordem: 4
-versao: 2
+versao: 3
 titulo: Convertendo valores
 objetivo: Converter valores com str, int e float para juntar textos e fazer contas.
 conceitos: [conversao, erro-tipo]
@@ -32,6 +32,7 @@ exercicios:
     resposta: b
     dicas:
       - Com aspas, os valores são textos.
+      - 'Com textos, o + junta em vez de somar: "1" + "2" forma 12.'
     explicacao: '"5" e "5" são textos, então o + os junta e o resultado é 55.'
 
   - id: u2-l4-e02
@@ -58,6 +59,7 @@ exercicios:
     resposta: b
     dicas:
       - Depois do int, os dois valores são números.
+      - 'O int transforma um texto com algarismos em número inteiro, que pode entrar em contas: int("3") + 1 dá 4.'
     explicacao: int("5") converte o texto no número 5. Somado com 5, o resultado é 10.
 
   - id: u2-l4-e03
@@ -78,6 +80,7 @@ exercicios:
         resposta: "str"
     dicas:
       - Para juntar com +, os dois lados precisam ser texto.
+      - "Cada conversão tem seu nome: str transforma em texto, int em inteiro e float em número com casa decimal."
     explicacao: str(pontos) transforma 50 no texto "50", que pode ser juntado com +. int e float manteriam um número e gerariam TypeError.
 
   - id: u2-l4-e04
@@ -104,7 +107,8 @@ exercicios:
         feedback: Uma conta com float resulta em float, que aparece com .0.
     resposta: a
     dicas:
-      - float("2.5") resulta no número 2.5.
+      - Primeiro o float transforma o texto em número.
+      - "Depois da conversão, a conta é uma multiplicação comum, e float vezes int resulta em float: 1.5 * 2 dá 3.0."
     explicacao: float("2.5") converte o texto em número. Multiplicado por 2, resulta em 5.0.
 
   - id: u2-l4-e05
@@ -125,7 +129,7 @@ exercicios:
       Ano que vem: 31
     dicas:
       - Qual é o tipo de idade?
-      - Um texto precisa ser convertido antes de entrar em uma conta.
+      - 'Um texto precisa ser convertido antes de entrar numa conta: int("7") + 1 dá 8.'
     explicacao: idade guarda o texto "30". Na linha 2, somar texto com número gera TypeError; int(idade) converte antes da soma.
 
   - id: u2-l4-e06
@@ -152,7 +156,8 @@ exercicios:
           3
     resposta: c
     dicas:
-      - Pense no // da lição anterior.
+      - O int não arredonda.
+      - "Ao converter para inteiro, o int simplesmente descarta a parte decimal: int(7.8) dá 7."
     explicacao: Ao converter 3.9 para inteiro, o int descarta a parte decimal. O resultado é 3, não 4.
 
   - id: u2-l4-e07
@@ -179,7 +184,7 @@ exercicios:
       - [a, b]
     dicas:
       - Para a conta, a quantidade precisa virar número.
-      - Para juntar com +, o total precisa virar texto.
+      - Depois da conta, o total precisa virar texto com str para ser juntado com +. Um texto multiplicado por número seria repetido, e não multiplicado.
     explicacao: int(quantidade) permite a multiplicação, e str(total) permite juntar o resultado ao texto. Sem o int, o texto "3" seria repetido; sem o str, o + geraria TypeError.
 
 revisao:
@@ -209,6 +214,7 @@ revisao:
     resposta: b
     dicas:
       - Repare nas aspas.
+      - 'Com textos, o + cola um no outro: "4" + "4" forma 44.'
     explicacao: '"2" e "3" são textos, então o + os junta: 23.'
 
   - id: u2-l4-r02
@@ -230,6 +236,7 @@ revisao:
       Dobro: 20
     dicas:
       - O que acontece quando um texto é multiplicado por um número?
+      - Um texto vezes um número é repetido. Para multiplicar de verdade, converta antes com int, como em int("4") * 2.
     explicacao: Como preco é texto, preco * 2 repete o texto e resulta em 1010. Convertendo com int, a multiplicação dá 20.
 
   - id: u2-l4-r03
@@ -251,4 +258,5 @@ revisao:
         resposta: "str"
     dicas:
       - Os dois lados do + precisam ser texto.
+      - Das opções, só uma transforma um valor em texto. As outras convertem em inteiro ou mostram o tipo.
     explicacao: 'str(idade) transforma 25 em texto, que pode ser juntado com "Idade: ".'

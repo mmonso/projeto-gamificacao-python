@@ -37,8 +37,8 @@ print("Olá, mundo!")
 
   - Feedback: O comando não aparece na tela. Aparece só a mensagem que está entre os parênteses.
 
-- Dica 1: Pense no que a pessoa que usa o programa vê, não no código.
-- Dica 2: As aspas só indicam onde o texto começa e termina.
+- Dica 1: Pense no que aparece para quem usa o programa, não no código escrito.
+- Dica 2: O print mostra só o que está entre as aspas. Por exemplo, print("Oi") exibe Oi, sem aspas e sem a palavra print.
 
 **Explicação:** O print exibe na tela o texto que está entre as aspas. Nem o comando nem as aspas aparecem na saída.
 
@@ -60,8 +60,8 @@ Bom dia
 
 - Lacuna 1: **`print`**, `mostrar`, `Print`
 
-- Dica 1: É o mesmo comando do exercício anterior.
-- Dica 2: O Python diferencia letras maiúsculas de minúsculas.
+- Dica 1: O comando que mostra mensagens na tela vem do inglês e significa imprimir.
+- Dica 2: O Python diferencia maiúsculas de minúsculas, e os comandos dele são escritos todos em minúsculas.
 
 **Explicação:** O comando se chama print, todo em letras minúsculas. O Python não conhece mostrar, e Print com P maiúsculo é outro nome.
 
@@ -99,8 +99,8 @@ print("Segundo")
 
   - Feedback: Cada print termina a linha. O próximo print começa em uma linha nova.
 
-- Dica 1: O Python lê o programa como você lê um texto, de cima para baixo.
-- Dica 2: Cada print exibe sua própria linha.
+- Dica 1: O Python executa as linhas na ordem em que estão escritas.
+- Dica 2: Cada print termina pulando de linha. Dois print seguidos exibem duas linhas, uma embaixo da outra.
 
 **Explicação:** As linhas são executadas de cima para baixo, e cada print exibe uma linha nova. Por isso Primeiro aparece antes de Segundo, em linhas separadas.
 
@@ -124,7 +124,7 @@ Tudo bem?
 Ordens aceitas: a → b
 
 - Dica 1: A primeira linha da saída vem do primeiro print do programa.
-- Dica 2: Um dos blocos não tem aspas. Sem aspas, Oi não é um texto.
+- Dica 2: Texto sempre vai entre aspas. Sem aspas, como em print(Ola), o Python procura algo com esse nome e mostra um erro.
 
 **Explicação:** O programa exibe as linhas na ordem em que os print aparecem. O bloco print(Oi) não tem aspas, então o Python procuraria algo chamado Oi e mostraria um erro.
 
@@ -142,8 +142,8 @@ Conceitos: Ordem de execução, Texto entre aspas. Objetivo: Montar um programa 
 
 Resposta: linha 2 (SyntaxError). Correção: `print("Hoje é o primeiro dia")`
 
-- Dica 1: Confira se cada texto tem aspas no início e no fim.
-- Dica 2: Olhe o final de cada linha, antes do parêntese.
+- Dica 1: Procure um texto que abre aspas mas não fecha.
+- Dica 2: Todo texto precisa de aspas no começo e no fim, como em "Bom dia". Se faltar a do fim, o Python não sabe onde o texto termina.
 
 **Explicação:** Na linha 2, o texto abre aspas mas não fecha. Todo texto precisa de aspas no início e no fim; sem isso, o Python mostra um erro de sintaxe (SyntaxError).
 
@@ -187,8 +187,8 @@ Python é legal
 
   - Feedback: Print com P maiúsculo não é o comando print.
 
-- Dica 1: São necessários três itens: o comando print, os parênteses e as aspas.
-- Dica 2: Confira também as letras maiúsculas e minúsculas.
+- Dica 1: Para exibir um texto, são necessários o comando print, os parênteses e as aspas.
+- Dica 2: Confira cada detalhe: o comando em minúsculas e o texto entre aspas dentro dos parênteses, como em print("Oi").
 
 **Explicação:** Para exibir um texto, use print em minúsculas, com o texto entre aspas dentro dos parênteses.
 
@@ -228,6 +228,7 @@ print("Hora do café")
   - Feedback: Os parênteses fazem parte do comando e não aparecem na saída.
 
 - Dica 1: Só o conteúdo entre as aspas aparece na tela.
+- Dica 2: Aspas e parênteses fazem parte do comando. print("Oi") exibe apenas Oi.
 
 **Explicação:** O print exibe só o texto entre as aspas. Parênteses e aspas fazem parte do comando.
 
@@ -246,8 +247,8 @@ Variação de u1-l1-e05.
 
 Resposta: linha 2 (SyntaxError). Correção: `print('Bom dia')`
 
-- Dica 1: O Python aceita aspas simples ou duplas.
-- Dica 2: Compare a aspa do início com a do fim de cada texto.
+- Dica 1: Compare a aspa do início com a do fim de cada texto.
+- Dica 2: O Python aceita aspas simples ou duplas, mas o texto precisa começar e terminar com o mesmo tipo: 'Oi' ou "Oi".
 
 **Explicação:** O Python aceita textos com aspas simples ou duplas, desde que o texto comece e termine com o mesmo tipo. Na linha 2, ele abre com aspas simples e tenta fechar com duplas.
 
@@ -291,6 +292,7 @@ print("Estudar")
 
 
 - Dica 1: Cada print gera uma linha, na ordem do código.
+- Dica 2: O Python executa de cima para baixo, e cada print começa uma nova linha na tela.
 
 **Explicação:** Cada print exibe uma linha, e as linhas aparecem na mesma ordem dos comandos no programa.
 
@@ -332,7 +334,7 @@ print(2 + 3)
   - Feedback: Com números, o + soma. Ele não junta os algarismos.
 
 - Dica 1: Não há aspas, então não é um texto.
-- Dica 2: O Python calcula a conta e exibe o resultado.
+- Dica 2: Sem aspas, o Python faz a conta antes de exibir. Por exemplo, print(1 + 1) exibe 2.
 
 **Explicação:** Sem aspas, 2 + 3 é uma conta. O Python calcula o resultado e o print exibe 5.
 
@@ -367,7 +369,8 @@ print("2 + 3")
   ```
 
 
-- Dica 1: Lembre o que as aspas significam na lição anterior.
+- Dica 1: Repare: agora a conta está entre aspas.
+- Dica 2: Tudo o que está entre aspas é texto e aparece exatamente como foi escrito. Por exemplo, print("1 + 1") exibe 1 + 1, sem calcular.
 
 **Explicação:** Tudo o que está entre aspas é texto. O print exibe o texto exatamente como foi escrito, sem calcular nada.
 
@@ -390,7 +393,7 @@ Saída esperada:
 - Lacuna 1: **`3 * 4`**, `"3 * 4"`, `3 x 4`
 
 - Dica 1: Para o Python calcular, a conta não pode estar entre aspas.
-- Dica 2: O x não é usado para multiplicar em Python.
+- Dica 2: Em Python, a multiplicação usa o asterisco *. O x não é um símbolo de conta para o Python.
 
 **Explicação:** A conta 3 * 4 sem aspas é calculada e exibe 12. Entre aspas, seria só o texto 3 * 4. Com x, o Python mostraria um erro.
 
@@ -425,8 +428,8 @@ print("Idade:", 30)
 
   - Feedback: A vírgula só separa os valores no código. Ela não aparece na saída.
 
-- Dica 1: A vírgula não aparece na tela.
-- Dica 2: O print coloca algo entre os valores.
+- Dica 1: Repare no que acontece com a vírgula: ela aparece na tela?
+- Dica 2: A vírgula separa os valores dentro do print e não aparece na saída. Entre um valor e outro, o print coloca um espaço.
 
 **Explicação:** Com vírgula, o print exibe os valores na mesma linha, separados por um espaço. A vírgula não aparece na saída.
 
@@ -449,8 +452,8 @@ Fim
 
 Ordens aceitas: a → b
 
-- Dica 1: A primeira linha precisa mostrar o resultado da conta, não a conta.
-- Dica 2: Para ser calculada, a conta não pode estar entre aspas.
+- Dica 1: A primeira linha da saída mostra o resultado da conta, não a conta.
+- Dica 2: Uma conta sem aspas é calculada; entre aspas, ela vira texto. Por exemplo, print("Valor:", 2 + 2) exibe Valor: 4.
 
 **Explicação:** Em print("Total:", 10 + 5), o texto vem entre aspas e a conta fica sem aspas, então o Python exibe o resultado 15. Depois, print("Fim") exibe a segunda linha.
 
@@ -474,8 +477,8 @@ Soma: 8
 
 Resposta: linha 2 (saida_incorreta). Correção: `print("Soma:", 5 + 3)`
 
-- Dica 1: A primeira linha da saída está certa.
-- Dica 2: Uma conta entre aspas não é calculada.
+- Dica 1: A primeira linha da saída já está certa. O problema está na conta.
+- Dica 2: Entre aspas, uma conta vira texto e não é calculada: print("1 + 1") exibe 1 + 1, e não 2.
 
 **Explicação:** Na linha 2, a conta 5 + 3 está entre aspas e é exibida como texto. Sem as aspas, o Python calcula e exibe 8.
 
@@ -512,7 +515,8 @@ Saída esperada:
 
   - Feedback: Entre aspas, a vírgula faz parte do texto e aparece na saída.
 
-- Dica 1: Para exibir os dois números lado a lado, use a vírgula do print.
+- Dica 1: Na saída, os dois números aparecem lado a lado, separados por um espaço, sem conta.
+- Dica 2: A vírgula do print exibe vários valores na mesma linha, com um espaço entre eles. Já o + soma os números.
 
 **Explicação:** Em print(10, 20), a vírgula separa dois valores, e o print os exibe com um espaço entre eles.
 
@@ -552,6 +556,7 @@ print(10 - 4)
   - Feedback: O sinal - faz uma subtração.
 
 - Dica 1: É uma conta sem aspas.
+- Dica 2: Sem aspas, o Python calcula antes de exibir: print(9 - 2) exibe 7.
 
 **Explicação:** Sem aspas, 10 - 4 é uma conta. O print exibe o resultado, 6.
 
@@ -589,6 +594,7 @@ print("4 * 2")
   - Feedback: O print exibe o texto exatamente como foi escrito.
 
 - Dica 1: Repare nas aspas.
+- Dica 2: Entre aspas, tudo é texto, inclusive contas: print("9 - 2") exibe 9 - 2.
 
 **Explicação:** Como está entre aspas, 4 * 2 é um texto. O print exibe o texto como foi escrito.
 
@@ -626,6 +632,7 @@ print("Ano:", 2000 + 26)
 
 
 - Dica 1: Primeiro o Python calcula a conta; depois o print junta os valores.
+- Dica 2: A vírgula não aparece na tela: o print coloca um espaço entre os valores. print("Total:", 1 + 1) exibe Total: 2.
 
 **Explicação:** O Python calcula 2000 + 26 e o print exibe o texto e o resultado separados por um espaço.
 
@@ -667,8 +674,8 @@ print(nome)
 
   - Feedback: As aspas não aparecem na saída.
 
-- Dica 1: A primeira linha guarda o texto Ana na variável chamada nome.
-- Dica 2: O print recebe a variável, sem aspas.
+- Dica 1: A primeira linha guarda um valor na variável nome.
+- Dica 2: O print de uma variável, sem aspas, exibe o valor guardado nela. Depois de cor = "azul", print(cor) exibe azul.
 
 **Explicação:** A linha nome = "Ana" guarda o texto Ana na variável nome. O print(nome) exibe o valor guardado, Ana.
 
@@ -699,7 +706,8 @@ print("cidade")
 - ▫️ c: O programa mostra um erro
   - Feedback: O programa funciona. O print recebe um texto comum.
 
-- Dica 1: Com aspas é texto; sem aspas é variável.
+- Dica 1: Repare nas aspas dentro do print.
+- Dica 2: Com aspas é texto; sem aspas é variável. print("cor") exibe a palavra cor, mesmo que exista uma variável com esse nome.
 
 **Explicação:** Com aspas, "cidade" é um texto como qualquer outro, e o print o exibe como está. Para exibir Recife, seria print(cidade), sem aspas.
 
@@ -723,8 +731,8 @@ Saída esperada:
 - Lacuna 1: **`=`**, `==`, `=>`
 - Lacuna 2: **`idade`**, `"idade"`, `Idade`
 
-- Dica 1: Para guardar um valor, usa-se um único sinal de igual.
-- Dica 2: O print deve receber a variável sem aspas, escrita igual à primeira linha.
+- Dica 1: Para guardar um valor numa variável, usa-se um único sinal de igual.
+- Dica 2: No print, a variável vai sem aspas e escrita exatamente como foi criada, com as mesmas letras maiúsculas e minúsculas.
 
 **Explicação:** O sinal = guarda 25 na variável idade. Depois, print(idade) exibe o valor guardado. Com aspas, seria exibido o texto idade; com I maiúsculo, seria outro nome.
 
@@ -743,7 +751,7 @@ Conceitos: Criar variáveis, Variável ou texto. Objetivo: Escrever uma atribui�
 Resposta: linha 3 (NameError). Correção: `print(pais)`
 
 - Dica 1: Compare o nome criado na linha 1 com o nome usado depois.
-- Dica 2: Uma letra maiúscula muda o nome.
+- Dica 2: Para o Python, uma letra maiúscula muda o nome: nota e Nota são variáveis diferentes.
 
 **Explicação:** Pais e pais são nomes diferentes para o Python. Como Pais nunca foi criada, a linha 3 mostra um erro de nome (NameError).
 
@@ -783,7 +791,8 @@ Maria
   ```
 
 
-- Dica 1: No lugar do espaço, é comum usar _ para separar palavras.
+- Dica 1: Nomes de variáveis não podem ter espaços nem começar com número.
+- Dica 2: No lugar do espaço, use _ para separar as palavras, como em data_nascimento.
 
 **Explicação:** Nomes de variáveis usam letras, números e _, mas não podem ter espaços nem começar com número. Por isso nome_completo funciona.
 
@@ -808,8 +817,8 @@ Preço: 12
 
 Ordens aceitas: a → b → c → d; a → c → b → d; b → a → c → d
 
-- Dica 1: Cada variável precisa aparecer em uma linha com = antes do print que a usa.
-- Dica 2: O nome da variável no print fica sem aspas.
+- Dica 1: Cada variável precisa ser criada, com =, antes do print que a usa.
+- Dica 2: No print, o nome da variável fica sem aspas. Com aspas, o print exibiria o próprio nome, e não o valor guardado.
 
 **Explicação:** Cada print só funciona depois que sua variável foi criada. Por isso as atribuições vêm antes dos print que as usam; a ordem entre elas pode variar.
 
@@ -845,7 +854,8 @@ print("Pontos:", pontos)
 
   - Feedback: A vírgula do print coloca um espaço entre os valores.
 
-- Dica 1: O primeiro valor é texto; o segundo é uma variável.
+- Dica 1: O primeiro valor do print é texto; o segundo é uma variável.
+- Dica 2: A variável é trocada pelo valor guardado nela, e a vírgula coloca um espaço entre os valores.
 
 **Explicação:** O print exibe o texto Pontos: e o valor guardado em pontos, separados por um espaço.
 
@@ -886,6 +896,7 @@ print("fruta", fruta)
   - Feedback: O segundo valor está sem aspas, então é a variável, que guarda manga.
 
 - Dica 1: Analise cada valor separado pela vírgula.
+- Dica 2: O valor com aspas é exibido como está; o valor sem aspas é uma variável e mostra o que ela guarda.
 
 **Explicação:** O primeiro valor, com aspas, é o texto fruta. O segundo, sem aspas, é a variável, que guarda manga.
 
@@ -905,6 +916,7 @@ Variação de u1-l3-e04.
 Resposta: linha 2 (NameError). Correção: `print(mensagem)`
 
 - Dica 1: Compare o nome letra por letra.
+- Dica 2: Se o nome usado não for exatamente igual ao criado, o Python não encontra a variável e mostra um NameError.
 
 **Explicação:** Na linha 2 falta uma letra no nome. Para o Python, mesagem é um nome que nunca foi criado, por isso ele mostra um NameError.
 
@@ -943,6 +955,7 @@ print(total)
 
 
 - Dica 1: Primeiro o Python calcula o lado direito do =.
+- Dica 2: A variável guarda o resultado da conta, não a conta: depois de x = 2 + 2, x vale 4.
 
 **Explicação:** O Python calcula 3 * 5 e guarda o resultado, 15, na variável total. O print exibe 15.
 
@@ -986,8 +999,8 @@ print(cor)
   ```
 
 
-- Dica 1: A variável guarda só um valor por vez.
-- Dica 2: Quando o print é executado, qual foi o último valor guardado?
+- Dica 1: Uma variável guarda só um valor por vez.
+- Dica 2: Uma nova atribuição apaga o valor antigo. Depois de x = 1 e x = 2, x vale 2.
 
 **Explicação:** A segunda atribuição substitui o valor anterior. Quando o print é executado, cor guarda verde.
 
@@ -1029,6 +1042,7 @@ print(nivel)
   - Feedback: A linha 3 muda o valor antes do segundo print.
 
 - Dica 1: Siga as linhas de cima para baixo, anotando o valor de nivel.
+- Dica 2: Cada print mostra o valor que a variável tem naquele momento. Mudar a variável depois não altera o que já foi exibido.
 
 **Explicação:** As linhas são executadas em ordem. O primeiro print acontece quando nivel vale 1; o segundo, depois da mudança para 2.
 
@@ -1066,7 +1080,7 @@ print(pontos)
   - Feedback: A conta está sem aspas, então é calculada.
 
 - Dica 1: Primeiro o Python calcula o lado direito do =.
-- Dica 2: Na linha 2, pontos ainda vale 10.
+- Dica 2: Em x = x + 1, o Python usa o valor atual de x, soma 1 e guarda o resultado de volta em x.
 
 **Explicação:** Na linha 2, o Python calcula pontos + 5 com o valor atual, 10, e guarda 15 de volta em pontos.
 
@@ -1090,8 +1104,8 @@ Saída esperada:
 
 - Lacuna 1: **`vidas + 1`**, `vidas - 1`, `"vidas + 1"`
 
-- Dica 1: O novo valor é o valor atual mais 1.
-- Dica 2: A conta não pode estar entre aspas.
+- Dica 1: O novo valor de vidas é o valor atual mais 1.
+- Dica 2: Para atualizar uma variável, use o próprio nome no lado direito, sem aspas: x = x + 2 aumenta x em 2.
 
 **Explicação:** vidas = vidas + 1 calcula 3 + 1 e guarda 4 em vidas. Entre aspas, a conta viraria texto.
 
@@ -1116,8 +1130,8 @@ Saldo: 70
 
 Resposta: linha 3 (saida_incorreta). Correção: `saldo = saldo - gasto`
 
-- Dica 1: Um gasto deve diminuir o saldo.
-- Dica 2: Veja qual linha muda o valor de saldo.
+- Dica 1: Um gasto deve diminuir o saldo. Procure a linha que muda o saldo.
+- Dica 2: Para descontar um valor, a conta usa o sinal de menos, como em total = total - 10.
 
 **Explicação:** A linha 3 soma o gasto ao saldo. Para descontar, a conta deve ser saldo - gasto, que resulta em 70.
 
@@ -1143,7 +1157,7 @@ Depois: 6
 Ordens aceitas: a → b → c → d
 
 - Dica 1: O primeiro print precisa acontecer antes da atualização.
-- Dica 2: No print, a variável fica sem aspas.
+- Dica 2: As linhas rodam em ordem: crie a variável, exiba, atualize e exiba de novo. No print, a variável fica sem aspas.
 
 **Explicação:** A variável é criada, exibida, atualizada e exibida de novo. Se a atualização viesse antes do primeiro print, os dois mostrariam 6.
 
@@ -1182,7 +1196,7 @@ print(preco_antigo)
   - Feedback: Sem aspas, preco_antigo é uma variável, e o print exibe o valor dela.
 
 - Dica 1: Na linha 2, qual valor preco guarda?
-- Dica 2: A linha 3 muda só preco.
+- Dica 2: Copiar uma variável guarda o valor daquele momento. Se a original mudar depois, a cópia continua com o valor antigo.
 
 **Explicação:** Na linha 2, preco_antigo recebe o valor que preco tinha naquele momento, 4. A mudança de preco na linha 3 não altera preco_antigo.
 
@@ -1224,6 +1238,7 @@ print(nome)
   - Feedback: A variável guarda só o último valor atribuído.
 
 - Dica 1: Qual foi o último valor guardado antes do print?
+- Dica 2: Uma nova atribuição substitui o valor antigo; a variável não guarda os dois.
 
 **Explicação:** A segunda linha substitui o valor de nome. No momento do print, nome guarda Lia.
 
@@ -1264,6 +1279,7 @@ print(moedas)
   - Feedback: As linhas 2 e 3 alteram o valor de moedas antes do print.
 
 - Dica 1: Anote o valor de moedas depois de cada linha.
+- Dica 2: Cada linha usa o valor atual: se x vale 10, x = x - 1 deixa x com 9, e repetir a linha deixa com 8.
 
 **Explicação:** A linha 2 muda moedas de 20 para 15, e a linha 3, de 15 para 10.
 
@@ -1304,6 +1320,7 @@ print(copia, meta)
 
 
 - Dica 1: A linha 2 copia o valor de meta naquele momento.
+- Dica 2: Mudar meta depois não muda copia: cada variável guarda o seu próprio valor.
 
 **Explicação:** copia recebe 3 na linha 2. Depois, só meta é atualizada para 4. Por isso o print exibe 3 e 4.
 
@@ -1335,7 +1352,7 @@ Bia 28
 - Lacuna 2: **`28`**, `idade`, `"vinte e oito"`
 
 - Dica 1: Texto precisa de aspas; número não.
-- Dica 2: Sem aspas, Bia e nome seriam variáveis, e elas ainda não existem nesse ponto do programa.
+- Dica 2: Sem aspas, o Python entende um nome como variável, e ainda não existe nenhuma variável chamada Bia nesse ponto do programa.
 
 **Explicação:** O nome é um texto, então vai entre aspas. A idade é um número e fica sem aspas. O print exibe os dois valores separados por espaço.
 
@@ -1376,6 +1393,7 @@ print("Idade:", idade)
   - Feedback: Cada print exibe sua própria linha.
 
 - Dica 1: Em cada print, o primeiro valor é texto e o segundo é variável.
+- Dica 2: A variável é trocada pelo valor guardado, e cada print exibe uma linha separada.
 
 **Explicação:** Cada print exibe um rótulo entre aspas e o valor de uma variável, em linhas separadas.
 
@@ -1395,6 +1413,7 @@ Conceitos: Vários valores no print, Variável ou texto. Objetivo: Prever a saí
 Resposta: linha 4 (NameError). Correção: `print("Cidade:", cidade)`
 
 - Dica 1: Compare os nomes criados com os nomes usados.
+- Dica 2: O Python diferencia maiúsculas de minúsculas: usar um nome com uma letra diferente é usar um nome que não existe.
 
 **Explicação:** A variável criada foi cidade, com c minúsculo. Na linha 4, Cidade é outro nome, que não existe, e o Python mostra um NameError.
 
@@ -1421,7 +1440,7 @@ Cidade: Salvador
 Ordens aceitas: a → b → c → d → e; a → c → b → d → e; a → c → d → b → e; b → a → c → d → e; b → c → a → d → e; c → a → b → d → e; c → a → d → b → e; c → b → a → d → e
 
 - Dica 1: Os print aparecem na mesma ordem das linhas da saída.
-- Dica 2: Cada variável precisa ser criada antes do print que a usa.
+- Dica 2: Cada variável precisa ser criada antes do print que a usa. A posição das atribuições pode variar, desde que venham antes.
 
 **Explicação:** Os três print seguem a ordem da saída, e cada variável é criada antes de ser usada. As atribuições podem vir em posições diferentes, desde que antes do seu print.
 
@@ -1446,8 +1465,8 @@ Idade: 29
 - Lacuna 1: **`idade + 1`**, `idade - 1`, `idade`
 - Lacuna 2: **`idade`**, `"idade"`, `Idade`
 
-- Dica 1: O novo valor é a idade atual mais 1.
-- Dica 2: No print, use a variável sem aspas.
+- Dica 1: Depois do aniversário, a idade é a atual mais 1.
+- Dica 2: Atualize usando o próprio nome, como em x = x + 1. No print, a variável vai sem aspas e com o mesmo nome criado.
 
 **Explicação:** idade = idade + 1 guarda 29 em idade. Depois, o print exibe o rótulo e o valor atualizado.
 
@@ -1487,7 +1506,8 @@ Cidade: Salvador
   ```
 
 
-- Dica 1: Confira a ordem das linhas e as aspas.
+- Dica 1: Confira a ordem das linhas e as aspas no print.
+- Dica 2: Uma variável só pode ser usada depois de criada, e no print ela fica sem aspas para mostrar o valor guardado.
 
 **Explicação:** A variável precisa ser criada antes de ser usada e aparecer no print sem aspas.
 
@@ -1523,7 +1543,7 @@ Cidade: Salvador
 Ordens aceitas: a → b → c → d
 
 - Dica 1: Siga a ordem das linhas da saída.
-- Dica 2: Um dos blocos exibe o texto nome em vez do valor da variável.
+- Dica 2: Repare nas aspas: print("Nome:", "nome") exibiria a palavra nome, e não o valor da variável.
 
 **Explicação:** Cada print exibe uma linha do cartão, na ordem da saída. O bloco com "nome" entre aspas exibiria a palavra nome, não Bia.
 
@@ -1545,7 +1565,8 @@ Variação de u1-l5-e03.
 
 Resposta: linha 3 (SyntaxError). Correção: `print("Cidade:", "Natal")`
 
-- Dica 1: Confira se cada texto abre e fecha aspas.
+- Dica 1: Confira se cada texto abre e fecha as próprias aspas.
+- Dica 2: Num print com vários valores, cada texto tem as suas aspas, e a vírgula fica fora delas: print("A", "B").
 
 **Explicação:** Na linha 3, o texto Cidade: não fecha as aspas antes da vírgula. Cada texto do print precisa das próprias aspas.
 

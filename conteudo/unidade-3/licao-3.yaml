@@ -1,7 +1,7 @@
 id: u3-l3
 unidade: u3
 ordem: 3
-versao: 2
+versao: 3
 titulo: E, ou, não
 objetivo: Combinar condições com and, or e not.
 conceitos: [logicos, booleanos]
@@ -32,6 +32,7 @@ exercicios:
     resposta: b
     dicas:
       - Os dois lados são True?
+      - O and só é verdadeiro quando os dois lados são verdadeiros. Basta um lado False para o resultado ser False.
     explicacao: Com and, basta um lado ser False para o resultado ser False.
 
   - id: u3-l3-e02
@@ -59,6 +60,7 @@ exercicios:
     resposta: a
     dicas:
       - Algum dos lados é True?
+      - O or é verdadeiro quando pelo menos um lado é verdadeiro. Só dá False se os dois forem False.
     explicacao: Com or, um lado verdadeiro é suficiente. Como o primeiro é True, o resultado é True.
 
   - id: u3-l3-e03
@@ -85,6 +87,7 @@ exercicios:
     resposta: b
     dicas:
       - Qual é o contrário de True?
+      - "O not inverte o valor: transforma True em False e False em True."
     explicacao: O not inverte o valor lógico. O contrário de True é False.
 
   - id: u3-l3-e04
@@ -114,6 +117,7 @@ exercicios:
     resposta: a
     dicas:
       - Avalie cada lado do and separadamente.
+      - Primeiro descubra se idade >= 18 é True ou False. O and só é True quando os dois lados são True.
     explicacao: idade >= 18 é True, e tem_ingresso também é True. Com os dois verdadeiros, o and resulta em True.
 
   - id: u3-l3-e05
@@ -135,6 +139,7 @@ exercicios:
         resposta: "or"
     dicas:
       - Basta uma das condições ser verdadeira.
+      - O or precisa de pelo menos um lado verdadeiro; o and precisa dos dois. O + não combina condições.
     explicacao: chuva or sol é True, porque chuva é True. Com and, o resultado seria False; com +, o Python faria uma soma.
 
   - id: u3-l3-e06
@@ -155,6 +160,7 @@ exercicios:
       False
     dicas:
       - As duas exigências precisam ser cumpridas.
+      - Quando as duas condições são obrigatórias, use and. O or aceita qualquer uma delas sozinha.
     explicacao: As duas condições são obrigatórias, então o correto é and. Com or, a nota sozinha já tornava o resultado True.
 
   - id: u3-l3-e07
@@ -188,6 +194,7 @@ exercicios:
     resposta: b
     dicas:
       - Uma condição verdadeira basta?
+      - Com or, basta um lado True; com and, os dois precisam ser True; o not inverte um valor.
     explicacao: Com or, basta um dos lados ser True. Como feriado é True, o resultado é True.
 
 revisao:
@@ -217,6 +224,7 @@ revisao:
     resposta: b
     dicas:
       - Algum lado é True?
+      - O or só resulta em False quando os dois lados são False.
     explicacao: Nenhum dos lados é True, então o or resulta em False.
 
   - id: u3-l3-r02
@@ -245,6 +253,7 @@ revisao:
     resposta: a
     dicas:
       - Qual é o contrário de False?
+      - "O not inverte o valor lógico: o que era falso vira verdadeiro."
     explicacao: O not inverte False, resultando em True.
 
   - id: u3-l3-r03
@@ -275,4 +284,5 @@ revisao:
     resposta: b
     dicas:
       - Avalie cada lado do and.
+      - Com and, basta um dos lados ser False para o resultado inteiro ser False.
     explicacao: idade >= 18 é True, mas tem_carteira é False. Com and, o resultado é False.
