@@ -3,14 +3,15 @@
 // O servidor corrige e decide; a interface só mostra o que ele confirmou.
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useRef, useState, type CSSProperties } from "react";
 import { BotaoRecuperar } from "@/app/licao/[id]/botao";
 import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
+import { textoSeguidas, tituloDoFeedback } from "@/componentes/licao/frases";
 import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
 import { motorDaSessao, type Motor } from "@/componentes/licao/motor";
 import { Resultado } from "@/componentes/licao/Resultado";
-import { tocar } from "@/componentes/licao/som";
+import { liberarSom, tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
 import type { ErroApi, ResultadoConclusao, ResultadoSubmissao } from "@/modulos/aprendizagem/contrato";
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
@@ -34,7 +35,9 @@ type Props = {
   criarMotor?: () => Motor;
 };
 
-const TITULOS_ACERTO = ["Muito bem!", "Isso mesmo!", "Correto!"];
+/** Faíscas do acerto, em volta do mascote; somem com movimento reduzido. */
+const FAISCAS = Array.from({ length: 8 }, (_, i) => ({ "--angulo": `${i * 45}deg` }) as CSSProperties);
+
 export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCoracoes, somInicial, demo = false, criarMotor }: Props) {
   const router = useRouter();
   const chave = `sibi-resposta:${sessaoId}`;
@@ -53,6 +56,9 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   const [som, setSom] = useState(somInicial);
   const [confirmarSaida, setConfirmarSaida] = useState(false);
   const [anuncio, setAnuncio] = useState("");
+  /** Respostas certas seguidas nesta tela e quantos feedbacks já apareceram, para variar as frases. */
+  const [seguidas, setSeguidas] = useState(0);
+  const [vez, setVez] = useState(0);
 
   const enunciadoRef = useRef<HTMLHeadingElement>(null);
   const feedbackRef = useRef<HTMLParagraphElement>(null);
@@ -61,6 +67,19 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   useEffect(() => {
     somRef.current = som;
   }, [som]);
+  // O áudio só pode começar dentro de um toque ou tecla: cada gesto na lição o deixa liberado (som.ts).
+  useEffect(() => {
+    const liberar = () => {
+      if (somRef.current) liberarSom();
+    };
+    document.addEventListener("pointerdown", liberar, true);
+    document.addEventListener("keydown", liberar, true);
+    return () => {
+      document.removeEventListener("pointerdown", liberar, true);
+      document.removeEventListener("keydown", liberar, true);
+    };
+  }, []);
+  const seguidasRef = useRef(0);
   /**
    * Id do envio do exercício mostrado, até o aluno tocar Continuar. Tentar novamente o reusa mesmo que a
    * resposta tenha mudado: se o primeiro envio chegou ao servidor, vale o resultado gravado (FL-04, passo 2).
@@ -139,9 +158,13 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
       setResultado(res);
       setProgresso({ resolvidos: res.resolvidos, total: res.total });
       if (res.coracoes !== null) setCoracoes(res.coracoes);
+      const agora = res.correta ? seguidasRef.current + 1 : 0;
+      seguidasRef.current = agora;
+      setSeguidas(agora);
+      setVez((v) => v + 1);
       setFase("feedback");
-      setAnuncio(res.correta ? "Resposta correta." : "Resposta incorreta.");
-      if (somRef.current) tocar(res.correta ? "acerto" : "erro");
+      setAnuncio(res.correta ? `Resposta correta.${textoSeguidas(agora) ? ` ${textoSeguidas(agora)}` : ""}` : "Resposta incorreta.");
+      if (somRef.current) tocar(res.correta ? "acerto" : "erro", agora);
     },
     [motor, chave, recarregar, tratarErro],
   );
@@ -204,6 +227,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
 
   function alternarSom() {
     const novo = !som;
+    if (novo) liberarSom();
     setSom(novo);
     void motor.som(novo);
   }
@@ -259,7 +283,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
           <Icone nome="x" />
         </button>
         <div className="barra-progresso" role="progressbar" aria-label="Progresso da lição" aria-valuemin={0} aria-valuemax={progresso.total} aria-valuenow={progresso.resolvidos}>
-          <span style={{ width: `${percentual}%` }} />
+          <span style={{ width: `${percentual}%` }}>{progresso.resolvidos > 0 && <i key={progresso.resolvidos} className="brilho" aria-hidden="true" />}</span>
         </div>
         <button type="button" className="botao-icone" aria-label={som ? "Desligar som" : "Ligar som"} aria-pressed={som} onClick={alternarSom}>
           <Icone nome={som ? "som" : "semSom"} />
@@ -285,7 +309,14 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
             <h1 id="enunciado" ref={enunciadoRef} tabIndex={-1}>
               {exercicio.enunciado}
             </h1>
-            <AreaExercicio ex={exercicio} resposta={resposta} aoMudar={mudarResposta} anunciar={setAnuncio} bloqueado={bloqueado} />
+            <AreaExercicio
+              ex={exercicio}
+              resposta={resposta}
+              aoMudar={mudarResposta}
+              anunciar={setAnuncio}
+              bloqueado={bloqueado}
+              correcao={fase === "feedback" && resultado ? { correta: resultado.correta, solucao: resultado.solucao } : null}
+            />
             {dicas.length > 0 && (
               <div className="dicas" aria-live="polite">
                 {dicas.map((d, i) => (
@@ -312,12 +343,31 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
         <div className={`rodape-licao ${resultado.correta ? "acerto" : "erro"}`}>
           <div className="rodape-conteudo surgir">
             <div className="feedback">
-              <p className="feedback-titulo" ref={feedbackRef} tabIndex={-1}>
-                <span className="selo">
-                  <Icone nome={resultado.correta ? "check" : "x"} />
-                </span>
-                {resultado.correta ? TITULOS_ACERTO[resultado.resolvidos % TITULOS_ACERTO.length] : "Ainda não."}
-              </p>
+              <div className="feedback-cabeca">
+                <div className="feedback-mascote" aria-hidden="true">
+                  <Mascote humor={resultado.correta ? "comemoracao" : "incentivo"} tamanho="mini" />
+                  {resultado.correta && (
+                    <span className="faiscas">
+                      {FAISCAS.map((estilo, i) => (
+                        <i key={i} style={estilo} />
+                      ))}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <p className="feedback-titulo" ref={feedbackRef} tabIndex={-1}>
+                    <span className="selo">
+                      <Icone nome={resultado.correta ? "check" : "x"} />
+                    </span>
+                    {tituloDoFeedback(resultado.correta, vez - 1)}
+                  </p>
+                  {resultado.correta && textoSeguidas(seguidas) && (
+                    <p className="selo-seguidas">
+                      <Icone nome="chama" pequeno /> {textoSeguidas(seguidas)}
+                    </p>
+                  )}
+                </div>
+              </div>
               {!resultado.correta && resultado.feedbackOpcao && (
                 <p className="feedback-texto">
                   <strong>{resultado.feedbackOpcao}</strong>

@@ -34,17 +34,56 @@ export function celebracoesDe(c: ResultadoConclusao): Celebracao[] {
 
 const CORES = ["#FFC23D", "#2FA85E", "#2367C9", "#D93A3A"];
 
+/** Confete: contínuo nas celebrações, uma única chuva leve no resultado. Some com movimento reduzido. */
+function Confete({ quantidade, leve = false }: { quantidade: number; leve?: boolean }) {
+  return (
+    <>
+      {Array.from({ length: quantidade }, (_, i) => (
+        <span
+          key={i}
+          className={`confete ${leve ? "leve" : ""}`}
+          aria-hidden="true"
+          style={{ left: `${(i * 41) % 100}%`, background: CORES[i % 4], animationDelay: `${(i % 8) * (leve ? 0.12 : 0.25)}s` }}
+        />
+      ))}
+    </>
+  );
+}
+
+const reduzirMovimento = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** Número que sobe até o valor final; com movimento reduzido, já aparece pronto. O leitor de tela ouve só o final. */
+function Contador({ valor, atraso = 0 }: { valor: number; atraso?: number }) {
+  const [mostrado, setMostrado] = useState(() => (reduzirMovimento() ? valor : 0));
+  useEffect(() => {
+    if (reduzirMovimento()) return;
+    let quadro = 0;
+    const inicio = performance.now() + atraso;
+    const passo = (agora: number) => {
+      const p = Math.min(1, Math.max(0, (agora - inicio) / 700));
+      setMostrado(Math.round(valor * (1 - (1 - p) ** 3)));
+      if (p < 1) quadro = requestAnimationFrame(passo);
+    };
+    quadro = requestAnimationFrame(passo);
+    return () => cancelAnimationFrame(quadro);
+  }, [valor, atraso]);
+  return (
+    <>
+      <span aria-hidden="true">{mostrado}</span>
+      <span className="so-leitor">{valor}</span>
+    </>
+  );
+}
+
 export function TelaCelebracao({ celebracao, aoContinuar, som }: { celebracao: Celebracao; aoContinuar: () => void; som: boolean }) {
   const botao = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     botao.current?.focus();
-    if (som) tocar("conclusao");
+    if (som) tocar("celebracao");
   }, [celebracao, som]);
   return (
     <div className="celebracao" role="dialog" aria-modal="true" aria-labelledby="titulo-celebracao">
-      {Array.from({ length: 24 }, (_, i) => (
-        <span key={i} className="confete" aria-hidden="true" style={{ left: `${(i * 41) % 100}%`, background: CORES[i % 4], animationDelay: `${(i % 8) * 0.25}s` }} />
-      ))}
+      <Confete quantidade={24} />
       <div className="conteudo surgir">
         <Mascote humor="comemoracao" tamanho="grande" />
         <h2 id="titulo-celebracao">{celebracao.titulo}</h2>
@@ -85,13 +124,24 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
   }
 
   const metaCumprida = conclusao.meta.cumpridaAgora;
+  const perfeita = conclusao.total > 0 && conclusao.acertosPrimeira === conclusao.total;
+  const acendeu = !demo && conclusao.sequenciaAumentou && conclusao.sequencia > 0;
+  const porcentagemMeta = Math.min(100, Math.round((conclusao.meta.feitas / Math.max(1, conclusao.meta.meta)) * 100));
   return (
-    <main className="tela-centro text-center" id="conteudo-principal">
-      <Mascote humor="comemoracao" tamanho="grande" />
+    <main className="tela-centro text-center resultado" id="conteudo-principal">
+      <Confete quantidade={14} leve />
+      <div className="resultado-mascote">
+        <Mascote humor="comemoracao" tamanho="grande" />
+      </div>
       <h1 ref={tituloRef} tabIndex={-1} className="focus:outline-none">
         {TITULOS[conclusao.tipo]}
       </h1>
       {conclusao.licaoId && <p className="subtitulo">{titulo}</p>}
+      {perfeita && (
+        <p className="selo-perfeita">
+          <Icone nome="estrela" pequeno /> {conclusao.tipo === "principal" ? "Lição perfeita!" : "Tudo certo de primeira!"}
+        </p>
+      )}
       {conclusao.coracoesRecuperados > 0 && (
         <p className="subtitulo">
           <span className="indicador indicador-coracoes">
@@ -104,34 +154,43 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
         <div className="estatistica xp">
           <p className="topo">XP</p>
           <p className="valor">
-            <Icone nome="raio" pequeno />+{conclusao.xp}
+            <Icone nome="raio" pequeno />
+            <span>
+              +<Contador valor={conclusao.xp} atraso={250} />
+            </span>
           </p>
           {demo && <span className="selo-provisorio">provisório</span>}
         </div>
         <div className="estatistica acertos">
           <p className="topo">De primeira</p>
           <p className="valor">
-            {conclusao.acertosPrimeira}/{conclusao.total}
+            <span>
+              <Contador valor={conclusao.acertosPrimeira} atraso={450} />/{conclusao.total}
+            </span>
           </p>
         </div>
-        <div className="estatistica sequencia">
+        <div className={`estatistica sequencia ${acendeu ? "acendeu" : ""}`}>
           <p className="topo">Sequência</p>
           <p className="valor">
             <Icone nome="chama" pequeno />
             {demo ? "–" : conclusao.sequencia}
           </p>
+          {acendeu && <span className="mais-um">+1 dia</span>}
         </div>
       </div>
       {demo && <p>Crie uma conta para salvar este XP, começar sua sequência e liberar a próxima lição.</p>}
-      {!demo && metaCumprida && (
-        <p className="cartao cartao-destaque flex items-center justify-center gap-2 font-extrabold">
-          <Icone nome="estrela" pequeno /> Meta do dia cumprida!
-        </p>
-      )}
-      {!demo && !metaCumprida && conclusao.meta.feitas < conclusao.meta.meta && (
-        <p className="ajuda">
-          Meta do dia: {conclusao.meta.feitas} de {conclusao.meta.meta} {plural(conclusao.meta.meta, "sessão", "sessões")}.
-        </p>
+      {!demo && (metaCumprida || conclusao.meta.feitas < conclusao.meta.meta) && (
+        <div className={`meta-resultado ${metaCumprida ? "cumprida" : ""}`}>
+          <p className="meta-resultado-texto">
+            <Icone nome="estrela" pequeno />
+            {metaCumprida
+              ? "Meta do dia cumprida!"
+              : `Meta do dia: ${conclusao.meta.feitas} de ${conclusao.meta.meta} ${plural(conclusao.meta.meta, "sessão", "sessões")}`}
+          </p>
+          <div className="progresso-meta" aria-hidden="true">
+            <span style={{ width: `${porcentagemMeta}%` }} />
+          </div>
+        </div>
       )}
       {!demo && conclusao.primeiraConclusao && conclusao.proximaLicaoId && <p className="mensagem-aviso">A próxima lição foi liberada.</p>}
       {conclusao.limitePratica && <p>Você já recebeu XP de prática três vezes hoje. Pode continuar praticando, sem XP.</p>}

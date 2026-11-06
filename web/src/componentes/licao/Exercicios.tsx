@@ -19,17 +19,31 @@ export function respostaCompleta(ex: ExercicioPublico, r: Resposta | null): r is
   return true;
 }
 
+/** Resultado da verificação, mostrado na própria resposta durante o feedback. */
+export type Correcao = { correta: boolean; solucao: Solucao };
+
 type Props = {
   ex: ExercicioPublico;
   resposta: Resposta | null;
   aoMudar: (r: Resposta | null) => void;
   anunciar: (texto: string) => void;
   bloqueado: boolean;
+  correcao?: Correcao | null;
 };
+
+/**
+ * Estado visual de uma escolha depois da verificação: a escolhida fica certa ou errada; se o aluno errou,
+ * a correta aparece como revelada.
+ */
+export function estadoDaEscolha(escolhida: boolean, correta: boolean): "certa" | "errada" | "revelada" | "" {
+  if (escolhida) return correta ? "certa" : "errada";
+  return correta ? "revelada" : "";
+}
 
 const LETRAS = "ABCD";
 
-export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado }: Props) {
+export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado, correcao = null }: Props) {
+  const sol = correcao?.solucao;
   switch (ex.tipo) {
     case "escolher_resultado": {
       const escolhida = resposta?.tipo === ex.tipo ? resposta.opcao : null;
@@ -42,7 +56,7 @@ export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado }: Pr
               <button
                 key={o.id}
                 type="button"
-                className="opcao"
+                className={`opcao ${sol?.tipo === "escolher_resultado" ? estadoDaEscolha(escolhida === o.id, sol.opcao === o.id) : ""}`}
                 aria-pressed={escolhida === o.id}
                 disabled={bloqueado}
                 onClick={() => aoMudar({ tipo: ex.tipo, opcao: o.id })}
@@ -75,8 +89,9 @@ export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado }: Pr
               const marcador = parte.match(/^___(\d)___$/);
               if (!marcador) return <span key={i}>{realcar(parte)}</span>;
               const valor = preenchidas[marcador[1]];
+              const certo = sol?.tipo === "completar_lacuna" ? (sol.lacunas[marcador[1]] === valor ? "certa" : "errada") : "";
               return (
-                <span key={i} className={`lacuna ${valor ? "preenchida" : ""}`}>
+                <span key={i} className={`lacuna ${valor ? "preenchida" : ""} ${certo}`}>
                   {valor ?? ` ${marcador[1]} `}
                 </span>
               );
@@ -91,7 +106,7 @@ export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado }: Pr
                   <button
                     key={o}
                     type="button"
-                    className="ficha"
+                    className={`ficha ${sol?.tipo === "completar_lacuna" ? estadoDaEscolha(preenchidas[l.id] === o, sol.lacunas[l.id] === o) : ""}`}
                     aria-pressed={preenchidas[l.id] === o}
                     disabled={bloqueado}
                     onClick={() => aoMudar({ tipo: ex.tipo, lacunas: { ...preenchidas, [l.id]: o } })}
@@ -115,14 +130,15 @@ export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado }: Pr
           <p className="rotulo-bloco" id="rotulo-montagem">
             Seu programa
           </p>
-          <div className="area-montagem" aria-labelledby="rotulo-montagem">
+          <div className={`area-montagem ${correcao && sol?.tipo === "ordenar_blocos" ? (correcao.correta ? "certa" : "errada") : ""}`} aria-labelledby="rotulo-montagem">
             {ex.codigoAntes && <div className="linhas-fixas">{ex.codigoAntes}</div>}
             {escolhidos.length ? (
               escolhidos.map((id, i) => (
                 <button
                   key={id}
                   type="button"
-                  className="bloco escolhido"
+                  className={`bloco escolhido ${correcao?.correta && sol?.tipo === "ordenar_blocos" ? "certa" : ""}`}
+                  style={correcao?.correta ? { animationDelay: `${i * 70}ms` } : undefined}
                   aria-label={`Linha ${i + 1}: ${codigoDe(id)}. Remover`}
                   disabled={bloqueado}
                   onClick={() => {
@@ -176,7 +192,7 @@ export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado }: Pr
               <button
                 key={i}
                 type="button"
-                className="linha-codigo"
+                className={`linha-codigo ${sol?.tipo === "localizar_erro" ? estadoDaEscolha(linha === i + 1, sol.linha === i + 1) : ""}`}
                 aria-pressed={linha === i + 1}
                 aria-label={`Linha ${i + 1}: ${texto}`}
                 disabled={bloqueado}

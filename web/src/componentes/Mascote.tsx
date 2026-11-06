@@ -8,7 +8,7 @@ const DESCRICAO: Record<Humor, string> = {
   descanso: "Sibi descansando",
 };
 
-const TAMANHO = { grande: 180, medio: 120, pequeno: 72 } as const;
+const TAMANHO = { grande: 180, medio: 120, pequeno: 72, mini: 52 } as const;
 
 function Olhos({ humor }: { humor: Humor }) {
   switch (humor) {
