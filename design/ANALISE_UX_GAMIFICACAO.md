@@ -8,6 +8,8 @@ Análise feita em 6 de novembro de 2026, depois do primeiro uso no site publicad
 
 Também foram revistos as telas, o código e as regras de [ESPECIFICACAO_MVP.md, seção 4](../ESPECIFICACAO_MVP.md#4-regras-de-gamificação). As propostas estão em ondas, da mais rápida à que muda regras.
 
+**Andamento:** a onda 1 foi implementada e publicada em 6 de novembro de 2026.
+
 ## 1. Diagnóstico das três observações
 
 ### Dicas
