@@ -7,7 +7,8 @@
 // TESTE_EMAIL_1 e TESTE_SENHA de web/.env.local: conclui uma prática da lição 1 nessa conta e
 // alterna o som duas vezes, voltando ao estado inicial.
 //
-// Uso: node ferramentas/verificar_navegador.mjs [demo|conta|tudo]
+// Uso: node ferramentas/verificar_navegador.mjs [demo|conta|tudo|jornada]
+// O modo jornada (E06.8) usa TESTE_EMAIL_2 em dois aparelhos e avança essa conta uma lição por execução.
 // As capturas de tela ficam na pasta CAPTURAS (padrão: uma pasta temporária nova).
 import { execSync } from "node:child_process";
 import fs from "node:fs";
@@ -83,7 +84,12 @@ async function focoVisivel(page, nome, toques = 25) {
 
 /** Tab até o elemento marcado; devolve false se ele não for alcançável. */
 async function tabAte(page, marcar, arg, limite = 70) {
-  const existe = await page.evaluate(marcar, arg);
+  // O elemento pode ainda não estar na tela logo depois de uma transição: espera até 5 s.
+  let existe = false;
+  for (let i = 0; i < 25 && !existe; i++) {
+    existe = await page.evaluate(marcar, arg);
+    if (!existe) await espera(200);
+  }
   if (!existe) return false;
   for (let i = 0; i < limite; i++) {
     await page.keyboard.press("Tab");
@@ -274,13 +280,13 @@ async function demonstracao(browser) {
   await page.close();
 }
 
-async function entrar(page) {
+async function entrar(page, email = ENV.TESTE_EMAIL_1, nome = "entrar na conta de teste pelo teclado") {
   await page.goto(BASE + "/entrar", { waitUntil: "networkidle0" });
-  await page.type("#email", ENV.TESTE_EMAIL_1);
+  await page.type("#email", email);
   await page.type("#senha", ENV.TESTE_SENHA);
   await Promise.all([page.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), page.keyboard.press("Enter")]);
   const ok = !page.url().includes("/entrar");
-  conferir(ok, "entrar na conta de teste pelo teclado");
+  conferir(ok, nome);
   return ok;
 }
 
@@ -381,10 +387,109 @@ async function conta(browser) {
   await page.close();
 }
 
+const lerXp = (page) => page.evaluate(() => Number(document.querySelector(".indicador-xp")?.textContent.replace(/\D/g, "") ?? NaN));
+const licaoAtual = (page) => page.evaluate(() => document.querySelector("a.no.atual")?.getAttribute("href") ?? null);
+async function progresso(page) {
+  await aguardar(page, () => document.querySelector('[role="progressbar"]'), null, 10000);
+  return page.evaluate(() => document.querySelector('[role="progressbar"]')?.getAttribute("aria-valuenow") ?? null);
+}
+
+/** Responde certo ao exercício na tela e segue para o próximo. */
+async function responderUm(page) {
+  const ex = await exercicioAtual(page);
+  if (!ex) return "sem exercício";
+  const p = (await escolherComTeclado(page, ex)) ?? (await verificarComTeclado(page));
+  if (p) return p;
+  await page.keyboard.press("Enter");
+  await aguardar(page, () => !document.querySelector(".feedback-titulo"), null, 8000);
+  await espera(150);
+  return null;
+}
+
+/**
+ * Jornada do E06.8 com a segunda conta de teste, em dois "aparelhos" (contextos sem cookies em comum):
+ * lição nova começada no celular e terminada no desktop, recompensa, desbloqueio, a aba antiga se
+ * atualizando sozinha e revisão em Praticar. Avança a conta uma lição a cada execução.
+ */
+async function jornada(browser) {
+  console.log("\n— Jornada em dois aparelhos (segunda conta de teste)");
+  const celular = await (await browser.createBrowserContext()).newPage();
+  const desktop = await (await browser.createBrowserContext()).newPage();
+  await celular.setViewport(CELULAR);
+  await desktop.setViewport(DESKTOP);
+  if (!(await entrar(celular, ENV.TESTE_EMAIL_2, "entrar no celular"))) return;
+  if (!(await entrar(desktop, ENV.TESTE_EMAIL_2, "entrar no desktop"))) return;
+
+  await celular.goto(BASE + "/aprender", { waitUntil: "networkidle0" });
+  const licao = await licaoAtual(celular);
+  const xpAntes = await lerXp(celular);
+  conferir(Boolean(licao), "a trilha destaca a lição atual", licao);
+  if (!licao) return;
+
+  // Celular: começa a lição e responde dois exercícios.
+  await celular.goto(BASE + licao, { waitUntil: "networkidle0" });
+  const rotulo = await celular.evaluate(() => [...document.querySelectorAll("main button")].map((b) => b.textContent.trim()).find((t) => /^(Começar|Continuar)$/.test(t)) ?? null);
+  await tabAte(celular, marcarPorTexto, ["main button", rotulo ?? "Começar"]);
+  await Promise.all([celular.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), celular.keyboard.press("Enter")]);
+  const sessao = new URL(celular.url()).pathname;
+  conferir(sessao.startsWith("/sessao/"), "celular: a lição abre a sessão", sessao);
+  for (let i = 0; i < 2; i++) {
+    const p = await responderUm(celular);
+    if (p) conferir(false, "celular: responder", p);
+  }
+  const noCelular = await progresso(celular);
+  const naTelaDoCelular = await exercicioAtual(celular);
+
+  // Desktop: a trilha mostra a lição em andamento, e Continuar retoma a mesma sessão no mesmo ponto.
+  await desktop.goto(BASE + "/aprender", { waitUntil: "networkidle0" });
+  conferir((await licaoAtual(desktop)) === licao, "desktop: a mesma lição aparece como atual");
+  await desktop.goto(BASE + licao, { waitUntil: "networkidle0" });
+  await tabAte(desktop, marcarPorTexto, ["main button", "Continuar"]);
+  await Promise.all([desktop.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), desktop.keyboard.press("Enter")]);
+  conferir(new URL(desktop.url()).pathname === sessao, "desktop: Continuar retoma a sessão começada no celular", desktop.url());
+  conferir((await progresso(desktop)) === noCelular, "desktop: no mesmo ponto do celular", { noCelular, noDesktop: await progresso(desktop) });
+  await fazerLicao(desktop, "desktop");
+  const texto = await desktop.evaluate(() => document.body.innerText);
+  conferir(/\+20/.test(texto), "a primeira conclusão rende 20 XP");
+
+  // Celular: a tela ficou para trás; responder faz a lição se atualizar e mostrar o resultado.
+  const ex = await exercicioAtual(celular);
+  conferir(ex === null, "a sessão terminada não tem mais exercício atual");
+  if (naTelaDoCelular) {
+    const p = (await escolherComTeclado(celular, naTelaDoCelular)) ?? null;
+    if (p) conferir(false, "celular: responder na aba antiga", p);
+    await tabAte(celular, marcarPorTexto, ["button", "Verificar"]);
+    await celular.keyboard.press("Enter");
+    const atualizou = await aguardar(celular, () => /Lição concluída|Atualizamos a lição/.test(document.body.innerText), null, 15000);
+    conferir(atualizou, "celular: a aba antiga percebe a conclusão feita no desktop e mostra o resultado");
+  }
+
+  // Recompensa e desbloqueio vistos de qualquer aparelho.
+  await celular.goto(BASE + "/aprender", { waitUntil: "networkidle0" });
+  const proxima = await licaoAtual(celular);
+  conferir(proxima !== null && proxima !== licao, "a próxima lição fica liberada", { antes: licao, agora: proxima });
+  conferir((await lerXp(celular)) === xpAntes + 20, "o XP do celular soma os 20 da conclusão feita no desktop", { xpAntes, agora: await lerXp(celular) });
+
+  // Revisão recomendada ou geral, em Praticar.
+  await desktop.goto(BASE + "/praticar", { waitUntil: "networkidle0" });
+  const revisao = await desktop.evaluate(() => [...document.querySelectorAll("main button")].map((b) => b.textContent.trim()).find((t) => /revisão$/.test(t)) ?? null);
+  conferir(Boolean(revisao), "Praticar oferece a revisão", revisao);
+  if (revisao) {
+    await tabAte(desktop, marcarPorTexto, ["main button", revisao]);
+    await Promise.all([desktop.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), desktop.keyboard.press("Enter")]);
+    conferir(/\/sessao\//.test(desktop.url()), "a revisão abre uma sessão", desktop.url());
+    await fazerLicao(desktop, "revisão");
+  }
+  await foto(desktop, "jornada-revisao");
+  await celular.close();
+  await desktop.close();
+}
+
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ["--no-first-run", "--no-default-browser-check"] });
 try {
   if (MODO === "demo" || MODO === "tudo") await demonstracao(browser);
   if (MODO === "conta" || MODO === "tudo") await conta(browser);
+  if (MODO === "jornada") await jornada(browser);
 } finally {
   await browser.close();
 }
