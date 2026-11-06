@@ -17,7 +17,8 @@ export function AvisoConexao() {
   if (online) return null;
   return (
     <p className="faixa-offline" role="status">
-      <Icone nome="semRede" /> Sem conexão. Seu progresso fica salvo; nada avança até a conexão voltar.
+      <Icone nome="semRede" />
+      <span>Sem conexão. Seu progresso fica salvo; nada avança até a conexão voltar.</span>
     </p>
   );
 }

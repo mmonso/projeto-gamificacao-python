@@ -15,6 +15,7 @@ Aplicação Next.js do MVP. Planejamento em [../PLANO_PRODUTO_E_ARQUITETURA.md](
 | `npm run db:migrar` | Aplica as migrações pendentes no banco de `DATABASE_URL_MIGRACOES` |
 | `npm run db:publicar` | Publica o conteúdo de `../conteudo` no mesmo banco; versões já publicadas são mantidas |
 | `npm run db:concorrencia` | Dispara pedidos simultâneos contra o banco de `DATABASE_URL` com dois perfis temporários, que apaga no fim. Cobre o que o PGlite dos testes não alcança, porque ele executa uma transação por vez |
+| `node ../ferramentas/verificar_navegador.mjs` | Percorre o app num Chrome sem janela: celular e desktop, teclado, som, redução de movimento, queda e travamento de conexão. Precisa do servidor na porta 3100 e de `puppeteer-core` (instruções no topo do arquivo) |
 
 ## Organização
 

@@ -2,6 +2,7 @@
 // Preferências do perfil (F-31): nome, meta diária, fuso horário confirmável e som.
 import { useActionState, useEffect, useRef, useState } from "react";
 import { BotaoEnviar, Mensagens } from "@/componentes/formulario";
+import { chamar } from "@/componentes/licao/motor";
 import { excluirConta, salvarFuso, salvarMeta, salvarNome, type EstadoPreferencia } from "./acoes";
 
 const FUSOS_COMUNS = [
@@ -47,11 +48,8 @@ export function Preferencias({ nome, meta, fuso, fusoPendente, som: somInicial }
   async function alternarSom() {
     const novo = !som;
     setSom(novo);
-    try {
-      await fetch("/api/perfil/som", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ som: novo }) });
-    } catch {
-      setSom(!novo);
-    }
+    // Sem conexão ou com a escolha recusada pelo servidor, o interruptor volta ao que está gravado.
+    if (!(await chamar("/api/perfil/som", { som: novo })).ok) setSom(!novo);
   }
 
   return (

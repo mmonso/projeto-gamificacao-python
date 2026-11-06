@@ -17,6 +17,7 @@ import { licaoDemo, transferirDemo } from "../src/servidor/demo/servico";
 import { concluir, ErroEstudo, submeter } from "../src/servidor/licoes/estudo";
 import { iniciarRevisao } from "../src/servidor/licoes/revisao";
 import { iniciarRecuperacao, iniciarSessao, obterSessaoAtual } from "../src/servidor/licoes/servico";
+import { dentroDoLimite, limparJanelasAntigas } from "../src/servidor/limites";
 import { excluirDadosDoAluno } from "../src/servidor/perfis/preferencias";
 import { respostaCorreta } from "../src/testes/respostas";
 
@@ -118,6 +119,15 @@ try {
   const registradas = transferencias.filter((r) => r.resultado === "registrada").length;
   conferir(registradas === 1, "transferências simultâneas da demonstração registram uma única vez", transferencias.map((r) => r.resultado));
   conferir((await xpTotal(bia)) === 20, "e lançam 20 XP uma única vez", await xpTotal(bia));
+
+  // Contador de pedidos: contagens simultâneas não se perdem, e a limpeza de janelas antigas roda no PostgreSQL.
+  const chave = `verificacao:${ana}`;
+  const contagens = await vezes(() => dentroDoLimite(db, chave, PARALELOS - 1));
+  conferir(contagens.filter((x) => !x).length === 1, `${PARALELOS} pedidos simultâneos com limite ${PARALELOS - 1}: exatamente um é recusado`, contagens);
+  const limpeza = await limparJanelasAntigas(db, new Date(Date.now() + 2 * 3_600_000)).then(() => "ok", (e) => String(e));
+  conferir(limpeza === "ok", "a limpeza das janelas antigas roda sem erro", limpeza);
+  const [{ restantes }] = await db.select({ restantes: count() }).from(t.limitesFrequencia).where(eq(t.limitesFrequencia.chave, chave));
+  conferir(restantes === 0, "e apaga as janelas vencidas", restantes);
 } finally {
   await db.transaction(async (tx) => {
     await excluirDadosDoAluno(tx, ana);

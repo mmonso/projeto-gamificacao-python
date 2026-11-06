@@ -1,6 +1,6 @@
 // Limites de frequência no servidor (ESPECIFICACAO_MVP, seção 6; CA-06). A contagem fica no PostgreSQL
 // para valer entre instâncias; os endpoints de autenticação usam os limites do Supabase Auth.
-import { sql } from "drizzle-orm";
+import { lt, sql } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import * as t from "@/servidor/db/esquema";
 
@@ -27,6 +27,14 @@ export async function dentroDoLimite(db: Db, chave: string, maximo: number, agor
     .values({ chave, janela, contagem: 1 })
     .onConflictDoUpdate({ target: [t.limitesFrequencia.chave, t.limitesFrequencia.janela], set: { contagem: sql`${t.limitesFrequencia.contagem} + 1` } })
     .returning({ contagem: t.limitesFrequencia.contagem });
-  if (Math.random() < 0.02) await db.delete(t.limitesFrequencia).where(sql`${t.limitesFrequencia.janela} < ${new Date(agora.getTime() - 3_600_000)}`);
+  if (Math.random() < 0.02) await limparJanelasAntigas(db, agora);
   return linha.contagem <= maximo;
+}
+
+/**
+ * Apaga as janelas de mais de uma hora. A data vai pelo tipo da coluna (lt), não crua num fragmento sql:
+ * o postgres.js não serializa Date ali, e o pedido que sorteava a limpeza terminava em erro 500.
+ */
+export async function limparJanelasAntigas(db: Db, agora = new Date()) {
+  await db.delete(t.limitesFrequencia).where(lt(t.limitesFrequencia.janela, new Date(agora.getTime() - 3_600_000)));
 }
