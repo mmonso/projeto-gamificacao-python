@@ -6,11 +6,14 @@ import { configuracao } from "@/servidor/config";
 import * as esquema from "./esquema";
 
 function conectar() {
-  const url = configuracao().bancoUrl;
+  const { bancoUrl, ambiente } = configuracao();
   // Pooler do Supabase em modo sessão (porta 5432). No modo transação (6543), consultas encadeadas pelo
   // postgres.js na mesma conexão às vezes ficavam sem resposta e a página travava. prepare: false mantém
   // a conexão compatível com os dois modos; conexões ociosas são devolvidas ao pooler depois de 20 s.
-  return drizzle({ client: postgres(url, { prepare: false, max: 10, idle_timeout: 20 }), schema: esquema });
+  // No modo sessão, cada conexão aberta ocupa uma das poucas do pooler (15 no plano gratuito). Na Vercel
+  // podem existir várias instâncias ao mesmo tempo, então cada uma abre no máximo 4.
+  const max = ambiente === "desenvolvimento" ? 10 : 4;
+  return drizzle({ client: postgres(bancoUrl, { prepare: false, max, idle_timeout: 20 }), schema: esquema });
 }
 
 export type Db = ReturnType<typeof conectar>;
