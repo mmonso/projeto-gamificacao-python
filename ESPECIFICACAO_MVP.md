@@ -81,7 +81,7 @@ Cada premissa simplifica o MVP. Se uma delas deixar de valer, a coluna da direit
 
 Confirmado em 7 de outubro de 2026:
 
-- não há idade mínima (PR-02). Revisto em 6 de novembro de 2026, por causa do ECA Digital: conta para maiores de 18 anos, aguardando a confirmação do responsável pelo produto;
+- não há idade mínima (PR-02). Revisto e confirmado em 6 de novembro de 2026, por causa do ECA Digital: conta para maiores de 18 anos;
 - não há turmas nem professores; o MVP é o Duolingo básico, individual (PR-11).
 
 Consequência de não haver idade mínima: menores de idade podem criar conta. Antes de abrir acesso público (E10), verificar com orientação jurídica as exigências da LGPD e do ECA Digital (Lei 15.211/2025) para produtos que podem ser usados por crianças e adolescentes. A atenção maior está nas funções sociais posteriores, como ligas e ranking, e nas mecânicas de engajamento. Isso não bloqueia E01 a E09, desde que o MVP continue coletando apenas os dados necessários para conta e progresso.
@@ -204,6 +204,7 @@ Os valores de cada regra estão na seção 8 do plano e serão detalhados em E01
 | Tutor por IA | Futuro | Condicionado a necessidades comprovadas no uso |
 | Correção remota de código | Futuro | Exige executor isolado separado do servidor web |
 | Turmas, professores e escolas | Futuro | Contraria PR-11 |
+| Versão para adolescentes (menores de 18) | Futuro | Exige o ECA Digital: idade no cadastro, contas de até 16 anos vinculadas à de um responsável, supervisão parental com limite de tempo e sequência e recompensas limitadas para menores (PR-02) |
 
 ### 2.4 Mudanças em relação ao plano de referência
 
