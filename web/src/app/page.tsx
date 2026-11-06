@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { Mascote } from "@/componentes/Mascote";
+import { DOCUMENTOS } from "@/modulos/conta/documentos";
 import { obterAluno } from "@/servidor/auth/sessao";
 import { AcoesVisitante } from "./AcoesVisitante";
 
@@ -29,7 +30,8 @@ export default function Apresentacao() {
         </Suspense>
       </div>
       <p className="links-documentos mt-8">
-        <Link href="/termos?de=inicio">Termos de uso</Link> · <Link href="/privacidade?de=inicio">Política de privacidade</Link>
+        Conta para maiores de {DOCUMENTOS.idadeMinima} anos · <Link href="/termos?de=inicio">Termos de uso</Link> ·{" "}
+        <Link href="/privacidade?de=inicio">Política de privacidade</Link>
       </p>
     </main>
   );

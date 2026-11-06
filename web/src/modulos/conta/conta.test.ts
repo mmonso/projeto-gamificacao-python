@@ -16,10 +16,10 @@ describe("cadastro (F-04)", () => {
     expect(esquemaCadastro.parse(base)).toEqual({ nome: "Ana", email: "ana@exemplo.com", senha: "segredo123", termos: "on", metaDiaria: 2, fuso: "America/Manaus" });
   });
 
-  it("exige o aceite dos termos", () => {
+  it("exige a declaração de idade e o aceite dos termos", () => {
     const r = esquemaCadastro.safeParse({ ...base, termos: undefined });
     expect(r.success).toBe(false);
-    expect(primeiroErro(r.error!)).toMatch(/termos de uso/);
+    expect(primeiroErro(r.error!)).toMatch(/18 anos ou mais.*termos de uso/);
   });
 
   it("exige senha com pelo menos 8 caracteres", () => {

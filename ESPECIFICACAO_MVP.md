@@ -15,7 +15,7 @@ Data de início: 7 de outubro de 2026. Documento da etapa E01 do [plano de refer
 
 ### 1.1 Público inicial
 
-Pessoas que leem em português brasileiro e estão começando em programação: nunca programaram ou tiveram só contato superficial, como um vídeo ou tutorial abandonado. Não há idade mínima nem verificação de idade. Linguagem e exemplos são pensados para adultos iniciantes, sem impedir o uso por pessoas mais jovens.
+Pessoas que leem em português brasileiro e estão começando em programação: nunca programaram ou tiveram só contato superficial, como um vídeo ou tutorial abandonado. A conta é para maiores de 18 anos, por declaração no cadastro, sem verificação de documentos; a demonstração sem conta é aberta e não grava dados pessoais no servidor (PR-02, revisada em 6 de novembro de 2026). Linguagem e exemplos são pensados para adultos iniciantes.
 
 Motivações esperadas: curiosidade, transição ou complemento de carreira, automatizar tarefas do trabalho e apoio a estudos. O produto não depende de uma motivação específica; os exemplos dos exercícios devem usar situações cotidianas e neutras, como compras, agenda, notas e mensagens.
 
@@ -66,7 +66,7 @@ Cada premissa simplifica o MVP. Se uma delas deixar de valer, a coluna da direit
 | ID | Premissa | Se deixar de valer |
 | --- | --- | --- |
 | PR-01 | Equipe pequena, com um desenvolvedor principal que também conduz conteúdo e design, com apoio pontual | Revisar a estimativa de 8 a 12 semanas e a divisão de etapas |
-| PR-02 | Sem idade mínima e sem verificação de idade; linguagem voltada a adultos iniciantes; data de nascimento não é coletada | Se o produto passar a ser divulgado para crianças e adolescentes, ou se esse uso se tornar relevante, revisar consentimento dos responsáveis, dados coletados e funcionalidades sociais |
+| PR-02 | Conta só para maiores de 18 anos, declarado no cadastro; sem verificação de documentos; data de nascimento não é coletada; linguagem voltada a adultos iniciantes. Revisada em 6 de novembro de 2026: sem idade mínima, o Sibi pode ser considerado de acesso provável por adolescentes no ECA Digital (Lei 15.211/2025, em vigor desde 17 de março de 2026) | Abrir para menores de 18 exige cumprir o ECA Digital (supervisão parental e limite de tempo de uso, art. 17; contas de até 16 anos vinculadas à de um responsável, art. 24; configurações que evitem uso compulsivo, art. 8º, IV, o que alcança sequência e recompensas) e o art. 14 da LGPD |
 | PR-03 | Conexão disponível durante as lições; falhas curtas são tratadas por reenvio | Planejar ensino offline e sincronização, hoje fora do escopo |
 | PR-04 | Sem monetização, compras ou anúncios no primeiro lançamento | Incluir pagamentos, termos comerciais e regras de cristais com valor real |
 | PR-05 | Primeira turma de 10 a 20 iniciantes convidados | Revisar capacidade, custos, suporte e moderação antes de abrir acesso |
@@ -81,7 +81,7 @@ Cada premissa simplifica o MVP. Se uma delas deixar de valer, a coluna da direit
 
 Confirmado em 7 de outubro de 2026:
 
-- não há idade mínima (PR-02);
+- não há idade mínima (PR-02). Revisto em 6 de novembro de 2026, por causa do ECA Digital: conta para maiores de 18 anos, aguardando a confirmação do responsável pelo produto;
 - não há turmas nem professores; o MVP é o Duolingo básico, individual (PR-11).
 
 Consequência de não haver idade mínima: menores de idade podem criar conta. Antes de abrir acesso público (E10), verificar com orientação jurídica as exigências da LGPD e do ECA Digital (Lei 15.211/2025) para produtos que podem ser usados por crianças e adolescentes. A atenção maior está nas funções sociais posteriores, como ligas e ranking, e nas mecânicas de engajamento. Isso não bloqueia E01 a E09, desde que o MVP continue coletando apenas os dados necessários para conta e progresso.

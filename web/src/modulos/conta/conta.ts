@@ -1,6 +1,7 @@
 // Regras de conta (ESPECIFICACAO_MVP.md, FL-02; F-04, F-05). Funções puras: as ações do servidor
 // chamam o Supabase Auth e usam estas regras para validar entradas e escolher mensagens.
 import { z } from "zod";
+import { DOCUMENTOS } from "@/modulos/conta/documentos";
 import { fusoValido } from "@/modulos/gamificacao/dias";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 
@@ -22,7 +23,7 @@ export const esquemaCadastro = z.object({
   nome: nome.default(""),
   email,
   senha,
-  termos: z.literal("on", "Aceite os termos de uso e a política de privacidade para continuar."),
+  termos: z.literal("on", `Confirme que tem ${DOCUMENTOS.idadeMinima} anos ou mais e aceite os termos de uso e a política de privacidade para continuar.`),
   metaDiaria,
   fuso,
 });

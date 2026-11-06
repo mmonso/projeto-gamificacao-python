@@ -39,6 +39,12 @@ export function Definir({ valor, oQue }: { valor: string | null; oQue: string })
   return valor ? <>{valor}</> : <mark className="a-definir">[{oQue}: a definir]</mark>;
 }
 
+/** E-mail de contato, como link que abre o programa de e-mail. */
+export function Contato() {
+  const { contato } = DOCUMENTOS;
+  return contato ? <a href={`mailto:${contato}`}>{contato}</a> : <Definir valor={null} oQue="e-mail de contato" />;
+}
+
 export function Documento({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
     <main className="documento" id="conteudo-principal">

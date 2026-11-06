@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DOCUMENTOS } from "@/modulos/conta/documentos";
-import { Definir, Documento } from "../documento";
+import { Contato, Definir, Documento } from "../documento";
 
 export const metadata: Metadata = { title: "Termos de uso" };
 
-// Termos de uso (E08.9; ESPECIFICACAO_MVP, D-06 e PR-02). Descrevem o app como ele funciona: sem idade
-// mínima, sem compras nem anúncios (PR-04), progresso sem valor monetário e exclusão da conta no Perfil.
+// Termos de uso (E08.9; ESPECIFICACAO_MVP, D-06, PR-02 e PR-04). Descrevem o app como ele funciona: conta
+// só para maiores de 18 anos, sem compras nem anúncios, progresso sem valor em dinheiro e exclusão da
+// conta no Perfil. Pontos em aberto para a revisão jurídica: REVISAO_JURIDICA.md.
 export default function PaginaTermos() {
-  const { responsavel, contato, foro } = DOCUMENTOS;
+  const { responsavel, foro, idadeMinima } = DOCUMENTOS;
   return (
     <Documento titulo="Termos de uso">
       <p>
         Estes termos explicam as regras para usar o Sibi. Ao criar uma conta, você concorda com eles e com a <Link href="/privacidade">política de privacidade</Link>.
-        O Sibi é oferecido por <Definir valor={responsavel} oQue="responsável pelo Sibi" />.
+      </p>
+      <p>
+        O Sibi é um projeto pessoal de <Definir valor={responsavel} oQue="responsável pelo Sibi" />, pessoa física, oferecido de graça e sem fins lucrativos. Nestes
+        termos, &ldquo;nós&rdquo; se refere a ele.
       </p>
 
       <h2>1. O que é o Sibi</h2>
@@ -26,12 +30,15 @@ export default function PaginaTermos() {
       </p>
 
       <h2>2. Quem pode usar</h2>
-      <p>Qualquer pessoa pode usar o Sibi. Não há idade mínima, mas o conteúdo e a linguagem foram pensados para adultos que estão começando a programar.</p>
       <ul>
-        <li>Menores de 18 anos devem usar com o conhecimento de pai, mãe ou responsável.</li>
         <li>
-          Crianças com menos de 12 anos só devem usar com uma conta criada e acompanhada por pai, mãe ou responsável, que aceita estes termos e a política de privacidade em nome
-          delas.
+          Para criar uma conta, você precisa ter {idadeMinima} anos ou mais. Ao se cadastrar, você declara que tem essa idade. O Sibi foi feito para adultos que estão começando
+          a programar e não é direcionado a crianças nem a adolescentes.
+        </li>
+        <li>A lição de demonstração pode ser feita sem conta. Ela fica guardada só no navegador e não grava dados pessoais no servidor.</li>
+        <li>
+          Se soubermos que uma conta pertence a alguém com menos de {idadeMinima} anos, ela será excluída. Pai, mãe ou responsável que descobrir uma conta assim pode pedir a
+          exclusão pelo contato no fim desta página.
         </li>
       </ul>
 
@@ -49,7 +56,7 @@ export default function PaginaTermos() {
         <li>usar programas para responder exercícios ou enviar pedidos em massa, ou tentar contornar os limites de uso;</li>
         <li>explorar falhas, sobrecarregar o serviço ou atrapalhar o uso por outras pessoas.</li>
       </ul>
-      <p>Contas usadas dessa forma podem ser suspensas. Se encontrar uma falha, conte para nós pelo contato abaixo: isso ajuda muito.</p>
+      <p>Contas usadas dessa forma podem ser suspensas ou excluídas. Se encontrar uma falha, conte para nós pelo contato abaixo: isso ajuda muito.</p>
 
       <h2>5. Progresso e recompensas</h2>
       <p>
@@ -78,8 +85,8 @@ export default function PaginaTermos() {
 
       <h2>9. Mudanças nestes termos</h2>
       <p>
-        Quando estes termos mudarem, avisaremos no app ou por e-mail antes de a mudança valer. Se ela for importante, pediremos que você aceite a nova versão para continuar usando
-        a conta.
+        Quando estes termos mudarem, avisaremos no app ou por e-mail antes de a mudança valer, e a data no topo da página será atualizada. Se a mudança for importante,
+        pediremos que você aceite a nova versão para continuar usando a conta.
       </p>
 
       <h2>10. Lei e foro</h2>
@@ -90,7 +97,7 @@ export default function PaginaTermos() {
 
       <h2>11. Contato</h2>
       <p>
-        Dúvidas, pedidos e avisos de problemas: <Definir valor={contato} oQue="e-mail de contato" />.
+        Dúvidas, pedidos e avisos de problemas: <Contato />.
       </p>
     </Documento>
   );
