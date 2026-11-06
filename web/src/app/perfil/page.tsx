@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { sair } from "@/app/(conta)/acoes";
 import { BotaoEnviar } from "@/componentes/formulario";
@@ -72,6 +73,9 @@ async function Perfil() {
             <BotaoEnviar classe="botao botao-secundario">Sair</BotaoEnviar>
           </form>
           <ExcluirConta />
+          <p className="links-documentos">
+            <Link href="/termos?de=perfil">Termos de uso</Link> · <Link href="/privacidade?de=perfil">Política de privacidade</Link>
+          </p>
         </section>
       </div>
     </Moldura>

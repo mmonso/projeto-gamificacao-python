@@ -32,7 +32,7 @@ export async function mudarNome(db: Db, alunoId: string, nome: string) {
  */
 export async function exportarHistorico(db: Db, alunoId: string) {
   const [perfil] = await db.select().from(t.perfis).where(eq(t.perfis.id, alunoId));
-  const [conclusoes, lancamentos, atividade, conquistas, conceitos, sessoes] = await Promise.all([
+  const [conclusoes, lancamentos, atividade, conquistas, conceitos, sessoes, respostas, eventos] = await Promise.all([
     db.select({ licao: t.conclusoesLicao.licaoId, concluidaEm: t.conclusoesLicao.concluidaEm }).from(t.conclusoesLicao).where(eq(t.conclusoesLicao.alunoId, alunoId)).orderBy(asc(t.conclusoesLicao.concluidaEm)),
     db
       .select({ moeda: t.lancamentos.moeda, causa: t.lancamentos.causa, valor: t.lancamentos.valor, diaEstudo: t.lancamentos.diaEstudo, criadoEm: t.lancamentos.criadoEm })
@@ -50,6 +50,14 @@ export async function exportarHistorico(db: Db, alunoId: string) {
       .from(t.sessoes)
       .where(eq(t.sessoes.alunoId, alunoId))
       .orderBy(asc(t.sessoes.criadoEm)),
+    // Respostas enviadas e eventos de uso: a exportação traz todos os dados da conta (LGPD, art. 18).
+    db
+      .select({ sessao: t.submissoes.sessaoId, exercicio: t.submissoes.exercicioId, resposta: t.submissoes.resposta, correta: t.submissoes.correta, criadoEm: t.submissoes.criadoEm })
+      .from(t.submissoes)
+      .innerJoin(t.sessoes, eq(t.sessoes.id, t.submissoes.sessaoId))
+      .where(eq(t.sessoes.alunoId, alunoId))
+      .orderBy(asc(t.submissoes.criadoEm)),
+    db.select({ nome: t.eventosProduto.nome, dados: t.eventosProduto.dados, criadoEm: t.eventosProduto.criadoEm }).from(t.eventosProduto).where(eq(t.eventosProduto.alunoId, alunoId)).orderBy(asc(t.eventosProduto.id)),
   ]);
   return {
     exportadoEm: new Date().toISOString(),
@@ -71,6 +79,8 @@ export async function exportarHistorico(db: Db, alunoId: string) {
     conquistas,
     conceitos,
     sessoes,
+    respostas,
+    eventos,
   };
 }
 

@@ -404,6 +404,21 @@
   .faixa-offline svg { flex: none; }
 }
 
+/* Termos de uso e política de privacidade (E08.9). */
+.documento { width: 100%; max-width: 680px; margin: 0 auto; padding: 16px 16px 64px; line-height: 1.6; }
+.documento h1 { font-size: 1.75rem; margin: 12px 0 4px; }
+.documento h2 { font-size: 1.15rem; margin: 28px 0 8px; }
+.documento p, .documento ul, .documento dl { margin-bottom: 12px; }
+.documento ul { padding-left: 1.25rem; list-style: disc; }
+.documento li { margin-bottom: 6px; }
+.documento a { color: var(--azul); font-weight: 700; text-decoration: underline; }
+.documento-versao { color: var(--texto-suave); font-size: .9rem; }
+.documento-lista dt { font-weight: 800; margin-top: 12px; }
+.documento-lista dd { margin: 2px 0 0; }
+.a-definir { background: #fff3c4; color: #7a5200; padding: 0 4px; border-radius: 4px; font-weight: 700; }
+.links-documentos { font-size: .9rem; color: var(--texto-suave); text-align: center; }
+.links-documentos a { color: inherit; text-decoration: underline; }
+
 @keyframes cair { to { transform: translateY(110vh) rotate(540deg); } }
 @media (prefers-reduced-motion: reduce) { .confete { display: none; } }
 

@@ -1,12 +1,18 @@
 // Apoio às rotas anônimas da demonstração: corpo JSON validado e limite de frequência por endereço (CA-06).
 import "server-only";
+import { createHash } from "node:crypto";
 import type { z } from "zod";
 import { erro, falhaInesperada } from "@/servidor/api";
 import { banco } from "@/servidor/db/cliente";
 import { dentroDoLimite, LIMITES } from "@/servidor/limites";
 
+/**
+ * Chave do contador: um resumo do endereço IP, nunca o endereço em si. Basta para contar pedidos de um
+ * mesmo endereço, e a linha é apagada depois de uma hora (política de privacidade, seção 2).
+ */
 function endereco(request: Request) {
-  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "local";
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "local";
+  return createHash("sha256").update(`sibi-demo:${ip}`).digest("base64url").slice(0, 22);
 }
 
 export async function acaoAnonima<T extends z.ZodType>(request: Request, esquema: T, acao: (corpo: z.infer<T>) => Promise<Response>) {

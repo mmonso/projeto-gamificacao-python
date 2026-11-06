@@ -28,6 +28,9 @@ export default function Apresentacao() {
           <Acoes />
         </Suspense>
       </div>
+      <p className="links-documentos mt-8">
+        <Link href="/termos?de=inicio">Termos de uso</Link> · <Link href="/privacidade?de=inicio">Política de privacidade</Link>
+      </p>
     </main>
   );
 }

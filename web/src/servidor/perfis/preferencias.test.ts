@@ -9,7 +9,8 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
-import { iniciarSessao } from "@/servidor/licoes/servico";
+import { submeter } from "@/servidor/licoes/estudo";
+import { iniciarSessao, obterSessaoAtual } from "@/servidor/licoes/servico";
 import { excluirDadosDoAluno, exportarHistorico, mudarFuso, mudarMeta } from "./preferencias";
 
 const JOAO = "00000000-0000-4000-8000-00000000000a";
@@ -49,12 +50,22 @@ describe("preferências", () => {
 });
 
 describe("dados pessoais", () => {
-  it("a exportação traz só os dados do próprio aluno (CA-115)", async () => {
+  it("a exportação traz todos os dados do próprio aluno, com respostas e eventos, e nada da outra conta (CA-115)", async () => {
+    const sessaoDe = async (aluno: string) => (await db.select({ id: t.sessoes.id }).from(t.sessoes).where(eq(t.sessoes.alunoId, aluno)))[0].id;
+    for (const aluno of [JOAO, KIKA]) {
+      const sessao = await sessaoDe(aluno);
+      const atual = await obterSessaoAtual(db, aluno, sessao);
+      await submeter(db, aluno, sessao, { id: randomUUID(), exercicioId: atual!.exercicio!.id, resposta: { tipo: "localizar_erro", linha: 99 } });
+    }
     const h = await exportarHistorico(db, JOAO);
     expect(h.perfil?.nome).toBe("João");
     expect(h.lancamentos).toHaveLength(1);
     expect(h.sessoes).toHaveLength(1);
-    expect(JSON.stringify(h)).not.toContain("Kika");
+    expect(h.respostas).toMatchObject([{ resposta: { tipo: "localizar_erro", linha: 99 }, correta: false }]);
+    expect(h.eventos.map((e) => e.nome)).toEqual(expect.arrayContaining(["licao_iniciada", "exercicio_respondido"]));
+    const texto = JSON.stringify(h);
+    expect(texto).not.toContain("Kika");
+    expect(texto).not.toContain(await sessaoDe(KIKA));
   });
 
   it("a exclusão remove perfil, sessões e XP sem tocar na outra conta (CA-116)", async () => {

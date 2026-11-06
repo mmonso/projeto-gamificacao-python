@@ -49,7 +49,7 @@ export function FormularioCadastro() {
       <label className="caixa-termos">
         <input type="checkbox" name="termos" checked={aceitou} onChange={(e) => setAceitou(e.target.checked)} />
         <span>
-          Li e aceito os <Link href="/termos">termos de uso</Link> e a <Link href="/privacidade">política de privacidade</Link>.
+          Li e aceito os <Link href="/termos?de=cadastro">termos de uso</Link> e a <Link href="/privacidade?de=cadastro">política de privacidade</Link>.
         </span>
       </label>
       <Mensagens erro={estado.erro} />
