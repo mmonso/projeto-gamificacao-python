@@ -353,7 +353,7 @@ Pronto quando: a experiência visual está revisável e o percurso principal é 
 ### E04 — Fundação técnica
 
 - [x] E04.1 — Criar o projeto com versões estáveis compatíveis, TypeScript, Tailwind, scripts e lockfile.
-- [ ] E04.2 — Organizar módulos, validação, acesso a dados e configuração por ambiente.
+- [x] E04.2 — Organizar módulos, validação, acesso a dados e configuração por ambiente.
 - [ ] E04.3 — Configurar banco de desenvolvimento e homologação, autenticação e conexão apropriada.
 - [x] E04.4 — Criar esquema e migrações para perfis, conteúdo versionado, sessões, respostas, conclusões e gamificação.
 - [x] E04.5 — Implementar cadastro, verificação de e-mail, login, recuperação de acesso e saída.

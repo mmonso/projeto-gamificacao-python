@@ -2,6 +2,7 @@
 // então o token expirado é renovado aqui e repassado ao servidor e ao navegador.
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { configuracao } from "@/servidor/config";
 
 /** Áreas que exigem conta. A verificação definitiva fica na camada de acesso (servidor/auth/sessao). */
 const AREAS_DO_ALUNO = ["/perfil", "/nova-senha", "/aprender", "/praticar", "/licao", "/sessao"];
@@ -9,7 +10,8 @@ const AREAS_DO_ALUNO = ["/perfil", "/nova-senha", "/aprender", "/praticar", "/li
 export async function atualizarSessao(request: NextRequest) {
   let resposta = NextResponse.next({ request });
 
-  const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, {
+  const { supabaseUrl, supabaseChave } = configuracao();
+  const supabase = createServerClient(supabaseUrl, supabaseChave, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll(cookiesParaGravar, cabecalhos) {

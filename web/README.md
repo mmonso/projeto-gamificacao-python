@@ -44,6 +44,8 @@ Autorização: todo acesso a dados do aluno passa pela camada de acesso em `src/
 
 Copie `.env.example` para `.env.local`. O projeto de desenvolvimento no Supabase é `sibi-dev` (região sa-east-1). As tabelas ficam com RLS ativo e sem políticas: só o servidor, pela conexão PostgreSQL, lê e grava dados.
 
+As variáveis são lidas e validadas em um só lugar, `src/servidor/config.ts`. Se faltar alguma, o primeiro pedido falha com a lista das que faltam, sem mostrar valores. `SIBI_AMBIENTE` separa desenvolvimento, homologação e produção. Fora do desenvolvimento, `URL_DO_SITE` é obrigatória.
+
 ### Supabase Auth
 
 No painel do projeto, em Authentication:

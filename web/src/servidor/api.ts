@@ -5,6 +5,7 @@ import type { ErroApi } from "@/modulos/aprendizagem/contrato";
 import { obterAluno, type Aluno } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { ErroEstudo } from "@/servidor/licoes/estudo";
+import { configuracao } from "@/servidor/config";
 import { dentroDoLimite, LIMITES } from "@/servidor/limites";
 
 const STATUS: Record<ErroApi["erro"], number> = {
@@ -29,7 +30,7 @@ export function erro(codigo: ErroApi["erro"], mensagem: string) {
  * ou dados da conta (CA-117), e devolve uma mensagem neutra.
  */
 export function falhaInesperada(rota: string, e: unknown) {
-  console.error(`[sibi] falha em ${rota}: ${e instanceof Error ? e.message : String(e)}`);
+  console.error(`[sibi:${configuracao().ambiente}] falha em ${rota}: ${e instanceof Error ? e.message : String(e)}`);
   return Response.json({ erro: "invalida", mensagem: "Algo deu errado do nosso lado. Tente de novo em instantes." }, { status: 500, headers: SEM_CACHE });
 }
 

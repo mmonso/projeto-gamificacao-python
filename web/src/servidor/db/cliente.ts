@@ -2,11 +2,11 @@
 import "server-only";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { configuracao } from "@/servidor/config";
 import * as esquema from "./esquema";
 
 function conectar() {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL não configurada (veja web/.env.example)");
+  const url = configuracao().bancoUrl;
   // Pooler do Supabase em modo sessão (porta 5432). No modo transação (6543), consultas encadeadas pelo
   // postgres.js na mesma conexão às vezes ficavam sem resposta e a página travava. prepare: false mantém
   // a conexão compatível com os dois modos; conexões ociosas são devolvidas ao pooler depois de 20 s.
