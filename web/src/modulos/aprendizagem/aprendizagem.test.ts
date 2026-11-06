@@ -1,9 +1,9 @@
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { separarExercicio, type Exercicio } from "@/modulos/conteudo/esquema";
+import { separarExercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { respostaCorreta } from "@/testes/respostas";
-import { corrigir, respostaEsquema, type Resposta } from "./corretor";
+import { corrigir, respostaEsquema } from "./corretor";
 import { acertosDePrimeira, iniciarFila, registrarResultado } from "./fila";
 
 describe("conteúdo publicado", () => {
