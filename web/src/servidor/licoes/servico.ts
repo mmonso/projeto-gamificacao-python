@@ -197,27 +197,30 @@ async function licaoConcluida(db: Db, alunoId: string, licaoId: string) {
   return Boolean(c);
 }
 
-/** Prática aberta há menos tempo que a expiração (D-08) é retomada; depois disso, começa outra. */
+/**
+ * Prática aberta há menos tempo que a expiração (D-08) é retomada; depois disso, começa outra.
+ * Pedidos simultâneos (toque duplo, duas abas) esperam o perfil travado: só o primeiro cria a prática.
+ */
 async function iniciarPratica(db: Db, alunoId: string, licao: LicaoPublica): Promise<ResultadoInicio> {
   const limite = new Date(Date.now() - PARAMETROS.horasExpiracaoPratica * 3_600_000);
-  const [aberta] = await db
-    .select({ id: t.sessoes.id })
-    .from(t.sessoes)
-    .where(and(eq(t.sessoes.alunoId, alunoId), eq(t.sessoes.licaoId, licao.id), eq(t.sessoes.tipo, "pratica"), eq(t.sessoes.estado, "aberta"), gt(t.sessoes.atualizadoEm, limite)))
-    .orderBy(desc(t.sessoes.atualizadoEm))
-    .limit(1);
-  if (aberta) return { ok: true, sessaoId: aberta.id, retomada: true };
-
   const itens = await itensPrincipais(db, licao.versaoLicaoId);
-  const sessaoId = await db.transaction(async (tx) => {
+  return db.transaction(async (tx) => {
+    await tx.select({ id: t.perfis.id }).from(t.perfis).where(eq(t.perfis.id, alunoId)).for("update");
+    const [aberta] = await tx
+      .select({ id: t.sessoes.id })
+      .from(t.sessoes)
+      .where(and(eq(t.sessoes.alunoId, alunoId), eq(t.sessoes.licaoId, licao.id), eq(t.sessoes.tipo, "pratica"), eq(t.sessoes.estado, "aberta"), gt(t.sessoes.atualizadoEm, limite)))
+      .orderBy(desc(t.sessoes.atualizadoEm))
+      .limit(1);
+    if (aberta) return { ok: true, sessaoId: aberta.id, retomada: true } as const;
+
     const [sessao] = await tx
       .insert(t.sessoes)
       .values({ alunoId, tipo: "pratica", licaoId: licao.id, versaoLicaoId: licao.versaoLicaoId, fila: iniciarFila(itens.map((i) => i.id)), totalItens: itens.length })
       .returning({ id: t.sessoes.id });
     await tx.insert(t.itensSessao).values(itens.map((i) => ({ sessaoId: sessao.id, exercicioId: i.id, versaoLicaoId: licao.versaoLicaoId, posicaoOriginal: i.posicao })));
-    return sessao.id;
+    return { ok: true, sessaoId: sessao.id, retomada: false } as const;
   });
-  return { ok: true, sessaoId, retomada: false };
 }
 
 export type ResultadoRecuperacao = { ok: true; sessaoId: string } | { ok: false; motivo: "coracoes_cheios" | "sem_conteudo" };

@@ -14,6 +14,7 @@ Aplicação Next.js do MVP. Planejamento em [../PLANO_PRODUTO_E_ARQUITETURA.md](
 | `npm run db:gerar` | Gera uma migração a partir de `src/servidor/db/esquema.ts` |
 | `npm run db:migrar` | Aplica as migrações pendentes no banco de `DATABASE_URL_MIGRACOES` |
 | `npm run db:publicar` | Publica o conteúdo de `../conteudo` no mesmo banco; versões já publicadas são mantidas |
+| `npm run db:concorrencia` | Dispara pedidos simultâneos contra o banco de `DATABASE_URL` com dois perfis temporários, que apaga no fim. Cobre o que o PGlite dos testes não alcança, porque ele executa uma transação por vez |
 
 ## Organização
 
