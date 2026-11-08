@@ -14,7 +14,8 @@ describe("feedback da lição", () => {
   it("mostra a contagem a partir de três respostas certas seguidas", () => {
     expect(textoSeguidas(2)).toBeNull();
     expect(textoSeguidas(3)).toBe("3 seguidas!");
-    expect(textoSeguidas(12)).toBe("12 seguidas! Imparável!");
+    expect(textoSeguidas(4)).toBe("4 seguidas!");
+    expect(textoSeguidas(5)).toBe("5 seguidas! Imparável!");
   });
 
   it("o som de acerto sobe de tom com as respostas seguidas, até um limite", () => {

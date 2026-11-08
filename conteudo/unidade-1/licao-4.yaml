@@ -1,7 +1,7 @@
 id: u1-l4
 unidade: u1
 ordem: 4
-versao: 3
+versao: 4
 titulo: Mudando valores
 objetivo: Prever o valor de uma variável depois de reatribuições e atualizações, respeitando a ordem das linhas.
 conceitos: [reatribuicao, atualizacao, ordem-execucao]
@@ -202,7 +202,7 @@ exercicios:
     resposta: b
     dicas:
       - Na linha 2, qual valor preco guarda?
-      - Copiar uma variável guarda o valor daquele momento. Se a original mudar depois, a cópia continua com o valor antigo.
+      - Siga linha por linha. A linha 3 dá um novo valor a preco; ela não menciona preco_antigo.
     explicacao: Na linha 2, preco_antigo recebe o valor que preco tinha naquele momento, 4. A mudança de preco na linha 3 não altera preco_antigo.
 
 revisao:
@@ -298,5 +298,5 @@ revisao:
     resposta: c
     dicas:
       - A linha 2 copia o valor de meta naquele momento.
-      - "Mudar meta depois não muda copia: cada variável guarda o seu próprio valor."
+      - Anote o valor de cada variável depois de cada linha. A linha 3 dá um novo valor só a meta; nenhuma linha depois da 2 menciona copia.
     explicacao: copia recebe 3 na linha 2. Depois, só meta é atualizada para 4. Por isso o print exibe 3 e 4.

@@ -155,8 +155,58 @@ Ligas, amigos e a opção de compartilhar uma conquista como imagem. Só com par
 | 2. Ver o progresso | Cartão "Conceito novo" e "Rever o conceito"; trilha com linha, cores por unidade, coroa de lição perfeita e troféu de unidade; tela de unidade concluída; anel da meta no topo; calendário e marcos da sequência; mapa de conceitos; mais conquistas | Só as conquistas novas (4.7) |
 | 3. Recompensas | Missões diárias, cristais, loja e proteção de sequência; novos tipos de exercício; depois, ligas e amigos | Sim (4.2, 4.5 e PR-04) |
 
-## 5. Decisões pendentes do responsável pelo produto
+## 5. Decisões da equipe de especialistas (8 de novembro de 2026)
 
-- A lição perfeita rende XP extra, ou só a coroa na trilha?
-- Os cristais e a loja entram antes do beta, ou depois?
-- Quantas conquistas e quais nomes?
+As decisões passaram a ser tomadas pela equipe de produto: Claude e um painel de especialistas em gamificação, ciência da aprendizagem, crescimento e UX.
+
+| Tema | Decisão |
+| --- | --- |
+| Lição perfeita | Só a coroa na trilha, sem XP extra. Vale também na prática: tudo certo de primeira, com dica permitida |
+| Cristais e loja | Depois do teste com amigos (onda 3). Cristais nunca serão vendidos, e a loja terá só visuais, com preço fixo e sem sorteio |
+| Conquistas | 18, na tabela abaixo. Nenhuma exige "zero dica", porque dica não pune. Contagens usam exercícios ou dias distintos, nunca repetições |
+| Meta diária | Continua em sessões, com nomes e tempo: Leve, 1 sessão (cerca de 5 min); Firme, 2 (cerca de 10 min); Intensa, 3 (cerca de 20 min) |
+| Sequência | Marcos de 3, 7, 14 e 30 dias. Dia livre ganho estudando (o primeiro aos 3 dias, depois 1 a cada 7 dias de estudo, no máximo 2), usado sozinho. Dia perdido aparece cinza, nunca vermelho |
+| Cartão "Conceito novo" | Um por conceito (25), antes do primeiro exercício dele, só na sessão principal e na demonstração. Saída escondida até "Ver a saída". Botão "Conceito" ao lado de "Dica" para rever. Na revisão, abrir o cartão antes de responder conta como dica na agenda |
+| Mapa de domínio | Quatro degraus sem porcentagem (visto, praticando 1 dia, praticando 3 dias, consolidando), selo "para revisar", nunca "dominado" |
+| Trilha | Cor por unidade: verde, azul e roxo (#6D4BC4). Caminho ligando os nós, mascote ao lado da lição atual, nó dourado com coroa para lição perfeita, troféu no fim da unidade, cabeçalho fixo com progresso |
+| Dourado | Passa a significar só excelência (coroa, meta, conquista). Lição concluída usa a cor da unidade |
+
+Conquistas (as três primeiras mantêm o id atual):
+
+| Id | Nome | Condição |
+| --- | --- | --- |
+| primeira-licao | Olá, mundo | Primeira sessão principal concluída |
+| primeira-unidade | Pacote completo | As 5 lições de uma unidade |
+| sete-dias | Semana completa | Sequência de 7 dias |
+| curso-completo | Saída esperada | Todas as lições do curso |
+| tres-dias | Pegando o ritmo | Sequência de 3 dias |
+| catorze-dias | Hábito instalado | Sequência de 14 dias |
+| trinta-dias | Rodando há um mês | Sequência de 30 dias |
+| meta-cinco | Combinado é combinado | Meta do dia cumprida 5 vezes |
+| primeira-coroa | Rodou de primeira | Primeira sessão com tudo certo de primeira |
+| cinco-coroas | Zero bugs | Coroa em 5 lições diferentes |
+| caca-bugs | Caça-bugs | 10 exercícios distintos de "encontre o erro" acertados de primeira |
+| encaixou | Encaixou! | 8 exercícios distintos de "monte o programa" acertados de primeira |
+| primeira-revisao | Salvo na memória | Primeira revisão concluída |
+| revisor-constante | Constante | Revisões em 5 dias diferentes |
+| sabe-de-cor | Sabe de cor | Um conceito consolidando |
+| biblioteca-propria | Biblioteca própria | 10 conceitos consolidando |
+| cem-xp | Contador ligado | 100 XP no total |
+| folego-novo | Fôlego novo | Primeira recuperação de corações concluída |
+
+Pareceres completos e estratégia de crescimento: [ESTRATEGIA_DE_CRESCIMENTO.md](ESTRATEGIA_DE_CRESCIMENTO.md).
+
+### Onda 2, em partes
+
+- **2A, telas:**
+  - trilha nova;
+  - anel da meta e calendário da sequência no topo;
+  - acertos de clareza (cabeçalho da lição, Sibi maior no feedback, cartões vazios, textos sem jargão);
+  - primeira impressão da tela inicial;
+  - imagem de prévia para links compartilhados.
+- **2B, recompensas:**
+  - 18 conquistas, com tela de desbloqueio e grade com progresso;
+  - nomes da meta;
+  - marcos da sequência.
+- **2C, aprender:** cartões de conceito e o botão "Conceito".
+- **2D, hábito:** dia livre e mapa de domínio.

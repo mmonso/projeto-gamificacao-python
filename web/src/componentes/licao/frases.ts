@@ -14,6 +14,7 @@ export function tituloDoFeedback(correta: boolean, vez: number): string {
 /** Texto da contagem de respostas certas seguidas, ou null abaixo do mínimo. */
 export function textoSeguidas(seguidas: number): string | null {
   if (seguidas < SEGUIDAS_MINIMAS) return null;
-  if (seguidas >= 10) return `${seguidas} seguidas! Imparável!`;
+  // Lições e práticas têm de 5 a 8 itens, e um erro zera a contagem: 5 seguidas já é a sessão quase inteira.
+  if (seguidas >= 5) return `${seguidas} seguidas! Imparável!`;
   return `${seguidas} seguidas!`;
 }

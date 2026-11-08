@@ -1196,7 +1196,7 @@ print(preco_antigo)
   - Feedback: Sem aspas, preco_antigo é uma variável, e o print exibe o valor dela.
 
 - Dica 1: Na linha 2, qual valor preco guarda?
-- Dica 2: Copiar uma variável guarda o valor daquele momento. Se a original mudar depois, a cópia continua com o valor antigo.
+- Dica 2: Siga linha por linha. A linha 3 dá um novo valor a preco; ela não menciona preco_antigo.
 
 **Explicação:** Na linha 2, preco_antigo recebe o valor que preco tinha naquele momento, 4. A mudança de preco na linha 3 não altera preco_antigo.
 
@@ -1320,7 +1320,7 @@ print(copia, meta)
 
 
 - Dica 1: A linha 2 copia o valor de meta naquele momento.
-- Dica 2: Mudar meta depois não muda copia: cada variável guarda o seu próprio valor.
+- Dica 2: Anote o valor de cada variável depois de cada linha. A linha 3 dá um novo valor só a meta; nenhuma linha depois da 2 menciona copia.
 
 **Explicação:** copia recebe 3 na linha 2. Depois, só meta é atualizada para 4. Por isso o print exibe 3 e 4.
 
