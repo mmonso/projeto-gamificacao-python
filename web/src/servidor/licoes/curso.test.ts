@@ -79,6 +79,8 @@ describe("percurso das 15 lições", () => {
 
     const trilha = await obterTrilha(db, LIA);
     expect(trilha.flatMap((u) => u.licoes).every((l) => l.estado === "concluida")).toBe(true);
+    // Todas foram resolvidas sem erro: cada lição ganha a coroa.
+    expect(trilha.flatMap((u) => u.licoes).every((l) => l.perfeita)).toBe(true);
     const [p] = await db.select().from(t.perfis).where(eq(t.perfis.id, LIA));
     const resumo = await resumoDoAluno(db, p);
     expect(resumo).toMatchObject({ xpTotal: 300, licoesConcluidas: 15, coracoes: 5, conquistas: ["primeira-licao", "primeira-unidade"] });

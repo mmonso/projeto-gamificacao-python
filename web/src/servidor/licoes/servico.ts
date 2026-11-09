@@ -78,7 +78,17 @@ export async function licaoDisponivel(db: Db, alunoId: string, licaoId: string):
 }
 
 export type EstadoNo = "concluida" | "atual" | "bloqueada";
-export type NoTrilha = { id: string; ordem: number; titulo: string; objetivo: string; estado: EstadoNo; sessaoAberta: boolean; desafio: boolean };
+export type NoTrilha = {
+  id: string;
+  ordem: number;
+  titulo: string;
+  objetivo: string;
+  estado: EstadoNo;
+  sessaoAberta: boolean;
+  desafio: boolean;
+  /** Coroa: alguma sessão da lição, principal ou prática, terminou com tudo certo de primeira (dica permitida). */
+  perfeita: boolean;
+};
 export type UnidadeTrilha = { id: string; ordem: number; titulo: string; descricao: string; licoes: NoTrilha[] };
 
 /**
@@ -86,7 +96,7 @@ export type UnidadeTrilha = { id: string; ordem: number; titulo: string; descric
  * A quinta lição de cada unidade é o desafio final.
  */
 export async function obterTrilha(db: Db, alunoId: string): Promise<UnidadeTrilha[]> {
-  const [licoes, concluidas, abertas] = await Promise.all([
+  const [licoes, concluidas, abertas, perfeitas] = await Promise.all([
     db
       .select({
         id: t.licoes.id,
@@ -106,7 +116,19 @@ export async function obterTrilha(db: Db, alunoId: string): Promise<UnidadeTrilh
       .select({ licaoId: t.sessoes.licaoId })
       .from(t.sessoes)
       .where(and(eq(t.sessoes.alunoId, alunoId), eq(t.sessoes.tipo, "principal"), inArray(t.sessoes.estado, ["aberta", "pausada"]))),
+    db
+      .selectDistinct({ licaoId: t.sessoes.licaoId })
+      .from(t.sessoes)
+      .where(
+        and(
+          eq(t.sessoes.alunoId, alunoId),
+          eq(t.sessoes.estado, "concluida"),
+          inArray(t.sessoes.tipo, ["principal", "pratica"]),
+          sql`(${t.sessoes.resultado}->>'total')::int > 0 and (${t.sessoes.resultado}->>'acertosPrimeira')::int = (${t.sessoes.resultado}->>'total')::int`,
+        ),
+      ),
   ]);
+  const coroas = new Set(perfeitas.map((p) => p.licaoId));
   const feitas = new Set(concluidas.map((c) => c.licaoId));
   const emAndamento = new Set(abertas.map((s) => s.licaoId));
   const ultimaPorUnidade = new Map(licoes.map((l) => [l.unidadeId, l.ordem]));
@@ -133,6 +155,7 @@ export async function obterTrilha(db: Db, alunoId: string): Promise<UnidadeTrilh
       estado,
       sessaoAberta: emAndamento.has(l.id),
       desafio: ultimaPorUnidade.get(l.unidadeId) === l.ordem,
+      perfeita: estado === "concluida" && coroas.has(l.id),
     });
   }
   return unidades;

@@ -1,9 +1,10 @@
 // Efeitos de uma sessão concluída sobre a gamificação (E06.3 a E06.5; ESPECIFICACAO_MVP, seção 4):
 // atividade diária, meta, sequência, agenda de revisão por conceito e conquistas.
 // Rodam na transação da conclusão, com o perfil já travado, para que tudo seja gravado junto (CA-35, CA-36).
-import { and, asc, count, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, count, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { diaDeEstudo, fusoVigente } from "@/modulos/gamificacao/dias";
+import { semanaDe, type DiaSemana } from "@/modulos/gamificacao/semana";
 import type { TipoSessao } from "@/modulos/gamificacao/parametros";
 import {
   agendaAposSessao,
@@ -169,6 +170,8 @@ export type ResumoAluno = {
   conquistas: Conquista[];
   licoesConcluidas: number;
   hoje: string;
+  /** Semana de domingo a sábado que contém hoje, com os dias de estudo (calendário da sequência). */
+  semana: DiaSemana[];
   fuso: string;
   fusoPendente: string | null;
   som: boolean;
@@ -178,7 +181,8 @@ export type ResumoAluno = {
 export async function resumoDoAluno(db: Db, perfil: Perfil, agora = new Date()): Promise<ResumoAluno> {
   const { fuso } = fusoVigente(perfil, agora);
   const hoje = diaDeEstudo(agora, fuso, perfil.ultimoDiaEstudo);
-  const [[atividade], [xp], conquistas, [{ licoes }]] = await Promise.all([
+  const inicioSemana = semanaDe(hoje, new Set())[0].dia;
+  const [[atividade], [xp], conquistas, [{ licoes }], diasDaSemana] = await Promise.all([
     db.select({ sessoes: t.atividadeDiaria.sessoes }).from(t.atividadeDiaria).where(and(eq(t.atividadeDiaria.alunoId, perfil.id), eq(t.atividadeDiaria.dia, hoje))),
     db
       .select({ total: sql<number>`coalesce(sum(${t.lancamentos.valor}), 0)::int` })
@@ -186,6 +190,10 @@ export async function resumoDoAluno(db: Db, perfil: Perfil, agora = new Date()):
       .where(and(eq(t.lancamentos.alunoId, perfil.id), eq(t.lancamentos.diaEstudo, hoje), eq(t.lancamentos.moeda, "xp"))),
     db.select({ conquista: t.conquistasAluno.conquista }).from(t.conquistasAluno).where(eq(t.conquistasAluno.alunoId, perfil.id)).orderBy(asc(t.conquistasAluno.concedidaEm)),
     db.select({ licoes: count() }).from(t.conclusoesLicao).where(eq(t.conclusoesLicao.alunoId, perfil.id)),
+    db
+      .select({ dia: t.atividadeDiaria.dia })
+      .from(t.atividadeDiaria)
+      .where(and(eq(t.atividadeDiaria.alunoId, perfil.id), gte(t.atividadeDiaria.dia, inicioSemana), lte(t.atividadeDiaria.dia, hoje))),
   ]);
   return {
     nome: perfil.nome,
@@ -200,6 +208,7 @@ export async function resumoDoAluno(db: Db, perfil: Perfil, agora = new Date()):
     conquistas: conquistas.map((c) => c.conquista),
     licoesConcluidas: licoes,
     hoje,
+    semana: semanaDe(hoje, new Set(diasDaSemana.map((d) => d.dia))),
     fuso: perfil.fuso,
     fusoPendente: perfil.fusoPendente,
     som: perfil.som,

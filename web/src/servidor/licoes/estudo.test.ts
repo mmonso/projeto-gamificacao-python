@@ -139,6 +139,8 @@ describe("lição piloto do começo ao fim", () => {
     const [u1] = await obterTrilha(db, ANA);
     expect(u1.licoes.map((l) => l.estado)).toEqual(["concluida", "atual", "bloqueada", "bloqueada", "bloqueada"]);
     expect(u1.licoes.at(-1)!.desafio).toBe(true);
+    // Houve um erro de primeira: concluída, mas sem coroa.
+    expect(u1.licoes[0].perfeita).toBe(false);
 
     const itens = await itensDaSessao(db, sessaoId);
     expect(itens.every((i) => i.resolvido)).toBe(true);

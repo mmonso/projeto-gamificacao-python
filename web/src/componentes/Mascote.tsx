@@ -89,10 +89,11 @@ function Extra({ humor }: { humor: Humor }) {
   }
 }
 
-export function Mascote({ humor = "incentivo", tamanho = "medio" }: { humor?: Humor; tamanho?: keyof typeof TAMANHO }) {
+/** Com `soCabeca`, o desenho é enquadrado só na cabeça, para caber legível em espaços pequenos. */
+export function Mascote({ humor = "incentivo", tamanho = "medio", soCabeca = false }: { humor?: Humor; tamanho?: keyof typeof TAMANHO; soCabeca?: boolean }) {
   const lado = TAMANHO[tamanho];
   return (
-    <svg width={lado} height={lado} viewBox="0 0 120 120" role="img" aria-label={DESCRICAO[humor]} className="mx-auto block shrink-0">
+    <svg width={lado} height={lado} viewBox={soCabeca ? "55 6 60 62" : "0 0 120 120"} role="img" aria-label={DESCRICAO[humor]} className="mx-auto block shrink-0">
       <path d="M16 104c0-16 26-14 34-26s-6-24 8-34c8-6 18-4 22-4" fill="none" stroke="#12592F" strokeWidth="22" strokeLinecap="round" />
       <path d="M16 104c0-16 26-14 34-26s-6-24 8-34c8-6 18-4 22-4" fill="none" stroke="#2FA85E" strokeWidth="17" strokeLinecap="round" />
       <circle cx="30" cy="96" r="2.6" fill="#1B7F45" />

@@ -24,6 +24,13 @@ const ICONES = {
       <path d="M10 13h4v3h2v4H8v-4h2v-3z" fill="currentColor" />
     </>
   ),
+  coroa: <path d="M3 8l4.5 3.5L12 5l4.5 6.5L21 8l-2 11H5L3 8z" fill="currentColor" />,
+  bandeira: (
+    <>
+      <path d="M6 21V4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M6 4h11l-2.5 4L17 12H6V4z" fill="currentColor" />
+    </>
+  ),
   pessoa: (
     <>
       <circle cx="12" cy="8" r="4" fill="currentColor" />

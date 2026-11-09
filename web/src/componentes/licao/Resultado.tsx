@@ -126,6 +126,9 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
   const metaCumprida = conclusao.meta.cumpridaAgora;
   const perfeita = conclusao.total > 0 && conclusao.acertosPrimeira === conclusao.total;
   const acendeu = !demo && conclusao.sequenciaAumentou && conclusao.sequencia > 0;
+  // Cartões sem informação somem: XP zerado pelo limite diário de prática e sequência na demonstração.
+  const mostrarXp = conclusao.xp > 0 || demo;
+  const colunas = 1 + (mostrarXp ? 1 : 0) + (demo ? 0 : 1);
   const porcentagemMeta = Math.min(100, Math.round((conclusao.meta.feitas / Math.max(1, conclusao.meta.meta)) * 100));
   return (
     <main className="tela-centro text-center resultado" id="conteudo-principal">
@@ -139,7 +142,7 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
       {conclusao.licaoId && <p className="subtitulo">{titulo}</p>}
       {perfeita && (
         <p className="selo-perfeita">
-          <Icone nome="estrela" pequeno /> {conclusao.tipo === "principal" ? "Lição perfeita!" : "Tudo certo de primeira!"}
+          <Icone nome="coroa" pequeno /> {conclusao.tipo === "principal" ? "Lição perfeita!" : "Tudo certo de primeira!"}
         </p>
       )}
       {conclusao.coracoesRecuperados > 0 && (
@@ -150,17 +153,19 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
           Você recuperou {conclusao.coracoesRecuperados} {plural(conclusao.coracoesRecuperados, "coração", "corações")}.
         </p>
       )}
-      <div className="estatisticas">
-        <div className="estatistica xp">
-          <p className="topo">XP</p>
-          <p className="valor">
-            <Icone nome="raio" pequeno />
-            <span>
-              +<Contador valor={conclusao.xp} atraso={250} />
-            </span>
-          </p>
-          {demo && <span className="selo-provisorio">provisório</span>}
-        </div>
+      <div className="estatisticas" style={{ gridTemplateColumns: `repeat(${colunas}, minmax(0, 1fr))` }}>
+        {mostrarXp && (
+          <div className="estatistica xp">
+            <p className="topo">XP</p>
+            <p className="valor">
+              <Icone nome="raio" pequeno />
+              <span>
+                +<Contador valor={conclusao.xp} atraso={250} />
+              </span>
+            </p>
+            {demo && <span className="selo-provisorio">provisório</span>}
+          </div>
+        )}
         <div className="estatistica acertos">
           <p className="topo">De primeira</p>
           <p className="valor">
@@ -169,14 +174,16 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
             </span>
           </p>
         </div>
-        <div className={`estatistica sequencia ${acendeu ? "acendeu" : ""}`}>
-          <p className="topo">Sequência</p>
-          <p className="valor">
-            <Icone nome="chama" pequeno />
-            {demo ? "–" : conclusao.sequencia}
-          </p>
-          {acendeu && <span className="mais-um">+1 dia</span>}
-        </div>
+        {!demo && (
+          <div className={`estatistica sequencia ${acendeu ? "acendeu" : ""}`}>
+            <p className="topo">Sequência</p>
+            <p className="valor">
+              <Icone nome="chama" pequeno />
+              {conclusao.sequencia}
+            </p>
+            {acendeu && <span className="mais-um">+1 dia</span>}
+          </div>
+        )}
       </div>
       {demo && <p>Crie uma conta para salvar este XP, começar sua sequência e liberar a próxima lição.</p>}
       {!demo && (metaCumprida || conclusao.meta.feitas < conclusao.meta.meta) && (

@@ -43,7 +43,7 @@ async function Praticar() {
             <p className="mb-3">
               {praticar.conceitosVencidos > 0
                 ? `${praticar.conceitosVencidos} ${praticar.conceitosVencidos === 1 ? "conceito está" : "conceitos estão"} no ponto de revisar. Exercícios novos sobre o que você já viu, sem gastar corações.`
-                : "Nenhum conceito venceu hoje. Uma revisão geral reforça o que você já viu, sem gastar corações."}
+                : "Nada para revisar hoje. Uma revisão geral reforça o que você já viu, sem gastar corações."}
             </p>
             <BotaoRevisao rotulo={praticar.revisaoAberta ? "Continuar revisão" : "Começar revisão"} />
           </div>

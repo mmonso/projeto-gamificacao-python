@@ -35,6 +35,8 @@ type Props = {
   criarMotor?: () => Motor;
 };
 
+const ROTULO_SESSAO: Record<ResultadoConclusao["tipo"], string> = { principal: "Lição", pratica: "Prática", revisao: "Revisão", recuperacao: "Recuperação" };
+
 /** Faíscas do acerto, em volta do mascote; somem com movimento reduzido. */
 const FAISCAS = Array.from({ length: 8 }, (_, i) => ({ "--angulo": `${i * 45}deg` }) as CSSProperties);
 
@@ -302,9 +304,8 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
         {exercicio ? (
           <>
             <p className="etiqueta-tipo">
-              {demo && "Demonstração · "}
-              {tipo === "pratica" && "Prática · "}
-              {titulo} · {NOME_TIPO[exercicio.tipo]}
+              {(demo || tipo !== "principal") && <span className="selo-sessao">{demo ? "Demonstração" : ROTULO_SESSAO[tipo]}</span>}
+              {NOME_TIPO[exercicio.tipo]}
             </p>
             <h1 id="enunciado" ref={enunciadoRef} tabIndex={-1}>
               {exercicio.enunciado}
@@ -345,7 +346,10 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
             <div className="feedback">
               <div className="feedback-cabeca">
                 <div className="feedback-mascote" aria-hidden="true">
-                  <Mascote humor={resultado.correta ? "comemoracao" : "incentivo"} tamanho="mini" />
+                  <Mascote humor={resultado.correta ? "comemoracao" : "incentivo"} tamanho="mini" soCabeca />
+                  <span className="selo selo-canto">
+                    <Icone nome={resultado.correta ? "check" : "x"} pequeno />
+                  </span>
                   {resultado.correta && (
                     <span className="faiscas">
                       {FAISCAS.map((estilo, i) => (
@@ -356,9 +360,6 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                 </div>
                 <div>
                   <p className="feedback-titulo" ref={feedbackRef} tabIndex={-1}>
-                    <span className="selo">
-                      <Icone nome={resultado.correta ? "check" : "x"} />
-                    </span>
                     {tituloDoFeedback(resultado.correta, vez - 1)}
                   </p>
                   {resultado.correta && textoSeguidas(seguidas) && (
@@ -380,7 +381,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                 </div>
               )}
               <p className="feedback-texto">{resultado.explicacao}</p>
-              {!resultado.correta && <p className="retorno-aviso">Este exercício volta no fim da lição.</p>}
+              {!resultado.correta && <p className="retorno-neutro">Este exercício volta no fim da lição.</p>}
               {resultado.perdeuCoracao && (
                 <p className="retorno-aviso">
                   <Icone nome="coracao" pequeno /> Você perdeu um coração. {resultado.coracoes === 0 ? "Seus corações acabaram." : `Restam ${resultado.coracoes}.`}

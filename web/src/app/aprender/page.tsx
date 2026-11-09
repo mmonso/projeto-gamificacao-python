@@ -1,58 +1,146 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Icone } from "@/componentes/Icone";
+import { Icone, type NomeIcone } from "@/componentes/Icone";
+import { Mascote } from "@/componentes/Mascote";
 import { Moldura, MolduraCarregando } from "@/componentes/Moldura";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
-import { obterTrilha, type NoTrilha } from "@/servidor/licoes/servico";
+import { obterTrilha, type NoTrilha, type UnidadeTrilha } from "@/servidor/licoes/servico";
 import { OfertaTransferencia } from "./OfertaTransferencia";
+import { RolarParaAtual } from "./RolarParaAtual";
 
 export const metadata: Metadata = { title: "Aprender" };
 
-// Trilha sinuosa (F-07; protótipo E03.3).
+// Trilha sinuosa (F-07; design/ANALISE_UX_GAMIFICACAO.md, seção 5): cada item tem altura fixa, o que permite
+// desenhar no servidor o caminho que liga os centros dos nós, sólido no trecho feito e pontilhado no resto.
 const DESLOCAMENTOS = [0, 56, 84, 56, 0, -56, -84, -56];
+const ALTURA = 132;
+const CENTRO = 38;
 const NOME_ESTADO = { concluida: "concluída", atual: "lição atual", bloqueada: "bloqueada" } as const;
 /** Pontos de revisão (F-09): depois da segunda e da última lição de cada unidade. */
 const REVISAO_DEPOIS = [2, 5];
 
-function No({ licao, posicao }: { licao: NoTrilha; posicao: number }) {
-  const icone = licao.estado === "concluida" ? "check" : licao.estado === "bloqueada" ? "cadeado" : licao.desafio ? "trofeu" : "estrela";
-  const rotulo = `${licao.desafio ? "Desafio final" : `Lição ${licao.ordem}`}: ${licao.titulo}, ${NOME_ESTADO[licao.estado]}`;
+type Item =
+  | { tipo: "licao"; licao: NoTrilha }
+  | { tipo: "revisao"; liberada: boolean; depois: number; chave: string }
+  | { tipo: "trofeu"; ganho: boolean };
+
+function itensDa(u: UnidadeTrilha): Item[] {
+  const itens: Item[] = [];
+  u.licoes.forEach((l, i) => {
+    itens.push({ tipo: "licao", licao: l });
+    if (REVISAO_DEPOIS.includes(i + 1)) itens.push({ tipo: "revisao", liberada: l.estado === "concluida", depois: i + 1, chave: `revisao-${l.id}` });
+  });
+  itens.push({ tipo: "trofeu", ganho: u.licoes.every((l) => l.estado === "concluida") });
+  return itens;
+}
+
+const deslocamento = (i: number) => DESLOCAMENTOS[i % DESLOCAMENTOS.length];
+
+/** Caminho entre os centros dos itens `de` a `ate`, em curvas suaves. */
+function caminho(de: number, ate: number): string {
+  let d = `M ${deslocamento(de)} ${de * ALTURA + CENTRO}`;
+  for (let i = de + 1; i <= ate; i++) {
+    const [x0, x1] = [deslocamento(i - 1), deslocamento(i)];
+    const [y0, y1] = [(i - 1) * ALTURA + CENTRO, i * ALTURA + CENTRO];
+    const ym = (y0 + y1) / 2;
+    d += ` C ${x0} ${ym}, ${x1} ${ym}, ${x1} ${y1}`;
+  }
+  return d;
+}
+
+function Caminho({ total, feito }: { total: number; feito: number }) {
   return (
-    <li className={licao.estado === "atual" ? "li-atual" : ""} style={{ transform: `translateX(${DESLOCAMENTOS[posicao % DESLOCAMENTOS.length]}px)` }}>
-      {licao.estado === "atual" && (
-        <span className="etiqueta-atual" aria-hidden="true">
-          {licao.sessaoAberta ? "Continuar" : "Começar"}
-        </span>
-      )}
-      <Link href={`/licao/${licao.id}`} className={`no ${licao.estado} ${licao.estado === "atual" ? "atual" : ""}`} aria-label={rotulo}>
-        <Icone nome={icone} />
-      </Link>
-      <span className="no-rotulo" aria-hidden="true">
-        {licao.titulo}
-      </span>
-    </li>
+    <svg className="caminho" viewBox={`-120 0 240 ${total * ALTURA}`} width="240" height={total * ALTURA} aria-hidden="true">
+      {feito < total - 1 && <path className="caminho-resto" d={caminho(Math.max(feito, 0), total - 1)} />}
+      {feito > 0 && <path className="caminho-feito" d={caminho(0, feito)} />}
+    </svg>
   );
 }
 
-function PontoRevisao({ liberada, posicao, depois }: { liberada: boolean; posicao: number; depois: number }) {
+function No({ licao, nome }: { licao: NoTrilha; nome: string }) {
+  const icone: NomeIcone = licao.perfeita ? "coroa" : licao.estado === "concluida" ? "check" : licao.estado === "bloqueada" ? "cadeado" : licao.desafio ? "bandeira" : "estrela";
+  const rotulo = `${licao.desafio ? "Desafio final" : `Lição ${licao.ordem}`}: ${licao.titulo}, ${NOME_ESTADO[licao.estado]}${licao.perfeita ? ", perfeita" : ""}`;
   return (
-    <li style={{ transform: `translateX(${DESLOCAMENTOS[posicao % DESLOCAMENTOS.length]}px)` }}>
-      {liberada ? (
-        <Link href="/praticar" className="no revisao" aria-label="Revisão dos conceitos vistos">
-          <Icone nome="revisao" />
-        </Link>
-      ) : (
-        <span className="no revisao bloqueada" role="img" aria-label={`Revisão, bloqueada até concluir a lição ${depois}`}>
-          <Icone nome="cadeado" />
+    <>
+      <Link href={`/licao/${licao.id}`} className={`no ${licao.estado} ${licao.perfeita ? "perfeita" : ""}`} aria-label={rotulo}>
+        <Icone nome={icone} />
+      </Link>
+      {licao.estado === "atual" && (
+        <span className="mascote-trilha" aria-hidden="true">
+          <span className="balao">{licao.sessaoAberta ? "Continuar" : nome ? `Bora, ${nome}?` : "Começar"}</span>
+          <Mascote humor="incentivo" tamanho="pequeno" />
         </span>
       )}
       <span className="no-rotulo" aria-hidden="true">
-        Revisão
+        {licao.titulo}
       </span>
-    </li>
+    </>
+  );
+}
+
+function Unidade({ u, nome }: { u: UnidadeTrilha; nome: string }) {
+  const itens = itensDa(u);
+  const feitas = u.licoes.filter((l) => l.estado === "concluida").length;
+  const liberada = u.licoes.some((l) => l.estado !== "bloqueada");
+  const atual = itens.findIndex((i) => i.tipo === "licao" && i.licao.estado === "atual");
+  const feito = atual >= 0 ? atual : liberada ? itens.length - 1 : 0;
+  return (
+    <section className={`unidade u${((u.ordem - 1) % 3) + 1} ${liberada ? "" : "bloqueada"}`} aria-labelledby={`unidade-${u.id}`}>
+      <div className="unidade-cabeca">
+        <p className="rotulo">
+          Unidade {u.ordem} · {feitas} de {u.licoes.length}
+        </p>
+        <h2 id={`unidade-${u.id}`}>{u.titulo}</h2>
+        <span className="unidade-progresso" aria-hidden="true">
+          <span style={{ width: `${(feitas / u.licoes.length) * 100}%` }} />
+        </span>
+      </div>
+      <p className="unidade-descricao">{u.descricao}</p>
+      <div className="trilha-area">
+        <Caminho total={itens.length} feito={feito} />
+        <ol className="trilha" aria-label={`Lições da unidade ${u.ordem}`}>
+          {itens.map((item, i) => {
+            const lado = deslocamento(i) > 0 ? "lado-esq" : "lado-dir";
+            const estilo = { transform: `translateX(${deslocamento(i)}px)` };
+            if (item.tipo === "licao") {
+              return (
+                <li key={item.licao.id} className={`${item.licao.estado === "atual" ? "li-atual" : ""} ${lado}`} style={estilo}>
+                  <No licao={item.licao} nome={nome} />
+                </li>
+              );
+            }
+            if (item.tipo === "revisao") {
+              return (
+                <li key={item.chave} style={estilo}>
+                  {item.liberada ? (
+                    <Link href="/praticar" className="no revisao" aria-label="Revisão dos conceitos vistos">
+                      <Icone nome="revisao" />
+                    </Link>
+                  ) : (
+                    <span className="no revisao bloqueada" role="img" aria-label={`Revisão, bloqueada até concluir a lição ${item.depois}`}>
+                      <Icone nome="cadeado" />
+                    </span>
+                  )}
+                  <span className="no-rotulo" aria-hidden="true">
+                    Revisão
+                  </span>
+                </li>
+              );
+            }
+            return (
+              <li key="trofeu" style={estilo}>
+                <span className={`no trofeu ${item.ganho ? "ganho" : "bloqueada"}`} role="img" aria-label={item.ganho ? `Troféu da unidade ${u.ordem}, conquistado` : `Troféu da unidade ${u.ordem}, ao concluir todas as lições`}>
+                  <Icone nome="trofeu" />
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
   );
 }
 
@@ -63,7 +151,6 @@ async function Trilha() {
     <Moldura atual="aprender" resumo={resumo}>
       <h1 className="so-leitor">Aprender</h1>
       <OfertaTransferencia licao1NaConta={unidades[0]?.licoes[0]?.estado === "concluida"} />
-      {perfil.nome && <p className="subtitulo">Olá, {perfil.nome}!</p>}
       {resumo.coracoes === 0 && (
         <div className="aviso-conta">
           <div>
@@ -74,28 +161,10 @@ async function Trilha() {
           </div>
         </div>
       )}
-      {unidades.map((u) => {
-        const liberada = u.licoes.some((l) => l.estado !== "bloqueada");
-        const itens: React.ReactNode[] = [];
-        u.licoes.forEach((l, i) => {
-          itens.push(<No key={l.id} licao={l} posicao={itens.length} />);
-          if (REVISAO_DEPOIS.includes(i + 1)) {
-            itens.push(<PontoRevisao key={`revisao-${l.id}`} liberada={l.estado === "concluida"} posicao={itens.length} depois={i + 1} />);
-          }
-        });
-        return (
-          <section key={u.id} aria-labelledby={`unidade-${u.id}`}>
-            <div className={`unidade-banner ${liberada ? "" : "bloqueada"}`}>
-              <p className="rotulo">Unidade {u.ordem}</p>
-              <h2 id={`unidade-${u.id}`}>{u.titulo}</h2>
-              <p>{u.descricao}</p>
-            </div>
-            <ol className="trilha" aria-label={`Lições da unidade ${u.ordem}`}>
-              {itens}
-            </ol>
-          </section>
-        );
-      })}
+      {unidades.map((u) => (
+        <Unidade key={u.id} u={u} nome={perfil.nome} />
+      ))}
+      <RolarParaAtual />
     </Moldura>
   );
 }

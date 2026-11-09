@@ -1,6 +1,6 @@
 "use client";
-// Ações da apresentação para quem ainda não entrou (FL-01): Começar leva à introdução; com uma demonstração
-// concluída neste navegador, o destaque é Criar conta para salvar.
+// Ações da apresentação para quem ainda não entrou (FL-01): Começar leva direto à demonstração; com uma
+// demonstração concluída neste navegador, o destaque é Criar conta para salvar.
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { lerDemo } from "@/componentes/licao/demo";
@@ -32,8 +32,8 @@ export function AcoesVisitante() {
   }
   return (
     <>
-      <Link className="botao" href={demo === "andamento" ? "/demo" : "/introducao"}>
-        {demo === "andamento" ? "Continuar a lição" : "Começar"}
+      <Link className="botao" href="/demo">
+        {demo === "andamento" ? "Continuar a lição" : "Começar grátis"}
       </Link>
       <Link className="botao botao-secundario" href="/entrar">
         Já tenho conta

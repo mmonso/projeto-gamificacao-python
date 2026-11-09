@@ -4,8 +4,10 @@ import { Mascote } from "@/componentes/Mascote";
 import { DOCUMENTOS } from "@/modulos/conta/documentos";
 import { obterAluno } from "@/servidor/auth/sessao";
 import { AcoesVisitante } from "./AcoesVisitante";
+import { PrimeiroPrograma } from "./PrimeiroPrograma";
 
-// Apresentação (F-01): Começar leva à introdução e à demonstração; Já tenho conta, ao login.
+// Apresentação (F-01; design/ANALISE_UX_GAMIFICACAO.md, 2A): o primeiro programa na própria tela e Começar
+// direto na demonstração. Os botões de visitante aparecem na hora, sem esperar a sessão ser conferida.
 async function Acoes() {
   const aluno = await obterAluno();
   if (aluno) {
@@ -21,11 +23,13 @@ async function Acoes() {
 export default function Apresentacao() {
   return (
     <main className="tela-centro text-center" id="conteudo-principal">
-      <Mascote humor="incentivo" tamanho="grande" />
-      <h1 className="marca">Sibi</h1>
-      <p className="subtitulo">Aprenda Python do zero, com lições de 5 minutos por dia.</p>
+      <p className="marca marca-inicio">Sibi</p>
+      <Mascote humor="incentivo" tamanho="medio" />
+      <h1 className="chamada">Escreva seu primeiro programa em Python. Agora.</h1>
+      <PrimeiroPrograma />
+      <p className="subtitulo">A academia diária de Python, em português: 5 minutos por dia para ler, prever e corrigir código.</p>
       <div className="acoes">
-        <Suspense fallback={<div className="esqueleto h-[116px]" />}>
+        <Suspense fallback={<AcoesVisitante />}>
           <Acoes />
         </Suspense>
       </div>

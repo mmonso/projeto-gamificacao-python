@@ -7,8 +7,10 @@ const nunito = Nunito({ variable: "--fonte-nunito", subsets: ["latin"], weight: 
 const jetbrains = JetBrains_Mono({ variable: "--fonte-jetbrains", subsets: ["latin"], weight: ["500", "700"] });
 
 export const metadata: Metadata = {
-  title: { default: "Sibi", template: "%s · Sibi" },
-  description: "Aprenda Python do zero, com lições de 5 minutos por dia.",
+  title: { default: "Sibi: Python em 5 minutos por dia", template: "%s · Sibi" },
+  description: "A academia diária de Python, em português. Lições de 5 minutos para ler, prever e corrigir código, do zero.",
+  applicationName: "Sibi",
+  openGraph: { siteName: "Sibi", locale: "pt_BR", type: "website" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
