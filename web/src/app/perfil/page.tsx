@@ -5,10 +5,9 @@ import { sair } from "@/app/(conta)/acoes";
 import { BotaoEnviar } from "@/componentes/formulario";
 import { Icone } from "@/componentes/Icone";
 import { CartaoMeta, Moldura, MolduraCarregando } from "@/componentes/Moldura";
-import type { Conquista } from "@/modulos/gamificacao/regras";
-import { CONQUISTAS } from "@/modulos/gamificacao/textos";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
+import { progressoDoAluno } from "@/servidor/gamificacao/conquistas";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
 import { ExcluirConta, Preferencias } from "./Preferencias";
 
@@ -16,7 +15,7 @@ export const metadata: Metadata = { title: "Perfil" };
 
 async function Perfil() {
   const { aluno, perfil } = await obterPerfilAtual();
-  const resumo = await resumoDoAluno(banco(), perfil);
+  const [resumo, conquistas] = await Promise.all([resumoDoAluno(banco(), perfil), progressoDoAluno(banco(), perfil.id)]);
   return (
     <Moldura atual="perfil" resumo={resumo}>
       <h1>{perfil.nome || "Seu perfil"}</h1>
@@ -45,21 +44,32 @@ async function Perfil() {
         <CartaoMeta resumo={resumo} />
 
         <section className="cartao" aria-labelledby="titulo-conquistas">
-          <h2 id="titulo-conquistas">Conquistas</h2>
-          <div className="conquistas">
-            {(Object.keys(CONQUISTAS) as Conquista[]).map((id) => {
-              const tem = resumo.conquistas.includes(id);
-              return (
-                <div key={id} className={`conquista ${tem ? "" : "bloqueada"}`} title={CONQUISTAS[id].descricao}>
-                  <div className="medalha">
-                    <Icone nome={tem ? "trofeu" : "cadeado"} />
-                  </div>
-                  {CONQUISTAS[id].nome}
-                  <span className="so-leitor">{tem ? ", conquistada" : `, ainda não conquistada: ${CONQUISTAS[id].descricao.toLowerCase()}`}</span>
+          <h2 id="titulo-conquistas">
+            Conquistas <span className="contagem-conquistas">{conquistas.filter((c) => c.conquistada).length} de {conquistas.length}</span>
+          </h2>
+          <ul className="conquistas">
+            {conquistas.map((c) => (
+              <li key={c.id} className={`conquista ${c.conquistada ? "" : "bloqueada"}`}>
+                <div className="medalha">
+                  <Icone nome={c.conquistada ? "trofeu" : "cadeado"} />
                 </div>
-              );
-            })}
-          </div>
+                <span className="conquista-nome">{c.nome}</span>
+                <span className="conquista-descricao">{c.descricao}</span>
+                {c.conquistada ? (
+                  <span className="so-leitor">Conquistada.</span>
+                ) : c.meta > 1 ? (
+                  <>
+                    <span className="conquista-barra" aria-hidden="true">
+                      <span style={{ width: `${(c.atual / c.meta) * 100}%` }} />
+                    </span>
+                    <span className="conquista-progresso">
+                      {c.atual} de {c.meta}
+                    </span>
+                  </>
+                ) : null}
+              </li>
+            ))}
+          </ul>
         </section>
 
         <Preferencias nome={perfil.nome} meta={perfil.metaDiaria} fuso={perfil.fuso} fusoPendente={perfil.fusoPendente} som={perfil.som} />

@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { BotaoEnviar, Mensagens } from "@/componentes/formulario";
 import { chamar } from "@/componentes/licao/motor";
+import { NOMES_META } from "@/modulos/gamificacao/parametros";
 import { excluirConta, salvarFuso, salvarMeta, salvarNome, type EstadoPreferencia } from "./acoes";
 
 const FUSOS_COMUNS = [
@@ -68,9 +69,11 @@ export function Preferencias({ nome, meta, fuso, fusoPendente, som: somInicial }
       <form action={acaoMeta} ref={formMeta} className="campo">
         <label htmlFor="p-meta">Meta diária</label>
         <select id="p-meta" name="meta" defaultValue={meta} onChange={() => formMeta.current?.requestSubmit()}>
-          <option value={1}>Leve: 1 sessão por dia</option>
-          <option value={2}>Regular: 2 sessões por dia</option>
-          <option value={3}>Intensa: 3 sessões por dia</option>
+          {[1, 2, 3].map((n) => (
+            <option key={n} value={n}>
+              {NOMES_META[n].nome}: {n} {n === 1 ? "sessão" : "sessões"} por dia ({NOMES_META[n].tempo})
+            </option>
+          ))}
         </select>
         <p className="ajuda">Qualquer lição, prática ou revisão concluída conta para a meta.</p>
         <Mensagens erro={estadoMeta.erro} aviso={estadoMeta.aviso} />

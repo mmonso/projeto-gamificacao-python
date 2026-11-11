@@ -71,21 +71,6 @@ export function sequenciaExibida(estado: EstadoSequencia, hoje: string): number 
   return estado.ultimoDia >= somarDias(hoje, -1) ? estado.atual : 0;
 }
 
-/* Conquistas (4.7) */
-
-export type Conquista = "primeira-licao" | "primeira-unidade" | "sete-dias";
-
-export function novasConquistas(
-  existentes: readonly Conquista[],
-  dados: { licoesConcluidas: number; unidadeCompleta: boolean; sequencia: number },
-): Conquista[] {
-  const merecidas: Conquista[] = [];
-  if (dados.licoesConcluidas >= 1) merecidas.push("primeira-licao");
-  if (dados.unidadeCompleta) merecidas.push("primeira-unidade");
-  if (dados.sequencia >= 7) merecidas.push("sete-dias");
-  return merecidas.filter((c) => !existentes.includes(c));
-}
-
 /* Agenda de revisão (4.8) */
 
 export type EstadoConceito = "iniciado" | "praticando" | "consolidando";

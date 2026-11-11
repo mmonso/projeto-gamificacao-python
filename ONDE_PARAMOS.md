@@ -29,17 +29,14 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 - **Parte 2C, publicada em 11/11/2026:** cartões "Conceito novo" (25 conceitos). O cartão fica em `cartao` de cada conceito no `unidade.yaml` (formato em `conteudo/FORMATO.md`, verificado por `verificar_conteudo.py`), na coluna `conceitos.cartao` (migração 0005), e `servidor/licoes/cartoes.ts` o anexa ao exercício. Abre sozinho só na sessão principal e na demonstração; o botão "Conceito" reabre; na revisão e na prática conta como dica (`dicas` com `numero: 0`).
 
+- **Parte 2B, publicada em 11/11/2026:** 18 conquistas (`web/src/modulos/gamificacao/conquistas.ts`, regras puras com progresso; `web/src/servidor/gamificacao/conquistas.ts` lê as métricas e concede), grade com progresso no perfil, nomes da meta (Leve, Firme, Intensa, em `parametros.ts`) e celebração própria dos marcos de 3, 7, 14 e 30 dias (`Resultado.tsx`). A tela de desbloqueio é a celebração que já existia, agora com uma tela por conquista.
+
 ## Próximos passos, em ordem
 
-1. **Parte 2B, recompensas:**
-   - as 18 conquistas da tabela na seção 5 da análise; o campo `conquista` é texto, sem migração;
-   - tela de desbloqueio e grade no perfil, com progresso;
-   - meta com os nomes Leve, Firme e Intensa;
-   - celebração nos marcos de sequência de 3, 7, 14 e 30 dias.
-2. **Parte 2D, hábito:**
+1. **Parte 2D, hábito:**
    - dia livre (`perfis.dias_livres`, o primeiro aos 3 dias, depois 1 a cada 7 dias de estudo, no máximo 2);
    - mapa de domínio com 4 degraus e selo "para revisar".
-3. **Depois, pela estratégia:**
+2. **Depois, pela estratégia:**
    - SMTP próprio (Gmail com senha de app; o dono precisa criar a senha e colá-la no painel do Supabase);
    - consulta de D1, D7 e D30;
    - novo tipo de exercício "digitar a saída";

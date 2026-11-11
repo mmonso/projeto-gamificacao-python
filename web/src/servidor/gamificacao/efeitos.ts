@@ -9,13 +9,13 @@ import type { TipoSessao } from "@/modulos/gamificacao/parametros";
 import {
   agendaAposSessao,
   metaCompletadaAgora,
-  novasConquistas,
   sequenciaAposSessao,
   sequenciaExibida,
   type AgendaConceito,
-  type Conquista,
 } from "@/modulos/gamificacao/regras";
 import * as t from "@/servidor/db/esquema";
+import type { Conquista } from "@/modulos/gamificacao/conquistas";
+import { concederConquistas } from "./conquistas";
 
 type Db = PgDatabase<PgQueryResultHKT, typeof t>;
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
@@ -75,7 +75,7 @@ export async function aplicarEfeitos(
   await atualizarAgenda(tx, perfil.id, sessao, dia);
 
   const unidadeConcluida = ctx.primeiraConclusao && sessao.licaoId ? await unidadeCompletada(tx, perfil.id, sessao.licaoId) : null;
-  const conquistas = await concederConquistas(tx, perfil.id, { unidadeCompleta: unidadeConcluida !== null, sequencia: depois.atual });
+  const conquistas = await concederConquistas(tx, perfil.id);
 
   return {
     sequencia: depois.atual,
@@ -135,23 +135,6 @@ async function unidadeCompletada(tx: Tx, alunoId: string, licaoId: string) {
     .innerJoin(t.licoes, eq(t.licoes.id, t.conclusoesLicao.licaoId))
     .where(and(eq(t.conclusoesLicao.alunoId, alunoId), eq(t.licoes.unidadeId, licao.unidadeId)));
   return feitas >= total ? { id: licao.unidadeId, titulo: licao.titulo } : null;
-}
-
-/** Concede, uma única vez, as conquistas merecidas; nunca remove (4.7, CA-99). */
-async function concederConquistas(tx: Tx, alunoId: string, dados: { unidadeCompleta: boolean; sequencia: number }) {
-  const [{ licoes }] = await tx.select({ licoes: count() }).from(t.conclusoesLicao).where(eq(t.conclusoesLicao.alunoId, alunoId));
-  const existentes = await tx.select({ conquista: t.conquistasAluno.conquista }).from(t.conquistasAluno).where(eq(t.conquistasAluno.alunoId, alunoId));
-  const novas = novasConquistas(
-    existentes.map((e) => e.conquista),
-    { licoesConcluidas: licoes, ...dados },
-  );
-  if (novas.length === 0) return [];
-  const inseridas = await tx
-    .insert(t.conquistasAluno)
-    .values(novas.map((conquista) => ({ alunoId, conquista })))
-    .onConflictDoNothing()
-    .returning({ conquista: t.conquistasAluno.conquista });
-  return inseridas.map((i) => i.conquista);
 }
 
 /* Leitura para as telas */

@@ -19,16 +19,27 @@ const TITULOS: Record<ResultadoConclusao["tipo"], string> = {
 
 type Celebracao = { titulo: string; texto: string };
 
+/** Celebração própria de cada marco da sequência (3, 7, 14 e 30 dias). */
+const TEXTOS_MARCO: Record<number, Celebracao> = {
+  3: { titulo: "3 dias seguidos!", texto: "Você está pegando o ritmo. Pouco por dia rende mais do que muito de uma vez." },
+  7: { titulo: "Uma semana inteira!", texto: "Sete dias seguidos. O hábito já tem forma: continue amanhã." },
+  14: { titulo: "Duas semanas de Python!", texto: "Quatorze dias seguidos. Quem chega até aqui costuma continuar." },
+  30: { titulo: "30 dias de sequência!", texto: "Um mês inteiro estudando todo dia. Isso é hábito de verdade." },
+};
+
 const plural = (n: number, um: string, varios: string) => (n === 1 ? um : varios);
 
 /** Celebrações na ordem em que aparecem: sequência, unidade concluída e conquistas (FL-03, passo 8). */
 export function celebracoesDe(c: ResultadoConclusao): Celebracao[] {
   const fila: Celebracao[] = [];
   if (c.sequenciaAumentou && c.sequencia > 0) {
-    fila.push({ titulo: `${c.sequencia} ${plural(c.sequencia, "dia", "dias")} de sequência!`, texto: c.sequencia === 1 ? "Sua sequência começou. Estude amanhã para mantê-la." : "Estude amanhã para manter a chama acesa." });
+    const marco = TEXTOS_MARCO[c.sequencia];
+    fila.push(
+      marco ?? { titulo: `${c.sequencia} ${plural(c.sequencia, "dia", "dias")} de sequência!`, texto: c.sequencia === 1 ? "Sua sequência começou. Estude amanhã para mantê-la." : "Estude amanhã para manter a chama acesa." },
+    );
   }
   if (c.unidadeConcluida) fila.push({ titulo: "Unidade concluída!", texto: `Você terminou “${c.unidadeConcluida.titulo}”.` });
-  for (const id of c.conquistas) fila.push({ titulo: `Conquista: ${CONQUISTAS[id].nome}`, texto: `${CONQUISTAS[id].descricao}.` });
+  for (const id of c.conquistas) fila.push({ titulo: `Conquista: ${CONQUISTAS[id].nome}`, texto: `Você conseguiu: ${CONQUISTAS[id].descricao.charAt(0).toLowerCase()}${CONQUISTAS[id].descricao.slice(1)}.` });
   return fila;
 }
 

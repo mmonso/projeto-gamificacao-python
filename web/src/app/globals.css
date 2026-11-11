@@ -546,8 +546,15 @@
   .selo-estado.consolidando { border-color: #a9dcbc; color: var(--verde-borda); }
   .selo-estado.vencido { border-color: #f5d98a; color: var(--amarelo-texto); background: #fff7e0; }
 
-  .conquistas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .conquista { text-align: center; border: 2px solid var(--borda); border-radius: var(--raio); padding: 12px 6px; font-weight: 800; font-size: .85rem; }
+  .conquistas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; margin: 0; padding: 0; }
+  @media (min-width: 640px) { .conquistas { grid-template-columns: repeat(3, 1fr); } }
+  .contagem-conquistas { margin-left: 8px; font-size: .9rem; font-weight: 800; color: var(--texto-suave); }
+  .conquista { display: flex; flex-direction: column; align-items: center; text-align: center; border: 2px solid var(--borda); border-radius: var(--raio); padding: 12px 8px; font-weight: 800; font-size: .85rem; }
+  .conquista-nome { line-height: 1.25; }
+  .conquista-descricao { margin-top: 4px; font-weight: 600; font-size: .75rem; line-height: 1.3; color: var(--texto-suave); }
+  .conquista-barra { display: block; width: 100%; height: 8px; margin-top: 8px; border-radius: 999px; background: var(--trilho); overflow: hidden; }
+  .conquista-barra > span { display: block; height: 100%; border-radius: 999px; background: var(--verde); }
+  .conquista-progresso { margin-top: 4px; font-size: .75rem; font-weight: 800; }
   .conquista .medalha { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; background: var(--amarelo); color: var(--amarelo-texto); }
   .conquista.bloqueada { color: var(--texto-suave); }
   .conquista.bloqueada .medalha { background: var(--bloqueado); color: var(--bloqueado-icone); }

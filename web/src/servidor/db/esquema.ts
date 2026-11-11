@@ -3,6 +3,7 @@
 import { sql } from "drizzle-orm";
 import type { z } from "zod";
 import type { cartaoEsquema } from "@/modulos/conteudo/esquema";
+import type { Conquista } from "@/modulos/gamificacao/conquistas";
 import {
   boolean,
   check,
@@ -247,7 +248,7 @@ export const conquistasAluno = pgTable(
   "conquistas_aluno",
   {
     alunoId: uuid("aluno_id").notNull().references(() => perfis.id, { onDelete: "cascade" }),
-    conquista: text("conquista", { enum: ["primeira-licao", "primeira-unidade", "sete-dias"] }).notNull(),
+    conquista: text("conquista").$type<Conquista>().notNull(),
     concedidaEm: timestamp("concedida_em", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [primaryKey({ columns: [t.alunoId, t.conquista] })],

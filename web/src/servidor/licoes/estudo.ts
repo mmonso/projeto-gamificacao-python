@@ -306,6 +306,8 @@ export async function efetivarConclusao(
   const { dia, toleranciaFuso } = await diaDaConclusao(tx, perfil, agora);
   const concessao = await lancarXp(tx, perfil, sessao, primeiraConclusao, dia);
   const coracoesRecuperados = sessao.tipo === "recuperacao" ? await devolverCoracoes(tx, perfil, sessao.id, dia, agora) : 0;
+  // As conquistas leem as sessões concluídas, inclusive esta: o resultado parcial já basta para contar a coroa.
+  await tx.update(t.sessoes).set({ resultado: { total: sessao.totalItens, acertosPrimeira: acertosDePrimeira(sessao.fila) } }).where(eq(t.sessoes.id, sessao.id));
   const efeitos = await aplicarEfeitos(tx, perfil, sessao, { dia, toleranciaFuso, primeiraConclusao, praticaRecompensada: concessao.causa === "pratica" });
 
   const trilha = await ordemDaTrilha(tx);

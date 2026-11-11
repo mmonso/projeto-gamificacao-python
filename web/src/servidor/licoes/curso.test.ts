@@ -12,6 +12,7 @@ import { separarExercicio, type Exercicio } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
+import { progressoDoAluno } from "@/servidor/gamificacao/conquistas";
 import { respostaCorreta } from "@/testes/respostas";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
 import { concluir, submeter } from "./estudo";
@@ -72,9 +73,11 @@ describe("percurso das 15 lições", () => {
       const r = await resolverSessao(inicio.sessaoId);
       expect(r).toMatchObject({ tipo: "principal", xp: 20, primeiraConclusao: true, proximaLicaoId: proxima?.id ?? null });
       expect(r.unidadeConcluida?.id ?? null).toBe(licao.ultima ? licao.unidade : null);
-      if (i === 0) expect(r.conquistas).toEqual(["primeira-licao"]);
-      else if (i === 4) expect(r.conquistas).toEqual(["primeira-unidade"]);
-      else expect(r.conquistas).toEqual([]);
+      // Tudo certo de primeira: a primeira sessão também rende "Rodou de primeira", e a quinta, "Zero bugs".
+      if (i === 0) expect(r.conquistas).toEqual(["primeira-licao", "primeira-coroa"]);
+      else if (i === 4) expect(r.conquistas).toEqual(expect.arrayContaining(["primeira-unidade", "cinco-coroas"]));
+      else expect(r.conquistas).not.toContain("primeira-unidade");
+      if (i === 14) expect(r.conquistas).toContain("curso-completo");
     }
 
     const trilha = await obterTrilha(db, LIA);
@@ -83,7 +86,15 @@ describe("percurso das 15 lições", () => {
     expect(trilha.flatMap((u) => u.licoes).every((l) => l.perfeita)).toBe(true);
     const [p] = await db.select().from(t.perfis).where(eq(t.perfis.id, LIA));
     const resumo = await resumoDoAluno(db, p);
-    expect(resumo).toMatchObject({ xpTotal: 300, licoesConcluidas: 15, coracoes: 5, conquistas: ["primeira-licao", "primeira-unidade"] });
+    expect(resumo).toMatchObject({ xpTotal: 300, licoesConcluidas: 15, coracoes: 5 });
+    expect(resumo.conquistas).toEqual(expect.arrayContaining(["primeira-licao", "primeira-unidade", "curso-completo"]));
+    // Progresso da grade do perfil: lido do banco, com contagens de exercícios distintos acertados de primeira.
+    const progresso = await progressoDoAluno(db, LIA);
+    expect(progresso).toHaveLength(18);
+    expect(progresso.find((c) => c.id === "caca-bugs")!.atual).toBeGreaterThan(0);
+    expect(progresso.find((c) => c.id === "encaixou")!.atual).toBeGreaterThan(0);
+    expect(progresso.find((c) => c.id === "cinco-coroas")).toMatchObject({ conquistada: true, atual: 5, meta: 5 });
+    expect(progresso.find((c) => c.id === "curso-completo")).toMatchObject({ conquistada: true, atual: 15, meta: 15 });
   });
 
   it("a revisão geral e a recuperação usam conceitos das três unidades", async () => {

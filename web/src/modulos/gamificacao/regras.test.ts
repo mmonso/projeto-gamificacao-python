@@ -5,7 +5,6 @@ import {
   coracoesAposResposta,
   estadoAposRevisao,
   metaCompletadaAgora,
-  novasConquistas,
   podeRecuperar,
   proximoIntervalo,
   sequenciaAposSessao,
@@ -93,14 +92,6 @@ describe("Fuso e dia de estudo (4.6)", () => {
   });
   it("rejeita fusos inválidos", () => {
     expect(() => pedirMudancaDeFuso({ fuso: "America/Sao_Paulo", fusoPendente: null, pendenteAPartirDe: null }, "Lua/Base", new Date())).toThrow();
-  });
-});
-
-describe("Conquistas (4.7)", () => {
-  it("concede cada conquista uma vez e não remove (CA-99)", () => {
-    expect(novasConquistas([], { licoesConcluidas: 1, unidadeCompleta: false, sequencia: 1 })).toEqual(["primeira-licao"]);
-    expect(novasConquistas(["primeira-licao"], { licoesConcluidas: 5, unidadeCompleta: true, sequencia: 7 })).toEqual(["primeira-unidade", "sete-dias"]);
-    expect(novasConquistas(["primeira-licao", "sete-dias"], { licoesConcluidas: 6, unidadeCompleta: false, sequencia: 0 })).toEqual([]);
   });
 });
 

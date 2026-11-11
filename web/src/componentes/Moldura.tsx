@@ -1,5 +1,6 @@
 // Estrutura das telas com menu (F-33; protótipo E03.3): no desktop, menu lateral, conteúdo e painel de metas;
 // no celular, uma coluna com indicadores no topo e navegação inferior.
+import { NOMES_META } from "@/modulos/gamificacao/parametros";
 import Link from "next/link";
 import { nomeDoDia, proximoMarco } from "@/modulos/gamificacao/semana";
 import type { ResumoAluno } from "@/servidor/gamificacao/efeitos";
@@ -97,7 +98,7 @@ export function Indicadores({ resumo, local }: { resumo: ResumoTopo; local: "top
       </span>
 
       <div id={`meta-${local}`} popover="auto" className="pop" aria-label="Meta do dia">
-        <p className="pop-titulo">Meta do dia</p>
+        <p className="pop-titulo">Meta do dia: {NOMES_META[resumo.meta]?.nome}</p>
         <p>
           {feitas} de {resumo.meta} {plural(resumo.meta, "sessão", "sessões")}
         </p>
@@ -140,7 +141,7 @@ export function CartaoMeta({ resumo }: { resumo: Pick<ResumoAluno, "meta" | "ses
         <span className="indicador-sequencia">
           <Icone nome="estrela" />
         </span>
-        Meta do dia
+        Meta do dia: {NOMES_META[resumo.meta]?.nome}
       </h3>
       <p>
         {feitas} de {resumo.meta} {plural(resumo.meta, "sessão", "sessões")}

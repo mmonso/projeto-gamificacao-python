@@ -2,7 +2,7 @@
 // Usado pelos Route Handlers para validar pedidos e pela interface para tipar as respostas.
 import { z } from "zod";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
-import type { Conquista } from "@/modulos/gamificacao/regras";
+import type { Conquista } from "@/modulos/gamificacao/conquistas";
 import { respostaEsquema, type Resposta } from "./corretor";
 
 export const pedidoSubmissao = z.object({
