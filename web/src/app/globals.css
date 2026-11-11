@@ -425,9 +425,12 @@
   .calendario .bolinha .icone { width: 18px; height: 18px; }
   .calendario .estudou .bolinha { background: var(--amarelo); color: var(--amarelo-texto); }
   .calendario .pendente .bolinha { background: var(--fundo); border: 2px dashed #b87f00; }
+  .calendario .livre .bolinha { background: #e3eefc; color: var(--azul); }
   .calendario .futuro .bolinha { background: transparent; border-color: #e4eaee; }
   .calendario .pendente { color: var(--amarelo-texto); }
   .painel .calendario { margin-bottom: 0; }
+  .dias-livres { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0 0; padding: 10px 12px; border-radius: var(--raio-pequeno); background: var(--fundo-suave); font-size: .85rem; line-height: 1.4; }
+  .dias-livres .icone { flex: none; margin-top: 2px; color: var(--azul); }
 }
 
 /* Resultado da sessão: contagem, lição perfeita, meta e sequência (onda 1) */
@@ -541,6 +544,14 @@
   .lista-licoes li { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .lista-conceitos { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
   .lista-conceitos li { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 700; }
+  .lista-conceitos li { flex-wrap: wrap; }
+  .conceito-nome { flex: 1 1 100%; min-width: 0; }
+  @media (min-width: 560px) { .conceito-nome { flex: 1 1 0; } }
+  .degraus { margin-right: auto; }
+  @media (min-width: 560px) { .degraus { margin-right: 0; } }
+  .degraus { flex: none; display: inline-flex; gap: 3px; }
+  .degraus i { display: block; width: 10px; height: 16px; border-radius: 3px; background: var(--trilho); }
+  .degraus i.cheio { background: var(--verde); }
   .selo-estado { flex: none; font-size: .75rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; border-radius: 8px; padding: 2px 8px; border: 2px solid var(--borda); color: var(--texto-suave); }
   .selo-estado.praticando { border-color: #b9d3f5; color: var(--azul); }
   .selo-estado.consolidando { border-color: #a9dcbc; color: var(--verde-borda); }

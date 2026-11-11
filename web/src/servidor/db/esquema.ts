@@ -41,12 +41,16 @@ export const perfis = pgTable(
     sequenciaAtual: integer("sequencia_atual").notNull().default(0),
     maiorSequencia: integer("maior_sequencia").notNull().default(0),
     ultimoDiaEstudo: date("ultimo_dia_estudo"),
+    /** Dias livres guardados (0 a 2) e os dias sem estudo que eles já cobriram (os 14 mais recentes). */
+    diasLivres: smallint("dias_livres").notNull().default(0),
+    diasLivresUsados: text("dias_livres_usados").array().notNull().default(sql`'{}'::text[]`),
     termosAceitosEm: timestamp("termos_aceitos_em", { withTimezone: true }),
     criadoEm: criadoEm(),
   },
   (t) => [
     check("perfis_coracoes_faixa", sql`${t.coracoes} between 0 and 5`),
     check("perfis_meta_faixa", sql`${t.metaDiaria} between 1 and 3`),
+    check("perfis_dias_livres_faixa", sql`${t.diasLivres} between 0 and 2`),
   ],
 );
 

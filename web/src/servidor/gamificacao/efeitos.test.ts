@@ -21,6 +21,7 @@ import { resumoDoAluno } from "./efeitos";
 
 const CAIO = "00000000-0000-4000-8000-0000000000c3";
 const DORA = "00000000-0000-4000-8000-0000000000d4";
+const ELI = "00000000-0000-4000-8000-0000000000e5";
 
 const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 const exercicios = new Map<string, Exercicio>(curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...l.revisao])).map((e) => [e.id, e]));
@@ -49,7 +50,7 @@ beforeAll(async () => {
   db = drizzle({ client: new PGlite(), schema: t });
   await migrate(db, { migrationsFolder: join(__dirname, "../../../drizzle") });
   await publicarCurso(db, curso);
-  await db.insert(t.perfis).values([{ id: CAIO }, { id: DORA, metaDiaria: 2 }]);
+  await db.insert(t.perfis).values([{ id: CAIO }, { id: DORA, metaDiaria: 2 }, { id: ELI }]);
   vi.useFakeTimers({ toFake: ["Date"] });
 }, 60_000);
 
@@ -243,5 +244,37 @@ describe("conquistas (E06.5; 4.7)", () => {
     for (let i = 0; i < 4; i++) resultados.push(await estudarLicao(CAIO, licoesU1[0]));
     expect(resultados.map((r) => r.xp)).toEqual([10, 10, 10, 0]);
     expect(resultados[3]).toMatchObject({ limitePratica: true, meta: { feitas: 4 }, sequencia: 1 });
+  });
+});
+
+describe("dia livre (2D)", () => {
+  it("ganha-se aos 3 dias, é usado sozinho ao faltar um dia e aparece no calendário", async () => {
+    // Terça 10/03 a quinta 12/03: a terceira sessão seguida rende o primeiro dia livre.
+    em("2026-03-10");
+    expect(await estudarLicao(ELI, licoesU1[0])).toMatchObject({ sequencia: 1, diasLivres: { ganhou: false, usados: 0 } });
+    em("2026-03-11");
+    expect(await estudarLicao(ELI, licoesU1[0])).toMatchObject({ sequencia: 2, diasLivres: { ganhou: false } });
+    em("2026-03-12");
+    expect(await estudarLicao(ELI, licoesU1[0])).toMatchObject({ sequencia: 3, diasLivres: { ganhou: true, usados: 0 } });
+    expect((await resumoDoAluno(db, await perfil(ELI))).diasLivres).toBe(1);
+
+    // Sexta 13/03 sem estudo: a sequência segue viva no sábado, graças ao dia livre.
+    em("2026-03-14");
+    const antes = await resumoDoAluno(db, await perfil(ELI));
+    expect(antes).toMatchObject({ sequencia: 3, diasLivres: 1 });
+    const r = await estudarLicao(ELI, licoesU1[0]);
+    expect(r).toMatchObject({ sequencia: 4, sequenciaAumentou: true, diasLivres: { ganhou: false, usados: 1 } });
+
+    const depois = await resumoDoAluno(db, await perfil(ELI));
+    expect(depois.diasLivres).toBe(0);
+    expect(depois.semana.filter((d) => d.livre).map((d) => d.dia)).toEqual(["2026-03-13"]);
+    expect(depois.semana.filter((d) => d.estudou).map((d) => d.dia)).toEqual(["2026-03-10", "2026-03-11", "2026-03-12", "2026-03-14"]);
+  });
+
+  it("sem dia livre, um dia perdido quebra a sequência", async () => {
+    // Sábado 14/03 foi o último dia; domingo 15 sem estudo e segunda 16 sem estudo (dois dias perdidos até terça).
+    em("2026-03-17");
+    expect((await resumoDoAluno(db, await perfil(ELI))).sequencia).toBe(0);
+    expect(await estudarLicao(ELI, licoesU1[0])).toMatchObject({ sequencia: 1, diasLivres: { ganhou: false, usados: 0 } });
   });
 });

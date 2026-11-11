@@ -9,10 +9,9 @@ import type { TipoSessao } from "@/modulos/gamificacao/parametros";
 import {
   agendaAposSessao,
   metaCompletadaAgora,
-  sequenciaAposSessao,
-  sequenciaExibida,
   type AgendaConceito,
 } from "@/modulos/gamificacao/regras";
+import { sequenciaComDiasLivres, sequenciaViva } from "@/modulos/gamificacao/diaslivres";
 import * as t from "@/servidor/db/esquema";
 import type { Conquista } from "@/modulos/gamificacao/conquistas";
 import { concederConquistas } from "./conquistas";
@@ -36,6 +35,7 @@ export async function diaDaConclusao(tx: Tx, perfil: Perfil, agora: Date) {
 export type EfeitosConclusao = {
   sequencia: number;
   sequenciaAumentou: boolean;
+  diasLivres: { ganhou: boolean; usados: number };
   meta: { feitas: number; meta: number; cumpridaAgora: boolean };
   conquistas: Conquista[];
   unidadeConcluida: { id: string; titulo: string } | null;
@@ -66,10 +66,17 @@ export async function aplicarEfeitos(
     .returning({ sessoes: t.atividadeDiaria.sessoes });
 
   const antes = { atual: perfil.sequenciaAtual, maior: perfil.maiorSequencia, ultimoDia: perfil.ultimoDiaEstudo };
-  const depois = sequenciaAposSessao(antes, dia, ctx.toleranciaFuso);
+  const livres = sequenciaComDiasLivres(antes, dia, ctx.toleranciaFuso, perfil.diasLivres);
+  const depois = livres.estado;
   await tx
     .update(t.perfis)
-    .set({ sequenciaAtual: depois.atual, maiorSequencia: depois.maior, ultimoDiaEstudo: depois.ultimoDia })
+    .set({
+      sequenciaAtual: depois.atual,
+      maiorSequencia: depois.maior,
+      ultimoDiaEstudo: depois.ultimoDia,
+      diasLivres: livres.diasLivres,
+      ...(livres.usados.length ? { diasLivresUsados: [...perfil.diasLivresUsados, ...livres.usados].slice(-14) } : {}),
+    })
     .where(eq(t.perfis.id, perfil.id));
 
   await atualizarAgenda(tx, perfil.id, sessao, dia);
@@ -80,6 +87,7 @@ export async function aplicarEfeitos(
   return {
     sequencia: depois.atual,
     sequenciaAumentou: antes.ultimoDia !== dia,
+    diasLivres: { ganhou: livres.ganhou, usados: livres.usados.length },
     meta: { feitas: atividade.sessoes, meta: perfil.metaDiaria, cumpridaAgora: metaCompletadaAgora(atividade.sessoes - 1, perfil.metaDiaria) },
     conquistas,
     unidadeConcluida,
@@ -147,6 +155,8 @@ export type ResumoAluno = {
   /** Sequência exibida: zero quando um dia inteiro passou sem estudo (4.5). */
   sequencia: number;
   maiorSequencia: number;
+  /** Dias livres guardados (0 a 2). */
+  diasLivres: number;
   estudouHoje: boolean;
   meta: number;
   sessoesHoje: number;
@@ -183,15 +193,16 @@ export async function resumoDoAluno(db: Db, perfil: Perfil, agora = new Date()):
     xpTotal: perfil.xpTotal,
     xpHoje: xp?.total ?? 0,
     coracoes: perfil.coracoes,
-    sequencia: sequenciaExibida({ atual: perfil.sequenciaAtual, maior: perfil.maiorSequencia, ultimoDia: perfil.ultimoDiaEstudo }, hoje),
+    sequencia: sequenciaViva({ atual: perfil.sequenciaAtual, maior: perfil.maiorSequencia, ultimoDia: perfil.ultimoDiaEstudo }, hoje, perfil.diasLivres),
     maiorSequencia: perfil.maiorSequencia,
+    diasLivres: perfil.diasLivres,
     estudouHoje: perfil.ultimoDiaEstudo === hoje,
     meta: perfil.metaDiaria,
     sessoesHoje: atividade?.sessoes ?? 0,
     conquistas: conquistas.map((c) => c.conquista),
     licoesConcluidas: licoes,
     hoje,
-    semana: semanaDe(hoje, new Set(diasDaSemana.map((d) => d.dia))),
+    semana: semanaDe(hoje, new Set(diasDaSemana.map((d) => d.dia)), new Set(perfil.diasLivresUsados)),
     fuso: perfil.fuso,
     fusoPendente: perfil.fusoPendente,
     som: perfil.som,

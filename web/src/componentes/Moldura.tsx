@@ -25,19 +25,20 @@ function ItensNav({ atual }: { atual: Aba }) {
   ));
 }
 
-type ResumoTopo = Pick<ResumoAluno, "sequencia" | "maiorSequencia" | "estudouHoje" | "coracoes" | "xpTotal" | "meta" | "sessoesHoje" | "semana">;
+type ResumoTopo = Pick<ResumoAluno, "sequencia" | "maiorSequencia" | "diasLivres" | "estudouHoje" | "coracoes" | "xpTotal" | "meta" | "sessoesHoje" | "semana">;
 
 /** Semana de domingo a sábado: dia estudado em dourado, hoje pendente tracejado, dia perdido em cinza (nunca vermelho). */
 export function CalendarioSemana({ semana }: { semana: ResumoAluno["semana"] }) {
   return (
     <ol className="calendario" aria-label="Dias de estudo desta semana">
       {semana.map((d) => {
-        const estado = d.estudou ? "estudou" : d.futuro ? "futuro" : d.hoje ? "pendente" : "perdido";
-        const descricao = d.estudou ? "estudou" : d.futuro ? "ainda não chegou" : d.hoje ? "hoje, ainda sem estudo" : "sem estudo";
+        const estado = d.estudou ? "estudou" : d.livre ? "livre" : d.futuro ? "futuro" : d.hoje ? "pendente" : "perdido";
+        const descricao = d.estudou ? "estudou" : d.livre ? "dia livre, a sequência foi mantida" : d.futuro ? "ainda não chegou" : d.hoje ? "hoje, ainda sem estudo" : "sem estudo";
         return (
           <li key={d.dia} className={estado} aria-label={`${nomeDoDia(d.dia)}: ${descricao}`}>
             <span className="bolinha" aria-hidden="true">
               {d.estudou && <Icone nome="chama" />}
+              {d.livre && <Icone nome="escudo" />}
             </span>
             <span aria-hidden="true">{d.letra}</span>
           </li>
@@ -127,6 +128,12 @@ export function Indicadores({ resumo, local }: { resumo: ResumoTopo; local: "top
         <p className="ajuda">
           {resumo.sequencia === 0 ? "Conclua uma lição para começar sua sequência." : resumo.estudouHoje ? "Você já estudou hoje." : "Estude hoje para manter a sequência."}
           {marco && ` Próximo marco: ${marco} dias.`} Maior sequência: {resumo.maiorSequencia} {plural(resumo.maiorSequencia, "dia", "dias")}.
+        </p>
+        <p className="dias-livres">
+          <Icone nome="escudo" pequeno />
+          <span>
+            {resumo.diasLivres === 0 ? "Nenhum dia livre guardado." : `${resumo.diasLivres} ${plural(resumo.diasLivres, "dia livre guardado", "dias livres guardados")}.`} Um dia livre cobre um dia sem estudo e mantém a sequência. Você ganha o primeiro aos 3 dias seguidos e depois um a cada 7 dias, até 2.
+          </span>
         </p>
       </div>
     </div>

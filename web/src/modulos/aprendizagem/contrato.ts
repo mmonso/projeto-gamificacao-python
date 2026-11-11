@@ -79,6 +79,8 @@ export type ResultadoConclusao = {
   /** Sequência depois da conclusão e se ela aumentou agora, na primeira sessão do dia (4.5). */
   sequencia: number;
   sequenciaAumentou: boolean;
+  /** Dia livre ganho agora e dias sem estudo cobertos por dias livres nesta sessão. Ausente em resultados antigos. */
+  diasLivres?: { ganhou: boolean; usados: number };
   /** Meta do dia depois da conclusão; cumpridaAgora só na sessão que a completa (4.4). */
   meta: { feitas: number; meta: number; cumpridaAgora: boolean };
   /** Conquistas concedidas por esta conclusão (4.7). */

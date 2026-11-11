@@ -1,9 +1,10 @@
 // Revisão recomendada e tela Praticar (E06.3; FL-05, F-27 a F-29; ESPECIFICACAO_MVP, 4.8).
 // A revisão junta itens dos conceitos da agenda do aluno, na versão vigente das lições, com os vencidos à frente.
-import { and, asc, desc, eq, gt, isNull } from "drizzle-orm";
+import { and, asc, count, desc, eq, gt, isNull } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { iniciarFila } from "@/modulos/aprendizagem/fila";
 import { diaDeEstudo, fusoVigente } from "@/modulos/gamificacao/dias";
+import { degrauDoConceito, type Degrau } from "@/modulos/gamificacao/dominio";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import * as t from "@/servidor/db/esquema";
 import { registrarEvento } from "@/servidor/eventos";
@@ -130,7 +131,9 @@ export function escolherItens(candidatos: Candidato[], ordem: string[], tamanho:
 
 export type EstadoPraticar = {
   conceitosVencidos: number;
-  conceitos: { id: string; nome: string; estado: "iniciado" | "praticando" | "consolidando"; vencido: boolean }[];
+  conceitos: { id: string; nome: string; estado: "iniciado" | "praticando" | "consolidando"; degrau: Degrau; vencido: boolean }[];
+  /** Conceitos do curso, para o mapa de domínio ("12 de 25 vistos"). */
+  totalConceitos: number;
   licoesConcluidas: { id: string; titulo: string; unidadeTitulo: string; unidadeOrdem: number; ordem: number }[];
   /** Revisão já montada e ainda aberta: Praticar oferece Continuar. */
   revisaoAberta: boolean;
@@ -139,9 +142,9 @@ export type EstadoPraticar = {
 /** Dados da tela Praticar (F-27): revisão recomendada, conceitos da agenda e lições concluídas. */
 export async function estadoPraticar(db: Db, perfil: Perfil, agora = new Date()): Promise<EstadoPraticar> {
   const hoje = hojeDoAluno(perfil, agora);
-  const [conceitos, licoes, [aberta]] = await Promise.all([
+  const [conceitos, licoes, [aberta], [{ total }]] = await Promise.all([
     db
-      .select({ id: t.conceitos.id, nome: t.conceitos.nome, estado: t.estadoConceitos.estado, proximaRevisao: t.estadoConceitos.proximaRevisao, unidadeOrdem: t.unidades.ordem })
+      .select({ id: t.conceitos.id, nome: t.conceitos.nome, estado: t.estadoConceitos.estado, intervaloDias: t.estadoConceitos.intervaloDias, proximaRevisao: t.estadoConceitos.proximaRevisao, unidadeOrdem: t.unidades.ordem })
       .from(t.estadoConceitos)
       .innerJoin(t.conceitos, eq(t.conceitos.id, t.estadoConceitos.conceitoId))
       .innerJoin(t.unidades, eq(t.unidades.id, t.conceitos.unidadeId))
@@ -159,7 +162,8 @@ export async function estadoPraticar(db: Db, perfil: Perfil, agora = new Date())
       .from(t.sessoes)
       .where(and(eq(t.sessoes.alunoId, perfil.id), eq(t.sessoes.tipo, "revisao"), eq(t.sessoes.estado, "aberta")))
       .limit(1),
+    db.select({ total: count() }).from(t.conceitos),
   ]);
-  const lista = conceitos.map((c) => ({ id: c.id, nome: c.nome, estado: c.estado, vencido: c.proximaRevisao <= hoje }));
-  return { conceitosVencidos: lista.filter((c) => c.vencido).length, conceitos: lista, licoesConcluidas: licoes, revisaoAberta: Boolean(aberta) };
+  const lista = conceitos.map((c) => ({ id: c.id, nome: c.nome, estado: c.estado, degrau: degrauDoConceito(c.estado, c.intervaloDias), vencido: c.proximaRevisao <= hoje }));
+  return { conceitosVencidos: lista.filter((c) => c.vencido).length, conceitos: lista, totalConceitos: total, licoesConcluidas: licoes, revisaoAberta: Boolean(aberta) };
 }

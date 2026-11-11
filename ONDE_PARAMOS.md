@@ -31,12 +31,11 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 - **Parte 2B, publicada em 11/11/2026:** 18 conquistas (`web/src/modulos/gamificacao/conquistas.ts`, regras puras com progresso; `web/src/servidor/gamificacao/conquistas.ts` lê as métricas e concede), grade com progresso no perfil, nomes da meta (Leve, Firme, Intensa, em `parametros.ts`) e celebração própria dos marcos de 3, 7, 14 e 30 dias (`Resultado.tsx`). A tela de desbloqueio é a celebração que já existia, agora com uma tela por conquista.
 
+- **Parte 2D, publicada em 11/11/2026:** dia livre (`modulos/gamificacao/diaslivres.ts`; colunas `perfis.dias_livres` e `dias_livres_usados`, migração 0006; ganho aos 3 dias e depois a cada 7, máximo 2, uso automático ao faltar, escudo azul no calendário) e mapa de domínio na tela Praticar (`dominio.ts`: Visto, Praticando, Firmando, Consolidando, selo "Para revisar").
+
 ## Próximos passos, em ordem
 
-1. **Parte 2D, hábito:**
-   - dia livre (`perfis.dias_livres`, o primeiro aos 3 dias, depois 1 a cada 7 dias de estudo, no máximo 2);
-   - mapa de domínio com 4 degraus e selo "para revisar".
-2. **Depois, pela estratégia:**
+1. **Depois, pela estratégia:**
    - SMTP próprio (Gmail com senha de app; o dono precisa criar a senha e colá-la no painel do Supabase);
    - consulta de D1, D7 e D30;
    - novo tipo de exercício "digitar a saída";

@@ -43,6 +43,13 @@
       "when": 1794423999391,
       "tag": "0005_cartao_do_conceito",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794426426492,
+      "tag": "0006_dias_livres",
+      "breakpoints": true
     }
   ]
 }

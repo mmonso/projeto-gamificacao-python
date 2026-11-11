@@ -1,7 +1,7 @@
 // Calendário da semana e marcos da sequência (design/ANALISE_UX_GAMIFICACAO.md, seção 5). Funções puras.
 import { somarDias } from "./regras";
 
-export type DiaSemana = { dia: string; letra: string; estudou: boolean; hoje: boolean; futuro: boolean };
+export type DiaSemana = { dia: string; letra: string; estudou: boolean; /** Dia sem estudo coberto por um dia livre. */ livre: boolean; hoje: boolean; futuro: boolean };
 
 const LETRAS = ["D", "S", "T", "Q", "Q", "S", "S"];
 const NOMES = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
@@ -12,11 +12,11 @@ export function nomeDoDia(dia: string): string {
 }
 
 /** A semana de domingo a sábado que contém `hoje`, com os dias em que houve estudo. */
-export function semanaDe(hoje: string, estudados: ReadonlySet<string>): DiaSemana[] {
+export function semanaDe(hoje: string, estudados: ReadonlySet<string>, livres: ReadonlySet<string> = new Set()): DiaSemana[] {
   const inicio = somarDias(hoje, -new Date(`${hoje}T12:00:00Z`).getUTCDay());
   return LETRAS.map((letra, i) => {
     const dia = somarDias(inicio, i);
-    return { dia, letra, estudou: estudados.has(dia), hoje: dia === hoje, futuro: dia > hoje };
+    return { dia, letra, estudou: estudados.has(dia), livre: !estudados.has(dia) && livres.has(dia), hoje: dia === hoje, futuro: dia > hoje };
   });
 }
 

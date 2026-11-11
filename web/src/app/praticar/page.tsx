@@ -5,14 +5,13 @@ import { BotaoComecar, BotaoRecuperar, BotaoRevisao } from "@/app/licao/[id]/bot
 import { Icone } from "@/componentes/Icone";
 import { Mascote } from "@/componentes/Mascote";
 import { Moldura, MolduraCarregando } from "@/componentes/Moldura";
+import { NOMES_DEGRAU } from "@/modulos/gamificacao/dominio";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
 import { estadoPraticar } from "@/servidor/licoes/revisao";
 
 export const metadata: Metadata = { title: "Praticar" };
-
-const NOME_ESTADO = { iniciado: "Iniciado", praticando: "Praticando", consolidando: "Consolidando" } as const;
 
 async function Praticar() {
   const { perfil } = await obterPerfilAtual();
@@ -80,13 +79,22 @@ async function Praticar() {
           )}
 
           <section className="cartao">
-            <h2>Seus conceitos</h2>
-            <p className="ajuda mb-3">Cada conceito volta para revisão depois de 1, 3 e 7 dias. Erros e dicas trazem ele de volta mais cedo.</p>
+            <h2>
+              Seus conceitos <span className="contagem-conquistas">{praticar.conceitos.length} de {praticar.totalConceitos} vistos</span>
+            </h2>
+            <p className="ajuda mb-3">
+              Cada acerto na revisão, sem dica, sobe um degrau: Visto, Praticando, Firmando e Consolidando. A revisão volta depois de 1, 3 e 7 dias; erros e dicas trazem o conceito de volta mais cedo.
+            </p>
             <ul className="lista-conceitos">
               {praticar.conceitos.map((c) => (
                 <li key={c.id}>
-                  <span>{c.nome}</span>
-                  <span className={`selo-estado ${c.vencido ? "vencido" : c.estado}`}>{c.vencido ? "Revisar" : NOME_ESTADO[c.estado]}</span>
+                  <span className="conceito-nome">{c.nome}</span>
+                  <span className="degraus" role="img" aria-label={`${NOMES_DEGRAU[c.degrau]}, degrau ${c.degrau} de 4`}>
+                    {[1, 2, 3, 4].map((n) => (
+                      <i key={n} className={n <= c.degrau ? "cheio" : ""} />
+                    ))}
+                  </span>
+                  <span className={`selo-estado ${c.vencido ? "vencido" : c.estado}`}>{c.vencido ? "Para revisar" : NOMES_DEGRAU[c.degrau]}</span>
                 </li>
               ))}
             </ul>

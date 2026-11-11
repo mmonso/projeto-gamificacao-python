@@ -38,6 +38,12 @@ export function celebracoesDe(c: ResultadoConclusao): Celebracao[] {
       marco ?? { titulo: `${c.sequencia} ${plural(c.sequencia, "dia", "dias")} de sequência!`, texto: c.sequencia === 1 ? "Sua sequência começou. Estude amanhã para mantê-la." : "Estude amanhã para manter a chama acesa." },
     );
   }
+  if (c.diasLivres?.usados) {
+    fila.push({ titulo: "Um dia livre salvou sua sequência", texto: `${c.diasLivres.usados === 1 ? "Um dia sem estudo foi coberto" : `${c.diasLivres.usados} dias sem estudo foram cobertos`} por ${c.diasLivres.usados === 1 ? "um dia livre" : "dias livres"}. Sua sequência continua.` });
+  }
+  if (c.diasLivres?.ganhou) {
+    fila.push({ titulo: "Você ganhou um dia livre!", texto: "Se faltar um dia, ele protege sua sequência sozinho. Você pode guardar até 2." });
+  }
   if (c.unidadeConcluida) fila.push({ titulo: "Unidade concluída!", texto: `Você terminou “${c.unidadeConcluida.titulo}”.` });
   for (const id of c.conquistas) fila.push({ titulo: `Conquista: ${CONQUISTAS[id].nome}`, texto: `Você conseguiu: ${CONQUISTAS[id].descricao.charAt(0).toLowerCase()}${CONQUISTAS[id].descricao.slice(1)}.` });
   return fila;
