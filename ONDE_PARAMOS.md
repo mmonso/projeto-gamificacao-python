@@ -6,7 +6,7 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 - **Decisões:** o dono do produto é leigo e não quer ser consultado sobre produto, design, conteúdo ou regras. Monte um painel de agentes especialistas (gamificação, ciência da aprendizagem, crescimento, UX), sintetize, registre a decisão em `design/` e implemente. Ideias que surgirem durante o trabalho são executadas na hora.
 - **Só leve ao dono:** dinheiro, contas e senhas pessoais, dados legais e ações irreversíveis fora do repositório.
-- **Git:** commits direto no `main`, sem branch, com `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Cada push no `main` publica o site.
+- **Git:** commits direto no `main`, sem branch, com `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. **O push no `main` NÃO publica o site:** o projeto `sibi` da Vercel não está ligado ao GitHub. Publique da raiz do repositório com `npx vercel@latest deploy --prod --yes --scope team_0zSAVILLco3gZHnizEuZEnKu` (a pasta `.vercel/` na raiz, ignorada pelo git, liga ao projeto `sibi`; o diretório raiz do projeto na Vercel é `web`, então nunca rode de dentro de `web/`).
 - **Sessões longas e autônomas:** não parar para perguntar a cada etapa.
 
 ## Estado do produto
@@ -25,12 +25,11 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
   - imagem de prévia dos links (`web/src/app/opengraph-image.tsx`);
   - ajustes de clareza na lição e no resultado.
 
-  Os testes automáticos (138), os tipos e o lint passaram. **Falta rodar o roteiro de navegador** (`ferramentas/verificar_navegador.mjs tudo`) contra a versão de produção ou o site publicado e corrigir o que aparecer.
+  Os testes automáticos (138), os tipos e o lint passaram. Publicada em 11/11/2026 e verificada no site com o roteiro de navegador (`ferramentas/verificar_navegador.mjs tudo`, todas as checagens passaram).
 
 ## Próximos passos, em ordem
 
-1. **Verificar a 2A no site publicado:** rodar o roteiro com `BASE=https://sibi-three.vercel.app` e revisar as capturas do celular (trilha, popovers do topo, tela inicial).
-2. **Parte 2C, cartões "Conceito novo":** os 25 cartões já estão escritos em `conteudo/cartoes-rascunho.json`, pelo especialista em aprendizagem.
+1. **Parte 2C, cartões "Conceito novo":** os 25 cartões já estão escritos em `conteudo/cartoes-rascunho.json`, pelo especialista em aprendizagem.
    - **Conteúdo:** mover cada cartão para o campo `cartao` do conceito no `unidade.yaml`. O verificador `ferramentas/verificar_conteudo.py` deve rodar o exemplo e conferir a saída.
    - **Banco:** coluna `cartao jsonb` em `conceitos`, numa migração nova. A publicação (`npm run db:publicar`) deve passar a gravá-la.
    - **Tela:**
@@ -38,15 +37,15 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
      - saída escondida até "Ver a saída";
      - botão "Conceito" ao lado de "Dica".
    - **Regra:** na revisão e na prática, abrir o cartão antes de responder conta como dica na agenda.
-3. **Parte 2B, recompensas:**
+2. **Parte 2B, recompensas:**
    - as 18 conquistas da tabela na seção 5 da análise; o campo `conquista` é texto, sem migração;
    - tela de desbloqueio e grade no perfil, com progresso;
    - meta com os nomes Leve, Firme e Intensa;
    - celebração nos marcos de sequência de 3, 7, 14 e 30 dias.
-4. **Parte 2D, hábito:**
+3. **Parte 2D, hábito:**
    - dia livre (`perfis.dias_livres`, o primeiro aos 3 dias, depois 1 a cada 7 dias de estudo, no máximo 2);
    - mapa de domínio com 4 degraus e selo "para revisar".
-5. **Depois, pela estratégia:**
+4. **Depois, pela estratégia:**
    - SMTP próprio (Gmail com senha de app; o dono precisa criar a senha e colá-la no painel do Supabase);
    - consulta de D1, D7 e D30;
    - novo tipo de exercício "digitar a saída";
@@ -62,3 +61,5 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 - **Vercel:** o conector MCP da Vercel enxergava outra conta. A CLI (`npx vercel@latest`) foi logada só no computador do dono. A `DATABASE_URL` da Vercel foi colada pelo próprio dono, e não se digitam senhas em serviços externos.
 - **Servidor local:** o de desenvolvimento ficou muito lento no computador do dono. Para testes de navegador, use `npm run build` e depois `npx next start -p 3100`.
 - **Next.js 16:** traz mudanças incompatíveis com versões anteriores. Antes de usar uma API nova, consulte `web/node_modules/next/dist/docs/`.
+
+- **Projeto sobrando na Vercel:** `web` (prj_dk9s4Hjzcr4RUZYWUxletqDhqlxz) foi criado por engano em 11/11/2026 e está vazio; o dono deve apagá-lo no painel.
