@@ -36,6 +36,13 @@
       "when": 1793891171211,
       "tag": "0004_resultado_da_sessao",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794423999391,
+      "tag": "0005_cartao_do_conceito",
+      "breakpoints": true
     }
   ]
 }

@@ -341,6 +341,31 @@ def carregar(caminho):
             sys.exit(f"ERRO   YAML inválido em {onde}: {getattr(e, 'problem', e)}. Textos com ': ' precisam de aspas.")
 
 
+def verificar_cartao(rel, conceito):
+    """Cartão "Conceito novo": campos de texto, exemplo que roda e saída conferida pelo Python."""
+    onde = f"conceito {conceito['id']}"
+    c = conceito.get("cartao")
+    if c is None:
+        return
+    if not isinstance(c, dict):
+        rel.erro(onde, "'cartao' deve ser um bloco com regra, exemplo, saida, repare e primeiro")
+        return
+    for campo in ("regra", "exemplo", "saida", "repare", "primeiro"):
+        _texto(rel, onde, c.get(campo), f"cartao.{campo}")
+    _texto(rel, onde, c.get("destaque"), "cartao.destaque", obrigatorio=False)
+    for campo in ("regra", "repare"):
+        if isinstance(c.get(campo), str) and len(c[campo]) > 200:
+            rel.erro(onde, f"cartao.{campo} com mais de 200 caracteres")
+    if c.get("destaque") and isinstance(c.get("exemplo"), str) and c["destaque"] not in c["exemplo"]:
+        rel.erro(onde, "cartao.destaque não aparece no exemplo")
+    if isinstance(c.get("exemplo"), str) and isinstance(c.get("saida"), str):
+        r = executar(c["exemplo"])
+        if r.erro:
+            rel.erro(onde, f"o exemplo do cartão falha ao rodar: {r.erro}")
+        elif r.saida != _normalizar(c["saida"]):
+            rel.erro(onde, f"a saída do cartão é {c['saida']!r}, mas o exemplo imprime {r.saida!r}")
+
+
 def verificar_unidade(pasta, rel):
     unidade = carregar(pasta / "unidade.yaml")
     conceitos = {}
@@ -351,6 +376,7 @@ def verificar_unidade(pasta, rel):
         conceitos[c["id"]] = c
         _texto(rel, f"conceito {c['id']}", c.get("nome"), "nome")
         _texto(rel, f"conceito {c['id']}", c.get("descricao"), "descricao")
+        verificar_cartao(rel, c)
     licoes = []
     for arquivo in sorted(pasta.glob("licao-*.yaml")):
         licao = carregar(arquivo)
@@ -387,6 +413,11 @@ def verificar_unidade(pasta, rel):
         tipos = {ex.get("tipo") for ex in principais}
         if len(tipos) < 3:
             rel.aviso(licao.get("id"), f"apenas {len(tipos)} tipos de exercício na sessão principal")
+    principais_por_id = {ex.get("id"): ex for lc in licoes for ex in (lc.get("exercicios") or [])}
+    for cid, c in conceitos.items():
+        primeiro = (c.get("cartao") or {}).get("primeiro")
+        if primeiro is not None and cid not in ((principais_por_id.get(primeiro) or {}).get("conceitos") or []):
+            rel.erro(f"conceito {cid}", f"cartao.primeiro {primeiro!r} não é exercício principal que avalie este conceito")
     for c in conceitos:
         if c not in usados:
             rel.aviso("unidade", f"conceito {c!r} não é avaliado por nenhum exercício")

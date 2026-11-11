@@ -12,6 +12,7 @@ export type NomeEvento =
   | "sessao_retomada"
   | "exercicio_respondido"
   | "dica_pedida"
+  | "conceito_aberto"
   | "licao_concluida"
   | "revisao_concluida";
 

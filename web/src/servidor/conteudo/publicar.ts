@@ -17,7 +17,7 @@ export async function publicarCurso(db: Db, curso: Curso): Promise<RelatorioPubl
       const dadosUnidade = { ordem: unidade.ordem, titulo: unidade.titulo, descricao: unidade.descricao };
       await tx.insert(t.unidades).values({ id: unidade.id, ...dadosUnidade }).onConflictDoUpdate({ target: t.unidades.id, set: dadosUnidade });
       for (const c of unidade.conceitos) {
-        const dados = { unidadeId: unidade.id, nome: c.nome, descricao: c.descricao };
+        const dados = { unidadeId: unidade.id, nome: c.nome, descricao: c.descricao, cartao: c.cartao ?? null };
         await tx.insert(t.conceitos).values({ id: c.id, ...dados }).onConflictDoUpdate({ target: t.conceitos.id, set: dados });
       }
       for (const licao of licoes) {

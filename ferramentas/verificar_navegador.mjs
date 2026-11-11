@@ -117,8 +117,30 @@ async function exercicioAtual(page) {
   });
 }
 
+let cartaoConferido = false;
+/** Cartão "Conceito novo": confere que a saída está escondida e passa por ele só com o teclado. */
+async function passarCartoes(page, ex) {
+  for (let n = 0; n < 6 && (await page.$(".cartao-conceito")); n++) {
+    if (!cartaoConferido) {
+      cartaoConferido = true;
+      conferir(await page.evaluate(() => document.activeElement?.id === "titulo-cartao"), "cartão de conceito: o foco vai para o título");
+      conferir((await page.$(".cartao-conceito .saida")) === null, "cartão de conceito: a saída fica escondida até pedir");
+      conferir(await page.evaluate(() => !document.querySelector("#enunciado")?.offsetParent), `cartão de conceito: o exercício ${ex.id} espera atrás do cartão`);
+      await foto(page, "cartao-conceito");
+      await page.evaluate(() => [...document.querySelectorAll(".cartao-conceito button")].find((b) => b.textContent.trim() === "Ver a saída")?.click());
+      await espera(150);
+      conferir((await page.$(".cartao-conceito .saida")) !== null, "cartão de conceito: Ver a saída mostra a saída e o que reparar");
+      await foto(page, "cartao-conceito-saida");
+    }
+    await page.evaluate(() => document.getElementById("titulo-cartao")?.focus());
+    await page.keyboard.press("Enter");
+    await espera(200);
+  }
+}
+
 /** Escolhe a resposta certa do exercício atual só com Tab e Espaço. */
 async function escolherComTeclado(page, ex) {
+  await passarCartoes(page, ex);
   const r = RESPOSTAS[ex.id];
   const passos = [];
   if (r.tipo === "escolher_resultado") passos.push({ indice: ex.opcoes.findIndex((o) => o.id === r.opcao), sel: ".opcao" });

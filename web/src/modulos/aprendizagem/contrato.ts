@@ -13,7 +13,8 @@ export const pedidoSubmissao = z.object({
 });
 export type PedidoSubmissao = z.infer<typeof pedidoSubmissao>;
 
-export const pedidoDica = z.object({ exercicioId: z.string().min(1).max(40), numero: z.number().int().min(1).max(3) });
+export const pedidoDica = z.object({ exercicioId: z.string().min(1).max(40), /** Número 0: o aluno abriu o cartão do conceito (conta como dica fora da sessão principal). */
+  numero: z.number().int().min(0).max(3) });
 
 /** Resposta correta, revelada só depois da submissão. Nunca inclui o feedback das outras opções. */
 export type Solucao =

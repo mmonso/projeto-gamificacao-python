@@ -15,7 +15,8 @@ import { liberarSom, tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
 import type { ErroApi, ResultadoConclusao, ResultadoSubmissao } from "@/modulos/aprendizagem/contrato";
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
-import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
+import type { CartaoConceito as Cartao, ExercicioPublico } from "@/modulos/conteudo/esquema";
+import { CartaoConceito } from "./CartaoConceito";
 
 type Fase = "respondendo" | "verificando" | "feedback" | "concluindo" | "concluida" | "sem_coracoes";
 
@@ -35,6 +36,13 @@ type Props = {
   criarMotor?: () => Motor;
 };
 
+/** Cartões abertos sozinhos: os de conceito novo, uma única vez por exercício nesta tela. */
+type CartaoAberto = { lista: Cartao[]; indice: number };
+const cartaoNovo = (ex: ExercicioPublico | null): CartaoAberto | null => {
+  const lista = ex?.cartoes?.filter((c) => c.novo) ?? [];
+  return lista.length ? { lista, indice: 0 } : null;
+};
+
 const ROTULO_SESSAO: Record<ResultadoConclusao["tipo"], string> = { principal: "Lição", pratica: "Prática", revisao: "Revisão", recuperacao: "Recuperação" };
 
 /** Faíscas do acerto, em volta do mascote; somem com movimento reduzido. */
@@ -46,6 +54,15 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   const [motor] = useState(() => (criarMotor ? criarMotor() : motorDaSessao(sessaoId)));
 
   const [exercicio, setExercicio] = useState(inicial.exercicio);
+  const [cartaoAberto, setCartaoAberto] = useState<CartaoAberto | null>(() => cartaoNovo(inicial.exercicio));
+  /** Exercícios cujo cartão novo já abriu sozinho; uma volta do exercício ao fim da fila não o abre de novo. */
+  const cartaoVistoRef = useRef(new Set<string>(inicial.exercicio?.cartoes?.some((c) => c.novo) ? [inicial.exercicio.id] : []));
+  const abrirCartaoSozinho = (ex: ExercicioPublico | null) => {
+    if (!ex || cartaoVistoRef.current.has(ex.id)) return setCartaoAberto(null);
+    const c = cartaoNovo(ex);
+    if (c) cartaoVistoRef.current.add(ex.id);
+    setCartaoAberto(c);
+  };
   const [resposta, setResposta] = useState<Resposta | null>(null);
   const [fase, setFase] = useState<Fase>(semCoracoes ? "sem_coracoes" : inicial.exercicio ? "respondendo" : "concluindo");
   const [coracoes, setCoracoes] = useState(coracoesIniciais);
@@ -134,6 +151,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     setResposta(null);
     setDicas([]);
     setExercicio(r.dados.exercicio);
+    abrirCartaoSozinho(r.dados.exercicio);
     if (r.dados.exercicio) setFase("respondendo");
     else void concluirLicao();
   }, [motor, chave, tratarErro, concluirLicao]);
@@ -179,10 +197,12 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
       /* eslint-disable react-hooks/set-state-in-effect */
       setExercicio(r.envio.exercicio);
       setResposta(r.envio.resposta);
+      setCartaoAberto(null);
       /* eslint-enable react-hooks/set-state-in-effect */
       void verificar(r.envio);
     } else if (r.acao === "rascunho") {
       setResposta(r.resposta);
+      setCartaoAberto(null);
     } else {
       guardar(chave, null);
       if (!inicial.exercicio) void concluirLicao();
@@ -193,8 +213,9 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
 
   useEffect(() => {
     if (fase === "feedback") feedbackRef.current?.focus({ preventScroll: true });
-    if (fase === "respondendo" && !falha) enunciadoRef.current?.focus({ preventScroll: true });
-  }, [fase, exercicio, falha]);
+    if (cartaoAberto) document.getElementById("titulo-cartao")?.focus({ preventScroll: true });
+    else if (fase === "respondendo" && !falha) enunciadoRef.current?.focus({ preventScroll: true });
+  }, [fase, exercicio, falha, cartaoAberto]);
 
   function continuar() {
     if (!resultado) return;
@@ -203,11 +224,23 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     if (resultado.concluida) return void concluirLicao();
     if (resultado.pausada) return setFase("sem_coracoes");
     setExercicio(resultado.proximo);
+    abrirCartaoSozinho(resultado.proximo);
     setResposta(null);
     setResultado(null);
     setDicas([]);
     setAviso(null);
     setFase("respondendo");
+  }
+
+  /** Botão "Conceito": reabre os cartões do exercício. Na revisão e na prática, isso conta como dica na agenda. */
+  function abrirCartao() {
+    if (!exercicio?.cartoes?.length) return;
+    setCartaoAberto({ lista: exercicio.cartoes, indice: 0 });
+    if (!demo && tipo !== "principal") void motor.dica(exercicio.id, 0);
+  }
+
+  function avancarCartao() {
+    setCartaoAberto((c) => (c && c.indice + 1 < c.lista.length ? { ...c, indice: c.indice + 1 } : null));
   }
 
   async function pedirDica() {
@@ -237,7 +270,8 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   const podeVerificar = fase === "respondendo" && exercicio !== null && respostaCompleta(exercicio, resposta);
 
   function acaoPrincipal() {
-    if (fase === "feedback") continuar();
+    if (cartaoAberto) avancarCartao();
+    else if (fase === "feedback") continuar();
     else if (podeVerificar && exercicio && resposta) void verificar({ exercicio, resposta, envioId: envioRef.current ?? crypto.randomUUID() });
     else if (fase === "concluindo" && falha) void concluirLicao();
   }
@@ -301,8 +335,9 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
 
       <main className="licao-corpo" id="conteudo-principal">
         {aviso && <p className="mensagem-aviso mb-4">{aviso}</p>}
+        {exercicio && cartaoAberto && <CartaoConceito key={`${exercicio.id}:${cartaoAberto.indice}`} cartao={cartaoAberto.lista[cartaoAberto.indice]} posicao={cartaoAberto.indice + 1} total={cartaoAberto.lista.length} />}
         {exercicio ? (
-          <>
+          <div hidden={cartaoAberto !== null}>
             <p className="etiqueta-tipo">
               {(demo || tipo !== "principal") && <span className="selo-sessao">{demo ? "Demonstração" : ROTULO_SESSAO[tipo]}</span>}
               {NOME_TIPO[exercicio.tipo]}
@@ -330,7 +365,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                 ))}
               </div>
             )}
-          </>
+          </div>
         ) : (
           <div className="carregando" aria-busy="true">
             <h1 className="so-leitor">Concluindo a lição</h1>
@@ -401,7 +436,11 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                 <Icone nome="semRede" /> {falha}
               </p>
             )}
-            {fase === "concluindo" ? (
+            {cartaoAberto ? (
+              <button type="button" className="botao" onClick={avancarCartao}>
+                {cartaoAberto.indice + 1 < cartaoAberto.lista.length ? "Próximo conceito" : "Entendi"}
+              </button>
+            ) : fase === "concluindo" ? (
               <button type="button" className="botao" disabled={!falha} onClick={() => void concluirLicao()}>
                 {falha ? "Tentar novamente" : "Concluindo…"}
               </button>
@@ -411,6 +450,11 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                   <button type="button" className="botao botao-secundario botao-dica" disabled={bloqueado || dicas.length >= totalDicas} onClick={() => void pedirDica()}>
                     <Icone nome="lampada" /> Dica{totalDicas - dicas.length > 0 ? ` (${totalDicas - dicas.length})` : ""}
                   </button>
+                  {exercicio?.cartoes?.length ? (
+                    <button type="button" className="botao botao-secundario botao-dica" disabled={bloqueado} onClick={abrirCartao}>
+                      <Icone nome="livro" /> Conceito
+                    </button>
+                  ) : null}
                 </div>
                 <button type="button" className="botao" disabled={!podeVerificar} onClick={acaoPrincipal}>
                   {fase === "verificando" ? "Verificando…" : falha ? "Tentar novamente" : "Verificar"}

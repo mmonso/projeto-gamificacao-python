@@ -312,6 +312,36 @@ describe("corações e recuperação (E06.2)", () => {
   });
 });
 
+describe("cartões de conceito", () => {
+  const GABI = "00000000-0000-4000-8000-0000000000c9";
+
+  it("abrem sozinhos no primeiro exercício do conceito e deixam de abrir depois de concluída a lição", async () => {
+    await db.insert(t.perfis).values({ id: GABI });
+    const { sessaoId } = (await iniciarSessao(db, GABI, "u1-l1")) as { sessaoId: string };
+    const primeiro = (await atual(GABI, sessaoId)).exercicio!;
+    expect(primeiro.id).toBe("u1-l1-e01");
+    expect(primeiro.cartoes?.filter((c) => c.novo).map((c) => c.conceitoId).sort()).toEqual(["print-texto", "string-aspas"]);
+    expect(JSON.stringify(primeiro.cartoes)).not.toContain("primeiro");
+
+    // Na sessão principal, abrir o cartão é livre: não conta como dica.
+    expect(await pedirDica(db, GABI, sessaoId, primeiro.id, 0)).toBe("");
+    expect((await itensDaSessao(db, sessaoId)).find((i) => i.exercicioId === primeiro.id)!.dicasUsadas).toBe(0);
+
+    // O exercício seguinte pode trazer o botão "Conceito", mas só abre sozinho no primeiro do conceito.
+    const r = await submeter(db, GABI, sessaoId, { id: randomUUID(), exercicioId: primeiro.id, resposta: correta(primeiro.id) });
+    expect(r.proximo?.cartoes?.filter((c) => c.novo && c.conceitoId === "print-texto")).toEqual([]);
+
+    for (let s = await atual(GABI, sessaoId); s.exercicio; s = await atual(GABI, sessaoId)) {
+      await submeter(db, GABI, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+    }
+    await concluir(db, GABI, sessaoId);
+    const outra = (await iniciarSessao(db, GABI, "u1-l1")) as { sessaoId: string };
+    const de_novo = (await atual(GABI, outra.sessaoId)).exercicio!;
+    expect(de_novo.cartoes?.some((c) => c.novo)).toBe(false);
+    expect(de_novo.cartoes?.length).toBeGreaterThan(0);
+  });
+});
+
 describe("nova versão publicada durante a sessão (FL-04)", () => {
   const CAIO = "00000000-0000-4000-8000-0000000000c3";
   const DANI = "00000000-0000-4000-8000-0000000000d4";

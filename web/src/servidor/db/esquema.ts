@@ -1,6 +1,8 @@
 // Esquema do banco (PLANO, seção 7; ESPECIFICACAO_MVP, seção 4). Única cadeia de migrações: Drizzle.
 // As tabelas não são expostas pela API de dados do Supabase; o acesso é só pelo servidor (ESPECIFICACAO, 6.1).
 import { sql } from "drizzle-orm";
+import type { z } from "zod";
+import type { cartaoEsquema } from "@/modulos/conteudo/esquema";
 import {
   boolean,
   check,
@@ -63,6 +65,8 @@ export const conceitos = pgTable(
     unidadeId: text("unidade_id").notNull().references(() => unidades.id),
     nome: text("nome").notNull(),
     descricao: text("descricao").notNull(),
+    /** Cartão "Conceito novo": regra, exemplo, saída e o primeiro exercício em que aparece. */
+    cartao: jsonb("cartao").$type<z.infer<typeof cartaoEsquema>>(),
   },
   (t) => [index("conceitos_unidade").on(t.unidadeId)],
 );

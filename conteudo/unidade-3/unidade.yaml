@@ -7,18 +7,60 @@ conceitos:
   - id: booleanos
     nome: Verdadeiro ou falso
     descricao: Comparações resultam em True ou False, os valores do tipo bool.
+    cartao:
+      regra: "Uma comparação responde True (verdadeiro) ou False (falso). Esses valores são do tipo bool."
+      exemplo: "print(10 > 4)\nprint(1 > 6)\nprint(type(10 > 4))"
+      saida: "True\nFalse\n<class 'bool'>"
+      destaque: "10 > 4"
+      repare: "A comparação não aparece na tela: aparece só a resposta, True ou False."
+      primeiro: "u3-l1-e01"
   - id: comparacao
     nome: Comparar números
     descricao: Os operadores >, <, >= e <= comparam valores; >= e <= incluem a igualdade.
+    cartao:
+      regra: "Leia > como maior que e < como menor que. Com >= e <=, valores iguais também valem."
+      exemplo: "print(6 >= 6)\nprint(6 > 6)\nprint(3 <= 2)"
+      saida: "True\nFalse\nFalse"
+      destaque: ">="
+      repare: "Escreva >= e <=, com o sinal de maior ou menor primeiro. => dá erro."
+      primeiro: "u3-l1-e01"
   - id: igualdade
     nome: Igual ou diferente
     descricao: O == compara se dois valores são iguais e o != se são diferentes; um único = guarda valores.
+    cartao:
+      regra: "== pergunta se dois valores são iguais; != se são diferentes. A resposta é True ou False."
+      exemplo: "plano = \"anual\"\nprint(plano == \"anual\")\nprint(plano != \"anual\")\nprint(plano == \"Anual\")"
+      saida: "True\nFalse\nFalse"
+      destaque: "=="
+      repare: "Um = só dá valor a um nome; para comparar, use ==."
+      primeiro: "u3-l2-e01"
   - id: logicos
     nome: E, ou, não
     descricao: and exige que as duas condições sejam verdadeiras, or exige pelo menos uma, e not inverte o valor.
+    cartao:
+      regra: "and exige os dois lados True; or exige pelo menos um; not inverte o valor."
+      exemplo: "velocidade = 70\nprint(velocidade > 40 and velocidade < 80)\nprint(velocidade < 40 or velocidade > 80)"
+      saida: "True\nFalse"
+      destaque: "and"
+      repare: "Quando basta uma condição, use or. O and exige todas ao mesmo tempo."
+      primeiro: "u3-l3-e01"
   - id: if-else
     nome: Se e senão
     descricao: O if executa um bloco quando a condição é verdadeira; o else executa outro bloco quando é falsa.
+    cartao:
+      regra: "Se a condição for True, roda o bloco do if. Se for False, roda o do else."
+      exemplo: "if 7 > 9:\n    print(\"7 é maior\")\nelse:\n    print(\"9 é maior\")"
+      saida: "9 é maior"
+      destaque: "else:"
+      repare: "Só um dos dois blocos roda, nunca os dois."
+      primeiro: "u3-l4-e01"
   - id: indentacao
     nome: Blocos e indentação
     descricao: A linha do if e do else termina com dois-pontos, e as linhas do bloco ficam recuadas.
+    cartao:
+      regra: "A linha do if e a do else terminam com dois-pontos. O bloco de cada um fica recuado."
+      exemplo: "if 3 > 5:\n    print(\"Só se for True\")\nprint(\"Sempre\")"
+      saida: "Sempre"
+      destaque: "    print(\"Só se for True\")"
+      repare: "Uma linha sem recuo depois do bloco não é do if: ela roda sempre."
+      primeiro: "u3-l4-e03"

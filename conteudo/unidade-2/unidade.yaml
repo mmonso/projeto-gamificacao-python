@@ -7,24 +7,80 @@ conceitos:
   - id: tipos-basicos
     nome: Tipos básicos
     descricao: Valores podem ser int, float, str ou bool, e type mostra o tipo de um valor.
+    cartao:
+      regra: "Cada valor tem um tipo: int (inteiro), float (com ponto), str (texto) e bool (True ou False)."
+      exemplo: "print(type(64))\nprint(type(2.75))\nprint(type(\"64\"))"
+      saida: "<class 'int'>\n<class 'float'>\n<class 'str'>"
+      destaque: "\"64\""
+      repare: "Casa decimal usa ponto. Com vírgula, 2,75 vira dois números."
+      primeiro: "u2-l1-e01"
   - id: divisao
     nome: Divisão
     descricao: A divisão com / sempre resulta em float; com //, a parte decimal é descartada.
+    cartao:
+      regra: "O / sempre dá float, mesmo em divisão exata. O // divide e descarta a parte decimal."
+      exemplo: "print(11 / 4)\nprint(12 / 4)\nprint(11 // 4)"
+      saida: "2.75\n3.0\n2"
+      destaque: "//"
+      repare: "O // não arredonda: 11 // 4 dá 2, e não 3."
+      primeiro: "u2-l2-e01"
   - id: resto-potencia
     nome: Resto e potência
     descricao: O operador % dá o resto da divisão, e ** eleva um número a uma potência.
+    cartao:
+      regra: "O % dá o resto da divisão. O ** eleva à potência: 5 ** 2 é 5 vezes 5."
+      exemplo: "print(14 % 5)\nprint(5 ** 2)"
+      saida: "4\n25"
+      destaque: "%"
+      repare: "O % não é porcentagem: 14 % 5 é o que sobra, 4."
+      primeiro: "u2-l2-e04"
   - id: precedencia
     nome: Ordem das operações
     descricao: Multiplicação e divisão acontecem antes de soma e subtração; parênteses mudam a ordem.
+    cartao:
+      regra: "Multiplicação e divisão vêm antes de soma e subtração. Parênteses mudam essa ordem."
+      exemplo: "print(10 - 2 * 3)\nprint((10 - 2) * 3)"
+      saida: "4\n24"
+      destaque: "(10 - 2)"
+      repare: "O Python não faz a conta da esquerda para a direita: o * vem antes."
+      primeiro: "u2-l2-e06"
   - id: concatenacao
     nome: Juntar textos
     descricao: O + junta textos, sem colocar espaço entre eles.
+    cartao:
+      regra: "O + junta textos, colando um no outro. Ele não põe espaço entre eles."
+      exemplo: "inicio = \"Porto\"\nprint(inicio + \"Alegre\")\nprint(inicio + \" \" + \"Alegre\")"
+      saida: "PortoAlegre\nPorto Alegre"
+      destaque: "\" \""
+      repare: "Quer espaço? Ele precisa estar dentro de aspas, como qualquer texto."
+      primeiro: "u2-l3-e01"
   - id: repeticao-texto
     nome: Repetir textos
     descricao: Um texto multiplicado por um número inteiro é repetido.
+    cartao:
+      regra: "Um texto vezes um número inteiro é repetido, colado, sem espaço."
+      exemplo: "print(\"bum\" * 3)\nprint(\".\" * 8)"
+      saida: "bumbumbum\n........"
+      destaque: "* 3"
+      repare: "Texto mais número dá erro; texto vezes número repete o texto."
+      primeiro: "u2-l3-e03"
   - id: erro-tipo
     nome: Texto com número
     descricao: Juntar texto e número com + gera TypeError.
+    cartao:
+      regra: "O + soma dois números ou junta dois textos. Para mostrar texto e número juntos, use a vírgula."
+      exemplo: "vagas = 12\nprint(\"Vagas:\", vagas)\nprint(\"Vagas: \" + \"12\")"
+      saida: "Vagas: 12\nVagas: 12"
+      destaque: "\"Vagas:\", vagas"
+      repare: "Texto + número gera TypeError: o + não mistura os dois tipos."
+      primeiro: "u2-l3-e04"
   - id: conversao
     nome: Converter valores
     descricao: str, int e float convertem um valor para texto, inteiro ou número decimal.
+    cartao:
+      regra: "int() transforma em inteiro, float() em número com ponto, e str() em texto."
+      exemplo: "print(\"8\" + \"4\")\nprint(int(\"8\") + 4)\nprint(\"Fila: \" + str(6))"
+      saida: "84\n12\nFila: 6"
+      destaque: "int(\"8\")"
+      repare: "Um número entre aspas é texto: o + junta, não soma."
+      primeiro: "u2-l4-e01"

@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 import { z } from "zod";
-import { licaoEsquema, type Licao } from "@/modulos/conteudo/esquema";
+import { cartaoEsquema, licaoEsquema, type Licao } from "@/modulos/conteudo/esquema";
 
 export const unidadeEsquema = z.object({
   id: z.string().regex(/^u\d+$/),
@@ -11,7 +11,7 @@ export const unidadeEsquema = z.object({
   ordem: z.number().int().min(1),
   titulo: z.string().min(1),
   descricao: z.string().min(1),
-  conceitos: z.array(z.object({ id: z.string().min(1), nome: z.string().min(1), descricao: z.string().min(1) })).min(1),
+  conceitos: z.array(z.object({ id: z.string().min(1), nome: z.string().min(1), descricao: z.string().min(1), cartao: cartaoEsquema.optional() })).min(1),
 });
 
 export type Unidade = z.infer<typeof unidadeEsquema>;

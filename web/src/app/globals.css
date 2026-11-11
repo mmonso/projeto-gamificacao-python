@@ -346,6 +346,13 @@
   .selo-canto .icone { width: 16px; height: 16px; }
   .retorno-neutro { margin: 0; font-weight: 700; color: var(--texto-suave); }
   .etiqueta-tipo { display: flex; align-items: center; gap: 8px; color: var(--texto-suave); font-size: .75rem; }
+  .cartao-conceito { margin-bottom: 8px; }
+  .cartao-conceito h1:focus { outline: none; }
+  .etiqueta-cartao { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-weight: 900; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--azul); }
+  .posicao-cartao { margin-left: auto; color: var(--texto-suave); letter-spacing: 0; text-transform: none; }
+  .regra-cartao { font-size: 1.1rem; font-weight: 700; line-height: 1.45; margin: 0 0 16px; }
+  .repare-cartao { margin: 0; padding: 12px 14px; border-radius: var(--raio-pequeno); background: var(--fundo-suave); line-height: 1.45; }
+  .destaque-codigo { background: rgba(255, 194, 61, .28); border-bottom: 2px solid var(--amarelo); border-radius: 3px; color: inherit; padding: 0 2px; }
   .selo-sessao { padding: 1px 8px; border-radius: 6px; background: var(--fundo-suave); border: 1px solid var(--borda); letter-spacing: .04em; }
   .estatistica.xp .valor .icone { color: var(--azul); }
   .estatistica.sequencia .valor .icone { color: var(--amarelo-borda); }

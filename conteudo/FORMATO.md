@@ -34,6 +34,22 @@ conceitos:
 
 Conceitos têm identificadores globais em letras minúsculas com hífens. Um conceito pertence à unidade em que é apresentado pela primeira vez; unidades seguintes podem usá-lo.
 
+### Cartão "Conceito novo" (opcional)
+
+Cada conceito pode ter um `cartao`, mostrado antes do primeiro exercício em que o conceito aparece e reaberto pelo botão "Conceito":
+
+```yaml
+    cartao:
+      regra: "O print mostra na tela o texto que está entre as aspas."   # uma frase, até 200 caracteres
+      exemplo: "print(\"Pedido recebido\")"                              # código que roda sem erro
+      saida: "Pedido recebido"                                           # o que o exemplo imprime
+      destaque: "print"                                                  # opcional; trecho do exemplo
+      repare: "Nem o comando print nem as aspas aparecem na tela."       # uma observação, até 200 caracteres
+      primeiro: "u1-l1-e01"                                              # exercício principal que avalia o conceito
+```
+
+O verificador executa o `exemplo` e confere a `saida`; o `destaque` precisa estar no `exemplo` e o `primeiro` precisa ser um exercício principal que avalie o conceito.
+
 ## 3. Lição
 
 ```yaml

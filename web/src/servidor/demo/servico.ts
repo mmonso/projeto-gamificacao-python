@@ -10,6 +10,7 @@ import { solucaoDoGabarito, type ResultadoConclusao, type Solucao } from "@/modu
 import { corrigir, respostaEsquema } from "@/modulos/aprendizagem/corretor";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
 import * as t from "@/servidor/db/esquema";
+import { comCartoes } from "@/servidor/licoes/cartoes";
 import { efetivarConclusao } from "@/servidor/licoes/estudo";
 import { ordemDaTrilha, versaoVigente } from "@/servidor/licoes/servico";
 
@@ -29,7 +30,8 @@ export async function licaoDemo(db: Db): Promise<LicaoDemo | null> {
     .from(t.exercicios)
     .where(and(eq(t.exercicios.versaoLicaoId, versao.id), eq(t.exercicios.uso, "principal")))
     .orderBy(asc(t.exercicios.posicao));
-  return { licaoId, titulo: licao.titulo, versaoLicaoId: versao.id, exercicios: exercicios.map((e) => e.publico as ExercicioPublico) };
+  const publicos = await Promise.all(exercicios.map((e) => comCartoes(db, e.publico as ExercicioPublico, { demo: true })));
+  return { licaoId, titulo: licao.titulo, versaoLicaoId: versao.id, exercicios: publicos };
 }
 
 /**

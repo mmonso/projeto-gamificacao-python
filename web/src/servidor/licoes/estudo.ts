@@ -18,6 +18,7 @@ import { coracoesAposRecuperacao, coracoesAposResposta, xpDaConclusao } from "@/
 import * as t from "@/servidor/db/esquema";
 import { registrarEvento } from "@/servidor/eventos";
 import { aplicarEfeitos, diaDaConclusao } from "@/servidor/gamificacao/efeitos";
+import { comCartoes } from "./cartoes";
 import { ordemDaTrilha } from "./servico";
 
 type Db = PgDatabase<PgQueryResultHKT, typeof t>;
@@ -76,7 +77,7 @@ async function progresso(tx: Tx, sessaoId: string, fila: EstadoFila, total: numb
     resolvidos: fila.resolvidos.length,
     total,
     concluida: fila.fila.length === 0,
-    proximo: await exercicioPublico(tx, sessaoId, fila.fila[0]),
+    proximo: await comCartoes(tx, await exercicioPublico(tx, sessaoId, fila.fila[0]), { sessaoId }),
   };
 }
 
@@ -192,6 +193,17 @@ export async function pedirDica(db: Db, alunoId: string, sessaoId: string, exerc
     const sessao = await travarSessao(tx, alunoId, sessaoId);
     if (sessao.estado === "pausada") throw new ErroEstudo("sem_coracoes", SEM_CORACOES);
     if (sessao.estado !== "aberta" || sessao.fila.fila[0] !== exercicioId) throw new ErroEstudo("desatualizada", "Esta lição mudou em outra aba ou aparelho.");
+    if (numero === 0) {
+      // Abrir o cartão do conceito antes de responder conta como dica na revisão e na prática: a agenda não trata como acerto sem ajuda.
+      if (sessao.tipo !== "principal") {
+        await tx
+          .update(t.itensSessao)
+          .set({ dicasUsadas: sql`greatest(${t.itensSessao.dicasUsadas}, 1)` })
+          .where(and(eq(t.itensSessao.sessaoId, sessao.id), eq(t.itensSessao.exercicioId, exercicioId)));
+        await registrarEvento(tx, "conceito_aberto", alunoId, { sessaoId: sessao.id, exercicioId });
+      }
+      return "";
+    }
     const dica = (await exercicioDoItem(tx, sessao.id, exercicioId))?.dicas[numero - 1];
     if (!dica) throw new ErroEstudo("invalida", "Não há mais dicas para este exercício.");
     await tx

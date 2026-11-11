@@ -26,6 +26,20 @@ const opcao = z.object({
   feedback: texto.optional(),
 });
 
+/** Cartão "Conceito novo" (design/ANALISE_UX_GAMIFICACAO.md): regra curta, exemplo que roda e saída conferida pelo verificador. */
+export const cartaoEsquema = z.object({
+  regra: texto.max(200),
+  exemplo: texto,
+  saida: texto,
+  destaque: texto.optional(),
+  repare: texto.max(200),
+  /** Exercício principal em que o conceito aparece pela primeira vez. */
+  primeiro: z.string().regex(/^u\d+-l\d+-e\d{2}$/),
+});
+
+/** Cartão como chega à tela: com o conceito, sem o campo de publicação, e se abre sozinho (conceito ainda não visto). */
+export type CartaoConceito = Omit<z.infer<typeof cartaoEsquema>, "primeiro"> & { conceitoId: string; nome: string; novo: boolean };
+
 export const exercicioEsquema = z.discriminatedUnion("tipo", [
   z.object({
     ...base,
@@ -91,7 +105,7 @@ export type ExercicioPublico =
   | (PublicoBase & { tipo: "ordenar_blocos"; blocos: { id: string; codigo: string }[]; codigoAntes?: string; codigoDepois?: string })
   | (PublicoBase & { tipo: "localizar_erro" });
 
-type PublicoBase = { id: string; versao: number; enunciado: string; codigo?: string; saidaEsperada?: string; totalDicas: number };
+type PublicoBase = { id: string; versao: number; enunciado: string; codigo?: string; saidaEsperada?: string; totalDicas: number; cartoes?: CartaoConceito[] };
 
 /** FNV-1a de 32 bits: semente estável para embaralhar e nomear o que a publicação gera. */
 function hash(texto: string): number {
