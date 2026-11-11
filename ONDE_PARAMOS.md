@@ -27,25 +27,19 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
   Os testes automáticos (138), os tipos e o lint passaram. Publicada em 11/11/2026 e verificada no site com o roteiro de navegador (`ferramentas/verificar_navegador.mjs tudo`, todas as checagens passaram).
 
+- **Parte 2C, publicada em 11/11/2026:** cartões "Conceito novo" (25 conceitos). O cartão fica em `cartao` de cada conceito no `unidade.yaml` (formato em `conteudo/FORMATO.md`, verificado por `verificar_conteudo.py`), na coluna `conceitos.cartao` (migração 0005), e `servidor/licoes/cartoes.ts` o anexa ao exercício. Abre sozinho só na sessão principal e na demonstração; o botão "Conceito" reabre; na revisão e na prática conta como dica (`dicas` com `numero: 0`).
+
 ## Próximos passos, em ordem
 
-1. **Parte 2C, cartões "Conceito novo":** os 25 cartões já estão escritos em `conteudo/cartoes-rascunho.json`, pelo especialista em aprendizagem.
-   - **Conteúdo:** mover cada cartão para o campo `cartao` do conceito no `unidade.yaml`. O verificador `ferramentas/verificar_conteudo.py` deve rodar o exemplo e conferir a saída.
-   - **Banco:** coluna `cartao jsonb` em `conceitos`, numa migração nova. A publicação (`npm run db:publicar`) deve passar a gravá-la.
-   - **Tela:**
-     - antes do primeiro exercício de cada conceito ainda não visto (sem linha em `estado_conceitos` e ainda não mostrado nesta sessão), só na sessão principal e na demonstração;
-     - saída escondida até "Ver a saída";
-     - botão "Conceito" ao lado de "Dica".
-   - **Regra:** na revisão e na prática, abrir o cartão antes de responder conta como dica na agenda.
-2. **Parte 2B, recompensas:**
+1. **Parte 2B, recompensas:**
    - as 18 conquistas da tabela na seção 5 da análise; o campo `conquista` é texto, sem migração;
    - tela de desbloqueio e grade no perfil, com progresso;
    - meta com os nomes Leve, Firme e Intensa;
    - celebração nos marcos de sequência de 3, 7, 14 e 30 dias.
-3. **Parte 2D, hábito:**
+2. **Parte 2D, hábito:**
    - dia livre (`perfis.dias_livres`, o primeiro aos 3 dias, depois 1 a cada 7 dias de estudo, no máximo 2);
    - mapa de domínio com 4 degraus e selo "para revisar".
-4. **Depois, pela estratégia:**
+3. **Depois, pela estratégia:**
    - SMTP próprio (Gmail com senha de app; o dono precisa criar a senha e colá-la no painel do Supabase);
    - consulta de D1, D7 e D30;
    - novo tipo de exercício "digitar a saída";
