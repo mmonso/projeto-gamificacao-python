@@ -96,19 +96,23 @@ export type Gabarito =
   | { tipo: "escolher_resultado"; opcao: string; feedbackOpcoes: Record<string, string> }
   | { tipo: "completar_lacuna"; lacunas: Record<string, string> }
   | { tipo: "ordenar_blocos"; ordens: string[][] }
-  | { tipo: "localizar_erro"; linha: number; correcao: string };
+  | { tipo: "localizar_erro"; linha: number; correcao: string }
+  /** Derivado de um escolher_resultado na revisão e na prática (modulos/aprendizagem/digitar.ts). */
+  | { tipo: "digitar_saida"; saida: string };
 
 /** Parte que o aluno pode ver antes de responder. As dicas são entregues uma a uma, a pedido. */
 export type ExercicioPublico =
   | (PublicoBase & { tipo: "escolher_resultado"; opcoesSao: "saida" | "codigo" | "texto"; opcoes: { id: string; texto?: string; erro?: boolean }[] })
   | (PublicoBase & { tipo: "completar_lacuna"; lacunas: { id: string; opcoes: string[] }[] })
   | (PublicoBase & { tipo: "ordenar_blocos"; blocos: { id: string; codigo: string }[]; codigoAntes?: string; codigoDepois?: string })
-  | (PublicoBase & { tipo: "localizar_erro" });
+  | (PublicoBase & { tipo: "localizar_erro" })
+  /** Escolher a saída sem as opções: o aluno digita o que aparece na tela. `linhas` é o número de linhas da saída. */
+  | (PublicoBase & { tipo: "digitar_saida"; linhas: number });
 
 type PublicoBase = { id: string; versao: number; enunciado: string; codigo?: string; saidaEsperada?: string; totalDicas: number; cartoes?: CartaoConceito[] };
 
 /** FNV-1a de 32 bits: semente estável para embaralhar e nomear o que a publicação gera. */
-function hash(texto: string): number {
+export function hash(texto: string): number {
   let h = 0x811c9dc5;
   for (let i = 0; i < texto.length; i++) {
     h ^= texto.charCodeAt(i);

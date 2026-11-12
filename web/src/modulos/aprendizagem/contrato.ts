@@ -21,7 +21,8 @@ export type Solucao =
   | { tipo: "escolher_resultado"; opcao: string }
   | { tipo: "completar_lacuna"; lacunas: Record<string, string> }
   | { tipo: "ordenar_blocos"; blocos: string[] }
-  | { tipo: "localizar_erro"; linha: number; correcao: string };
+  | { tipo: "localizar_erro"; linha: number; correcao: string }
+  | { tipo: "digitar_saida"; saida: string };
 
 export function solucaoDoGabarito(g: Gabarito): Solucao {
   switch (g.tipo) {
@@ -33,6 +34,8 @@ export function solucaoDoGabarito(g: Gabarito): Solucao {
       return { tipo: g.tipo, blocos: g.ordens[0] };
     case "localizar_erro":
       return { tipo: g.tipo, linha: g.linha, correcao: g.correcao };
+    case "digitar_saida":
+      return { tipo: g.tipo, saida: g.saida };
   }
 }
 
@@ -55,7 +58,7 @@ export type ResultadoSubmissao = Progresso & {
   pausada: boolean;
   solucao: Solucao;
   explicacao: string;
-  /** Comentário da opção escolhida, quando o conteúdo traz um (escolher_resultado). */
+  /** Comentário da opção escolhida, quando o conteúdo traz um (escolher_resultado), ou da saída quase certa (digitar_saida). */
   feedbackOpcao?: string;
 };
 

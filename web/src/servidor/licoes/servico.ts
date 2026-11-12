@@ -6,6 +6,7 @@ import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { iniciarFila, type EstadoFila } from "@/modulos/aprendizagem/fila";
 import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
+import { noModoDaSessao } from "@/modulos/aprendizagem/digitar";
 import * as t from "@/servidor/db/esquema";
 import { comCartoes } from "./cartoes";
 import { registrarEvento } from "@/servidor/eventos";
@@ -351,7 +352,7 @@ export async function obterSessaoAtual(db: Db, alunoId: string, sessaoId: string
       .from(t.itensSessao)
       .innerJoin(t.exercicios, and(eq(t.exercicios.versaoLicaoId, t.itensSessao.versaoLicaoId), eq(t.exercicios.exercicioId, t.itensSessao.exercicioId)))
       .where(and(eq(t.itensSessao.sessaoId, s.id), eq(t.itensSessao.exercicioId, atual)));
-    exercicio = await comCartoes(db, (ex?.publico as ExercicioPublico | undefined) ?? null, { sessaoId: s.id });
+    exercicio = await comCartoes(db, ex ? noModoDaSessao(s.tipo, s.id, ex.publico as ExercicioPublico) : null, { sessaoId: s.id });
   }
   return {
     id: s.id,

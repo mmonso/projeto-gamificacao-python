@@ -354,6 +354,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
               anunciar={setAnuncio}
               bloqueado={bloqueado}
               correcao={fase === "feedback" && resultado ? { correta: resultado.correta, solucao: resultado.solucao } : null}
+              aoEnviar={acaoPrincipal}
             />
             {dicas.length > 0 && (
               <div className="dicas" aria-live="polite">

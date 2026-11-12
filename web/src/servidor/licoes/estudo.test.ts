@@ -7,7 +7,7 @@ import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
-import type { Exercicio } from "@/modulos/conteudo/esquema";
+import type { Exercicio, ExercicioPublico } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
@@ -21,8 +21,8 @@ const BIA = "00000000-0000-4000-8000-0000000000b2";
 const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 const exercicios = new Map<string, Exercicio>(curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...l.revisao])).map((e) => [e.id, e]));
 
-function correta(id: string): Resposta {
-  return respostaCorreta(exercicios.get(id)!);
+function correta(id: string, publico?: ExercicioPublico | null): Resposta {
+  return respostaCorreta(exercicios.get(id)!, publico);
 }
 
 function errada(id: string): Resposta {
@@ -55,7 +55,7 @@ async function xpTotal(aluno: string) {
 async function resolverTudo(aluno: string, licaoId: string) {
   const { sessaoId } = (await iniciarSessao(db, aluno, licaoId)) as { sessaoId: string };
   for (let s = await atual(aluno, sessaoId); s.exercicio; s = await atual(aluno, sessaoId)) {
-    await submeter(db, aluno, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+    await submeter(db, aluno, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
   }
   return sessaoId;
 }
@@ -124,7 +124,7 @@ describe("lição piloto do começo ao fim", () => {
 
   it("resolve a fila, conclui uma única vez e libera a próxima lição (CA-34)", async () => {
     for (let s = await atual(ANA, sessaoId); s.exercicio; s = await atual(ANA, sessaoId)) {
-      await submeter(db, ANA, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+      await submeter(db, ANA, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
     }
     const [a, b] = await Promise.all([concluir(db, ANA, sessaoId), concluir(db, ANA, sessaoId)]);
     expect(a).toEqual(b);
@@ -268,7 +268,7 @@ describe("corações e recuperação (E06.2)", () => {
 
   it("concluir a recuperação devolve dois corações, conta como prática e reabre a lição pausada (CA-81, CA-84)", async () => {
     for (let s = await atual(FABI, recuperacao); s.exercicio; s = await atual(FABI, recuperacao)) {
-      await submeter(db, FABI, recuperacao, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+      await submeter(db, FABI, recuperacao, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
     }
     const a = await concluir(db, FABI, recuperacao);
     expect(a).toMatchObject({ tipo: "recuperacao", licaoId: null, primeiraConclusao: false, xp: 10, coracoesRecuperados: 2, voltarSessaoId: principal });
@@ -278,7 +278,7 @@ describe("corações e recuperação (E06.2)", () => {
     // A lição continua no mesmo item em que parou.
     const s = (await obterSessaoAtual(db, FABI, principal))!;
     expect(s.estado).toBe("aberta");
-    const r = await submeter(db, FABI, principal, { id: randomUUID(), exercicioId: s.exercicio!.id, resposta: correta(s.exercicio!.id) });
+    const r = await submeter(db, FABI, principal, { id: randomUUID(), exercicioId: s.exercicio!.id, resposta: correta(s.exercicio!.id, s.exercicio) });
     expect(r).toMatchObject({ correta: true, perdeuCoracao: false, coracoes: 2 });
   });
 
@@ -286,7 +286,7 @@ describe("corações e recuperação (E06.2)", () => {
     await db.update(t.perfis).set({ coracoes: 4 }).where(eq(t.perfis.id, FABI));
     const id = ((await iniciarRecuperacao(db, FABI)) as { sessaoId: string }).sessaoId;
     for (let s = await atual(FABI, id); s.exercicio; s = await atual(FABI, id)) {
-      await submeter(db, FABI, id, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+      await submeter(db, FABI, id, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
     }
     expect((await concluir(db, FABI, id)).coracoesRecuperados).toBe(1);
     expect(await coracoes(FABI)).toBe(5);
@@ -332,7 +332,7 @@ describe("cartões de conceito", () => {
     expect(r.proximo?.cartoes?.filter((c) => c.novo && c.conceitoId === "print-texto")).toEqual([]);
 
     for (let s = await atual(GABI, sessaoId); s.exercicio; s = await atual(GABI, sessaoId)) {
-      await submeter(db, GABI, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+      await submeter(db, GABI, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
     }
     await concluir(db, GABI, sessaoId);
     const outra = (await iniciarSessao(db, GABI, "u1-l1")) as { sessaoId: string };

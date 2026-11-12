@@ -1,12 +1,14 @@
 // Correção determinística das respostas (conteudo/FORMATO.md, seção 6).
 import { z } from "zod";
 import type { Gabarito } from "@/modulos/conteudo/esquema";
+import { normalizarSaida } from "./digitar";
 
 export const respostaEsquema = z.discriminatedUnion("tipo", [
   z.object({ tipo: z.literal("escolher_resultado"), opcao: z.string().min(1).max(20) }),
   z.object({ tipo: z.literal("completar_lacuna"), lacunas: z.record(z.string().max(5), z.string().max(200)) }),
   z.object({ tipo: z.literal("ordenar_blocos"), blocos: z.array(z.string().max(20)).min(1).max(7) }),
   z.object({ tipo: z.literal("localizar_erro"), linha: z.number().int().min(1).max(50) }),
+  z.object({ tipo: z.literal("digitar_saida"), texto: z.string().max(400) }),
 ]);
 
 export type Resposta = z.infer<typeof respostaEsquema>;
@@ -28,5 +30,7 @@ export function corrigir(gabarito: Gabarito, resposta: Resposta): boolean {
     }
     case "localizar_erro":
       return (resposta as Extract<Resposta, { tipo: "localizar_erro" }>).linha === gabarito.linha;
+    case "digitar_saida":
+      return normalizarSaida((resposta as Extract<Resposta, { tipo: "digitar_saida" }>).texto) === normalizarSaida(gabarito.saida);
   }
 }

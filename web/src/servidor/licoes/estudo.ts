@@ -12,6 +12,7 @@ import {
   type ResultadoSubmissao,
 } from "@/modulos/aprendizagem/contrato";
 import { corrigir, type Resposta } from "@/modulos/aprendizagem/corretor";
+import { comentarioDeQuase, gabaritoNoModoDaSessao, noModoDaSessao } from "@/modulos/aprendizagem/digitar";
 import { acertosDePrimeira, registrarResultado, type EstadoFila } from "@/modulos/aprendizagem/fila";
 import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
 import { coracoesAposRecuperacao, coracoesAposResposta, xpDaConclusao } from "@/modulos/gamificacao/regras";
@@ -60,11 +61,13 @@ async function travarPerfil(tx: Tx, alunoId: string) {
  */
 async function exercicioDoItem(tx: Tx, sessaoId: string, exercicioId: string) {
   const [ex] = await tx
-    .select({ versaoLicaoId: t.exercicios.versaoLicaoId, publico: t.exercicios.publico, dicas: t.exercicios.dicas })
+    .select({ versaoLicaoId: t.exercicios.versaoLicaoId, publico: t.exercicios.publico, dicas: t.exercicios.dicas, tipoSessao: t.sessoes.tipo })
     .from(t.itensSessao)
+    .innerJoin(t.sessoes, eq(t.sessoes.id, t.itensSessao.sessaoId))
     .innerJoin(t.exercicios, and(eq(t.exercicios.versaoLicaoId, t.itensSessao.versaoLicaoId), eq(t.exercicios.exercicioId, t.itensSessao.exercicioId)))
     .where(and(eq(t.itensSessao.sessaoId, sessaoId), eq(t.itensSessao.exercicioId, exercicioId)));
-  return ex ? { ...ex, publico: ex.publico as ExercicioPublico } : null;
+  // Na revisão e na prática, parte dos itens de escolher a saída vira digitar a saída (modulos/aprendizagem/digitar.ts).
+  return ex ? { ...ex, publico: noModoDaSessao(ex.tipoSessao, sessaoId, ex.publico as ExercicioPublico) } : null;
 }
 
 async function exercicioPublico(tx: Tx, sessaoId: string, exercicioId: string | undefined): Promise<ExercicioPublico | null> {
@@ -84,15 +87,21 @@ async function progresso(tx: Tx, sessaoId: string, fila: EstadoFila, total: numb
 /** Gabarito e explicação: lidos só aqui, depois da submissão gravada. */
 async function lerGabarito(tx: Tx, sessaoId: string, exercicioId: string) {
   const [g] = await tx
-    .select({ gabarito: t.gabaritos.gabarito, explicacao: t.gabaritos.explicacao })
+    .select({ gabarito: t.gabaritos.gabarito, explicacao: t.gabaritos.explicacao, publico: t.exercicios.publico, tipoSessao: t.sessoes.tipo })
     .from(t.itensSessao)
+    .innerJoin(t.sessoes, eq(t.sessoes.id, t.itensSessao.sessaoId))
     .innerJoin(t.gabaritos, and(eq(t.gabaritos.versaoLicaoId, t.itensSessao.versaoLicaoId), eq(t.gabaritos.exercicioId, t.itensSessao.exercicioId)))
+    .innerJoin(t.exercicios, and(eq(t.exercicios.versaoLicaoId, t.itensSessao.versaoLicaoId), eq(t.exercicios.exercicioId, t.itensSessao.exercicioId)))
     .where(and(eq(t.itensSessao.sessaoId, sessaoId), eq(t.itensSessao.exercicioId, exercicioId)));
   if (!g) throw new Error(`Gabarito ausente: ${exercicioId} na sessão ${sessaoId}`);
-  return { gabarito: g.gabarito as Gabarito, explicacao: g.explicacao };
+  return { gabarito: gabaritoNoModoDaSessao(g.tipoSessao, sessaoId, g.publico as ExercicioPublico, g.gabarito as Gabarito), explicacao: g.explicacao };
 }
 
 function feedbackDaOpcao(gabarito: Gabarito, resposta: unknown): string | undefined {
+  if (gabarito.tipo === "digitar_saida") {
+    const texto = (resposta as { texto?: unknown })?.texto;
+    return typeof texto === "string" ? comentarioDeQuase(texto, gabarito.saida) : undefined;
+  }
   if (gabarito.tipo !== "escolher_resultado") return undefined;
   const opcao = (resposta as { opcao?: unknown })?.opcao;
   return typeof opcao === "string" ? gabarito.feedbackOpcoes[opcao] : undefined;

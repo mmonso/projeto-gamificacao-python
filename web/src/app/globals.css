@@ -611,3 +611,16 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Digitar a saída: na revisão e na prática, o aluno escreve o que o print mostra (modulos/aprendizagem/digitar.ts) */
+@layer components {
+  .campo-saida {
+    display: block; width: 100%; margin: 0 0 8px; resize: none; white-space: pre; overflow-x: auto;
+    border-style: solid; font-size: 1.05rem; transition: border-color 150ms ease, background-color 150ms ease;
+  }
+  .campo-saida:focus { border-color: var(--azul); background: var(--fundo); outline: none; box-shadow: 0 0 0 3px var(--azul-claro); }
+  .campo-saida:disabled { opacity: 1; cursor: default; }
+  .campo-saida.certa { border-color: var(--verde-vivo); background: var(--verde-claro); animation: pulo 450ms cubic-bezier(.34, 1.56, .64, 1) both; }
+  .campo-saida.errada { border-color: var(--vermelho); background: var(--vermelho-claro); animation: balancar 450ms ease both; }
+  .ajuda-saida { font-size: .9rem; color: var(--texto-suave); margin: 0 0 16px; }
+}

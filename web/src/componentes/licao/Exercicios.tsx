@@ -1,5 +1,6 @@
 "use client";
-// Os quatro tipos de exercício (F-10 a F-13), montados por toque ou teclado, sem arrastar (F-34).
+// Os tipos de exercício (F-10 a F-13), montados por toque ou teclado, sem arrastar (F-34).
+// Digitar a saída só aparece na revisão e na prática (modulos/aprendizagem/digitar.ts).
 import type { Solucao } from "@/modulos/aprendizagem/contrato";
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
 import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
@@ -10,12 +11,14 @@ export const NOME_TIPO: Record<ExercicioPublico["tipo"], string> = {
   completar_lacuna: "Complete o código",
   ordenar_blocos: "Monte o programa",
   localizar_erro: "Encontre o erro",
+  digitar_saida: "Digite a saída",
 };
 
 export function respostaCompleta(ex: ExercicioPublico, r: Resposta | null): r is Resposta {
   if (!r || r.tipo !== ex.tipo) return false;
   if (r.tipo === "completar_lacuna" && ex.tipo === "completar_lacuna") return ex.lacunas.every((l) => r.lacunas[l.id] !== undefined);
   if (r.tipo === "ordenar_blocos") return r.blocos.length > 0;
+  if (r.tipo === "digitar_saida") return r.texto.trim().length > 0;
   return true;
 }
 
@@ -29,6 +32,8 @@ type Props = {
   anunciar: (texto: string) => void;
   bloqueado: boolean;
   correcao?: Correcao | null;
+  /** Enter num campo de texto de uma linha (ou Ctrl+Enter num de várias): o mesmo que tocar Verificar. */
+  aoEnviar?: () => void;
 };
 
 /**
@@ -42,7 +47,7 @@ export function estadoDaEscolha(escolhida: boolean, correta: boolean): "certa" |
 
 const LETRAS = "ABCD";
 
-export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado, correcao = null }: Props) {
+export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado, correcao = null, aoEnviar }: Props) {
   const sol = correcao?.solucao;
   switch (ex.tipo) {
     case "escolher_resultado": {
@@ -182,6 +187,58 @@ export function AreaExercicio({ ex, resposta, aoMudar, anunciar, bloqueado, corr
       );
     }
 
+    case "digitar_saida": {
+      const texto = resposta?.tipo === ex.tipo ? resposta.texto : "";
+      const estado = correcao ? (correcao.correta ? "certa" : "errada") : "";
+      const comum = {
+        id: "campo-saida",
+        className: `campo-saida saida ${estado}`,
+        value: texto,
+        disabled: bloqueado,
+        autoComplete: "off",
+        autoCorrect: "off",
+        autoCapitalize: "off",
+        spellCheck: false,
+        "aria-describedby": "ajuda-saida",
+        onChange: (e: { target: { value: string } }) => aoMudar(e.target.value ? { tipo: ex.tipo, texto: e.target.value } : null),
+      };
+      return (
+        <>
+          {ex.codigo && <BlocoCodigo codigo={ex.codigo} />}
+          <label className="rotulo-bloco" htmlFor="campo-saida">
+            O que aparece na tela
+          </label>
+          {ex.linhas > 1 ? (
+            <textarea
+              {...comum}
+              rows={ex.linhas}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault();
+                  aoEnviar?.();
+                }
+              }}
+            />
+          ) : (
+            <input
+              {...comum}
+              type="text"
+              enterKeyHint="done"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  aoEnviar?.();
+                }
+              }}
+            />
+          )}
+          <p className="ajuda-saida" id="ajuda-saida">
+            {ex.linhas > 1 ? `A saída tem ${ex.linhas} linhas. Use Enter para mudar de linha.` : "Digite exatamente o que o print mostra."}
+          </p>
+        </>
+      );
+    }
+
     case "localizar_erro": {
       const linha = resposta?.tipo === ex.tipo ? resposta.linha : null;
       return (
@@ -225,6 +282,7 @@ export function RespostaCorreta({ ex, solucao }: { ex: ExercicioPublico; solucao
     const linhas = solucao.blocos.map((id) => ex.blocos.find((b) => b.id === id)?.codigo ?? "");
     return <BlocoCodigo codigo={[ex.codigoAntes, ...linhas, ex.codigoDepois].filter(Boolean).join("\n")} />;
   }
+  if (solucao.tipo === "digitar_saida") return <pre className="saida">{solucao.saida}</pre>;
   if (solucao.tipo === "localizar_erro") {
     return (
       <>

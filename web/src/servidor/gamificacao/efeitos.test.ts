@@ -9,7 +9,7 @@ import { migrate } from "drizzle-orm/pglite/migrator";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { ResultadoConclusao } from "@/modulos/aprendizagem/contrato";
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
-import type { Exercicio } from "@/modulos/conteudo/esquema";
+import type { Exercicio, ExercicioPublico } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
@@ -27,8 +27,8 @@ const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 const exercicios = new Map<string, Exercicio>(curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...l.revisao])).map((e) => [e.id, e]));
 const licoesU1 = curso[0].licoes.map((l) => l.id);
 
-function correta(id: string): Resposta {
-  return respostaCorreta(exercicios.get(id)!);
+function correta(id: string, publico?: ExercicioPublico | null): Resposta {
+  return respostaCorreta(exercicios.get(id)!, publico);
 }
 
 function errada(id: string): Resposta {
@@ -64,7 +64,7 @@ async function resolver(aluno: string, sessaoId: string, opcoes: { errarPrimeiro
   for (let s = await obterSessaoAtual(db, aluno, sessaoId); s?.exercicio; s = await obterSessaoAtual(db, aluno, sessaoId)) {
     const id = s.exercicio.id;
     if (primeiro && opcoes.dica) await pedirDica(db, aluno, sessaoId, id, 1);
-    const resposta = primeiro && opcoes.errarPrimeiro ? errada(id) : correta(id);
+    const resposta = primeiro && opcoes.errarPrimeiro ? errada(id) : correta(id, s.exercicio);
     primeiro = false;
     await submeter(db, aluno, sessaoId, { id: randomUUID(), exercicioId: id, resposta });
   }

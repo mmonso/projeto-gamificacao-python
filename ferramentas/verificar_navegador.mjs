@@ -138,11 +138,29 @@ async function passarCartoes(page, ex) {
   }
 }
 
+let digitadoConferido = false;
 /** Escolhe a resposta certa do exercício atual só com Tab e Espaço. */
 async function escolherComTeclado(page, ex) {
   await passarCartoes(page, ex);
   const r = RESPOSTAS[ex.id];
   const passos = [];
+  if (ex.tipo === "digitar_saida") {
+    // Digitar a saída (revisão e prática): chega ao campo com Tab e digita; numa saída de várias linhas, Enter muda de linha.
+    const achou = await tabAte(page, () => {
+      const el = document.getElementById("campo-saida");
+      el?.setAttribute("data-alvo", "1");
+      return Boolean(el);
+    });
+    if (!achou) return `não alcançou o campo da saída em ${ex.id}`;
+    await page.keyboard.type(r.saida);
+    await espera(80);
+    if (!digitadoConferido) {
+      digitadoConferido = true;
+      conferir((await page.$(".opcao")) === null, `digitar a saída: ${ex.id} aparece sem as opções`);
+      await foto(page, "digitar-saida");
+    }
+    return null;
+  }
   if (r.tipo === "escolher_resultado") passos.push({ indice: ex.opcoes.findIndex((o) => o.id === r.opcao), sel: ".opcao" });
   if (r.tipo === "completar_lacuna") for (const [id, valor] of Object.entries(r.lacunas)) passos.push({ grupo: `Opções para a lacuna ${id}`, texto: valor });
   if (r.tipo === "ordenar_blocos") for (const codigo of r.codigos) passos.push({ rotulo: `Adicionar: ${codigo}` });
@@ -448,7 +466,9 @@ async function jornada(browser) {
   conferir(Boolean(licao), "a trilha destaca a lição atual", licao);
   if (!licao) return;
 
-  // Celular: começa a lição e responde dois exercícios.
+  // Celular: começa a lição e responde dois exercícios. Cada aparelho vem para a frente antes de ser usado:
+  // numa aba em segundo plano, o foco não muda e as animações (como a contagem do XP) ficam paradas.
+  await celular.bringToFront();
   await celular.goto(BASE + licao, { waitUntil: "networkidle0" });
   const rotulo = await celular.evaluate(() => [...document.querySelectorAll("main button")].map((b) => b.textContent.trim()).find((t) => /^(Começar|Continuar)$/.test(t)) ?? null);
   await tabAte(celular, marcarPorTexto, ["main button", rotulo ?? "Começar"]);
@@ -463,6 +483,7 @@ async function jornada(browser) {
   const naTelaDoCelular = await exercicioAtual(celular);
 
   // Desktop: a trilha mostra a lição em andamento, e Continuar retoma a mesma sessão no mesmo ponto.
+  await desktop.bringToFront();
   await desktop.goto(BASE + "/aprender", { waitUntil: "networkidle0" });
   conferir((await licaoAtual(desktop)) === licao, "desktop: a mesma lição aparece como atual");
   await desktop.goto(BASE + licao, { waitUntil: "networkidle0" });
@@ -471,13 +492,20 @@ async function jornada(browser) {
   conferir(new URL(desktop.url()).pathname === sessao, "desktop: Continuar retoma a sessão começada no celular", desktop.url());
   conferir((await progresso(desktop)) === noCelular, "desktop: no mesmo ponto do celular", { noCelular, noDesktop: await progresso(desktop) });
   await fazerLicao(desktop, "desktop");
-  const texto = await desktop.evaluate(() => document.body.innerText);
-  conferir(/\+20/.test(texto), "a primeira conclusão rende 20 XP");
+  // O XP sobe contando a partir de +0: espera a contagem chegar ao fim.
+  let xp20 = false;
+  for (let i = 0; i < 50 && !xp20; i++) {
+    xp20 = /\+20/.test(await desktop.evaluate(() => document.body.innerText));
+    if (!xp20) await espera(100);
+  }
+  await foto(desktop, "jornada-resultado");
+  conferir(Boolean(xp20), "a primeira conclusão rende 20 XP", await desktop.evaluate(() => document.body.innerText.slice(0, 300)));
 
   // Celular: a tela ficou para trás; responder faz a lição se atualizar e mostrar o resultado.
   const ex = await exercicioAtual(celular);
   conferir(ex === null, "a sessão terminada não tem mais exercício atual");
   if (naTelaDoCelular) {
+    await celular.bringToFront();
     const p = (await escolherComTeclado(celular, naTelaDoCelular)) ?? null;
     if (p) conferir(false, "celular: responder na aba antiga", p);
     await tabAte(celular, marcarPorTexto, ["button", "Verificar"]);

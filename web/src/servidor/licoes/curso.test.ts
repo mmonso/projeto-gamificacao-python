@@ -8,7 +8,7 @@ import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, describe, expect, it } from "vitest";
 import { corrigir, type Resposta } from "@/modulos/aprendizagem/corretor";
-import { separarExercicio, type Exercicio } from "@/modulos/conteudo/esquema";
+import { separarExercicio, type Exercicio, type ExercicioPublico } from "@/modulos/conteudo/esquema";
 import { carregarCurso } from "@/servidor/conteudo/carregar";
 import { publicarCurso } from "@/servidor/conteudo/publicar";
 import * as t from "@/servidor/db/esquema";
@@ -25,8 +25,8 @@ const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 const todos = curso.flatMap((u) => u.licoes.flatMap((l) => [...l.exercicios, ...l.revisao]));
 const exercicios = new Map<string, Exercicio>(todos.map((e) => [e.id, e]));
 
-function correta(id: string): Resposta {
-  return respostaCorreta(exercicios.get(id)!);
+function correta(id: string, publico?: ExercicioPublico | null): Resposta {
+  return respostaCorreta(exercicios.get(id)!, publico);
 }
 
 let db: ReturnType<typeof drizzle<typeof t>>;
@@ -40,7 +40,7 @@ beforeAll(async () => {
 
 async function resolverSessao(sessaoId: string) {
   for (let s = await obterSessaoAtual(db, LIA, sessaoId); s?.exercicio; s = await obterSessaoAtual(db, LIA, sessaoId)) {
-    const r = await submeter(db, LIA, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id) });
+    const r = await submeter(db, LIA, sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
     expect(r.correta, `${s.exercicio.id} deveria aceitar a resposta do conteúdo`).toBe(true);
   }
   return concluir(db, LIA, sessaoId);
@@ -95,6 +95,29 @@ describe("percurso das 15 lições", () => {
     expect(progresso.find((c) => c.id === "encaixou")!.atual).toBeGreaterThan(0);
     expect(progresso.find((c) => c.id === "cinco-coroas")).toMatchObject({ conquistada: true, atual: 5, meta: 5 });
     expect(progresso.find((c) => c.id === "curso-completo")).toMatchObject({ conquistada: true, atual: 15, meta: 15 });
+  });
+
+  it("na revisão, escolher a saída curto aparece para digitar, sem as opções, e diz quando quase acertou", async () => {
+    const revisao = await iniciarRevisao(db, LIA);
+    if (!revisao.ok) throw new Error();
+    let testado = false;
+    for (let n = 0; n < 12 && !testado; n++) {
+      const s = (await obterSessaoAtual(db, LIA, revisao.sessaoId))!;
+      if (!s.exercicio) break;
+      const ex = exercicios.get(s.exercicio.id)!;
+      const certa = ex.tipo === "escolher_resultado" ? ex.opcoes.find((o) => o.id === ex.resposta)!.texto! : "";
+      if (s.exercicio.tipo !== "digitar_saida" || !/[a-z]/i.test(certa)) {
+        await submeter(db, LIA, revisao.sessaoId, { id: randomUUID(), exercicioId: s.exercicio.id, resposta: correta(s.exercicio.id, s.exercicio) });
+        continue;
+      }
+      expect(s.exercicio).not.toHaveProperty("opcoes");
+      const trocada = [...certa].map((c) => (c === c.toLowerCase() ? c.toUpperCase() : c.toLowerCase())).join("");
+      const r = await submeter(db, LIA, revisao.sessaoId, { id: randomUUID(), exercicioId: ex.id, resposta: { tipo: "digitar_saida", texto: trocada } });
+      expect(r).toMatchObject({ correta: false, solucao: { tipo: "digitar_saida", saida: certa } });
+      expect(r.feedbackOpcao).toMatch(/maiúsculas/);
+      testado = true;
+    }
+    expect(testado, "a revisão deveria ter um item para digitar").toBe(true);
   });
 
   it("a revisão geral e a recuperação usam conceitos das três unidades", async () => {
