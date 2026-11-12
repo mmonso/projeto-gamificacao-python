@@ -16,12 +16,12 @@ export default function Imagem() {
         <div style={{ fontSize: 84, fontWeight: 800, lineHeight: 1.05, marginTop: 14 }}>Qual é a saída?</div>
         <div style={{ display: "flex", flexDirection: "column", marginTop: 34, background: "#1E2A32", borderRadius: 18, padding: "22px 30px", fontSize: 36, color: "#E9EEF1", width: 640 }}>
           <div style={{ display: "flex" }}>
-            <span>{"nome00a0=00a0"}</span>
+            <span>{"nome = "}</span>
             <span style={{ color: "#A8E6A3" }}>&quot;Ana&quot;</span>
           </div>
           <div style={{ display: "flex" }}>
             <span style={{ color: "#8CC8FF" }}>print</span>
-            <span>{"(nome00a0*00a0"}</span>
+            <span>{"(nome * "}</span>
             <span style={{ color: "#FFD580" }}>2</span>
             <span>)</span>
           </div>
