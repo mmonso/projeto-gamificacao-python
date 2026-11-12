@@ -1,0 +1,164 @@
+# "Entenda melhor" de cada conceito da unidade 2 (formato em conteudo/FORMATO.md, seção 2).
+
+tipos-basicos:
+  texto: "Todo valor tem um tipo, que diz o que dá para fazer com ele. int é número inteiro, float é número com casa decimal, str é texto e bool é verdadeiro ou falso. O type() mostra o tipo, como quem confere a etiqueta de um produto."
+  passo_a_passo:
+    codigo: |-
+      print(type(30))
+      print(type(30.0))
+      print(type("30"))
+    saida: |-
+      <class 'int'>
+      <class 'float'>
+      <class 'str'>
+    etapas:
+      - "Linha 1: 30 sem ponto e sem aspas é inteiro, int."
+      - "Linha 2: 30.0 tem ponto decimal, então é float, mesmo valendo o mesmo que 30."
+      - "Linha 3: entre aspas, \"30\" é texto, str."
+  erros:
+    - codigo: |-
+        preco = 2,50
+        print(preco)
+      saida: |-
+        (2, 50)
+      porque: "Em Python, casa decimal usa ponto. Com vírgula, 2,50 vira dois números separados, 2 e 50."
+
+divisao:
+  texto: "O Python tem duas divisões. A barra / divide de verdade e sempre devolve float, até em contas exatas como 10 / 2, que dá 5.0. A barra dupla // divide e joga fora a parte depois do ponto, como saber quantas caixas cheias dá para montar."
+  passo_a_passo:
+    codigo: |-
+      print(17 / 5)
+      print(15 / 5)
+      print(17 // 5)
+    saida: |-
+      3.4
+      3.0
+      3
+    etapas:
+      - "Linha 1: 17 / 5 dá 3.4, a divisão completa."
+      - "Linha 2: mesmo exata, a / devolve float: 3.0."
+      - "Linha 3: 17 // 5 descarta o .4 e fica 3, sem arredondar."
+  erros:
+    - codigo: |-
+        print(19 // 5)
+      saida: |-
+        3
+      porque: "Quem espera 4 pensa em arredondar. O // não arredonda: 19 / 5 é 3.8, e o // só descarta o .8."
+
+resto-potencia:
+  texto: "O % responde quanto sobra numa divisão: 14 % 5 é 4, porque 5 cabe duas vezes em 14 e sobram 4. Serve para saber se um número é par (resto 0 na divisão por 2). O ** é a potência: 3 ** 2 é 3 vezes 3."
+  passo_a_passo:
+    codigo: |-
+      print(20 % 6)
+      print(8 % 2)
+      print(3 ** 2)
+    saida: |-
+      2
+      0
+      9
+    etapas:
+      - "Linha 1: 6 cabe 3 vezes em 20, o que dá 18. Sobram 2."
+      - "Linha 2: 8 dividido por 2 não deixa sobra: resto 0, então 8 é par."
+      - "Linha 3: 3 ** 2 multiplica 3 por ele mesmo: 9."
+  erros:
+    - codigo: |-
+        print(50 % 10)
+      saida: |-
+        0
+      porque: "O % não é porcentagem. 50 % 10 não é 5: é o resto de 50 dividido por 10, que é 0."
+
+precedencia:
+  texto: "O Python segue a ordem da matemática: primeiro potência, depois multiplicação e divisão, por último soma e subtração. Ele não lê a conta da esquerda para a direita. Quando quiser outra ordem, use parênteses, que sempre são feitos primeiro."
+  passo_a_passo:
+    codigo: |-
+      print(2 + 3 * 4)
+      print((2 + 3) * 4)
+    saida: |-
+      14
+      20
+    etapas:
+      - "Linha 1: a multiplicação vem antes. 3 * 4 dá 12, e 2 + 12 dá 14."
+      - "Linha 2: os parênteses mandam fazer 2 + 3 primeiro, que dá 5. Depois, 5 * 4 dá 20."
+  erros:
+    - codigo: |-
+        print(10 - 4 / 2)
+      saida: |-
+        8.0
+      porque: "Quem espera 3.0 fez a conta da esquerda para a direita. A divisão vem antes: 4 / 2 dá 2.0, e 10 - 2.0 dá 8.0."
+
+concatenacao:
+  texto: "Com textos, o + não soma: ele cola um texto no fim do outro, como juntar dois pedaços de fita. Ele não acrescenta nada no meio, nem espaço. Se quiser espaço, ele precisa estar dentro das aspas, como qualquer outro caractere."
+  passo_a_passo:
+    codigo: |-
+      nome = "Ana"
+      print("Oi" + nome)
+      print("Oi, " + nome + "!")
+    saida: |-
+      OiAna
+      Oi, Ana!
+    etapas:
+      - "Linha 1: nome guarda o texto Ana."
+      - "Linha 2: o + cola Oi em Ana sem espaço: OiAna."
+      - "Linha 3: o espaço e a vírgula estão dentro das aspas de \"Oi, \", então aparecem."
+  erros:
+    - codigo: |-
+        print("Bom" + "dia")
+      saida: |-
+        Bomdia
+      porque: "Faltou o espaço. O + não o coloca sozinho; escreva \"Bom \" + \"dia\" ou use a vírgula do print."
+
+repeticao-texto:
+  texto: "Multiplicar um texto por um número inteiro repete o texto, colado, aquela quantidade de vezes. É útil para desenhar linhas e separadores. Já somar texto com número não funciona, porque o + não sabe misturar os dois tipos."
+  passo_a_passo:
+    codigo: |-
+      print("-" * 10)
+      print("ha" * 3)
+    saida: |-
+      ----------
+      hahaha
+    etapas:
+      - "Linha 1: o traço é repetido 10 vezes, formando uma linha."
+      - "Linha 2: ha repetido 3 vezes, sem espaço: hahaha."
+  erros:
+    - codigo: |-
+        print("ha" + 3)
+      erro: TypeError
+      porque: "Com +, o Python tenta juntar texto e número e não consegue. Para repetir, use *."
+
+erro-tipo:
+  texto: "O + funciona entre dois números (soma) ou entre dois textos (junta), mas não entre um texto e um número: aí aparece TypeError. Para mostrar texto e número na mesma frase, o jeito mais simples é separar com vírgula no print."
+  passo_a_passo:
+    codigo: |-
+      idade = 30
+      print("Idade:", idade)
+    saida: |-
+      Idade: 30
+    etapas:
+      - "Linha 1: idade guarda o número 30."
+      - "Linha 2: a vírgula entrega dois valores ao print, um texto e um número, e ele mostra os dois com um espaço."
+  erros:
+    - codigo: |-
+        idade = 30
+        print("Idade: " + idade)
+      erro: TypeError
+      porque: "O + não junta texto com número. Troque por vírgula, ou converta o número com str(idade)."
+
+conversao:
+  texto: "Às vezes o valor vem no tipo errado, como um número guardado como texto. As funções de conversão resolvem: int() vira inteiro, float() vira número com ponto e str() vira texto. Elas não mudam a variável original; devolvem um valor novo."
+  passo_a_passo:
+    codigo: |-
+      quantidade = "3"
+      print(int(quantidade) + 2)
+      print("Itens: " + str(5))
+    saida: |-
+      5
+      Itens: 5
+    etapas:
+      - "Linha 1: quantidade guarda o texto \"3\", não o número."
+      - "Linha 2: int() transforma em 3, e aí o + soma: 3 + 2 dá 5."
+      - "Linha 3: str(5) vira o texto \"5\", que o + consegue juntar com \"Itens: \"."
+  erros:
+    - codigo: |-
+        print(int("dois") + 1)
+      erro: ValueError
+      porque: "O int() só converte textos com algarismos. Uma palavra como \"dois\" não vira número."

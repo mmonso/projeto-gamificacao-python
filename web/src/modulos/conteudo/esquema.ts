@@ -26,6 +26,24 @@ const opcao = z.object({
   feedback: texto.optional(),
 });
 
+/**
+ * "Entenda melhor" (reports/Estratégias de aprendizagem do Duolingo.md): explicação em camadas, aberta só por quem quer.
+ * Fica em conteudo/unidade-N/entenda.yaml e entra no cartão do conceito ao carregar. Todo código é rodado pelo verificador.
+ */
+export const entendaEsquema = z.object({
+  /** Duas ou três frases com a ideia por trás da regra, de preferência com uma comparação do dia a dia. */
+  texto: texto.max(450),
+  /** Exemplo resolvido com etapas nomeadas: o que o Python faz em cada linha. */
+  passo_a_passo: z.object({ codigo: texto, saida: texto, etapas: z.array(texto.max(180)).min(2).max(4) }),
+  /** Erros comuns: o código errado, o que acontece (erro ou saída) e por quê. */
+  erros: z
+    .array(z.object({ codigo: texto, erro: texto.optional(), saida: texto.optional(), porque: texto.max(220) }).refine((e) => !!e.erro !== !!e.saida))
+    .min(1)
+    .max(2),
+});
+
+export type Entenda = z.infer<typeof entendaEsquema>;
+
 /** Cartão "Conceito novo" (design/ANALISE_UX_GAMIFICACAO.md): regra curta, exemplo que roda e saída conferida pelo verificador. */
 export const cartaoEsquema = z.object({
   regra: texto.max(200),
@@ -35,6 +53,7 @@ export const cartaoEsquema = z.object({
   repare: texto.max(200),
   /** Exercício principal em que o conceito aparece pela primeira vez. */
   primeiro: z.string().regex(/^u\d+-l\d+-e\d{2}$/),
+  entenda: entendaEsquema.optional(),
 });
 
 /** Cartão como chega à tela: com o conceito, sem o campo de publicação, e se abre sozinho (conceito ainda não visto). */

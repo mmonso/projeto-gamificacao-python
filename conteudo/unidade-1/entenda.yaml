@@ -1,0 +1,241 @@
+# "Entenda melhor" de cada conceito da unidade 1 (formato em conteudo/FORMATO.md, seção 2).
+# Aparece no cartão do conceito, fechado, para quem quiser mais explicação. Todo código é rodado pelo verificador.
+
+print-texto:
+  texto: "Pense no print como um alto-falante: ele anuncia na tela o que você entrega a ele, entre os parênteses. O programa é a receita; a tela é o que o cliente vê. Por isso o comando e as aspas não aparecem: só a mensagem."
+  passo_a_passo:
+    codigo: |-
+      print("Mesa 4")
+      print("Pedido pronto")
+    saida: |-
+      Mesa 4
+      Pedido pronto
+    etapas:
+      - "Linha 1: o print recebe o texto \"Mesa 4\" e mostra Mesa 4, sem as aspas."
+      - "Linha 2: outro print mostra Pedido pronto, numa linha nova."
+  erros:
+    - codigo: |-
+        Print("Oi")
+      erro: NameError
+      porque: "O Python diferencia maiúsculas: Print com P maiúsculo não existe. O comando é print, todo em minúsculas."
+    - codigo: |-
+        print "Oi"
+      erro: SyntaxError
+      porque: "Sem parênteses o Python não entende o comando. O que o print vai mostrar sempre fica entre ( e )."
+
+string-aspas:
+  texto: "As aspas são como as bordas de uma etiqueta: marcam onde o texto começa e onde termina. Tudo o que está entre elas, inclusive espaços e números, é texto e aparece igualzinho na tela. Pode ser aspas duplas ou simples, desde que abra e feche com o mesmo tipo."
+  passo_a_passo:
+    codigo: |-
+      print("Bom dia!")
+      print('Bom dia!')
+    saida: |-
+      Bom dia!
+      Bom dia!
+    etapas:
+      - "Linha 1: o texto vai de uma aspa dupla até a outra, e aparece Bom dia!"
+      - "Linha 2: com aspas simples o resultado é o mesmo; o que importa é abrir e fechar com o mesmo tipo."
+  erros:
+    - codigo: |-
+        print("Bom dia!)
+      erro: SyntaxError
+      porque: "Faltou a aspa do fim: o Python não sabe onde o texto termina e mostra erro de sintaxe."
+    - codigo: |-
+        print("Bom dia!')
+      erro: SyntaxError
+      porque: "Abriu com aspa dupla e tentou fechar com simples. Para o Python, o texto continua aberto."
+
+ordem-execucao:
+  texto: "Um programa é lido como uma lista de tarefas: de cima para baixo, uma linha de cada vez. Trocar duas linhas de lugar troca a ordem do que aparece. E cada print começa numa linha nova da tela, como se apertasse Enter no fim."
+  passo_a_passo:
+    codigo: |-
+      print("1. Separar a roupa")
+      print("2. Lavar")
+      print("3. Estender")
+    saida: |-
+      1. Separar a roupa
+      2. Lavar
+      3. Estender
+    etapas:
+      - "O Python começa pela linha 1 e mostra a primeira tarefa."
+      - "Só depois passa para a linha 2, e então para a 3."
+      - "Cada print termina pulando de linha, por isso as tarefas ficam uma embaixo da outra."
+  erros:
+    - codigo: |-
+        print("Estender")
+        print("Lavar")
+      saida: |-
+        Estender
+        Lavar
+      porque: "O Python não reorganiza nada: se a linha de Estender vem primeiro, ela aparece primeiro, mesmo sem fazer sentido."
+
+print-numero:
+  texto: "Números são escritos sem aspas, e aí o Python trata como número de verdade: com eles dá para fazer contas. Quando o print recebe uma conta, ele primeiro calcula e mostra só o resultado, como uma calculadora."
+  passo_a_passo:
+    codigo: |-
+      print(12)
+      print(12 + 30)
+      print(50 - 8)
+    saida: |-
+      12
+      42
+      42
+    etapas:
+      - "Linha 1: um número sozinho aparece como está."
+      - "Linha 2: o Python faz 12 + 30 antes de mostrar, e aparece só o 42."
+      - "Linha 3: a subtração também é feita antes: 50 - 8 dá 42."
+  erros:
+    - codigo: |-
+        print("12" + "30")
+      saida: |-
+        1230
+      porque: "Com aspas, 12 e 30 viram textos, e o + cola um texto no outro em vez de somar."
+
+texto-vs-numero:
+  texto: "As aspas mudam a natureza do valor. Sem elas, 7 + 1 é uma conta e o Python responde 8. Com elas, \"7 + 1\" é só uma frase, que aparece letra por letra. Pergunte sempre: isto está entre aspas?"
+  passo_a_passo:
+    codigo: |-
+      print(3 * 4)
+      print("3 * 4")
+    saida: |-
+      12
+      3 * 4
+    etapas:
+      - "Linha 1: sem aspas, é conta. O Python calcula 3 * 4 e mostra 12."
+      - "Linha 2: com aspas, é texto. Aparece exatamente 3 * 4."
+  erros:
+    - codigo: |-
+        print("10 - 3")
+      saida: |-
+        10 - 3
+      porque: "Quem queria o resultado 7 colocou aspas sem querer. Entre aspas, a conta não é feita."
+
+print-varios:
+  texto: "O print aceita vários valores de uma vez, separados por vírgula. Ele mostra todos na mesma linha e coloca um espaço entre eles. É o jeito mais simples de juntar texto e número numa frase, como num formulário com rótulo e valor."
+  passo_a_passo:
+    codigo: |-
+      print("Total:", 35)
+      print("Mesa", 7, "livre")
+    saida: |-
+      Total: 35
+      Mesa 7 livre
+    etapas:
+      - "Linha 1: dois valores, o texto Total: e o número 35, aparecem juntos com um espaço no meio."
+      - "Linha 2: com três valores, o print põe um espaço entre cada um."
+      - "A vírgula separa os valores no código, mas não aparece na tela."
+  erros:
+    - codigo: |-
+        print("Total:" 35)
+      erro: SyntaxError
+      porque: "Faltou a vírgula entre os valores. Sem ela, o Python não sabe onde termina um e começa o outro."
+
+atribuicao:
+  texto: "Uma variável é uma etiqueta com nome colada num valor. O sinal = faz a colagem: o nome fica à esquerda e o valor à direita. Depois disso, sempre que o programa usar o nome, o Python troca pelo valor guardado."
+  passo_a_passo:
+    codigo: |-
+      cliente = "Joana"
+      pontos = 120
+      print(cliente, pontos)
+    saida: |-
+      Joana 120
+    etapas:
+      - "Linha 1: o nome cliente passa a guardar o texto Joana."
+      - "Linha 2: o nome pontos passa a guardar o número 120."
+      - "Linha 3: o print troca cada nome pelo valor guardado e mostra Joana 120."
+  erros:
+    - codigo: |-
+        "Joana" = cliente
+      erro: SyntaxError
+      porque: "A ordem é sempre nome = valor. Do jeito invertido, o Python tenta dar valor a um texto e não deixa."
+
+variavel-vs-texto:
+  texto: "Sem aspas, uma palavra é um nome: o Python procura a variável e mostra o valor dela. Com aspas, é texto e aparece como está. Se a palavra sem aspas nunca recebeu valor, o Python reclama que não conhece aquele nome."
+  passo_a_passo:
+    codigo: |-
+      cidade = "Recife"
+      print(cidade)
+      print("cidade")
+    saida: |-
+      Recife
+      cidade
+    etapas:
+      - "Linha 1: o nome cidade guarda o texto Recife."
+      - "Linha 2: sem aspas, o print mostra o valor guardado: Recife."
+      - "Linha 3: com aspas, é só a palavra cidade."
+  erros:
+    - codigo: |-
+        print(Recife)
+      erro: NameError
+      porque: "Sem aspas, Recife é tratado como nome de variável. Como nenhuma variável se chama Recife, aparece NameError."
+
+nomes-variaveis:
+  texto: "Nomes de variáveis seguem regras: só letras, números e o sublinhado _, sem espaço e sem começar com número. Maiúsculas contam: idade e Idade são nomes diferentes. Bons nomes dizem o que guardam, como total_compra."
+  passo_a_passo:
+    codigo: |-
+      total_compra = 80
+      dia2 = "terça"
+      print(total_compra, dia2)
+    saida: |-
+      80 terça
+    etapas:
+      - "Linha 1: o _ substitui o espaço entre as palavras do nome."
+      - "Linha 2: números podem aparecer no nome, desde que não seja no começo."
+      - "Linha 3: o print usa os nomes exatamente como foram escritos."
+  erros:
+    - codigo: |-
+        total compra = 80
+      erro: SyntaxError
+      porque: "Nome com espaço não vale. Use total_compra."
+    - codigo: |-
+        saldo = 50
+        print(Saldo)
+      erro: NameError
+      porque: "Saldo com S maiúsculo é outro nome, que nunca recebeu valor."
+
+reatribuicao:
+  texto: "Uma variável guarda um valor de cada vez. Quando o mesmo nome recebe um valor novo, a etiqueta sai do valor antigo e vai para o novo. O que veio antes continua valendo para as linhas de antes; dali para baixo, vale o novo."
+  passo_a_passo:
+    codigo: |-
+      status = "aberto"
+      print(status)
+      status = "fechado"
+      print(status)
+    saida: |-
+      aberto
+      fechado
+    etapas:
+      - "Linha 1: status guarda aberto."
+      - "Linha 2: o print mostra o valor daquele momento, aberto."
+      - "Linha 3: status passa a guardar fechado; o valor antigo é deixado de lado."
+      - "Linha 4: o print agora mostra fechado."
+  erros:
+    - codigo: |-
+        status = "aberto"
+        status = "fechado"
+        print(status)
+      saida: |-
+        fechado
+      porque: "Quem espera ver os dois valores se engana: o print vem depois da troca e mostra só o último."
+
+atualizacao:
+  texto: "Em gols = gols + 1, o = não é o igual da matemática. Leia como passa a valer: o Python primeiro calcula o lado direito com o valor atual e depois guarda o resultado no nome. É assim que se conta: pega o que tinha e soma um."
+  passo_a_passo:
+    codigo: |-
+      saldo = 100
+      saldo = saldo - 30
+      print(saldo)
+    saida: |-
+      70
+    etapas:
+      - "Linha 1: saldo começa valendo 100."
+      - "Linha 2: o lado direito é calculado com o valor atual: 100 - 30 dá 70."
+      - "Ainda na linha 2: saldo passa a valer 70."
+      - "Linha 3: o print mostra 70."
+  erros:
+    - codigo: |-
+        saldo = 100
+        saldo - 30
+        print(saldo)
+      saida: |-
+        100
+      porque: "A conta é feita, mas o resultado não é guardado em lugar nenhum. Sem saldo = na frente, saldo continua valendo 100."

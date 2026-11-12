@@ -15,6 +15,8 @@ export type NomeEvento =
   | "exercicio_respondido"
   | "dica_pedida"
   | "conceito_aberto"
+  /** "Entenda melhor" aberto no cartão do conceito (com ou sem conta). */
+  | "entenda_aberto"
   | "licao_concluida"
   | "revisao_concluida"
   /** Desafio do dia, sempre sem aluno: `compartilhado` diz se veio de um link enviado por alguém. */

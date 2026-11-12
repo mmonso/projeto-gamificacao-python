@@ -9,7 +9,7 @@ import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
 import { textoSeguidas, tituloDoFeedback } from "@/componentes/licao/frases";
 import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
-import { motorDaSessao, type Motor } from "@/componentes/licao/motor";
+import { chamar, motorDaSessao, type Motor } from "@/componentes/licao/motor";
 import { Resultado } from "@/componentes/licao/Resultado";
 import { liberarSom, tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
@@ -244,6 +244,15 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     if (desafio || (!demo && tipo !== "principal")) void motor.dica(exercicio.id, 0);
   }
 
+  /** "Entenda melhor" aberto: só evento de produto, para medir se a explicação muda o acerto depois. */
+  function abrirEntenda(conceitoId: string) {
+    // Navegador controlado por automação (testes, robôs) não entra na métrica.
+    if (!exercicio || navigator.webdriver) return;
+    const contexto = desafio ? "desafio" : demo ? "demo" : tipo;
+    const sessao = /^[0-9a-f-]{36}$/i.test(sessaoId) ? { sessaoId } : {};
+    void chamar("/api/eventos/entenda", { conceitoId, exercicioId: exercicio.id, contexto, ...sessao });
+  }
+
   function avancarCartao() {
     setCartaoAberto((c) => (c && c.indice + 1 < c.lista.length ? { ...c, indice: c.indice + 1 } : null));
   }
@@ -341,7 +350,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
 
       <main className="licao-corpo" id="conteudo-principal">
         {aviso && <p className="mensagem-aviso mb-4">{aviso}</p>}
-        {exercicio && cartaoAberto && <CartaoConceito key={`${exercicio.id}:${cartaoAberto.indice}`} cartao={cartaoAberto.lista[cartaoAberto.indice]} posicao={cartaoAberto.indice + 1} total={cartaoAberto.lista.length} />}
+        {exercicio && cartaoAberto && <CartaoConceito key={`${exercicio.id}:${cartaoAberto.indice}`} cartao={cartaoAberto.lista[cartaoAberto.indice]} posicao={cartaoAberto.indice + 1} total={cartaoAberto.lista.length} aoAbrirEntenda={abrirEntenda} />}
         {exercicio ? (
           <div hidden={cartaoAberto !== null}>
             <p className="etiqueta-tipo">

@@ -69,6 +69,35 @@ try {
   console.log(`  começaram: ${somar("desafio_iniciado")}   terminaram: ${somar("desafio_concluido")}`);
   console.log(`  chegaram por link compartilhado: ${somar("desafio_iniciado", true)} (meta: 30 para cada 100 que terminam)`);
 
+  // "Entenda melhor": quantas vezes foi aberto e o acerto de primeira nos exercícios do mesmo conceito, na mesma
+  // sessão, depois de abrir, comparado com as demais primeiras respostas desse conceito. Com poucos alunos, é só
+  // um sinal: quem abre a explicação já costuma ser quem está com dificuldade.
+  const [aberturas] = await sql<{ vezes: number; alunos: number }[]>`
+    select count(*)::int as vezes, count(distinct coalesce(aluno_id::text, criado_em::text))::int as alunos
+    from eventos_produto where nome = 'entenda_aberto' and criado_em > now() - interval '30 days'`;
+  const comparacao = await sql<{ depois: boolean; n: number; taxa: number }[]>`
+    with conceitos_ex as (
+      select distinct on (exercicio_id) exercicio_id, conceitos from exercicios order by exercicio_id, versao_licao_id desc
+    ), respostas as (
+      select e.aluno_id, e.dados->>'sessaoId' as sessao, (e.dados->>'correta')::boolean as correta, e.criado_em, unnest(x.conceitos) as conceito
+      from eventos_produto e join conceitos_ex x on x.exercicio_id = e.dados->>'exercicioId'
+      where e.nome = 'exercicio_respondido' and (e.dados->>'primeiraTentativa')::boolean
+    ), abertas as (
+      select aluno_id, dados->>'sessaoId' as sessao, dados->>'conceitoId' as conceito, min(criado_em) as quando
+      from eventos_produto where nome = 'entenda_aberto' and aluno_id is not null and dados ? 'sessaoId' group by 1, 2, 3
+    )
+    select coalesce(r.criado_em > a.quando, false) as depois, count(*)::int as n, avg(r.correta::int)::float as taxa
+    from respostas r left join abertas a on a.aluno_id = r.aluno_id and a.sessao = r.sessao and a.conceito = r.conceito
+    group by 1`;
+  const linha = (depois: boolean) => {
+    const c = comparacao.find((x) => x.depois === depois);
+    return c ? `${Math.round(c.taxa * 100)}% de ${c.n} respostas` : "sem respostas ainda";
+  };
+  console.log("\nEntenda melhor (últimos 30 dias)");
+  console.log(`  aberto ${aberturas.vezes} vezes, por cerca de ${aberturas.alunos} pessoas`);
+  console.log(`  acerto de primeira depois de abrir:  ${linha(true)}`);
+  console.log(`  acerto de primeira nos demais casos: ${linha(false)}`);
+
   if (total < 20) console.log("\nCom menos de 20 contas, as porcentagens ainda oscilam muito: leia os números absolutos.");
 } finally {
   await sql.end();

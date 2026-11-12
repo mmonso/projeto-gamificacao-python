@@ -50,6 +50,30 @@ Cada conceito pode ter um `cartao`, mostrado antes do primeiro exercício em que
 
 O verificador executa o `exemplo` e confere a `saida`; o `destaque` precisa estar no `exemplo` e o `primeiro` precisa ser um exercício principal que avalie o conceito.
 
+### "Entenda melhor" (opcional)
+
+Explicação em camadas, mostrada fechada embaixo do cartão, para quem quiser mais. Fica em `entenda.yaml`, na pasta da unidade, com uma entrada por conceito que tem cartão:
+
+```yaml
+print-texto:
+  texto: "Duas ou três frases com a ideia por trás da regra, até 450 caracteres."
+  passo_a_passo:
+    codigo: |-
+      print("Mesa 4")
+    saida: |-
+      Mesa 4
+    etapas:                 # de 2 a 4, até 180 caracteres cada
+      - "Linha 1: o print recebe o texto e mostra Mesa 4, sem as aspas."
+      - "..."
+  erros:                    # 1 ou 2 erros comuns
+    - codigo: |-
+        Print("Oi")
+      erro: NameError       # ou saida: o que o código errado mostra
+      porque: "O que deu errado e como corrigir, até 220 caracteres."
+```
+
+O verificador roda o passo a passo e confere a saída, e roda cada erro comum: com `erro`, o código precisa dar exatamente esse erro; com `saida`, precisa mostrar exatamente essa saída. Mudar o `entenda.yaml` não muda a versão das lições: a publicação atualiza o cartão do conceito.
+
 ## 3. Lição
 
 ```yaml

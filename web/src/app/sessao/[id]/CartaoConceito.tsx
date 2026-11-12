@@ -1,8 +1,9 @@
 // Cartão "Conceito novo": a regra em uma frase, um exemplo que roda e a saída, escondida até o aluno pedir.
+// Embaixo, o "Entenda melhor" fechado, para quem quiser mais explicação.
 import { useState } from "react";
 import { realcar } from "@/componentes/licao/Codigo";
 import { Icone } from "@/componentes/Icone";
-import type { CartaoConceito as Cartao } from "@/modulos/conteudo/esquema";
+import type { CartaoConceito as Cartao, Entenda } from "@/modulos/conteudo/esquema";
 
 function Exemplo({ cartao }: { cartao: Cartao }) {
   const { exemplo, destaque } = cartao;
@@ -17,7 +18,54 @@ function Exemplo({ cartao }: { cartao: Cartao }) {
   );
 }
 
-export function CartaoConceito({ cartao, posicao, total }: { cartao: Cartao; posicao: number; total: number }) {
+/** "Entenda melhor": explicação em camadas, fechada até o aluno pedir (texto, passo a passo e erros comuns). */
+function EntendaMelhor({ entenda, aoAbrir }: { entenda: Entenda; aoAbrir?: () => void }) {
+  const [aberto, setAberto] = useState(false);
+  return (
+    <details
+      className="entenda"
+      onToggle={(e) => {
+        const agora = (e.currentTarget as HTMLDetailsElement).open;
+        if (agora && !aberto) aoAbrir?.();
+        setAberto(agora);
+      }}
+    >
+      <summary>Entenda melhor</summary>
+      <div className="entenda-corpo">
+        <p>{entenda.texto}</p>
+        <p className="rotulo-bloco">Passo a passo</p>
+        <pre className="codigo">{realcar(entenda.passo_a_passo.codigo)}</pre>
+        <ol className="entenda-etapas">
+          {entenda.passo_a_passo.etapas.map((etapa) => (
+            <li key={etapa}>{etapa}</li>
+          ))}
+        </ol>
+        <pre className="saida">{entenda.passo_a_passo.saida}</pre>
+        <p className="rotulo-bloco">{entenda.erros.length > 1 ? "Erros comuns" : "Erro comum"}</p>
+        {entenda.erros.map((erro) => (
+          <div key={erro.codigo} className="entenda-erro">
+            <pre className="codigo">{realcar(erro.codigo)}</pre>
+            <p className="entenda-resultado">
+              {erro.erro ? (
+                <>
+                  Dá erro: <strong>{erro.erro}</strong>
+                </>
+              ) : (
+                <>Mostra:</>
+              )}
+            </p>
+            {erro.saida && <pre className="saida">{erro.saida}</pre>}
+            <p>{erro.porque}</p>
+          </div>
+        ))}
+      </div>
+    </details>
+  );
+}
+
+type Props = { cartao: Cartao; posicao: number; total: number; aoAbrirEntenda?: (conceitoId: string) => void };
+
+export function CartaoConceito({ cartao, posicao, total, aoAbrirEntenda }: Props) {
   const [vendo, setVendo] = useState(false);
   return (
     <section className="cartao-conceito" aria-labelledby="titulo-cartao">
@@ -46,6 +94,7 @@ export function CartaoConceito({ cartao, posicao, total }: { cartao: Cartao; pos
           Ver a saída
         </button>
       )}
+      {cartao.entenda && <EntendaMelhor entenda={cartao.entenda} aoAbrir={() => aoAbrirEntenda?.(cartao.conceitoId)} />}
     </section>
   );
 }

@@ -56,6 +56,10 @@ describe("conteúdo publicado", () => {
     for (const ex of todos) expect(corrigir(separarExercicio(ex).gabarito, correta(ex.id)), ex.id).toBe(true);
   });
 
+  it("todo conceito tem cartão e Entenda melhor", () => {
+    for (const { unidade } of curso) for (const c of unidade.conceitos) expect(c.cartao?.entenda, c.id).toBeDefined();
+  });
+
   it("identificadores de exercício são únicos no curso", () => {
     expect(new Set(todos.map((e) => e.id)).size).toBe(todos.length);
   });

@@ -128,13 +128,25 @@ async function passarCartoes(page, ex) {
     if (!cartaoConferido) {
       cartaoConferido = true;
       conferir(await page.evaluate(() => document.activeElement?.id === "titulo-cartao"), "cartão de conceito: o foco vai para o título");
-      conferir((await page.$(".cartao-conceito .saida")) === null, "cartão de conceito: a saída fica escondida até pedir");
+      conferir((await page.$(".cartao-conceito .surgir .saida")) === null, "cartão de conceito: a saída fica escondida até pedir");
       conferir(await page.evaluate(() => !document.querySelector("#enunciado")?.offsetParent), `cartão de conceito: o exercício ${ex.id} espera atrás do cartão`);
       await foto(page, "cartao-conceito");
       await page.evaluate(() => [...document.querySelectorAll(".cartao-conceito button")].find((b) => b.textContent.trim() === "Ver a saída")?.click());
       await espera(150);
-      conferir((await page.$(".cartao-conceito .saida")) !== null, "cartão de conceito: Ver a saída mostra a saída e o que reparar");
+      conferir((await page.$(".cartao-conceito .surgir .saida")) !== null, "cartão de conceito: Ver a saída mostra a saída e o que reparar");
       await foto(page, "cartao-conceito-saida");
+      const entenda = await page.$(".cartao-conceito .entenda summary");
+      conferir(entenda !== null, "cartão de conceito: tem o Entenda melhor, fechado");
+      if (entenda) {
+        await entenda.click();
+        await espera(150);
+        const corpo = await page.evaluate(() => {
+          const c = document.querySelector(".entenda[open] .entenda-corpo");
+          return c ? { etapas: c.querySelectorAll(".entenda-etapas li").length, erros: c.querySelectorAll(".entenda-erro").length } : null;
+        });
+        conferir(corpo !== null && corpo.etapas >= 2 && corpo.erros >= 1, "Entenda melhor abre com passo a passo e erros comuns", corpo);
+        await foto(page, "cartao-entenda");
+      }
     }
     await page.evaluate(() => document.getElementById("titulo-cartao")?.focus());
     await page.keyboard.press("Enter");

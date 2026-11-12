@@ -366,6 +366,59 @@ def verificar_cartao(rel, conceito):
             rel.erro(onde, f"a saída do cartão é {c['saida']!r}, mas o exemplo imprime {r.saida!r}")
 
 
+def verificar_entenda(rel, pasta, conceitos):
+    """"Entenda melhor" (entenda.yaml): textos com limite, passo a passo e erros comuns rodados pelo Python."""
+    arquivo = pasta / "entenda.yaml"
+    if not arquivo.exists():
+        return 0
+    dados = carregar(arquivo) or {}
+    for cid, e in dados.items():
+        onde = f"entenda {cid}"
+        if cid not in conceitos or not conceitos[cid].get("cartao"):
+            rel.erro(onde, "conceito inexistente ou sem cartão")
+            continue
+        if not isinstance(e, dict):
+            rel.erro(onde, "deve ser um bloco com texto, passo_a_passo e erros")
+            continue
+        if _texto(rel, onde, e.get("texto"), "texto") and len(e["texto"]) > 450:
+            rel.erro(onde, "texto com mais de 450 caracteres")
+        p = e.get("passo_a_passo") or {}
+        ok = _texto(rel, onde, p.get("codigo"), "passo_a_passo.codigo") & _texto(rel, onde, p.get("saida"), "passo_a_passo.saida")
+        etapas = p.get("etapas") or []
+        if not 2 <= len(etapas) <= 4:
+            rel.erro(onde, f"passo_a_passo com {len(etapas)} etapas; esperado de 2 a 4")
+        for i, etapa in enumerate(etapas, 1):
+            if _texto(rel, onde, etapa, f"etapa {i}") and len(etapa) > 180:
+                rel.erro(onde, f"etapa {i} com mais de 180 caracteres")
+        if ok:
+            r = executar(p["codigo"])
+            if r.erro:
+                rel.erro(onde, f"o passo a passo falha ao rodar: {r.erro}")
+            elif r.saida != _normalizar(p["saida"]):
+                rel.erro(onde, f"a saída do passo a passo é {p['saida']!r}, mas o código imprime {r.saida!r}")
+        erros = e.get("erros") or []
+        if not 1 <= len(erros) <= 2:
+            rel.erro(onde, f"{len(erros)} erros comuns; esperado 1 ou 2")
+        for i, er in enumerate(erros, 1):
+            o = f"{onde}, erro {i}"
+            if not _texto(rel, o, er.get("codigo"), "codigo"):
+                continue
+            if _texto(rel, o, er.get("porque"), "porque") and len(er["porque"]) > 220:
+                rel.erro(o, "porque com mais de 220 caracteres")
+            if bool(er.get("erro")) == bool(er.get("saida")):
+                rel.erro(o, "use exatamente um entre 'erro' (nome do erro) e 'saida' (o que aparece)")
+                continue
+            r = executar(er["codigo"])
+            if er.get("erro"):
+                if r.erro != er["erro"]:
+                    rel.erro(o, f"deveria dar {er['erro']}, mas dá {r.erro or 'saída ' + repr(r.saida)}")
+            elif r.erro:
+                rel.erro(o, f"deveria mostrar uma saída, mas dá {r.erro}")
+            elif r.saida != _normalizar(str(er["saida"])):
+                rel.erro(o, f"a saída é {er['saida']!r}, mas o código imprime {r.saida!r}")
+    return len(dados)
+
+
 def verificar_unidade(pasta, rel):
     unidade = carregar(pasta / "unidade.yaml")
     conceitos = {}
@@ -421,6 +474,7 @@ def verificar_unidade(pasta, rel):
     for c in conceitos:
         if c not in usados:
             rel.aviso("unidade", f"conceito {c!r} não é avaliado por nenhum exercício")
+    unidade["_entenda"] = verificar_entenda(rel, pasta, conceitos)
     return unidade, licoes
 
 
@@ -513,6 +567,7 @@ def main():
 
     print(f"Python {sys.version.split()[0]}")
     print(f"Unidade {unidade.get('id')}: {len(licoes)} lições, {total} exercícios principais, {variacoes} variações de revisão")
+    print(f"Entenda melhor: {unidade.get('_entenda', 0)} de {len(unidade.get('conceitos', []))} conceitos")
     for a in rel.avisos:
         print(f"AVISO  {a}")
     for e in rel.erros:

@@ -1,0 +1,139 @@
+# "Entenda melhor" de cada conceito da unidade 3 (formato em conteudo/FORMATO.md, seção 2).
+
+booleanos:
+  texto: "Uma comparação é uma pergunta de sim ou não feita ao Python. A resposta é True (verdadeiro) ou False (falso), sempre com a primeira letra maiúscula. Esses dois valores formam o tipo bool, e é com eles que o programa vai tomar decisões."
+  passo_a_passo:
+    codigo: |-
+      saldo = 50
+      print(saldo > 20)
+      print(saldo > 80)
+    saida: |-
+      True
+      False
+    etapas:
+      - "Linha 1: saldo guarda 50."
+      - "Linha 2: o Python pergunta se 50 é maior que 20. Sim: True."
+      - "Linha 3: 50 é maior que 80? Não: False."
+  erros:
+    - codigo: |-
+        print(true)
+      erro: NameError
+      porque: "Em minúsculas, true não é o valor verdadeiro: é um nome desconhecido. O certo é True, com T maiúsculo."
+
+comparacao:
+  texto: "Leia os sinais em voz alta: > é maior que, < é menor que, >= é maior ou igual, <= é menor ou igual. A diferença entre > e >= aparece quando os valores são iguais: 18 > 18 é falso, mas 18 >= 18 é verdadeiro."
+  passo_a_passo:
+    codigo: |-
+      idade = 18
+      print(idade > 18)
+      print(idade >= 18)
+    saida: |-
+      False
+      True
+    etapas:
+      - "Linha 1: idade guarda 18."
+      - "Linha 2: 18 é maior que 18? Não, é igual: False."
+      - "Linha 3: 18 é maior ou igual a 18? Sim, porque é igual: True."
+  erros:
+    - codigo: |-
+        print(5 => 3)
+      erro: SyntaxError
+      porque: "O sinal de maior vem primeiro: escreva >=. A forma => não existe em Python."
+
+igualdade:
+  texto: "Um = sozinho guarda valor numa variável. Para perguntar se dois valores são iguais, use dois: ==. O != pergunta se são diferentes. Com textos, a comparação é exata: maiúscula, acento e espaço fazem diferença."
+  passo_a_passo:
+    codigo: |-
+      senha = "abc123"
+      print(senha == "abc123")
+      print(senha == "ABC123")
+      print(senha != "abc123")
+    saida: |-
+      True
+      False
+      False
+    etapas:
+      - "Linha 1: senha guarda o texto abc123."
+      - "Linha 2: os textos são iguais, letra por letra: True."
+      - "Linha 3: com letras maiúsculas já é outro texto: False."
+      - "Linha 4: != pergunta se são diferentes. Não são: False."
+  erros:
+    - codigo: |-
+        senha = "abc"
+        print(senha = "abc")
+      erro: TypeError
+      porque: "Com um = só, o Python não compara. Dentro do print isso nem é aceito. Para comparar, use ==."
+
+logicos:
+  texto: "and, or e not combinam perguntas. and é exigente: só dá True se as duas partes forem True. or é generoso: basta uma. not inverte o resultado. Pense num ingresso: and é ter ingresso e documento; or é ser estudante ou professor."
+  passo_a_passo:
+    codigo: |-
+      tem_ingresso = True
+      tem_documento = False
+      print(tem_ingresso and tem_documento)
+      print(tem_ingresso or tem_documento)
+      print(not tem_documento)
+    saida: |-
+      False
+      True
+      True
+    etapas:
+      - "Linhas 1 e 2: uma condição é verdadeira e a outra é falsa."
+      - "Linha 3: and exige as duas. Como uma é falsa: False."
+      - "Linha 4: or se contenta com uma: True."
+      - "Linha 5: not inverte False e dá True."
+  erros:
+    - codigo: |-
+        idade = 15
+        estudante = True
+        print(idade < 18 and estudante == False)
+      saida: |-
+        False
+      porque: "Quem queria meia-entrada para menores ou estudantes precisava de or. Com and, as duas coisas teriam que valer ao mesmo tempo."
+
+if-else:
+  texto: "O if é uma bifurcação: o programa faz uma pergunta e segue por um dos dois caminhos. Se a condição for True, roda o bloco do if; se for False, roda o bloco do else. Nunca os dois, e nunca nenhum, quando há else."
+  passo_a_passo:
+    codigo: |-
+      temperatura = 31
+      if temperatura > 28:
+          print("Leve água")
+      else:
+          print("Leve um casaco")
+    saida: |-
+      Leve água
+    etapas:
+      - "Linha 1: temperatura guarda 31."
+      - "Linha 2: a pergunta 31 > 28 dá True."
+      - "Linha 3: como é True, roda o bloco do if e aparece Leve água."
+      - "Linhas 4 e 5: o else é pulado inteiro."
+  erros:
+    - codigo: |-
+        temperatura = 31
+        if temperatura > 28
+            print("Leve água")
+      erro: SyntaxError
+      porque: "A linha do if termina com dois-pontos. Sem eles, o Python não sabe que um bloco vem a seguir."
+
+indentacao:
+  texto: "Em Python, o recuo no começo da linha não é enfeite: é ele que diz quais linhas pertencem ao if e ao else. Use quatro espaços. Uma linha recuada faz parte do bloco; uma linha sem recuo, depois dele, roda sempre."
+  passo_a_passo:
+    codigo: |-
+      nota = 5
+      if nota >= 7:
+          print("Aprovado")
+          print("Parabéns!")
+      print("Fim do boletim")
+    saida: |-
+      Fim do boletim
+    etapas:
+      - "Linha 2: 5 >= 7 é False, então o bloco do if é pulado."
+      - "Linhas 3 e 4: estão recuadas, então as duas pertencem ao if e não rodam."
+      - "Linha 5: não tem recuo, está fora do if e roda sempre."
+  erros:
+    - codigo: |-
+        nota = 9
+        if nota >= 7:
+        print("Aprovado")
+      erro: IndentationError
+      porque: "A linha do bloco precisa de recuo. Sem ele, o Python mostra erro de indentação."

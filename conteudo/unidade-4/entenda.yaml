@@ -1,0 +1,123 @@
+# "Entenda melhor" de cada conceito da unidade 4 (formato em conteudo/FORMATO.md, seção 2).
+
+listas:
+  texto: "Uma lista é como uma lista de compras: vários itens, em ordem, num lugar só. Ela é escrita entre colchetes, com vírgulas separando os valores, e pode ter textos e números. O len() conta quantos itens há, não quantas letras."
+  passo_a_passo:
+    codigo: |-
+      tarefas = ["pagar luz", "mercado", "academia"]
+      print(tarefas)
+      print(len(tarefas))
+    saida: |-
+      ['pagar luz', 'mercado', 'academia']
+      3
+    etapas:
+      - "Linha 1: a lista guarda três textos, na ordem em que foram escritos."
+      - "Linha 2: o print mostra a lista inteira, com colchetes e os textos entre aspas simples."
+      - "Linha 3: o len conta os itens: 3."
+  erros:
+    - codigo: |-
+        tarefas = ["mercado" "academia"]
+        print(len(tarefas))
+      saida: |-
+        1
+      porque: "Faltou a vírgula entre os itens. Sem ela, o Python cola os dois textos num só, e a lista fica com um item."
+
+indice:
+  texto: "Cada item da lista tem um endereço, o índice. A contagem começa em 0, não em 1: o primeiro item está na posição 0, o segundo na 1. Para pegar o último sem contar, use -1. Pedir uma posição que não existe dá erro."
+  passo_a_passo:
+    codigo: |-
+      fila = ["Rui", "Ana", "Léo"]
+      print(fila[0])
+      print(fila[2])
+      print(fila[-1])
+    saida: |-
+      Rui
+      Léo
+      Léo
+    etapas:
+      - "Linha 1: as posições são 0 (Rui), 1 (Ana) e 2 (Léo)."
+      - "Linha 2: a posição 0 é o primeiro: Rui."
+      - "Linha 3: a posição 2 é o terceiro: Léo."
+      - "Linha 4: a posição -1 é sempre o último. Aqui, também Léo."
+  erros:
+    - codigo: |-
+        fila = ["Rui", "Ana", "Léo"]
+        print(fila[3])
+      erro: IndexError
+      porque: "Com três itens, as posições vão de 0 a 2. A posição 3 não existe e dá IndexError."
+
+append:
+  texto: "O append acrescenta um item no fim da lista, como alguém entrando no fim de uma fila. A própria lista muda e fica com um item a mais. Por isso não se escreve lista = lista.append(...): basta lista.append(...)."
+  passo_a_passo:
+    codigo: |-
+      convidados = ["Bia"]
+      convidados.append("Caio")
+      convidados.append("Duda")
+      print(convidados)
+    saida: |-
+      ['Bia', 'Caio', 'Duda']
+    etapas:
+      - "Linha 1: a lista começa com um nome."
+      - "Linha 2: Caio entra no fim."
+      - "Linha 3: Duda entra depois de Caio, também no fim."
+      - "Linha 4: o print mostra os três, na ordem em que entraram."
+  erros:
+    - codigo: |-
+        convidados = ["Bia"]
+        convidados = convidados.append("Caio")
+        print(convidados)
+      saida: |-
+        None
+      porque: "O append muda a lista e não devolve nada (None). Guardar esse resultado com = troca a lista por None."
+
+for:
+  texto: "O for repete um bloco de código para cada item da lista, em ordem. A cada volta, a variável do for guarda o item da vez, como um crachá que passa de mão em mão. O que estiver recuado se repete; o que vier depois, sem recuo, roda uma vez só."
+  passo_a_passo:
+    codigo: |-
+      for dia in ["seg", "ter", "qua"]:
+          print("Treino de", dia)
+      print("Semana planejada")
+    saida: |-
+      Treino de seg
+      Treino de ter
+      Treino de qua
+      Semana planejada
+    etapas:
+      - "1ª volta: dia guarda seg e o print recuado roda."
+      - "2ª e 3ª voltas: dia guarda ter, depois qua, e o print roda de novo."
+      - "Sem mais itens, o for acaba e a linha sem recuo roda uma vez."
+  erros:
+    - codigo: |-
+        for dia in ["seg", "ter"]:
+            print("Treino de", dia)
+            print("Semana planejada")
+      saida: |-
+        Treino de seg
+        Semana planejada
+        Treino de ter
+        Semana planejada
+      porque: "A última linha ficou recuada e passou a fazer parte do for, repetindo a cada volta. Tire o recuo para ela rodar só no fim."
+
+acumulador:
+  texto: "Para somar uma lista, use uma variável que acumula, como um cofrinho: começa em 0 antes do for e, a cada volta, recebe o valor da vez. Quando o for termina, ela guarda o total. Começar o cofrinho dentro do for o esvazia a cada volta."
+  passo_a_passo:
+    codigo: |-
+      total = 0
+      for gasto in [12, 30, 8]:
+          total = total + gasto
+      print(total)
+    saida: |-
+      50
+    etapas:
+      - "Antes do for: total começa em 0."
+      - "Voltas: total vira 0 + 12 = 12, depois 12 + 30 = 42, depois 42 + 8 = 50."
+      - "Depois do for, sem recuo: o print mostra o total final, 50."
+  erros:
+    - codigo: |-
+        for gasto in [12, 30, 8]:
+            total = 0
+            total = total + gasto
+        print(total)
+      saida: |-
+        8
+      porque: "Com total = 0 dentro do for, o cofrinho é zerado a cada volta e no fim sobra só o último gasto."

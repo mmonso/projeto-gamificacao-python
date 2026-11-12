@@ -1,9 +1,9 @@
 // Leitura dos arquivos de conteúdo (conteudo/unidade-*/), validados com o esquema do app.
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 import { z } from "zod";
-import { cartaoEsquema, licaoEsquema, type Licao } from "@/modulos/conteudo/esquema";
+import { cartaoEsquema, entendaEsquema, licaoEsquema, type Licao } from "@/modulos/conteudo/esquema";
 
 export const unidadeEsquema = z.object({
   id: z.string().regex(/^u\d+$/),
@@ -24,6 +24,15 @@ export function carregarCurso(pastaConteudo: string): Curso {
       const pasta = join(pastaConteudo, d);
       const ler = (arquivo: string) => parse(readFileSync(join(pasta, arquivo), "utf8"));
       const unidade = unidadeEsquema.parse(ler("unidade.yaml"));
+      // "Entenda melhor" de cada conceito, em arquivo próprio: entra no cartão do conceito.
+      if (existsSync(join(pasta, "entenda.yaml"))) {
+        const entenda = z.record(z.string(), entendaEsquema).parse(ler("entenda.yaml"));
+        for (const [id, e] of Object.entries(entenda)) {
+          const conceito = unidade.conceitos.find((c) => c.id === id);
+          if (!conceito?.cartao) throw new Error(`entenda.yaml de ${d}: o conceito ${id} não existe ou não tem cartão`);
+          conceito.cartao.entenda = e;
+        }
+      }
       const licoes = readdirSync(pasta)
         .filter((f) => /^licao-\d+\.yaml$/.test(f))
         .map((f) => licaoEsquema.parse(ler(f)))
