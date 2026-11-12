@@ -12,7 +12,8 @@
     "db:gerar": "drizzle-kit generate",
     "db:migrar": "drizzle-kit migrate",
     "db:publicar": "tsx --env-file=.env.local scripts/publicar-conteudo.mts",
-    "db:concorrencia": "tsx --env-file=.env.local scripts/verificar-concorrencia.mts"
+    "db:concorrencia": "tsx --env-file=.env.local scripts/verificar-concorrencia.mts",
+    "db:retencao": "tsx --env-file=.env.local scripts/retencao.mts"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

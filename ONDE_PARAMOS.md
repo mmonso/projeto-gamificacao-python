@@ -33,11 +33,12 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 - **Parte 2D, publicada em 11/11/2026:** dia livre (`modulos/gamificacao/diaslivres.ts`; colunas `perfis.dias_livres` e `dias_livres_usados`, migração 0006; ganho aos 3 dias e depois a cada 7, máximo 2, uso automático ao faltar, escudo azul no calendário) e mapa de domínio na tela Praticar (`dominio.ts`: Visto, Praticando, Firmando, Consolidando, selo "Para revisar").
 
+- **Retenção, 12/11/2026:** `npm run db:retencao` (em `web/`) mostra o funil da fase 1 (1ª lição, unidade 1) e D1, D7 e D30, no total e por semana de entrada. Regras puras em `web/src/modulos/metricas/retencao.ts`; o script tira visitantes e as contas de teste de `.env.local` e não imprime nomes nem e-mails.
+
 ## Próximos passos, em ordem
 
 1. **Depois, pela estratégia:**
-   - SMTP próprio (Gmail com senha de app; o dono precisa criar a senha e colá-la no painel do Supabase);
-   - consulta de D1, D7 e D30;
+   - SMTP próprio: **esperando o dono** seguir `PASSO_A_PASSO_EMAIL.md` (senha de app do Gmail colada no painel do Supabase). Quando ele disser "pronto", criar uma conta com endereço novo, conferir se o e-mail chega e se o link abre, e tirar o aviso de e-mail abaixo;
    - novo tipo de exercício "digitar a saída";
    - desafio do dia compartilhável;
    - PWA;
@@ -51,5 +52,3 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 - **Vercel:** o conector MCP da Vercel enxergava outra conta. A CLI (`npx vercel@latest`) foi logada só no computador do dono. A `DATABASE_URL` da Vercel foi colada pelo próprio dono, e não se digitam senhas em serviços externos.
 - **Servidor local:** o de desenvolvimento ficou muito lento no computador do dono. Para testes de navegador, use `npm run build` e depois `npx next start -p 3100`.
 - **Next.js 16:** traz mudanças incompatíveis com versões anteriores. Antes de usar uma API nova, consulte `web/node_modules/next/dist/docs/`.
-
-- **Projeto sobrando na Vercel:** `web` (prj_dk9s4Hjzcr4RUZYWUxletqDhqlxz) foi criado por engano em 11/11/2026 e está vazio; o dono deve apagá-lo no painel.
