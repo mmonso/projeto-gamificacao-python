@@ -8,6 +8,7 @@ import { BotaoRecuperar } from "@/app/licao/[id]/botao";
 import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
 import { textoSeguidas, tituloDoFeedback } from "@/componentes/licao/frases";
+import { atualizarCronometro, CRONOMETRO_VAZIO, tempoDoCronometro, type Cronometro } from "@/componentes/licao/cronometro";
 import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
 import { chamar, motorDaSessao, type Motor } from "@/componentes/licao/motor";
 import { Resultado } from "@/componentes/licao/Resultado";
@@ -110,14 +111,16 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
    */
   const envioRef = useRef<string | null>(null);
   /**
-   * Tempo até o envio: começa quando o exercício fica pronto para responder (o cartão do conceito fechado)
-   * e vale o do primeiro envio; Tentar novamente leva o mesmo valor (FL-04).
+   * Tempo até o envio: conta só enquanto o exercício está à vista. Pausa com o cartão do conceito aberto (no
+   * começo ou reaberto no meio) e continua quando ele fecha. Vale o do primeiro envio; Tentar novamente leva o
+   * mesmo valor (FL-04).
    */
-  const inicioRef = useRef(0);
+  const cronometroRef = useRef<Cronometro>(CRONOMETRO_VAZIO);
   const tempoEnvioRef = useRef<number | undefined>(undefined);
   useEffect(() => {
-    inicioRef.current = performance.now();
+    cronometroRef.current = atualizarCronometro(cronometroRef.current, exercicio?.id ?? null, cartaoAberto !== null, performance.now());
   }, [exercicio?.id, cartaoAberto]);
+  const tempoAteAgora = () => tempoDoCronometro(cronometroRef.current, performance.now());
 
   const tratarErro = useCallback(
     (erro: ErroApi | null, aoFalhar: () => void) => {
@@ -297,7 +300,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     else if (fase === "feedback") continuar();
     else if (podeVerificar && exercicio && resposta) {
       // Primeiro envio: mede o tempo agora. Tentar novamente reaproveita o tempo do primeiro.
-      if (!envioRef.current) tempoEnvioRef.current = Math.max(0, Math.round(performance.now() - inicioRef.current));
+      if (!envioRef.current) tempoEnvioRef.current = tempoAteAgora();
       void verificar({ exercicio, resposta, envioId: envioRef.current ?? crypto.randomUUID(), tempoMs: tempoEnvioRef.current });
     }
     else if (fase === "concluindo" && falha) void concluirLicao();

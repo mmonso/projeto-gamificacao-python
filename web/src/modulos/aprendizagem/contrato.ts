@@ -5,13 +5,23 @@ import type { ExercicioPublico, Gabarito } from "@/modulos/conteudo/esquema";
 import type { Conquista } from "@/modulos/gamificacao/conquistas";
 import { respostaEsquema, type Resposta } from "./corretor";
 
+/** Teto do tempo de resposta gravado: acima disso, a aba ficou esquecida aberta. */
+export const TEMPO_MAXIMO_MS = 60 * 60 * 1000;
+
 export const pedidoSubmissao = z.object({
   /** Gerado pela interface antes do envio; o reenvio usa o mesmo valor (FL-04). */
   id: z.uuid(),
   exercicioId: z.string().min(1).max(40),
   resposta: respostaEsquema,
-  /** Tempo, em milissegundos, entre o exercício aparecer e o aluno enviar. Opcional: aparelhos antigos não mandam. */
-  tempoMs: z.number().int().min(0).max(60 * 60 * 1000).optional(),
+  /**
+   * Tempo, em milissegundos, com o exercício à vista até o envio. Opcional: aparelhos antigos não mandam.
+   * É só medida e nunca recusa a resposta: um valor enorme (aba esquecida aberta) é limitado a 1 hora, e um
+   * valor inválido (negativo, texto) vira "sem tempo".
+   */
+  tempoMs: z
+    .unknown()
+    .transform((v): number | undefined => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? Math.min(Math.round(v), TEMPO_MAXIMO_MS) : undefined))
+    .optional(),
 });
 export type PedidoSubmissao = z.infer<typeof pedidoSubmissao>;
 
