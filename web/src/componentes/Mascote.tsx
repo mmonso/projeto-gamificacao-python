@@ -76,10 +76,10 @@ function Extra({ humor }: { humor: Humor }) {
     case "descanso":
       return (
         <>
-          <text x="104" y="22" fontFamily="Nunito, sans-serif" fontWeight="900" fontSize="15" fill="#55636D">
+          <text x="104" y="22" fontFamily="Nunito, sans-serif" fontWeight="900" fontSize="15" style={{ fill: "var(--texto-suave)" }}>
             z
           </text>
-          <text x="112" y="12" fontFamily="Nunito, sans-serif" fontWeight="900" fontSize="11" fill="#55636D">
+          <text x="112" y="12" fontFamily="Nunito, sans-serif" fontWeight="900" fontSize="11" style={{ fill: "var(--texto-suave)" }}>
             z
           </text>
         </>

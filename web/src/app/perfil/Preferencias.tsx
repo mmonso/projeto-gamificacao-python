@@ -1,5 +1,6 @@
 "use client";
 // Preferências do perfil (F-31): nome, meta diária, fuso horário confirmável e som.
+import { AlternarTema } from "@/componentes/Tema";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { BotaoEnviar, Mensagens } from "@/componentes/formulario";
 import { chamar } from "@/componentes/licao/motor";
@@ -86,6 +87,8 @@ export function Preferencias({ nome, meta, fuso, fusoPendente, som: somInicial }
         <button type="button" aria-pressed={som} aria-labelledby="rotulo-som" onClick={() => void alternarSom()} />
       </div>
 
+      <AlternarTema />
+
       <form action={acaoFuso} className="campo">
         <label htmlFor="p-fuso">Fuso horário</label>
         <select id="p-fuso" name="fuso" defaultValue={fusoDesejado} key={fusoDesejado}>
@@ -122,7 +125,7 @@ export function ExcluirConta() {
     );
   }
   return (
-    <form action={acao} className="cartao pilha border-[#f3b9b9]">
+    <form action={acao} className="cartao pilha border-[var(--vermelho-tint)]">
       <h3>Excluir sua conta?</h3>
       <p>Seu progresso, XP, sequência e conquistas serão apagados, e o login deixará de funcionar. Isso não pode ser desfeito.</p>
       <div className="campo">
