@@ -54,6 +54,12 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 - Resultado da lição com "Mandar no WhatsApp" e "Copiar resultado".
 - Já existiam: erro volta no fim da lição, cartão reabrível durante o exercício, celebração de marcos da sequência.
 
+**Preparação do teste com amigos (12/11/2026, depois da troca para o Opus):**
+- Teto de 50 contas com e-mail (`modulos/conta/vagas.ts`): o cadastro fecha sozinho, e a vigilância avisa com 40 e com 50. O dono pediu para não crescer antes de conseguir acompanhar.
+- O dono **não vai observar** os amigos usando. Isso foi substituído por: avaliação no fim de cada lição (fácil, na medida, difícil e o motivo, só de toque) e mini-teste da unidade 1 antes e depois (`/miniteste`). As duas coisas aparecem no `db:retencao`.
+- Revisão dos commits feitos com o modelo mais barato: o tempo de resposta recusava envios acima de 1 hora, o que travava o aluno (corrigido), e o cronômetro zerava ao reabrir o cartão (agora pausa).
+- **Rotina:** quando o dono perguntar "como está o Sibi?", rodar `db:vigilancia`, `db:retencao` e `db:dificuldade` e responder com números e o que mudar.
+
 **Pendente da pesquisa do Duolingo, para decidir em outra rodada:**
 - Ação 6, dica ligada ao erro: precisa de conteúdo novo (2 ou 3 erros comuns por exercício).
 - Ação 8, quebra sem alarme com recuperação "3 sessões em até 2 dias": muda a regra da sequência no servidor. Pede teste de regra e decisão sobre o texto.

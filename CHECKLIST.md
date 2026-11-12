@@ -19,7 +19,7 @@ Todos os comandos rodam a partir da pasta indicada. No Windows, use o Git Bash o
 
 | Verificação | Comando | Passa quando |
 |---|---|---|
-| Testes unitários e de integração | `npx vitest run` | 212 testes passando, 0 falhas (27 arquivos) |
+| Testes unitários e de integração | `npx vitest run` | 227 testes passando, 0 falhas (31 arquivos) |
 | Tipos | `npx tsc --noEmit` | Nenhuma saída |
 | Lint | `npm run lint` | Nenhum erro |
 | Build de produção | `npm run build` | Termina com `BUILD_EXIT=0` e lista as rotas |
@@ -67,6 +67,8 @@ Modos separados (rodar quando mexer na área):
 Em `web/`: `npm run db:vigilancia`
 
 - [ ] Imprime "Tudo normal: nenhum sinal de abuso." Se disser ATENÇÃO ou ALERTA, avise o dono.
+- [ ] A linha "contas com e-mail: N de 50 vagas" mostra o teto do teste. Com 40, atenção; com 50, o cadastro já fechou sozinho.
+  O teto fica em `web/src/modulos/conta/vagas.ts` (`LIMITE_DE_CONTAS`; 0 fecha o cadastro).
 - [ ] O código de saída é 2 quando há ALERTA.
 
 ## 6. Relatório de retenção
