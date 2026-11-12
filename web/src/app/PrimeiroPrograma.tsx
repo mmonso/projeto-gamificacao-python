@@ -26,7 +26,7 @@ export function PrimeiroPrograma() {
         <input
           className="terminal-nome"
           // A largura acompanha o texto (fonte monoespaçada), para o "!" ficar colado no nome.
-          style={{ width: `${Math.max(nome.length, PLACEHOLDER.length) + 1}ch` }}
+          style={{ width: `${(nome ? nome.length : PLACEHOLDER.length) + 1}ch`, minWidth: "2ch" }}
           value={nome}
           maxLength={NOME_MAXIMO}
           placeholder={PLACEHOLDER}
