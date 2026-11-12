@@ -1,9 +1,11 @@
 "use client";
 // Ações da apresentação para quem ainda não entrou (FL-01): Começar leva direto à demonstração; com uma
-// demonstração concluída neste navegador, o destaque é Criar conta para salvar.
+// demonstração concluída neste navegador, o destaque é Criar conta para salvar. Entrar como visitante abre o app
+// inteiro sem cadastro, para quem só quer conhecer.
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { lerDemo } from "@/componentes/licao/demo";
+import { EntrarComoVisitante } from "@/componentes/EntrarComoVisitante";
 import { Mascote } from "@/componentes/Mascote";
 
 export function AcoesVisitante() {
@@ -27,6 +29,7 @@ export function AcoesVisitante() {
         <Link className="botao botao-secundario" href="/entrar">
           Já tenho conta
         </Link>
+        <EntrarComoVisitante origem="inicio" />
       </>
     );
   }
@@ -38,6 +41,7 @@ export function AcoesVisitante() {
       <Link className="botao botao-secundario" href="/entrar">
         Já tenho conta
       </Link>
+      <EntrarComoVisitante origem="inicio" />
     </>
   );
 }

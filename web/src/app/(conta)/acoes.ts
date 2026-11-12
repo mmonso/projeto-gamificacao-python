@@ -4,6 +4,7 @@
 import { redirect } from "next/navigation";
 import {
   MENSAGENS,
+  NOME_DE_VISITANTE,
   destinoSeguro,
   esquemaCadastro,
   esquemaEmail,
@@ -13,6 +14,7 @@ import {
   primeiroErro,
   type MetadadosCadastro,
 } from "@/modulos/conta/conta";
+import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import { guardarEmailPendente, lerEmailPendente } from "@/servidor/auth/email-pendente";
 import { criarClienteSupabase, origemDoSite } from "@/servidor/auth/supabase";
 
@@ -68,6 +70,25 @@ export async function entrar(_anterior: EstadoFormulario, form: FormData): Promi
     return { erro: mensagemDeErroAuth(error.code, "entrar"), valores };
   }
   redirect(destinoSeguro(entrada.voltar));
+}
+
+/**
+ * Entra como visitante: login anônimo do Supabase, sem e-mail nem senha. O botão diz que entrar
+ * equivale a declarar a idade mínima e aceitar os documentos, e o aceite fica registrado como no cadastro.
+ * O acesso e o progresso são apagados pela manutenção diária depois de DIAS_DE_VISITANTE dias.
+ */
+export async function entrarComoVisitante(_anterior: EstadoFormulario, form: FormData): Promise<EstadoFormulario> {
+  const fuso = esquemaCadastro.shape.fuso.parse(form.get("fuso"));
+  const metadados: MetadadosCadastro = {
+    nome: NOME_DE_VISITANTE,
+    meta_diaria: PARAMETROS.metaPadrao,
+    fuso,
+    termos_aceitos_em: new Date().toISOString(),
+  };
+  const supabase = await criarClienteSupabase();
+  const { error } = await supabase.auth.signInAnonymously({ options: { data: metadados } });
+  if (error) return { erro: mensagemDeErroAuth(error.code, "visitante") };
+  redirect("/aprender");
 }
 
 export async function reenviarConfirmacao(): Promise<EstadoFormulario> {

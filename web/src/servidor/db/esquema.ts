@@ -45,9 +45,12 @@ export const perfis = pgTable(
     diasLivres: smallint("dias_livres").notNull().default(0),
     diasLivresUsados: text("dias_livres_usados").array().notNull().default(sql`'{}'::text[]`),
     termosAceitosEm: timestamp("termos_aceitos_em", { withTimezone: true }),
+    /** Acesso de visitante (login anônimo do Supabase): sem e-mail, apagado sozinho depois de alguns dias. */
+    visitante: boolean("visitante").notNull().default(false),
     criadoEm: criadoEm(),
   },
   (t) => [
+    index("perfis_visitantes").on(t.criadoEm).where(sql`${t.visitante}`),
     check("perfis_coracoes_faixa", sql`${t.coracoes} between 0 and 5`),
     check("perfis_meta_faixa", sql`${t.metaDiaria} between 1 and 3`),
     check("perfis_dias_livres_faixa", sql`${t.diasLivres} between 0 and 2`),

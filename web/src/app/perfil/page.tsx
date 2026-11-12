@@ -5,6 +5,7 @@ import { sair } from "@/app/(conta)/acoes";
 import { BotaoEnviar } from "@/componentes/formulario";
 import { Icone } from "@/componentes/Icone";
 import { CartaoMeta, Moldura, MolduraCarregando } from "@/componentes/Moldura";
+import { DIAS_DE_VISITANTE } from "@/modulos/conta/conta";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { progressoDoAluno } from "@/servidor/gamificacao/conquistas";
@@ -21,6 +22,7 @@ async function Perfil() {
       <h1>{perfil.nome || "Seu perfil"}</h1>
       {aluno.email && <p className="ajuda mb-4 break-all">{aluno.email}</p>}
       <div className="pilha">
+        {perfil.visitante && <AvisoVisitante criadoEm={perfil.criadoEm} fuso={perfil.fuso} />}
         <div className="estatisticas">
           <div className="estatistica xp">
             <p className="topo">XP total</p>
@@ -76,9 +78,11 @@ async function Perfil() {
 
         <section className="cartao pilha" aria-labelledby="titulo-conta">
           <h2 id="titulo-conta">Conta</h2>
-          <a className="botao botao-secundario" href="/api/perfil/exportacao" download>
-            Exportar meu histórico
-          </a>
+          {!perfil.visitante && (
+            <a className="botao botao-secundario" href="/api/perfil/exportacao" download>
+              Exportar meu histórico
+            </a>
+          )}
           <form action={sair}>
             <BotaoEnviar classe="botao botao-secundario">Sair</BotaoEnviar>
           </form>
@@ -89,6 +93,20 @@ async function Perfil() {
         </section>
       </div>
     </Moldura>
+  );
+}
+
+/** Visitante: o acesso some sozinho, e sair encerra de vez (não há e-mail nem senha para voltar). */
+function AvisoVisitante({ criadoEm, fuso }: { criadoEm: Date; fuso: string }) {
+  const fim = new Date(criadoEm.getTime() + DIAS_DE_VISITANTE * 86_400_000);
+  const data = new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long", timeZone: fuso }).format(fim);
+  return (
+    <section className="cartao pilha" aria-labelledby="titulo-visitante">
+      <h2 id="titulo-visitante">Você está como visitante</h2>
+      <p>
+        Este acesso e todo o progresso serão apagados em {data}. Se sair, não dá para voltar a ele. Para guardar o progresso de verdade, saia e crie uma conta com e-mail.
+      </p>
+    </section>
   );
 }
 

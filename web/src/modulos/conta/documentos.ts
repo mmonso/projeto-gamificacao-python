@@ -2,7 +2,7 @@
 // jurídica estão em REVISAO_JURIDICA.md; enquanto um campo for null, as páginas mostram "a definir".
 export const DOCUMENTOS = {
   /** Data da versão em vigor, mostrada no topo das duas páginas. Mudou o texto, muda a data. */
-  versao: "6 de novembro de 2026",
+  versao: "12 de novembro de 2026",
   /** Enquanto true, as páginas avisam que o texto é preliminar e ainda será revisado. */
   preliminar: true,
   /** Pessoa responsável pelo Sibi e pelo tratamento dos dados (controlador, LGPD art. 5º, VI). */

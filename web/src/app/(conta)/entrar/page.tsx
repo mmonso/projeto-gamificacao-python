@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { EntrarComoVisitante } from "@/componentes/EntrarComoVisitante";
 import { Voltar } from "@/componentes/formulario";
 import { destinoSeguro } from "@/modulos/conta/conta";
 import { FormularioEntrar } from "./formulario";
@@ -26,6 +27,7 @@ export default function PaginaEntrar({ searchParams }: PageProps<"/entrar">) {
       <p className="text-center">
         Ainda não tem conta? <Link href="/cadastro">Criar conta</Link>
       </p>
+      <EntrarComoVisitante origem="entrar" />
     </main>
   );
 }

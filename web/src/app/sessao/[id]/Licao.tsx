@@ -340,6 +340,8 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
           <div hidden={cartaoAberto !== null}>
             <p className="etiqueta-tipo">
               {(demo || tipo !== "principal") && <span className="selo-sessao">{demo ? "Demonstração" : ROTULO_SESSAO[tipo]}</span>}
+              {/* Espaço só para o texto lido (leitor de tela, cópia): na tela, o gap do flex já separa. */}
+              {(demo || tipo !== "principal") && " "}
               {NOME_TIPO[exercicio.tipo]}
             </p>
             <h1 id="enunciado" ref={enunciadoRef} tabIndex={-1}>

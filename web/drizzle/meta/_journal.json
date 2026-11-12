@@ -50,6 +50,13 @@
       "when": 1794426426492,
       "tag": "0006_dias_livres",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794495199590,
+      "tag": "0007_visitantes",
+      "breakpoints": true
     }
   ]
 }

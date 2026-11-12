@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { DOCUMENTOS } from "@/modulos/conta/documentos";
 
 /** Telas que abrem os documentos, indicadas no link com ?de=. */
-const ORIGENS: Record<string, string> = { cadastro: "/cadastro", perfil: "/perfil", inicio: "/" };
+const ORIGENS: Record<string, string> = { cadastro: "/cadastro", perfil: "/perfil", inicio: "/", entrar: "/entrar" };
 
 /**
  * Volta para a tela de onde a pessoa veio. Pelo histórico, quando há, o cadastro reaparece como estava;

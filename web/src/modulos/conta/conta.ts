@@ -8,6 +8,11 @@ import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 export const SENHA_MINIMA = 8;
 export const NOME_MAXIMO = 40;
 
+/** Quantos dias dura um acesso de visitante antes de a manutenção diária apagá-lo com o progresso. */
+export const DIAS_DE_VISITANTE = 7;
+/** Nome do perfil de quem entra como visitante. */
+export const NOME_DE_VISITANTE = "Visitante";
+
 /** Chave do navegador em que a introdução guarda nome e meta até o cadastro (FL-01, passo 2). */
 export const CHAVE_INTRODUCAO = "sibi-introducao";
 
@@ -89,13 +94,14 @@ export const MENSAGENS = {
   recuperacaoEnviada: "Se houver uma conta com esse e-mail, o link chega em alguns minutos.",
   linkReenviado: "Se esse e-mail estiver aguardando confirmação, enviamos um novo link.",
   falhaGenerica: "Não foi possível concluir agora. Tente de novo em instantes.",
+  visitanteIndisponivel: "O acesso de visitante está desligado no momento. Experimente a lição de demonstração.",
 } as const;
 
 /**
  * Mensagem para um erro do Supabase Auth. Nunca revela se um e-mail está cadastrado:
  * qualquer falha de login vira a mesma mensagem de credenciais.
  */
-export function mensagemDeErroAuth(codigo: string | undefined, contexto: "entrar" | "cadastro" | "senha" | "email"): string {
+export function mensagemDeErroAuth(codigo: string | undefined, contexto: "entrar" | "cadastro" | "senha" | "email" | "visitante"): string {
   switch (codigo) {
     case "over_email_send_rate_limit":
     case "over_request_rate_limit":
@@ -106,6 +112,8 @@ export function mensagemDeErroAuth(codigo: string | undefined, contexto: "entrar
       return MENSAGENS.mesmaSenha;
     case "email_not_confirmed":
       return contexto === "entrar" ? MENSAGENS.emailNaoConfirmado : MENSAGENS.falhaGenerica;
+    case "anonymous_provider_disabled":
+      return MENSAGENS.visitanteIndisponivel;
   }
   return contexto === "entrar" ? MENSAGENS.credenciais : MENSAGENS.falhaGenerica;
 }

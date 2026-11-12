@@ -72,6 +72,9 @@ describe("mensagens de erro do Auth", () => {
     expect(mensagemDeErroAuth("invalid_credentials", "entrar")).toBe(MENSAGENS.credenciais);
     expect(mensagemDeErroAuth("user_not_found", "entrar")).toBe(MENSAGENS.credenciais);
     expect(mensagemDeErroAuth(undefined, "entrar")).toBe(MENSAGENS.credenciais);
+    expect(mensagemDeErroAuth("anonymous_provider_disabled", "visitante")).toBe(MENSAGENS.visitanteIndisponivel);
+    expect(mensagemDeErroAuth("over_request_rate_limit", "visitante")).toBe(MENSAGENS.muitasTentativas);
+    expect(mensagemDeErroAuth(undefined, "visitante")).toBe(MENSAGENS.falhaGenerica);
   });
 
   it("oferece reenvio quando o e-mail não foi confirmado", () => {

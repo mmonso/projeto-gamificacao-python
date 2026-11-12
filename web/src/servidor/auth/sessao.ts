@@ -8,7 +8,8 @@ import { banco } from "@/servidor/db/cliente";
 import { obterOuCriarPerfil, type Perfil } from "@/servidor/perfis/servico";
 import { criarClienteSupabase } from "./supabase";
 
-export type Aluno = { id: string; email: string | null; metadados: unknown };
+/** visitante: sessão anônima do Supabase ("Entrar como visitante"), sem e-mail nem senha. */
+export type Aluno = { id: string; email: string | null; metadados: unknown; visitante: boolean };
 
 /** Aluno da sessão atual, com o token verificado, ou null. Uma leitura por requisição. */
 export const obterAluno = cache(async (): Promise<Aluno | null> => {
@@ -17,8 +18,8 @@ export const obterAluno = cache(async (): Promise<Aluno | null> => {
   const supabase = await criarClienteSupabase();
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims?.sub) return null;
-  const { sub, email, user_metadata } = data.claims;
-  return { id: sub, email: typeof email === "string" ? email : null, metadados: user_metadata };
+  const { sub, email, user_metadata, is_anonymous } = data.claims;
+  return { id: sub, email: typeof email === "string" && email ? email : null, metadados: user_metadata, visitante: is_anonymous === true };
 });
 
 /** Aluno autenticado; sem sessão, leva ao login. */
@@ -31,6 +32,6 @@ export async function exigirAluno(): Promise<Aluno> {
 /** Perfil do aluno autenticado, criado no primeiro acesso. */
 export const obterPerfilAtual = cache(async (): Promise<{ aluno: Aluno; perfil: Perfil }> => {
   const aluno = await exigirAluno();
-  const perfil = await obterOuCriarPerfil(banco(), aluno.id, aluno.metadados);
+  const perfil = await obterOuCriarPerfil(banco(), aluno.id, aluno.metadados, aluno.visitante);
   return { aluno, perfil };
 });

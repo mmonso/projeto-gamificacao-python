@@ -8,6 +8,8 @@ type Db = PgDatabase<PgQueryResultHKT, typeof t>;
 export type NomeEvento =
   | "demonstracao_iniciada"
   | "conta_criada"
+  /** Acesso de visitante criado. Visitantes não contam como contas: as métricas de alunos filtram perfis.visitante. */
+  | "visitante_entrou"
   | "licao_iniciada"
   | "sessao_retomada"
   | "exercicio_respondido"

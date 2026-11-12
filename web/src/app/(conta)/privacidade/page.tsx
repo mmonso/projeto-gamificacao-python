@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DIAS_DE_VISITANTE } from "@/modulos/conta/conta";
 import { DOCUMENTOS } from "@/modulos/conta/documentos";
 import { Contato, Definir, Documento } from "../documento";
 
@@ -7,7 +8,7 @@ export const metadata: Metadata = { title: "Política de privacidade" };
 
 // Política de privacidade (E08.9; LGPD; Resoluções CD/ANPD nº 2/2022 e nº 19/2024; ESPECIFICACAO_MVP, PR-02
 // e CA-115 a CA-117). Descreve o que o app guarda hoje: conta, perfil, estudo, eventos só com
-// identificadores, IP resumido na demonstração e erros sem dados pessoais. Ao mudar o que é guardado,
+// identificadores, IP resumido na demonstração, acesso de visitante por poucos dias e erros sem dados pessoais. Ao mudar o que é guardado,
 // atualizar esta página e a data em DOCUMENTOS. Pontos em aberto para a revisão jurídica: REVISAO_JURIDICA.md.
 export default function PaginaPrivacidade() {
   const { responsavel, prazoBackup, idadeMinima } = DOCUMENTOS;
@@ -67,6 +68,11 @@ export default function PaginaPrivacidade() {
         A lição de demonstração fica guardada só no seu navegador. O servidor corrige as respostas sem gravar nada. Se você criar uma conta depois, o app pergunta se quer salvar o
         resultado. Só então as respostas são enviadas, corrigidas de novo e registradas na conta.
       </p>
+      <p>
+        Também dá para entrar como visitante, sem e-mail e sem senha. O Sibi cria um acesso temporário, guarda o progresso dele como faria numa conta e registra a data em que
+        você aceitou estes documentos. Depois de {DIAS_DE_VISITANTE} dias, o acesso e tudo o que foi feito nele são apagados automaticamente. Se você sair antes disso, não há como
+        voltar a ele.
+      </p>
 
       <h2>4. Cookies e armazenamento no navegador</h2>
       <ul>
@@ -99,6 +105,7 @@ export default function PaginaPrivacidade() {
       <h2>7. Por quanto tempo</h2>
       <ul>
         <li>Enquanto a conta existir. Ao excluí-la, conta, perfil, progresso, respostas e eventos são apagados na hora.</li>
+        <li>Acesso de visitante: {DIAS_DE_VISITANTE} dias a partir da entrada, ou menos, se você excluir antes pelo Perfil.</li>
         <li>
           Cópias de segurança do banco podem manter esses dados por <Definir valor={prazoBackup} oQue="prazo das cópias de segurança" />, até serem substituídas. Elas só são
           usadas para recuperar o serviço depois de uma falha.
