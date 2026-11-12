@@ -60,6 +60,17 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 - Revisão dos commits feitos com o modelo mais barato: o tempo de resposta recusava envios acima de 1 hora, o que travava o aluno (corrigido), e o cronômetro zerava ao reabrir o cartão (agora pausa).
 - **Rotina:** quando o dono perguntar "como está o Sibi?", rodar `db:vigilancia`, `db:retencao` e `db:dificuldade` e responder com números e o que mudar.
 
+**E-mail (12/11/2026, 17h):** o dono criou o Gmail do Sibi e configurou o SMTP no Supabase. Teste feito: um e-mail
+de recuperação de senha para a conta de teste 1 foi aceito e registrado (`auth.users.recovery_sent_at` às 20:05 UTC),
+sem erro de SMTP. **Falta, e o dono pediu para eu fazer pelo navegador na próxima sessão** (ele autorizou estas mudanças
+no painel do Supabase):
+1. Conferir com o dono se o e-mail de teste chegou e se caiu no spam.
+2. Supabase → Authentication → Rate Limits → "Rate limit for sending emails" = 100 por hora.
+3. Supabase → Authentication → Emails → Templates: "Confirm signup" e "Reset Password" com os textos de
+   `PASSO_A_PASSO_EMAIL.md`, parte 4.
+4. Conferir Authentication → URL Configuration (Site URL e Redirect URLs, parte 3 do passo a passo).
+5. Testar um cadastro de ponta a ponta e só então liberar o link para os amigos.
+
 **Pendente da pesquisa do Duolingo, para decidir em outra rodada:**
 - Ação 6, dica ligada ao erro: precisa de conteúdo novo (2 ou 3 erros comuns por exercício).
 - Ação 8, quebra sem alarme com recuperação "3 sessões em até 2 dias": muda a regra da sequência no servidor. Pede teste de regra e decisão sobre o texto.
