@@ -57,6 +57,18 @@ try {
       console.log(`  ${s.semana.padEnd(11)} ${String(s.alunos).padEnd(7)} ${s.linhas.map((l) => formatarTaxa(l).padEnd(16)).join(" ")}`);
     }
   }
+  // Desafio do dia: quantos jogam, quantos terminam e quantos chegaram por um link compartilhado (loop de crescimento).
+  const desafio = await sql<{ nome: string; compartilhado: boolean; n: number }[]>`
+    select nome, coalesce((dados->>'compartilhado')::boolean, false) as compartilhado, count(*)::int as n
+    from eventos_produto
+    where nome in ('desafio_iniciado', 'desafio_concluido') and criado_em > now() - interval '7 days'
+    group by 1, 2`;
+  const somar = (nome: string, compartilhado?: boolean) =>
+    desafio.filter((d) => d.nome === nome && (compartilhado === undefined || d.compartilhado === compartilhado)).reduce((s, d) => s + d.n, 0);
+  console.log("\nDesafio do dia (últimos 7 dias)");
+  console.log(`  começaram: ${somar("desafio_iniciado")}   terminaram: ${somar("desafio_concluido")}`);
+  console.log(`  chegaram por link compartilhado: ${somar("desafio_iniciado", true)} (meta: 30 para cada 100 que terminam)`);
+
   if (total < 20) console.log("\nCom menos de 20 contas, as porcentagens ainda oscilam muito: leia os números absolutos.");
 } finally {
   await sql.end();

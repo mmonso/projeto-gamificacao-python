@@ -35,12 +35,12 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 - **Retenção, 12/11/2026:** `npm run db:retencao` (em `web/`) mostra o funil da fase 1 (1ª lição, unidade 1) e D1, D7 e D30, no total e por semana de entrada. Regras puras em `web/src/modulos/metricas/retencao.ts`; o script tira visitantes e as contas de teste de `.env.local` e não imprime nomes nem e-mails.
 - **Digitar a saída, 12/11/2026:** sem conteúdo novo. Na revisão (sempre) e na prática (metade dos itens, escolhida de forma estável pela sessão), um "escolher a saída" curto (até 4 linhas de 40 caracteres, sem opção de erro) aparece como campo para digitar; 69 dos 77 itens desse tipo se qualificam. A lição principal e a recuperação continuam com opções. Regras em `web/src/modulos/aprendizagem/digitar.ts`: a comparação ignora espaços no fim das linhas e as aspas e travessões que o celular troca sozinho, mas não maiúsculas nem espaços no meio; uma resposta quase certa recebe um comentário ("Confira as maiúsculas…"). A transformação acontece ao servir o item e ao corrigir (`estudo.ts`, `servico.ts`), então nada mudou no banco nem no formato do conteúdo.
+- **Desafio do dia, 12/11/2026:** `/desafio`, sem conta. São 5 perguntas de "qual é a saída?" (77 candidatas, das versões vigentes), iguais para todos no dia de Brasília, do #1 em 12/11/2026. Os candidatos são embaralhados com semente fixa e cada dia pega o bloco seguinte, então nada se repete por uns 15 dias. Uma tentativa por pergunta; o placar marca 🟩 de primeira, 🟨 com dica ou cartão, 🟥 erro. No fim: "Mandar no WhatsApp" (link `/desafio?c=1`), copiar, compartilhar do sistema, contagem até o próximo e convite para a primeira lição. Não dá XP nem grava progresso; só os eventos `desafio_iniciado` e `desafio_concluido` (sem aluno, com `compartilhado`), que aparecem no `npm run db:retencao`. Entradas: tela inicial e Praticar. Regras em `web/src/modulos/desafio/desafio.ts`, servidor em `web/src/servidor/desafio/servico.ts`, motor local em `web/src/componentes/licao/desafio.ts` (a tela é a mesma `Licao.tsx`, com a prop `desafio`). O roteiro de navegador tem o modo `desafio` (também roda em `tudo`) e não registra eventos.
 
 ## Próximos passos, em ordem
 
 1. **Depois, pela estratégia:**
    - SMTP próprio: **esperando o dono** seguir `PASSO_A_PASSO_EMAIL.md` (senha de app do Gmail colada no painel do Supabase). Quando ele disser "pronto", criar uma conta com endereço novo, conferir se o e-mail chega e se o link abre, e tirar o aviso de e-mail abaixo;
-   - desafio do dia compartilhável;
    - PWA;
    - unidade 4 (listas e `for`).
 

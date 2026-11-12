@@ -16,7 +16,10 @@ export type NomeEvento =
   | "dica_pedida"
   | "conceito_aberto"
   | "licao_concluida"
-  | "revisao_concluida";
+  | "revisao_concluida"
+  /** Desafio do dia, sempre sem aluno: `compartilhado` diz se veio de um link enviado por alguém. */
+  | "desafio_iniciado"
+  | "desafio_concluido";
 
 type Valor = string | number | boolean | null;
 

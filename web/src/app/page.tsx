@@ -33,6 +33,11 @@ export default function Apresentacao() {
           <Acoes />
         </Suspense>
       </div>
+      <p className="mt-6">
+        <Link className="link-desafio" href="/desafio">
+          🟩🟨🟥 Desafio do dia: 5 perguntas de &quot;qual é a saída?&quot;, sem cadastro
+        </Link>
+      </p>
       <p className="links-documentos mt-8">
         Conta para maiores de {DOCUMENTOS.idadeMinima} anos · <Link href="/termos?de=inicio">Termos de uso</Link> ·{" "}
         <Link href="/privacidade?de=inicio">Política de privacidade</Link>

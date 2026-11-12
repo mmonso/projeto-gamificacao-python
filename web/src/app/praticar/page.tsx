@@ -5,6 +5,7 @@ import { BotaoComecar, BotaoRecuperar, BotaoRevisao } from "@/app/licao/[id]/bot
 import { Icone } from "@/componentes/Icone";
 import { Mascote } from "@/componentes/Mascote";
 import { Moldura, MolduraCarregando } from "@/componentes/Moldura";
+import { diaDoDesafio, numeroDoDia } from "@/modulos/desafio/desafio";
 import { NOMES_DEGRAU } from "@/modulos/gamificacao/dominio";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
@@ -31,6 +32,7 @@ async function Praticar() {
               Ir para a trilha
             </Link>
           </div>
+          <CartaoDesafio />
           {resumo.coracoes < 5 && <CartaoCoracoes coracoes={resumo.coracoes} />}
         </div>
       ) : (
@@ -46,6 +48,8 @@ async function Praticar() {
             </p>
             <BotaoRevisao rotulo={praticar.revisaoAberta ? "Continuar revisão" : "Começar revisão"} />
           </div>
+
+          <CartaoDesafio />
 
           {resumo.coracoes < 5 ? (
             <CartaoCoracoes coracoes={resumo.coracoes} />
@@ -125,5 +129,20 @@ export default function PaginaPraticar() {
     <Suspense fallback={<MolduraCarregando />}>
       <Praticar />
     </Suspense>
+  );
+}
+
+/** Desafio do dia: o mesmo para todo mundo, sem XP, feito para jogar e mandar aos amigos. */
+function CartaoDesafio() {
+  return (
+    <Link className="cartao cartao-desafio" href="/desafio">
+      <span className="cartao-desafio-quadrados" aria-hidden="true">
+        🟩🟨🟥
+      </span>
+      <span>
+        <strong>Desafio do dia #{numeroDoDia(diaDoDesafio())}</strong>
+        <span className="block">5 perguntas de &quot;qual é a saída?&quot;, iguais para todo mundo. Jogue e mande o placar aos amigos.</span>
+      </span>
+    </Link>
   );
 }

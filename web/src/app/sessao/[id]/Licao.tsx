@@ -3,7 +3,7 @@
 // O servidor corrige e decide; a interface só mostra o que ele confirmou.
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useEffectEvent, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useEffectEvent, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { BotaoRecuperar } from "@/app/licao/[id]/botao";
 import { Icone } from "@/componentes/Icone";
 import { AreaExercicio, NOME_TIPO, RespostaCorreta, respostaCompleta } from "@/componentes/licao/Exercicios";
@@ -34,6 +34,11 @@ type Props = {
   demo?: boolean;
   /** Motor criado no navegador; sem ele, a lição usa a API da sessão. */
   criarMotor?: () => Motor;
+  /**
+   * Desafio do dia: uma tentativa por pergunta (o erro não volta no fim), o cartão do conceito conta como ajuda
+   * e o fim mostra a tela própria do desafio, desenhada por `telaFinal`.
+   */
+  desafio?: { telaFinal: () => ReactNode };
 };
 
 /** Cartões abertos sozinhos: os de conceito novo, uma única vez por exercício nesta tela. */
@@ -48,7 +53,7 @@ const ROTULO_SESSAO: Record<ResultadoConclusao["tipo"], string> = { principal: "
 /** Faíscas do acerto, em volta do mascote; somem com movimento reduzido. */
 const FAISCAS = Array.from({ length: 8 }, (_, i) => ({ "--angulo": `${i * 45}deg` }) as CSSProperties);
 
-export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCoracoes, somInicial, demo = false, criarMotor }: Props) {
+export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCoracoes, somInicial, demo = false, criarMotor, desafio }: Props) {
   const router = useRouter();
   const chave = `sibi-resposta:${sessaoId}`;
   const [motor] = useState(() => (criarMotor ? criarMotor() : motorDaSessao(sessaoId)));
@@ -236,7 +241,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   function abrirCartao() {
     if (!exercicio?.cartoes?.length) return;
     setCartaoAberto({ lista: exercicio.cartoes, indice: 0 });
-    if (!demo && tipo !== "principal") void motor.dica(exercicio.id, 0);
+    if (desafio || (!demo && tipo !== "principal")) void motor.dica(exercicio.id, 0);
   }
 
   function avancarCartao() {
@@ -305,6 +310,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   }
 
   if (fase === "concluida" && conclusao) {
+    if (desafio) return desafio.telaFinal();
     return <Resultado conclusao={conclusao} titulo={titulo} demo={demo} som={som} />;
   }
 
@@ -339,7 +345,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
         {exercicio ? (
           <div hidden={cartaoAberto !== null}>
             <p className="etiqueta-tipo">
-              {(demo || tipo !== "principal") && <span className="selo-sessao">{demo ? "Demonstração" : ROTULO_SESSAO[tipo]}</span>}
+              {(demo || tipo !== "principal") && <span className="selo-sessao">{desafio ? "Desafio do dia" : demo ? "Demonstração" : ROTULO_SESSAO[tipo]}</span>}
               {/* Espaço só para o texto lido (leitor de tela, cópia): na tela, o gap do flex já separa. */}
               {(demo || tipo !== "principal") && " "}
               {NOME_TIPO[exercicio.tipo]}
@@ -419,7 +425,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                 </div>
               )}
               <p className="feedback-texto">{resultado.explicacao}</p>
-              {!resultado.correta && <p className="retorno-neutro">Este exercício volta no fim da lição.</p>}
+              {!resultado.correta && !desafio && <p className="retorno-neutro">Este exercício volta no fim da lição.</p>}
               {resultado.perdeuCoracao && (
                 <p className="retorno-aviso">
                   <Icone nome="coracao" pequeno /> Você perdeu um coração. {resultado.coracoes === 0 ? "Seus corações acabaram." : `Restam ${resultado.coracoes}.`}

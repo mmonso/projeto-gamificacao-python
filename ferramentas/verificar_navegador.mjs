@@ -7,7 +7,7 @@
 // TESTE_EMAIL_1 e TESTE_SENHA de web/.env.local: conclui uma prática da lição 1 nessa conta e
 // alterna o som duas vezes, voltando ao estado inicial.
 //
-// Uso: node ferramentas/verificar_navegador.mjs [demo|conta|tudo|jornada]
+// Uso: node ferramentas/verificar_navegador.mjs [demo|desafio|conta|tudo|jornada]
 // O modo jornada (E06.8) usa TESTE_EMAIL_2 em dois aparelhos e avança essa conta uma lição por execução.
 // As capturas de tela ficam na pasta CAPTURAS (padrão: uma pasta temporária nova).
 import { execSync } from "node:child_process";
@@ -112,6 +112,10 @@ async function exercicioAtual(page) {
   return page.evaluate(async () => {
     const m = location.pathname.match(/^\/sessao\/([0-9a-f-]{36})/);
     if (m) return (await (await fetch(`/api/sessoes/${m[1]}`, { cache: "no-store" })).json()).exercicio ?? null;
+    if (location.pathname === "/desafio") {
+      const d = JSON.parse(localStorage.getItem("sibi-desafio") ?? "null");
+      return d && !d.concluido ? (d.exercicios[d.respondidas.length] ?? null) : null;
+    }
     const d = JSON.parse(localStorage.getItem("sibi-demo") ?? "null");
     return d && !d.concluida ? d.exercicios.find((e) => e.id === d.fila.fila[0]) : null;
   });
@@ -221,7 +225,8 @@ async function fazerLicao(page, nome, { aoExercicio } = {}) {
   }
   conferir(problemas.length === 0, `${nome}: lição inteira respondida só com o teclado`, problemas);
   conferir(focoNoFeedback, `${nome}: depois de Verificar, o foco vai para o feedback`);
-  const chegou = await aguardar(page, () => /XP/.test(document.body.innerText) && document.querySelector("h1, h2"), null, 15000);
+  // O resultado da lição mostra o XP; o do desafio do dia, o placar.
+  const chegou = await aguardar(page, () => (/XP/.test(document.body.innerText) || document.querySelector(".placar-desafio")) && document.querySelector("h1, h2"), null, 15000);
   conferir(chegou, `${nome}: chega ao resultado`);
 }
 
@@ -317,6 +322,64 @@ async function demonstracao(browser) {
   await semRolagemLateral(page, "resultado da demonstração");
   await conferirMovimento(page, "resultado da demonstração");
   await foto(page, "demo-resultado");
+  await page.close();
+}
+
+/** Desafio do dia sem conta, chegando por um link compartilhado: joga só com o teclado e confere o placar. */
+async function desafio(browser) {
+  console.log("\n— Desafio do dia (celular, sem conta)");
+  const page = await novaPagina(browser, CELULAR);
+  // Os eventos do desafio medem o loop de compartilhamento: o roteiro não os registra, para não inflar a métrica.
+  await page.setRequestInterception(true);
+  page.on("request", (req) =>
+    req.url().includes("/api/desafio/evento") ? req.respond({ status: 200, contentType: "application/json", body: '{"ok":true}' }) : req.continue(),
+  );
+  await page.goto(BASE + "/desafio?c=1", { waitUntil: "networkidle0" });
+  await page.evaluate(() => localStorage.removeItem("sibi-desafio"));
+  await page.reload({ waitUntil: "networkidle0" });
+  await semRolagemLateral(page, "/desafio");
+  conferir(/Desafio do dia/i.test(await page.evaluate(() => document.querySelector(".etiqueta-tipo")?.textContent ?? "")), "o desafio mostra o selo Desafio do dia");
+  await foto(page, "desafio-pergunta");
+
+  // Erra a primeira de propósito: no desafio, o erro mostra a resposta e segue, sem voltar no fim.
+  let errou = false;
+  await fazerLicao(page, "desafio", {
+    aoExercicio: async (n, ex) => {
+      if (n !== 0 || ex.tipo !== "escolher_resultado") return;
+      const certa = RESPOSTAS[ex.id].opcao;
+      const indice = ex.opcoes.findIndex((o) => o.id !== certa);
+      await passarCartoes(page, ex);
+      await page.evaluate((i) => document.querySelectorAll(".opcao")[i].click(), indice);
+      const p = await verificarComTeclado(page);
+      conferir(!p, "desafio: verificar uma resposta errada", p);
+      const texto = await page.evaluate(() => document.body.innerText);
+      conferir(!/volta no fim/.test(texto), "desafio: o erro não volta no fim", texto.slice(0, 200));
+      await page.keyboard.press("Enter");
+      await espera(200);
+      errou = true;
+    },
+  });
+  const ok = await aguardar(page, () => document.querySelector(".placar-desafio"));
+  conferir(ok, "o desafio termina no placar");
+  if (!ok) return;
+  const placar = await page.evaluate(() => ({
+    titulo: document.querySelector("h1")?.textContent ?? "",
+    quadrados: document.querySelector(".placar-quadrados")?.textContent ?? "",
+    whatsapp: document.querySelector('a[href^="https://wa.me/"]')?.getAttribute("href") ?? "",
+    convite: Boolean(document.querySelector(".convite-desafio")),
+  }));
+  conferir(/^Desafio #\d+$/.test(placar.titulo), "o placar mostra o número do desafio", placar.titulo);
+  conferir([...placar.quadrados].filter((c) => /[🟩🟨🟥]/u.test(c)).length === 5, "o placar tem 5 quadradinhos", placar.quadrados);
+  if (errou) conferir(placar.quadrados.startsWith("🟥"), "a pergunta errada aparece em vermelho", placar.quadrados);
+  const texto = decodeURIComponent(placar.whatsapp.replace("https://wa.me/?text=", ""));
+  conferir(/^Sibi #\d+ 🐍 \d\/5\n/.test(texto) && texto.includes("/desafio?c=1"), "Mandar no WhatsApp leva o placar e o link do desafio", texto);
+  conferir(placar.convite, "sem conta, o placar convida para a primeira lição");
+  await semRolagemLateral(page, "placar do desafio");
+  await foto(page, "desafio-placar");
+
+  // Voltar no mesmo dia mostra o placar de novo, sem jogar outra vez.
+  await page.reload({ waitUntil: "networkidle0" });
+  conferir(await aguardar(page, () => document.querySelector(".placar-desafio"), null, 5000), "recarregar depois do fim mostra o mesmo placar");
   await page.close();
 }
 
@@ -538,6 +601,7 @@ async function jornada(browser) {
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ["--no-first-run", "--no-default-browser-check"] });
 try {
   if (MODO === "demo" || MODO === "tudo") await demonstracao(browser);
+  if (MODO === "desafio" || MODO === "tudo") await desafio(browser);
   if (MODO === "conta" || MODO === "tudo") await conta(browser);
   if (MODO === "jornada") await jornada(browser);
 } finally {

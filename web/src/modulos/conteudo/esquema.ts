@@ -122,7 +122,7 @@ export function hash(texto: string): number {
 }
 
 /** Embaralhamento determinístico (mulberry32 + Fisher-Yates): a mesma versão é publicada sempre igual. */
-function embaralhar<T>(itens: readonly T[], semente: string, aceitavel: (ordem: T[]) => boolean = () => true): T[] {
+export function embaralhar<T>(itens: readonly T[], semente: string, aceitavel: (ordem: T[]) => boolean = () => true): T[] {
   let estado = hash(semente);
   const aleatorio = () => {
     estado = (estado + 0x6d2b79f5) | 0;
