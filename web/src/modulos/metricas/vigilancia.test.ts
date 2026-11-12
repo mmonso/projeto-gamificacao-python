@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { LIMITE_DE_CONTAS } from "../conta/vagas";
 import { avaliar, type Medidas } from "./vigilancia";
 
 const calmo: Medidas = {
@@ -10,6 +11,7 @@ const calmo: Medidas = {
   eventos24h: 400,
   desafios24h: 10,
   bancoMb: 30,
+  contas: 5,
 };
 
 describe("vigilância de abuso", () => {
@@ -26,5 +28,12 @@ describe("vigilância de abuso", () => {
 
   it("avisa de repetição automática quando alguém bate no limite por minuto", () => {
     expect(avaliar({ ...calmo, chavesNoLimite: 1 })).toEqual([expect.objectContaining({ nivel: "atencao" })]);
+  });
+
+  it("avisa quando as contas chegam perto do teto e quando o cadastro fecha", () => {
+    const perto = avaliar({ ...calmo, contas: Math.ceil(LIMITE_DE_CONTAS * 0.8) });
+    expect(perto).toEqual([expect.objectContaining({ nivel: "atencao", texto: expect.stringMatching(/fecha sozinho/) })]);
+    const cheio = avaliar({ ...calmo, contas: LIMITE_DE_CONTAS });
+    expect(cheio).toEqual([expect.objectContaining({ nivel: "alerta", texto: expect.stringMatching(/cadastro está fechado/) })]);
   });
 });

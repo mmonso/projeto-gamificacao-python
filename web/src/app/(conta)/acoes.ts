@@ -14,7 +14,10 @@ import {
   primeiroErro,
   type MetadadosCadastro,
 } from "@/modulos/conta/conta";
+import { cadastroAberto, MENSAGEM_SEM_VAGAS } from "@/modulos/conta/vagas";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
+import { banco } from "@/servidor/db/cliente";
+import { contarContas } from "@/servidor/perfis/vagas";
 import { guardarEmailPendente, lerEmailPendente } from "@/servidor/auth/email-pendente";
 import { criarClienteSupabase, origemDoSite } from "@/servidor/auth/supabase";
 
@@ -35,6 +38,9 @@ export async function cadastrar(_anterior: EstadoFormulario, form: FormData): Pr
   const valores = { nome: String(entrada.nome ?? ""), email: String(entrada.email ?? "") };
   const dados = esquemaCadastro.safeParse(entrada);
   if (!dados.success) return { erro: primeiroErro(dados.error), valores };
+
+  // Teto do teste com amigos: sem vaga, nenhum e-mail é enviado e nenhuma conta é criada.
+  if (!cadastroAberto(await contarContas(banco()))) return { erro: MENSAGEM_SEM_VAGAS, valores };
 
   const { nome, email, senha, metaDiaria, fuso } = dados.data;
   const metadados: MetadadosCadastro = { nome, meta_diaria: metaDiaria, fuso, termos_aceitos_em: new Date().toISOString() };

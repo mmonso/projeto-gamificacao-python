@@ -1,5 +1,6 @@
 // Vigilância de abuso (npm run db:vigilancia): números do banco comparados com limites que uma fase de teste com
 // amigos não deveria passar. Regras puras; o script lê os números e imprime os alertas.
+import { FRACAO_DE_ATENCAO, LIMITE_DE_CONTAS } from "../conta/vagas";
 
 export type Medidas = {
   /** Visitantes (perfis) criados nas últimas 24 horas. */
@@ -18,6 +19,8 @@ export type Medidas = {
   desafios24h: number;
   /** Tamanho do banco, em MB (o plano gratuito do Supabase vai até 500 MB). */
   bancoMb: number;
+  /** Contas com e-mail (visitantes fora), comparadas com o teto do teste em modulos/conta/vagas.ts. */
+  contas: number;
 };
 
 export type Nivel = "alerta" | "atencao";
@@ -32,6 +35,7 @@ export const LIMITES_VIGILANCIA = {
   eventos24h: { atencao: 20_000, alerta: 100_000 },
   desafios24h: { atencao: 500, alerta: 3_000 },
   bancoMb: { atencao: 250, alerta: 400 },
+  contas: { atencao: Math.ceil(LIMITE_DE_CONTAS * FRACAO_DE_ATENCAO), alerta: LIMITE_DE_CONTAS },
 } as const satisfies Partial<Record<keyof Medidas, { atencao: number; alerta: number }>>;
 
 const TEXTOS: Record<keyof typeof LIMITES_VIGILANCIA, (n: number) => string> = {
@@ -42,6 +46,10 @@ const TEXTOS: Record<keyof typeof LIMITES_VIGILANCIA, (n: number) => string> = {
   eventos24h: (n) => `${n} eventos nas últimas 24 h, bem acima do esperado para o teste com amigos.`,
   desafios24h: (n) => `${n} desafios do dia começados nas últimas 24 h. Ótimo se foi divulgação; estranho se não foi.`,
   bancoMb: (n) => `O banco tem ${n} MB, perto do limite de 500 MB do plano gratuito.`,
+  contas: (n) =>
+    n >= LIMITE_DE_CONTAS
+      ? `${n} contas: o teto de ${LIMITE_DE_CONTAS} foi atingido e o cadastro está fechado. Para abrir mais vagas, aumente LIMITE_DE_CONTAS.`
+      : `${n} contas de ${LIMITE_DE_CONTAS}: o cadastro fecha sozinho ao chegar no teto.`,
 };
 
 export function avaliar(m: Medidas): Achado[] {

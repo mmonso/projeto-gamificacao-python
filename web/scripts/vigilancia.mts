@@ -3,6 +3,7 @@
 // Uso: npm run db:vigilancia (rodar no começo de cada sessão de trabalho no Sibi).
 import postgres from "postgres";
 import { LIMITES } from "../src/servidor/limites";
+import { LIMITE_DE_CONTAS } from "../src/modulos/conta/vagas";
 import { avaliar, type Medidas } from "../src/modulos/metricas/vigilancia";
 
 const url = process.env.DATABASE_URL;
@@ -22,7 +23,8 @@ try {
       (select coalesce(max(contagem), 0)::int from limites_frequencia) as "picoPorMinuto",
       (select count(*)::int from eventos_produto where criado_em > now() - interval '24 hours') as "eventos24h",
       (select count(*)::int from eventos_produto where nome = 'desafio_iniciado' and criado_em > now() - interval '24 hours') as "desafios24h",
-      (select round(pg_database_size(current_database()) / 1048576.0)::int) as "bancoMb"`;
+      (select round(pg_database_size(current_database()) / 1048576.0)::int) as "bancoMb",
+      (select count(*)::int from perfis where not visitante) as "contas"`;
 
   const [{ agora }] = await sql<{ agora: string }[]>`select to_char(now() at time zone 'America/Sao_Paulo', 'DD/MM/YYYY HH24:MI') as agora`;
   console.log(`Vigilância de abuso do Sibi em ${agora} (horário de Brasília)\n`);
@@ -32,7 +34,8 @@ try {
   console.log(`  quem bateu no limite por minuto (1 h):  ${m.chavesNoLimite} (pico de ${m.picoPorMinuto} pedidos num minuto)`);
   console.log(`  eventos nas últimas 24 h:               ${m.eventos24h}`);
   console.log(`  desafios do dia começados (24 h):       ${m.desafios24h}`);
-  console.log(`  tamanho do banco:                       ${m.bancoMb} MB de 500 MB\n`);
+  console.log(`  tamanho do banco:                       ${m.bancoMb} MB de 500 MB`);
+  console.log(`  contas com e-mail:                      ${m.contas} de ${LIMITE_DE_CONTAS} vagas\n`);
 
   const achados = avaliar(m);
   if (!achados.length) console.log("Tudo normal: nenhum sinal de abuso.");
