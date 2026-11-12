@@ -20,6 +20,8 @@ export type NomeEvento =
   | "licao_concluida"
   /** Avaliação da lição no resultado: nível (fácil, na medida, difícil) e, no difícil, o motivo. Nunca texto livre. */
   | "licao_avaliada"
+  /** Mini-teste da unidade 1, antes de começar e depois de concluir: só acertos e total, sem as respostas. */
+  | "miniteste_respondido"
   | "revisao_concluida"
   /** Desafio do dia, sempre sem aluno: `compartilhado` diz se veio de um link enviado por alguém. */
   | "desafio_iniciado"

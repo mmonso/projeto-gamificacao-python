@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { configuracao } from "@/servidor/config";
 
 /** Áreas que exigem conta. A verificação definitiva fica na camada de acesso (servidor/auth/sessao). */
-const AREAS_DO_ALUNO = ["/perfil", "/nova-senha", "/aprender", "/praticar", "/licao", "/sessao"];
+const AREAS_DO_ALUNO = ["/perfil", "/nova-senha", "/aprender", "/praticar", "/licao", "/sessao", "/miniteste"];
 
 export async function atualizarSessao(request: NextRequest) {
   let resposta = NextResponse.next({ request });

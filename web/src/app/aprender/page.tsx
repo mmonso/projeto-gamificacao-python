@@ -8,6 +8,7 @@ import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
 import { obterTrilha, type NoTrilha, type UnidadeTrilha } from "@/servidor/licoes/servico";
+import { estadoMiniteste } from "@/servidor/miniteste";
 import { OfertaTransferencia } from "./OfertaTransferencia";
 import { RolarParaAtual } from "./RolarParaAtual";
 
@@ -146,11 +147,36 @@ function Unidade({ u, nome }: { u: UnidadeTrilha; nome: string }) {
 
 async function Trilha() {
   const { perfil } = await obterPerfilAtual();
-  const [unidades, resumo] = await Promise.all([obterTrilha(banco(), perfil.id), resumoDoAluno(banco(), perfil)]);
+  const [unidades, resumo, miniteste] = await Promise.all([obterTrilha(banco(), perfil.id), resumoDoAluno(banco(), perfil), estadoMiniteste(banco(), perfil.id)]);
+  // Mini-teste da unidade 1: o "antes" vale até a lição 1 (a da demonstração), porque as perguntas tratam de
+  // números e variáveis, vistos só a partir da lição 2. O "depois" aparece ao concluir a unidade.
+  const u1 = unidades[0]?.licoes ?? [];
+  const feitasU1 = u1.filter((l) => l.estado === "concluida").length;
+  const convite = miniteste.antes === null && feitasU1 <= 1 ? "antes" : miniteste.antes !== null && miniteste.depois === null && u1.length > 0 && feitasU1 === u1.length ? "depois" : null;
   return (
     <Moldura atual="aprender" resumo={resumo}>
       <h1 className="so-leitor">Aprender</h1>
       <OfertaTransferencia licao1NaConta={unidades[0]?.licoes[0]?.estado === "concluida"} />
+      {convite && (
+        <div className="aviso-conta convite-miniteste">
+          <div>
+            <p>
+              {convite === "antes" ? (
+                <>
+                  <strong>Antes de seguir:</strong> 5 perguntas rápidas, sem nota, para marcar de onde você parte.
+                </>
+              ) : (
+                <>
+                  <strong>Unidade 1 concluída!</strong> Refaça as 5 perguntas do começo e veja quanto você aprendeu.
+                </>
+              )}
+            </p>
+            <Link className="botao botao-pequeno" href={convite === "antes" ? "/miniteste" : "/miniteste?momento=depois"}>
+              {convite === "antes" ? "Responder (1 minuto)" : "Ver quanto aprendi"}
+            </Link>
+          </div>
+        </div>
+      )}
       {resumo.coracoes === 0 && (
         <div className="aviso-conta">
           <div>

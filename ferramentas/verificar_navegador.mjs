@@ -425,6 +425,27 @@ async function visitante(browser) {
   conferir(new URL(page.url()).pathname === "/aprender", "o visitante cai direto na trilha", page.url());
   await semRolagemLateral(page, "/aprender (visitante)");
 
+  // Mini-teste "antes": convite na trilha, 5 perguntas, envio só com todas respondidas, resultado sem gabarito.
+  // A trilha chega por streaming (Suspense): espera o convite em vez de ler na hora.
+  conferir(
+    await aguardar(page, () => /5 perguntas rápidas/.test(document.querySelector(".convite-miniteste")?.textContent ?? ""), null, 8000),
+    "a trilha convida para o mini-teste antes de seguir",
+  );
+  await foto(page, "visitante-trilha-convite");
+  await page.goto(BASE + "/miniteste", { waitUntil: "networkidle0" });
+  await semRolagemLateral(page, "/miniteste");
+  await foto(page, "miniteste");
+  const perguntas = await page.evaluate(() => document.querySelectorAll(".miniteste-pergunta").length);
+  conferir(perguntas === 5, "o mini-teste tem 5 perguntas", perguntas);
+  conferir(await page.evaluate(() => document.querySelector('button[type="submit"]')?.disabled === true), "o envio fica bloqueado até responder todas");
+  for (let i = 0; i < perguntas; i++) await page.evaluate((k) => document.querySelectorAll(".miniteste-pergunta")[k].querySelector('input[type="radio"]').click(), i);
+  await page.evaluate(() => document.querySelector('button[type="submit"]').click());
+  const marcado = await aguardar(page, () => /Ponto de partida marcado/.test(document.body.innerText), null, 8000);
+  conferir(marcado, "enviar marca o ponto de partida");
+  conferir(await page.evaluate(() => /Você acertou \d de 5/.test(document.body.innerText)), "o resultado mostra os acertos, sem gabarito");
+  await page.goto(BASE + "/aprender", { waitUntil: "networkidle0" });
+  conferir(await page.evaluate(() => !document.querySelector(".convite-miniteste")), "depois de responder, o convite some da trilha");
+
   await page.goto(BASE + "/perfil", { waitUntil: "networkidle0" });
   const perfil = await page.evaluate(() => document.body.innerText);
   conferir(/Você está como visitante/.test(perfil) && /serão apagados em \d+ de/.test(perfil), "o Perfil avisa a data em que o acesso será apagado", perfil.slice(0, 200));

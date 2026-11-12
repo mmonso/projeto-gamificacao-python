@@ -114,6 +114,30 @@ try {
   for (const a of avaliacoes) if (a.nivel === "dificil") dificeis.set(a.licao, (dificeis.get(a.licao) ?? 0) + a.n);
   if (dificeis.size) console.log(`  lições mais marcadas como difíceis: ${[...dificeis.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([l, n]) => `${l} (${n})`).join(", ")}`);
 
+  // Mini-teste da unidade 1: primeira resposta de cada momento por conta (visitantes e contas de teste fora).
+  const idsContas = new Set(linhas.map((l) => l.id));
+  const respostasMini = await sql<{ aluno: string; momento: string; acertos: number }[]>`
+    select aluno_id::text as aluno, dados->>'momento' as momento, (dados->>'acertos')::int as acertos
+    from eventos_produto where nome = 'miniteste_respondido' and aluno_id is not null order by criado_em`;
+  const porAluno = new Map<string, { antes?: number; depois?: number }>();
+  for (const r of respostasMini) {
+    if (!idsContas.has(r.aluno)) continue;
+    const a = porAluno.get(r.aluno) ?? {};
+    if (r.momento === "antes" && a.antes === undefined) a.antes = r.acertos;
+    if (r.momento === "depois" && a.depois === undefined) a.depois = r.acertos;
+    porAluno.set(r.aluno, a);
+  }
+  const mediana = (ns: number[]) => {
+    if (!ns.length) return "—";
+    const o = [...ns].sort((x, y) => x - y);
+    const m = Math.floor(o.length / 2);
+    return String(o.length % 2 ? o[m] : (o[m - 1] + o[m]) / 2);
+  };
+  const ambos = [...porAluno.values()].filter((a) => a.antes !== undefined && a.depois !== undefined);
+  console.log("\nMini-teste da unidade 1 (5 perguntas)");
+  console.log(`  fizeram o antes: ${[...porAluno.values()].filter((a) => a.antes !== undefined).length}   fizeram os dois: ${ambos.length}`);
+  console.log(`  mediana de quem fez os dois: antes ${mediana(ambos.map((a) => a.antes!))}, depois ${mediana(ambos.map((a) => a.depois!))}`);
+
   // Estados do dia (pesquisa do Duolingo, ação 2): quantos estão novos, correntes, reativados, em risco ou inativos.
   const painel = painelDoDia(alunos, hoje);
   const correntes = retencaoDeCorrentes(alunos, hoje);
