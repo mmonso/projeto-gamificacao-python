@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { sair } from "@/app/(conta)/acoes";
 import { BotaoEnviar } from "@/componentes/formulario";
 import { Icone } from "@/componentes/Icone";
+import { InstalarApp } from "@/componentes/InstalarApp";
 import { CartaoMeta, Moldura, MolduraCarregando } from "@/componentes/Moldura";
 import { DIAS_DE_VISITANTE } from "@/modulos/conta/conta";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
@@ -73,6 +74,8 @@ async function Perfil() {
             ))}
           </ul>
         </section>
+
+        <InstalarApp />
 
         <Preferencias nome={perfil.nome} meta={perfil.metaDiaria} fuso={perfil.fuso} fusoPendente={perfil.fusoPendente} som={perfil.som} />
 

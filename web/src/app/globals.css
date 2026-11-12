@@ -647,3 +647,10 @@
   .cartao-desafio-quadrados { font-size: 1.3rem; letter-spacing: .1em; flex: none; }
   .link-desafio { font-weight: 800; }
 }
+
+/* Cartão Instalar o Sibi (PWA) */
+@layer components {
+  .instalar-app h2 { display: flex; align-items: center; gap: 8px; }
+  .instalar-app p { margin: 6px 0 12px; }
+  .passos-instalar { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+}

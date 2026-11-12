@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1B7F45">
+<title>Sem conexão · Sibi</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #fff; color: #1e2a32;
+    font-family: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif; text-align: center; padding: 24px; box-sizing: border-box; }
+  main { max-width: 420px; }
+  h1 { font-size: 1.5rem; margin: 16px 0 8px; }
+  p { color: #55636d; line-height: 1.5; margin: 0 0 24px; }
+  button { font: inherit; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #fff; background: #1b7f45; border: 0;
+    border-radius: 16px; padding: 14px 28px; box-shadow: 0 4px 0 #12592f; cursor: pointer; width: 100%; }
+  button:focus-visible { outline: 3px solid #2367c9; outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M16 104c0-16 26-14 34-26s-6-24 8-34c8-6 18-4 22-4" fill="none" stroke="#12592F" stroke-width="22" stroke-linecap="round"/>
+    <path d="M16 104c0-16 26-14 34-26s-6-24 8-34c8-6 18-4 22-4" fill="none" stroke="#2FA85E" stroke-width="17" stroke-linecap="round"/>
+    <ellipse cx="85" cy="38" rx="25" ry="22" fill="#12592F"/>
+    <ellipse cx="85" cy="37" rx="23" ry="20" fill="#2FA85E"/>
+    <path d="M70 36q6 6 12 0M88 36q6 6 12 0" fill="none" stroke="#1E2A32" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M78 47h14" stroke="#1E2A32" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <h1>Sem conexão</h1>
+  <p>O Sibi precisa de internet para corrigir suas respostas. Seu progresso está salvo: quando a conexão voltar, é só continuar.</p>
+  <button type="button" onclick="location.reload()">Tentar de novo</button>
+</main>
+</body>
+</html>
