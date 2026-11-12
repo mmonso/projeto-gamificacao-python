@@ -4,6 +4,8 @@
 import { useState } from "react";
 import { CHAVE_INTRODUCAO, NOME_MAXIMO } from "@/modulos/conta/conta";
 
+const PLACEHOLDER = "seu nome";
+
 function guardarNome(nome: string) {
   try {
     const atual = JSON.parse(localStorage.getItem(CHAVE_INTRODUCAO) ?? "{}");
@@ -19,12 +21,15 @@ export function PrimeiroPrograma() {
   return (
     <div className="terminal" aria-label="Seu primeiro programa em Python">
       <label className="terminal-linha">
-        <span className="t-kw">print</span>(<span className="t-str">&quot;Olá, </span>
+        {/* O espaço depois da vírgula é sem quebra: num flex, um espaço comum no fim do span some. */}
+        <span className="t-kw">print</span>(<span className="t-str">&quot;Olá,&nbsp;</span>
         <input
           className="terminal-nome"
+          // A largura acompanha o texto (fonte monoespaçada), para o "!" ficar colado no nome.
+          style={{ width: `${Math.max(nome.length, PLACEHOLDER.length) + 1}ch` }}
           value={nome}
           maxLength={NOME_MAXIMO}
-          placeholder="seu nome"
+          placeholder={PLACEHOLDER}
           aria-label="Escreva seu nome dentro do programa"
           autoComplete="given-name"
           onChange={(e) => {

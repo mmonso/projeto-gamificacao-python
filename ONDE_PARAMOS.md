@@ -4,7 +4,7 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 ## Como trabalhar neste projeto
 
-- **Decisões:** o dono do produto é leigo e não quer ser consultado sobre produto, design, conteúdo ou regras. Monte um painel de agentes especialistas (gamificação, ciência da aprendizagem, crescimento, UX), sintetize, registre a decisão em `design/` e implemente. Ideias que surgirem durante o trabalho são executadas na hora.
+- **Decisões:** o dono do produto prefere não ser consultado sobre produto, design, conteúdo ou regras. Monte um painel de agentes especialistas (gamificação, ciência da aprendizagem, crescimento, UX), sintetize, registre a decisão em `design/` e implemente. Ideias que surgirem durante o trabalho são executadas na hora.
 - **Só leve ao dono:** dinheiro, contas e senhas pessoais, dados legais e ações irreversíveis fora do repositório.
 - **Git:** commits direto no `main`, sem branch, com `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. **Publicação:** desde 12/11/2026 o projeto `sibi` da Vercel está ligado ao GitHub, e cada push no `main` publica o site sozinho (aparece o endereço `sibi-git-main-…`). Se precisar publicar à mão, rode da raiz do repositório `npx vercel@latest deploy --prod --yes --scope team_0zSAVILLco3gZHnizEuZEnKu` (a pasta `.vercel/` na raiz, ignorada pelo git, liga ao projeto `sibi`; o diretório raiz do projeto na Vercel é `web`, então nunca rode de dentro de `web/`).
 - **Sessões longas e autônomas:** não parar para perguntar a cada etapa.
