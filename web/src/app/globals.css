@@ -699,6 +699,13 @@
   .legenda-desafio { font-size: .85rem; color: var(--texto-suave); margin: 0 0 20px; }
   .proximo-desafio { font-weight: 800; color: var(--texto-suave); margin: 16px 0 0; }
   .compartilhar-licao { margin-top: 20px; }
+  .avaliar-licao { margin-top: 24px; }
+  .avaliar-licao fieldset { border: 0; padding: 0; margin: 0; }
+  .avaliar-licao legend { font-weight: 800; color: var(--texto-suave); margin: 0 auto 8px; }
+  .avaliar-opcoes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .avaliar-motivos { grid-template-columns: 1fr; }
+  .avaliar-opcoes .botao { min-width: 0; padding-inline: 8px; }
+  .avaliar-obrigado { font-weight: 800; color: var(--texto-suave); }
   .previsao-antes { display: grid; gap: 8px; margin: 12px 0; }
   .previsao-antes .rotulo-bloco { display: block; margin: 0; }
   .previsao-campo { width: 100%; font: inherit; color: var(--texto); background: var(--fundo-suave); border: 2px solid var(--borda); border-radius: 12px; padding: 10px 12px; resize: vertical; }

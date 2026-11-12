@@ -8,6 +8,7 @@ import type { ResultadoConclusao } from "@/modulos/aprendizagem/contrato";
 import { textoDoResultadoDaLicao } from "@/modulos/aprendizagem/compartilhar";
 import { CONQUISTAS } from "@/modulos/gamificacao/textos";
 import { Icone } from "../Icone";
+import { AvaliarLicao } from "./AvaliarLicao";
 import { Mascote } from "../Mascote";
 import { tocar } from "./som";
 
@@ -244,6 +245,7 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
           </button>
         )}
       </div>
+      {conclusao.tipo === "principal" && conclusao.licaoId && <AvaliarLicao licaoId={conclusao.licaoId} demo={demo} />}
       {!demo && conclusao.tipo === "principal" && conclusao.licaoId && (
         <CompartilharLicao titulo={titulo} acertosPrimeira={conclusao.acertosPrimeira} total={conclusao.total} sequencia={conclusao.sequencia} />
       )}

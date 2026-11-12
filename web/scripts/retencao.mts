@@ -99,6 +99,21 @@ try {
   console.log(`  acerto de primeira depois de abrir:  ${linha(true)}`);
   console.log(`  acerto de primeira nos demais casos: ${linha(false)}`);
 
+  // Avaliação das lições no resultado: quantas foram fáceis, na medida ou difíceis, e o que atrapalhou nas difíceis.
+  const avaliacoes = await sql<{ licao: string; nivel: string; motivo: string | null; n: number }[]>`
+    select dados->>'licaoId' as licao, dados->>'nivel' as nivel, dados->>'motivo' as motivo, count(*)::int as n
+    from eventos_produto where nome = 'licao_avaliada' and criado_em > now() - interval '30 days'
+    group by 1, 2, 3`;
+  const somaNivel = (nivel: string) => avaliacoes.filter((a) => a.nivel === nivel).reduce((s, a) => s + a.n, 0);
+  console.log("\nAvaliação das lições (últimos 30 dias)");
+  console.log(`  fácil ${somaNivel("facil")}   na medida ${somaNivel("na_medida")}   difícil ${somaNivel("dificil")}`);
+  const motivos = new Map<string, number>();
+  for (const a of avaliacoes) if (a.nivel === "dificil") motivos.set(a.motivo ?? "sem motivo", (motivos.get(a.motivo ?? "sem motivo") ?? 0) + a.n);
+  if (motivos.size) console.log(`  nas difíceis: ${[...motivos.entries()].sort((a, b) => b[1] - a[1]).map(([m, n]) => `${m} ${n}`).join(", ")}`);
+  const dificeis = new Map<string, number>();
+  for (const a of avaliacoes) if (a.nivel === "dificil") dificeis.set(a.licao, (dificeis.get(a.licao) ?? 0) + a.n);
+  if (dificeis.size) console.log(`  lições mais marcadas como difíceis: ${[...dificeis.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([l, n]) => `${l} (${n})`).join(", ")}`);
+
   // Estados do dia (pesquisa do Duolingo, ação 2): quantos estão novos, correntes, reativados, em risco ou inativos.
   const painel = painelDoDia(alunos, hoje);
   const correntes = retencaoDeCorrentes(alunos, hoje);

@@ -334,6 +334,21 @@ async function demonstracao(browser) {
   await semRolagemLateral(page, "resultado da demonstração");
   await conferirMovimento(page, "resultado da demonstração");
   await foto(page, "demo-resultado");
+
+  // Avaliação da lição: Difícil abre os motivos; escolher um agradece. O navegador automatizado não grava o evento.
+  const clicarBotao = (texto) =>
+    page.evaluate((t) => {
+      const b = [...document.querySelectorAll(".avaliar-licao button")].find((x) => x.textContent.trim() === t);
+      b?.click();
+      return Boolean(b);
+    }, texto);
+  conferir(await clicarBotao("Difícil"), "o resultado pergunta como foi a lição");
+  conferir(
+    await aguardar(page, () => /O que mais atrapalhou/.test(document.querySelector(".avaliar-licao")?.textContent ?? ""), null, 3000),
+    "Difícil pergunta o que atrapalhou",
+  );
+  await clicarBotao("Foi rápido demais");
+  conferir(await aguardar(page, () => document.querySelector(".avaliar-obrigado"), null, 3000), "escolher o motivo agradece");
   await page.close();
 }
 

@@ -18,6 +18,8 @@ export type NomeEvento =
   /** "Entenda melhor" aberto no cartão do conceito (com ou sem conta). */
   | "entenda_aberto"
   | "licao_concluida"
+  /** Avaliação da lição no resultado: nível (fácil, na medida, difícil) e, no difícil, o motivo. Nunca texto livre. */
+  | "licao_avaliada"
   | "revisao_concluida"
   /** Desafio do dia, sempre sem aluno: `compartilhado` diz se veio de um link enviado por alguém. */
   | "desafio_iniciado"
