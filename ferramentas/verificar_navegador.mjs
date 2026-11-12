@@ -7,7 +7,7 @@
 // TESTE_EMAIL_1 e TESTE_SENHA de web/.env.local: conclui uma prática da lição 1 nessa conta e
 // alterna o som duas vezes, voltando ao estado inicial.
 //
-// Uso: node ferramentas/verificar_navegador.mjs [demo|desafio|conta|tudo|jornada]
+// Uso: node ferramentas/verificar_navegador.mjs [demo|desafio|conta|tudo|jornada|visitante]
 // O modo jornada (E06.8) usa TESTE_EMAIL_2 em dois aparelhos e avança essa conta uma lição por execução.
 // As capturas de tela ficam na pasta CAPTURAS (padrão: uma pasta temporária nova).
 import { execSync } from "node:child_process";
@@ -383,6 +383,36 @@ async function desafio(browser) {
   await page.close();
 }
 
+/**
+ * Entrar como visitante (portfólio): sem cadastro, só com o teclado. Cria um usuário anônimo de verdade, que a
+ * manutenção diária apaga em 7 dias; por isso fica fora do modo tudo.
+ */
+async function visitante(browser) {
+  console.log("\n— Visitante (celular, sem cadastro)");
+  const page = await novaPagina(browser, CELULAR);
+  await page.goto(BASE + "/", { waitUntil: "networkidle0" });
+  const achou = await tabAte(page, marcarPorTexto, ["button", "Entrar como visitante"]);
+  conferir(achou, "a tela inicial oferece Entrar como visitante pelo teclado");
+  if (!achou) return;
+  await Promise.all([page.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), page.keyboard.press("Enter")]);
+  conferir(new URL(page.url()).pathname === "/aprender", "o visitante cai direto na trilha", page.url());
+  await semRolagemLateral(page, "/aprender (visitante)");
+
+  await page.goto(BASE + "/perfil", { waitUntil: "networkidle0" });
+  const perfil = await page.evaluate(() => document.body.innerText);
+  conferir(/Você está como visitante/.test(perfil) && /serão apagados em \d+ de/.test(perfil), "o Perfil avisa a data em que o acesso será apagado", perfil.slice(0, 200));
+  conferir(!/Exportar meu histórico/.test(perfil), "o visitante não vê Exportar meu histórico");
+  await foto(page, "visitante-perfil");
+
+  // A primeira lição funciona como numa conta e rende o XP de primeira conclusão.
+  await page.goto(BASE + "/licao/u1-l1", { waitUntil: "networkidle0" });
+  await tabAte(page, marcarPorTexto, ["main button", "Começar"]);
+  await Promise.all([page.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), page.keyboard.press("Enter")]);
+  conferir(/^\/sessao\//.test(new URL(page.url()).pathname), "o visitante abre a sessão da primeira lição", page.url());
+  await fazerLicao(page, "visitante");
+  await page.close();
+}
+
 async function entrar(page, email = ENV.TESTE_EMAIL_1, nome = "entrar na conta de teste pelo teclado") {
   await page.goto(BASE + "/entrar", { waitUntil: "networkidle0" });
   await page.type("#email", email);
@@ -604,6 +634,7 @@ try {
   if (MODO === "desafio" || MODO === "tudo") await desafio(browser);
   if (MODO === "conta" || MODO === "tudo") await conta(browser);
   if (MODO === "jornada") await jornada(browser);
+  if (MODO === "visitante") await visitante(browser);
 } finally {
   await browser.close();
 }

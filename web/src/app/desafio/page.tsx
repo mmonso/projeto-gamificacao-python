@@ -22,7 +22,8 @@ async function CarregarDesafio({ busca }: { busca: Promise<{ c?: string }> }) {
       </main>
     );
   }
-  return <Desafio desafio={desafio} compartilhado={c === "1"} comConta={aluno !== null && !aluno.visitante} />;
+  // Visitante também já está dentro do app: no fim, volta à trilha em vez de ser convidado para a demonstração.
+  return <Desafio desafio={desafio} compartilhado={c === "1"} comConta={aluno !== null} />;
 }
 
 function Carregando() {
