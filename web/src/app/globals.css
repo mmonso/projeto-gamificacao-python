@@ -449,8 +449,8 @@
 /* Tela inicial: chamada e primeiro programa (onda 2A) */
 @layer components {
   .marca-inicio { font-size: 1.6rem; margin: 0; }
-  .chamada { font-size: 1.75rem; line-height: 1.2; font-weight: 900; margin: 4px 0 0; max-width: 22ch; justify-self: center; }
-  .terminal { width: 100%; max-width: 420px; justify-self: center; text-align: left; background: var(--codigo-fundo); color: var(--codigo-texto); border: 1px solid var(--codigo-borda); border-radius: var(--raio); padding: 14px 16px; font-family: var(--font-mono); font-size: 1rem; box-shadow: 0 6px 0 #0b1217; }
+  .chamada { font-size: 1.75rem; line-height: 1.2; font-weight: 900; margin: 4px 0 0; max-width: 22ch; align-self: center; }
+  .terminal { width: 100%; max-width: 420px; align-self: center; text-align: left; background: var(--codigo-fundo); color: var(--codigo-texto); border: 1px solid var(--codigo-borda); border-radius: var(--raio); padding: 14px 16px; font-family: var(--font-mono); font-size: 1rem; box-shadow: 0 6px 0 #0b1217; }
   .terminal-linha { display: flex; align-items: baseline; flex-wrap: wrap; cursor: text; }
   .terminal-nome {
     min-width: 6ch; max-width: 100%; background: rgba(255, 255, 255, .1); color: #a8e6a3; border: 0; border-bottom: 2px solid #ffd580;
