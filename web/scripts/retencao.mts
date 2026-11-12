@@ -4,6 +4,7 @@
 // Uso: npm run db:retencao
 import postgres from "postgres";
 import { type AlunoCoorte, formatarTaxa, MARCOS, METAS, retencao, retencaoPorSemana } from "../src/modulos/metricas/retencao";
+import { painelDoDia, retencaoDeCorrentes } from "../src/modulos/metricas/estados";
 
 const url = process.env.DATABASE_URL;
 if (!url) throw new Error("DATABASE_URL não configurada em .env.local");
@@ -97,6 +98,13 @@ try {
   console.log(`  aberto ${aberturas.vezes} vezes, por cerca de ${aberturas.alunos} pessoas`);
   console.log(`  acerto de primeira depois de abrir:  ${linha(true)}`);
   console.log(`  acerto de primeira nos demais casos: ${linha(false)}`);
+
+  // Estados do dia (pesquisa do Duolingo, ação 2): quantos estão novos, correntes, reativados, em risco ou inativos.
+  const painel = painelDoDia(alunos, hoje);
+  const correntes = retencaoDeCorrentes(alunos, hoje);
+  console.log("\nEstados de hoje (contas com e-mail)");
+  console.log(`  novos ${painel.novo}   correntes ${painel.corrente}   reativados ${painel.reativado}   em risco ${painel.em_risco}   inativos ${painel.inativo}`);
+  console.log(`  correntes de ontem que estudaram hoje: ${correntes.taxa === null ? "sem base ainda" : `${Math.round(correntes.taxa * 100)}% (${correntes.mantidos} de ${correntes.base})`}`);
 
   if (total < 20) console.log("\nCom menos de 20 contas, as porcentagens ainda oscilam muito: leia os números absolutos.");
 } finally {
