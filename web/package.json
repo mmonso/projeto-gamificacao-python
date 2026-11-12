@@ -14,6 +14,7 @@
     "db:publicar": "tsx --env-file=.env.local scripts/publicar-conteudo.mts",
     "db:concorrencia": "tsx --env-file=.env.local scripts/verificar-concorrencia.mts",
     "db:retencao": "tsx --env-file=.env.local scripts/retencao.mts",
+    "db:dificuldade": "tsx --env-file=.env.local scripts/dificuldade.mts",
     "db:vigilancia": "tsx --env-file=.env.local scripts/vigilancia.mts"
   },
   "dependencies": {
