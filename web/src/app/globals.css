@@ -699,6 +699,12 @@
   .legenda-desafio { font-size: .85rem; color: var(--texto-suave); margin: 0 0 20px; }
   .proximo-desafio { font-weight: 800; color: var(--texto-suave); margin: 16px 0 0; }
   .compartilhar-licao { margin-top: 20px; }
+  .previsao-antes { display: grid; gap: 8px; margin: 12px 0; }
+  .previsao-antes .rotulo-bloco { display: block; margin: 0; }
+  .previsao-campo { width: 100%; font: inherit; color: var(--texto); background: var(--fundo-suave); border: 2px solid var(--borda); border-radius: 12px; padding: 10px 12px; resize: vertical; }
+  .previsao-campo:focus-visible { outline: 3px solid var(--foco, #ffc23d); outline-offset: 2px; }
+  .previsao-cartao { display: grid; gap: 4px; margin: 0 0 12px; }
+  .previsao-texto { color: var(--texto-suave); font-style: italic; }
   .compartilhar-titulo { font-weight: 800; color: var(--texto-suave); margin: 0 0 8px; }
   .convite-desafio {
     margin-top: 24px; padding: 18px; border: 2px solid var(--borda); border-radius: var(--raio);

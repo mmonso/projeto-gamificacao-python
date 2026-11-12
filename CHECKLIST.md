@@ -19,7 +19,7 @@ Todos os comandos rodam a partir da pasta indicada. No Windows, use o Git Bash o
 
 | Verificação | Comando | Passa quando |
 |---|---|---|
-| Testes unitários e de integração | `npx vitest run` | 194 testes passando, 0 falhas (25 arquivos) |
+| Testes unitários e de integração | `npx vitest run` | 212 testes passando, 0 falhas (27 arquivos) |
 | Tipos | `npx tsc --noEmit` | Nenhuma saída |
 | Lint | `npm run lint` | Nenhum erro |
 | Build de produção | `npm run build` | Termina com `BUILD_EXIT=0` e lista as rotas |

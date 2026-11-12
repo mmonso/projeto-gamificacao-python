@@ -67,6 +67,8 @@ type Props = { cartao: Cartao; posicao: number; total: number; aoAbrirEntenda?: 
 
 export function CartaoConceito({ cartao, posicao, total, aoAbrirEntenda }: Props) {
   const [vendo, setVendo] = useState(false);
+  // A previsão existe só nesta tela: não é gravada nem enviada a ninguém.
+  const [previsao, setPrevisao] = useState("");
   return (
     <section className="cartao-conceito" aria-labelledby="titulo-cartao">
       <p className="etiqueta-cartao">
@@ -83,6 +85,12 @@ export function CartaoConceito({ cartao, posicao, total, aoAbrirEntenda }: Props
       </pre>
       {vendo ? (
         <div className="surgir">
+          {previsao.trim() && (
+            <p className="previsao-cartao">
+              <span className="rotulo-bloco">Sua previsão</span>
+              <span className="previsao-texto">{previsao.trim()}</span>
+            </p>
+          )}
           <p className="rotulo-bloco">O que aparece na tela</p>
           <pre className="saida">{cartao.saida}</pre>
           <p className="repare-cartao">
@@ -90,9 +98,24 @@ export function CartaoConceito({ cartao, posicao, total, aoAbrirEntenda }: Props
           </p>
         </div>
       ) : (
-        <button type="button" className="botao botao-secundario" onClick={() => setVendo(true)}>
-          Ver a saída
-        </button>
+        // Preveja antes de ver (PRIMM, pesquisa do Duolingo ação 5): escrever a previsão é opcional, mas convida a pensar.
+        <div className="previsao-antes">
+          <label htmlFor={`previsao-${cartao.conceitoId}`} className="rotulo-bloco">
+            Antes de ver: o que você acha que aparece?
+          </label>
+          <textarea
+            id={`previsao-${cartao.conceitoId}`}
+            className="previsao-campo"
+            rows={2}
+            maxLength={200}
+            value={previsao}
+            onChange={(e) => setPrevisao(e.target.value)}
+            placeholder="Pode ser só um palpite."
+          />
+          <button type="button" className="botao botao-secundario" onClick={() => setVendo(true)}>
+            Ver a saída
+          </button>
+        </div>
       )}
       {cartao.entenda && <EntendaMelhor entenda={cartao.entenda} aoAbrir={() => aoAbrirEntenda?.(cartao.conceitoId)} />}
     </section>

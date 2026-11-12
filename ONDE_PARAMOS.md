@@ -46,6 +46,22 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 ## Próximos passos, em ordem
 
+**Feito nesta rodada (12/11/2026, sem o dono):**
+- Tempo de cada resposta gravado (`submissoes.tempo_ms`, migração 0008). Base para medir dificuldade.
+- Painel diário de estados (novo, corrente, reativado, em risco, inativo) e retenção de correntes em `npm run db:retencao`.
+- Relatório de dificuldade (`npm run db:dificuldade`): exercícios confusos e fáceis demais, com tempo mediano.
+- Previsão antes de ver a saída no cartão de conceito (opcional, não é gravada).
+- Resultado da lição com "Mandar no WhatsApp" e "Copiar resultado".
+- Já existiam: erro volta no fim da lição, cartão reabrível durante o exercício, celebração de marcos da sequência.
+
+**Pendente da pesquisa do Duolingo, para decidir em outra rodada:**
+- Ação 6, dica ligada ao erro: precisa de conteúdo novo (2 ou 3 erros comuns por exercício).
+- Ação 8, quebra sem alarme com recuperação "3 sessões em até 2 dias": muda a regra da sequência no servidor. Pede teste de regra e decisão sobre o texto.
+- Ações 9 a 11 e 14 a 21: lembrete por e-mail (depende do SMTP), compromisso na primeira sessão, meia-vida por aluno, micro-vídeos, modo fim de semana, mini-teste de unidade, etc.
+- Unidade 5 (textos e f-strings): conteúdo novo e publicação no banco compartilhado com produção, então precisa de revisão antes.
+
+Abaixo, a lista anterior, sem alterações:
+
 1. **Depois, pela estratégia:**
    - SMTP próprio: **esperando o dono** seguir `PASSO_A_PASSO_EMAIL.md` (senha de app do Gmail colada no painel do Supabase). Quando ele disser "pronto", criar uma conta com endereço novo, conferir se o e-mail chega e se o link abre, e tirar o aviso de e-mail abaixo;
    - lembrete por e-mail na hora escolhida pelo aluno (depende do SMTP; a estratégia pede a partir da 3ª semana do teste);
