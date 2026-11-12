@@ -1,0 +1,284 @@
+id: u4-l1
+unidade: u4
+ordem: 1
+versao: 1
+titulo: Listas
+objetivo: Criar uma lista e prever o que o print e o len mostram.
+conceitos: [listas]
+
+exercicios:
+  - id: u4-l1-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que o print de uma lista mostra colchetes e aspas simples.
+    conceitos: [listas]
+    dificuldade: 1
+    enunciado: Uma lista guarda vários valores entre colchetes. O que este programa exibe?
+    codigo: |-
+      frutas = ["maçã", "uva"]
+      print(frutas)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          ['maçã', 'uva']
+      - id: b
+        texto: |-
+          maçã uva
+        feedback: O print de uma lista mostra a lista inteira, com os colchetes.
+      - id: c
+        texto: |-
+          ["maçã", "uva"]
+        feedback: Na tela, os textos de uma lista aparecem com aspas simples.
+      - id: d
+        texto: |-
+          frutas
+        feedback: Sem aspas, frutas é o nome da variável; o print mostra o valor guardado nela.
+    resposta: a
+    dicas:
+      - O print mostra a lista do jeito que o Python a escreve, com colchetes.
+      - "Ao mostrar uma lista, o Python usa aspas simples nos textos: print([\"sim\"]) exibe ['sim']."
+    explicacao: O print de uma lista mostra os colchetes e as vírgulas. Os textos aparecem entre aspas simples, mesmo que o código use aspas duplas.
+
+  - id: u4-l1-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Usar len para contar os valores de uma lista.
+    conceitos: [listas]
+    dificuldade: 1
+    enunciado: O len diz quantos valores uma lista tem. O que este programa exibe?
+    codigo: |-
+      nomes = ["Ana", "Bia", "Caio"]
+      print(len(nomes))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          2
+        feedback: Conte os valores entre os colchetes, um por um.
+      - id: b
+        texto: |-
+          3
+      - id: c
+        texto: |-
+          10
+        feedback: O len de uma lista conta os valores, não as letras.
+    resposta: b
+    dicas:
+      - Quantos textos há entre os colchetes?
+      - "O len de uma lista conta os valores separados por vírgula: len([7, 8]) dá 2."
+    explicacao: A lista tem três valores, então len(nomes) é 3. O len de uma lista conta os valores, não as letras de cada um.
+
+  - id: u4-l1-e03
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever uma lista com colchetes.
+    conceitos: [listas]
+    dificuldade: 2
+    enunciado: Complete o programa para criar a lista de preços.
+    codigo: |-
+      precos = ___1___10, 20, 30___2___
+      print(precos)
+    saida_esperada: |-
+      [10, 20, 30]
+    lacunas:
+      - id: "1"
+        opcoes: ["[", "(", "{"]
+        resposta: "["
+      - id: "2"
+        opcoes: ["]", ")", "}"]
+        resposta: "]"
+    dicas:
+      - Repare nos sinais que aparecem na saída.
+      - "Uma lista começa com [ e termina com ]. Por exemplo: notas = [7, 9]."
+    explicacao: Listas são escritas entre colchetes, [ e ]. Parênteses e chaves criam outros tipos de valor, que aparecem diferente na tela.
+
+  - id: u4-l1-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que números aparecem sem aspas e textos com aspas simples numa lista.
+    conceitos: [listas]
+    dificuldade: 2
+    enunciado: Uma lista pode misturar textos e números. O que este programa exibe?
+    codigo: |-
+      cadastro = ["Ana", 30]
+      print(cadastro)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          ['Ana', '30']
+        feedback: 30 foi escrito sem aspas, então é número e aparece sem aspas.
+      - id: b
+        texto: |-
+          ['Ana', 30]
+      - id: c
+        texto: |-
+          [Ana, 30]
+        feedback: Ao mostrar uma lista, os textos aparecem entre aspas simples.
+      - id: d
+        texto: |-
+          Ana 30
+        feedback: O print de uma lista mostra os colchetes e as vírgulas.
+    resposta: b
+    dicas:
+      - Qual dos dois valores foi escrito entre aspas no código?
+      - "Numa lista mostrada na tela, textos aparecem com aspas simples e números sem aspas: [\"a\", 1] aparece como ['a', 1]."
+    explicacao: '"Ana" é texto e aparece com aspas simples; 30 é número e aparece sem aspas.'
+
+  - id: u4-l1-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar uma lista sem o colchete de fechar.
+    conceitos: [listas]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      cores = ["azul", "verde", "rosa"
+      print(len(cores))
+    erro: SyntaxError
+    resposta: 1
+    correcao: 'cores = ["azul", "verde", "rosa"]'
+    saida_esperada: |-
+      3
+    dicas:
+      - Toda lista que abre um colchete precisa fechá-lo.
+      - "Uma lista começa com [ e termina com ], na mesma linha: dias = [\"seg\", \"ter\"]."
+    explicacao: A lista da linha 1 abre o colchete e não fecha. Sem o ], o Python não sabe onde a lista termina e mostra um erro de sintaxe.
+
+  - id: u4-l1-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar um programa que cria uma lista e mostra quantos valores ela tem.
+    conceitos: [listas]
+    dificuldade: 2
+    enunciado: Monte o programa que mostra quantos pedidos há na lista.
+    saida_esperada: |-
+      2
+    blocos:
+      - id: a
+        codigo: 'pedidos = ["suco", "pão"]'
+      - id: b
+        codigo: print(len(pedidos))
+      - id: c
+        codigo: print(len("pedidos"))
+      - id: d
+        codigo: print(len(pedidos)
+    resposta:
+      - [a, b]
+    dicas:
+      - A lista precisa existir antes de ser contada.
+      - "Entre aspas, \"pedidos\" é um texto de 7 letras, não a lista. Para contar a lista, use o nome dela sem aspas."
+    explicacao: Primeiro o programa cria a lista e depois conta os valores com len(pedidos). Com aspas, len("pedidos") contaria as letras da palavra.
+
+  - id: u4-l1-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que a vírgula dentro das aspas faz parte do texto, e não separa valores.
+    conceitos: [listas]
+    dificuldade: 3
+    enunciado: Repare nas aspas. O que este programa exibe?
+    codigo: |-
+      itens = ["arroz, feijão", "café"]
+      print(len(itens))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          3
+        feedback: A vírgula entre arroz e feijão está dentro das aspas, então faz parte do texto.
+      - id: b
+        texto: |-
+          2
+      - id: c
+        texto: |-
+          1
+        feedback: Há uma vírgula fora das aspas separando dois valores.
+    resposta: b
+    dicas:
+      - Quantas vírgulas estão fora das aspas?
+      - "Só as vírgulas fora das aspas separam valores: [\"a, b\"] tem um valor só."
+    explicacao: A lista tem dois textos, "arroz, feijão" e "café". A vírgula dentro das aspas faz parte do primeiro texto.
+
+revisao:
+  - id: u4-l1-r01
+    versao: 1
+    variacao_de: u4-l1-e01
+    tipo: escolher_resultado
+    objetivo: Prever o print de uma lista de textos em outro contexto.
+    conceitos: [listas]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      bebidas = ["café", "chá"]
+      print(bebidas)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          café chá
+        feedback: O print de uma lista mostra os colchetes e as vírgulas.
+      - id: b
+        texto: |-
+          ["café", "chá"]
+        feedback: Na tela, os textos de uma lista aparecem com aspas simples.
+      - id: c
+        texto: |-
+          ['café', 'chá']
+    resposta: c
+    dicas:
+      - O print mostra a lista com colchetes.
+      - "Ao mostrar uma lista, o Python escreve os textos com aspas simples: [\"oi\"] aparece como ['oi']."
+    explicacao: O print mostra a lista com colchetes e vírgulas, e os textos com aspas simples.
+
+  - id: u4-l1-r02
+    versao: 1
+    variacao_de: u4-l1-e02
+    tipo: escolher_resultado
+    objetivo: Contar os valores de uma lista com um valor só.
+    conceitos: [listas]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      tarefas = ["estudar"]
+      print(len(tarefas))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          1
+      - id: b
+        texto: |-
+          7
+        feedback: O len de uma lista conta os valores, não as letras.
+      - id: c
+        texto: |-
+          0
+        feedback: A lista tem um valor dentro dos colchetes.
+    resposta: a
+    dicas:
+      - Quantos valores há entre os colchetes?
+      - "O len de uma lista conta os valores: len([\"sol\", \"lua\"]) dá 2, não importa o tamanho de cada palavra."
+    explicacao: A lista tem um único valor, o texto "estudar", então len(tarefas) é 1.
+
+  - id: u4-l1-r03
+    versao: 1
+    variacao_de: u4-l1-e05
+    tipo: localizar_erro
+    objetivo: Encontrar uma lista sem o colchete de fechar em outro contexto.
+    conceitos: [listas]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      times = ["azul", "verde"]
+      notas = [8, 6, 9
+      print(len(notas))
+    erro: SyntaxError
+    resposta: 2
+    correcao: notas = [8, 6, 9]
+    saida_esperada: |-
+      3
+    dicas:
+      - Confira se cada lista abre e fecha o colchete.
+      - "Toda lista termina com ], como em idades = [20, 31]."
+    explicacao: A lista da linha 2 não fecha o colchete. Sem o ], o Python mostra um erro de sintaxe.

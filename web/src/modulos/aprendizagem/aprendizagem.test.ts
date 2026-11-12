@@ -10,8 +10,8 @@ describe("conteúdo publicado", () => {
   const licoes = carregarCurso(join(__dirname, "../../../../conteudo")).flatMap((u) => u.licoes);
   const exercicios = licoes.flatMap((l) => [...l.exercicios, ...l.revisao]);
 
-  it("todas as lições das três unidades passam no esquema", () => {
-    expect(licoes).toHaveLength(15);
+  it("todas as lições das quatro unidades passam no esquema", () => {
+    expect(licoes).toHaveLength(20);
     expect(exercicios.length).toBeGreaterThanOrEqual(140);
   });
 

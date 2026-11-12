@@ -1,0 +1,284 @@
+id: u4-l2
+unidade: u4
+ordem: 2
+versao: 1
+titulo: Posições
+objetivo: Pegar um valor da lista pela posição, contando a partir de 0, e o último com -1.
+conceitos: [indice, listas]
+
+exercicios:
+  - id: u4-l2-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que a posição 0 é o primeiro valor da lista.
+    conceitos: [indice]
+    dificuldade: 1
+    enunciado: As posições de uma lista começam em 0. O que este programa exibe?
+    codigo: |-
+      cores = ["azul", "verde", "rosa"]
+      print(cores[0])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          azul
+      - id: b
+        texto: |-
+          verde
+        feedback: A contagem das posições começa em 0, então 0 é a primeira.
+      - id: c
+        texto: |-
+          ['azul']
+        feedback: cores[0] é um valor só, o texto, e não uma lista.
+    resposta: a
+    dicas:
+      - Qual valor está na posição 0?
+      - "A primeira posição de uma lista é 0, a segunda é 1: em [\"x\", \"y\"], a posição 0 guarda \"x\"."
+    explicacao: As posições começam em 0. Por isso cores[0] é o primeiro valor, azul.
+
+  - id: u4-l2-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Pegar o segundo valor da lista com a posição 1.
+    conceitos: [indice]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      dias = ["seg", "ter", "qua"]
+      print(dias[1])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          seg
+        feedback: seg está na posição 0. A posição 1 é a segunda.
+      - id: b
+        texto: |-
+          ter
+      - id: c
+        texto: |-
+          qua
+        feedback: qua está na posição 2.
+    resposta: b
+    dicas:
+      - Conte as posições começando do 0.
+      - "Em [\"a\", \"b\", \"c\"], as posições são 0, 1 e 2; a posição 1 guarda \"b\"."
+    explicacao: Contando do 0, seg está na posição 0 e ter na posição 1. Por isso dias[1] é ter.
+
+  - id: u4-l2-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Pegar o último valor com a posição -1.
+    conceitos: [indice]
+    dificuldade: 2
+    enunciado: Posições negativas contam do fim da lista. O que este programa exibe?
+    codigo: |-
+      fila = ["Ana", "Bia", "Caio", "Davi"]
+      print(fila[-1])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Ana
+        feedback: -1 conta do fim da lista, não do começo.
+      - id: b
+        texto: |-
+          Caio
+        feedback: -1 é o último valor; Caio é o penúltimo.
+      - id: c
+        texto: |-
+          Davi
+    resposta: c
+    dicas:
+      - O sinal de menos faz contar a partir do fim.
+      - "A posição -1 é sempre o último valor, e -2 o penúltimo: em [1, 2, 3], a posição -1 guarda 3."
+    explicacao: A posição -1 é sempre o último valor da lista, qualquer que seja o tamanho dela. Aqui, Davi.
+
+  - id: u4-l2-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escolher a posição do terceiro valor.
+    conceitos: [indice]
+    dificuldade: 2
+    enunciado: Complete com a posição que mostra a nota 4.
+    codigo: |-
+      notas = [7, 9, 4]
+      print(notas[___1___])
+    saida_esperada: |-
+      4
+    lacunas:
+      - id: "1"
+        opcoes: ["2", "3", "1"]
+        resposta: "2"
+    dicas:
+      - O 4 é o terceiro valor. Em que posição ele está, contando do 0?
+      - "As posições de [10, 20, 30] são 0, 1 e 2: o terceiro valor fica na posição 2."
+    explicacao: Contando do 0, a nota 4 está na posição 2. A posição 3 não existe numa lista de três valores.
+
+  - id: u4-l2-e05
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o erro ao pedir uma posição que não existe.
+    conceitos: [indice, listas]
+    dificuldade: 2
+    enunciado: A lista tem três valores. O que acontece quando este programa é executado?
+    codigo: |-
+      letras = ["a", "b", "c"]
+      print(letras[3])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          c
+        feedback: c está na posição 2. Com três valores, as posições vão de 0 a 2.
+      - id: b
+        erro: true
+      - id: c
+        texto: |-
+          a
+        feedback: A lista não recomeça do início quando a posição passa do fim.
+    resposta: b
+    dicas:
+      - Quais são as posições de uma lista com três valores?
+      - "Uma lista com 2 valores tem as posições 0 e 1. Pedir a posição 2 dela é pedir um valor que não existe."
+    explicacao: Com três valores, as posições vão de 0 a 2. A posição 3 não existe, e o Python mostra um erro (IndexError).
+
+  - id: u4-l2-e06
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar a posição errada num programa que deveria mostrar o primeiro valor.
+    conceitos: [indice]
+    dificuldade: 2
+    enunciado: O programa deveria mostrar o primeiro da fila, mas mostra outro nome. Selecione a linha com o problema.
+    codigo: |-
+      fila = ["Rui", "Ana", "Léo"]
+      print("Primeiro da fila:")
+      print(fila[1])
+    erro: saida_incorreta
+    resposta: 3
+    correcao: print(fila[0])
+    saida_esperada: |-
+      Primeiro da fila:
+      Rui
+    dicas:
+      - Qual posição guarda o primeiro valor?
+      - "A contagem das posições começa em 0. A posição 1 é a segunda: em [\"x\", \"y\"], [1] é \"y\"."
+    explicacao: A linha 3 usa a posição 1, que é o segundo nome. O primeiro valor fica na posição 0.
+
+  - id: u4-l2-e07
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar um programa que mostra o primeiro e o último valor da lista.
+    conceitos: [indice, listas]
+    dificuldade: 3
+    enunciado: Monte o programa que mostra o primeiro e depois o último nome da fila.
+    saida_esperada: |-
+      Rui
+      Léo
+    blocos:
+      - id: a
+        codigo: 'fila = ["Rui", "Ana", "Léo"]'
+      - id: b
+        codigo: print(fila[0])
+      - id: c
+        codigo: print(fila[-1])
+      - id: d
+        codigo: print(fila[1])
+      - id: e
+        codigo: print(fila[3])
+    resposta:
+      - [a, b, c]
+    dicas:
+      - Primeiro crie a lista; depois mostre a posição do primeiro e a do último.
+      - "O primeiro valor fica na posição 0 e o último na posição -1. Numa lista de 3 valores, a posição 3 não existe."
+    explicacao: A lista vem primeiro. Depois, fila[0] mostra o primeiro nome e fila[-1] o último.
+
+revisao:
+  - id: u4-l2-r01
+    versao: 1
+    variacao_de: u4-l2-e01
+    tipo: escolher_resultado
+    objetivo: Pegar o primeiro valor com a posição 0 em outro contexto.
+    conceitos: [indice]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      sabores = ["uva", "limão"]
+      print(sabores[0])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          limão
+        feedback: A contagem das posições começa em 0, então 0 é a primeira.
+      - id: b
+        texto: |-
+          uva
+      - id: c
+        texto: |-
+          sabores
+        feedback: O print mostra o valor guardado na posição 0, não o nome da lista.
+    resposta: b
+    dicas:
+      - A posição 0 é a primeira.
+      - "Em [\"sol\", \"lua\"], a posição 0 guarda \"sol\" e a posição 1 guarda \"lua\"."
+    explicacao: A posição 0 é sempre o primeiro valor da lista. Aqui, uva.
+
+  - id: u4-l2-r02
+    versao: 1
+    variacao_de: u4-l2-e03
+    tipo: escolher_resultado
+    objetivo: Pegar o último valor com -1 numa lista de números.
+    conceitos: [indice]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      precos = [5, 8, 12]
+      print(precos[-1])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5
+        feedback: -1 conta do fim da lista, não do começo.
+      - id: b
+        texto: |-
+          12
+      - id: c
+        texto: |-
+          -12
+        feedback: O -1 é uma posição; o valor guardado nela continua positivo.
+    resposta: b
+    dicas:
+      - Com o sinal de menos, a posição conta a partir do fim.
+      - "A posição -1 guarda sempre o último valor: em [\"a\", \"b\"], [-1] é \"b\"."
+    explicacao: A posição -1 é o último valor da lista, o 12.
+
+  - id: u4-l2-r03
+    versao: 1
+    variacao_de: u4-l2-e05
+    tipo: escolher_resultado
+    objetivo: Prever o erro de posição inexistente em outro contexto.
+    conceitos: [indice, listas]
+    dificuldade: 2
+    enunciado: O que acontece quando este programa é executado?
+    codigo: |-
+      pares = [2, 4]
+      print(pares[2])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          4
+        feedback: 4 está na posição 1. Com dois valores, as posições são 0 e 1.
+      - id: b
+        texto: |-
+          2
+        feedback: A lista não recomeça do início quando a posição passa do fim.
+      - id: c
+        erro: true
+    resposta: c
+    dicas:
+      - Quais posições existem numa lista com dois valores?
+      - "Uma lista com 3 valores tem as posições 0, 1 e 2; a posição 3 não existe e dá erro."
+    explicacao: Com dois valores, as posições são 0 e 1. A posição 2 não existe, e o Python mostra um erro (IndexError).

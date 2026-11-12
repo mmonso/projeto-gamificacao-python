@@ -1,0 +1,283 @@
+id: u4-l5
+unidade: u4
+ordem: 5
+versao: 1
+titulo: "Desafio: gastos da semana"
+objetivo: Somar os gastos de uma lista com um acumulador, achar o maior gasto e calcular a média.
+conceitos: [acumulador, for]
+
+exercicios:
+  - id: u4-l5-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a soma feita por um acumulador dentro do for.
+    conceitos: [acumulador]
+    dificuldade: 1
+    enunciado: "Etapa 1: somar os gastos. O total começa em 0 e recebe cada gasto. O que este programa exibe?"
+    codigo: |-
+      total = 0
+      for gasto in [10, 20, 5]:
+          total = total + gasto
+      print(total)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          35
+      - id: b
+        texto: |-
+          5
+        feedback: O total não guarda só o último gasto; a cada volta ele soma mais um.
+      - id: c
+        texto: |-
+          0
+        feedback: O total começa em 0, mas o bloco do for soma cada gasto a ele.
+    resposta: a
+    dicas:
+      - Quanto vale o total depois de cada volta?
+      - "Com total = 0 e for x in [1, 2]: total = total + x, o total vale 1 depois da primeira volta e 3 depois da segunda."
+    explicacao: O total começa em 0 e vale 10, depois 30 e por fim 35. O print fora do for mostra só o resultado final.
+
+  - id: u4-l5-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o total parcial mostrado a cada volta.
+    conceitos: [acumulador, for]
+    dificuldade: 2
+    enunciado: Agora o print está dentro do for. O que este programa exibe?
+    codigo: |-
+      total = 0
+      for gasto in [4, 6]:
+          total = total + gasto
+          print(total)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          10
+        feedback: O print está recuado, então roda a cada volta, e não só no fim.
+      - id: b
+        texto: |-
+          4
+          6
+        feedback: O print mostra o total somado até ali, e não o gasto da vez.
+      - id: c
+        texto: |-
+          4
+          10
+    resposta: c
+    dicas:
+      - O print roda em cada volta. Quanto vale o total em cada uma?
+      - "Dentro do for, o print mostra o total acumulado até aquela volta: com [1, 2], mostraria 1 e depois 3."
+    explicacao: Na primeira volta o total vira 4 e é mostrado; na segunda vira 10 e é mostrado de novo.
+
+  - id: u4-l5-e03
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escolher o valor inicial de um acumulador de soma.
+    conceitos: [acumulador]
+    dificuldade: 2
+    enunciado: Complete com o valor inicial do total.
+    codigo: |-
+      total = ___1___
+      for gasto in [12, 8, 30]:
+          total = total + gasto
+      print(total)
+    saida_esperada: |-
+      50
+    lacunas:
+      - id: "1"
+        opcoes: ["0", "1", "gasto"]
+        resposta: "0"
+    dicas:
+      - Antes de somar qualquer gasto, quanto deve valer o total?
+      - "Uma soma começa do zero: se o total começasse em 1, o resultado teria 1 a mais."
+    explicacao: O total começa em 0 para que, no fim, guarde exatamente a soma dos gastos. Começando em 1, sobraria 1.
+
+  - id: u4-l5-e04
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar o acumulador que troca o total em vez de somar.
+    conceitos: [acumulador]
+    dificuldade: 3
+    enunciado: O programa deveria mostrar 50, a soma dos gastos, mas mostra 10. Selecione a linha com o problema.
+    codigo: |-
+      gastos = [15, 25, 10]
+      total = 0
+      for gasto in gastos:
+          total = gasto
+      print(total)
+    erro: saida_incorreta
+    resposta: 4
+    correcao: '    total = total + gasto'
+    saida_esperada: |-
+      50
+    dicas:
+      - Em qual linha o total deveria crescer?
+      - "total = gasto troca o valor do total pelo gasto da vez. Para somar, o total novo é o total antigo mais o gasto."
+    explicacao: A linha 4 troca o total pelo gasto da vez, e no fim sobra só o último, 10. Para somar, escreva total = total + gasto.
+
+  - id: u4-l5-e05
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar o programa que soma os gastos e mostra o total uma vez.
+    conceitos: [acumulador, for]
+    dificuldade: 3
+    enunciado: "Etapa 2: monte o programa que soma os gastos e mostra o total uma vez, no fim."
+    codigo_antes: |-
+      gastos = [7, 5, 6]
+    saida_esperada: |-
+      Total: 18
+    blocos:
+      - id: a
+        codigo: total = 0
+      - id: b
+        codigo: 'for gasto in gastos:'
+      - id: c
+        codigo: '    total = total + gasto'
+      - id: d
+        codigo: print("Total:", total)
+      - id: e
+        codigo: '    print("Total:", total)'
+      - id: f
+        codigo: '    total = 0'
+    resposta:
+      - [a, b, c, d]
+    dicas:
+      - O total começa antes do for, a soma acontece dentro dele e o print vem depois.
+      - "Se o total = 0 ficasse dentro do for, ele voltaria a zero a cada volta. Se o print ficasse dentro, apareceria a cada volta."
+    explicacao: O total começa em 0 antes do for, recebe cada gasto dentro do bloco e é mostrado uma vez, sem recuo, depois das voltas.
+
+  - id: u4-l5-e06
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o maior valor encontrado com um if dentro do for.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: "Etapa 3: achar o maior gasto. O que este programa exibe?"
+    codigo: |-
+      maior = 0
+      for gasto in [12, 40, 25]:
+          if gasto > maior:
+              maior = gasto
+      print(maior)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          25
+        feedback: O maior só muda quando o gasto da vez é maior que ele. 25 não é maior que 40.
+      - id: b
+        texto: |-
+          40
+      - id: c
+        texto: |-
+          77
+        feedback: Aqui ninguém soma. O maior troca de valor só quando aparece um gasto maior.
+    resposta: b
+    dicas:
+      - Acompanhe o valor de maior a cada volta.
+      - "O if só troca o maior quando o gasto da vez passa dele: com [3, 9, 4], o maior vira 3, depois 9 e fica em 9."
+    explicacao: O maior vira 12, depois 40. Na última volta, 25 não é maior que 40, então o maior continua 40.
+
+  - id: u4-l5-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Combinar soma, len e divisão para calcular a média dos gastos.
+    conceitos: [acumulador, for]
+    dificuldade: 3
+    enunciado: Etapa final. O que este programa exibe?
+    codigo: |-
+      gastos = [20, 10, 30]
+      total = 0
+      for gasto in gastos:
+          total = total + gasto
+      print("Total:", total)
+      print("Média:", total / len(gastos))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Total: 60
+          Média: 20.0
+      - id: b
+        texto: |-
+          Total: 60
+          Média: 20
+        feedback: A divisão com / sempre dá um número com casa decimal.
+      - id: c
+        texto: |-
+          Total: 60
+          Média: 60.0
+        feedback: len(gastos) é 3, o número de gastos da lista.
+    resposta: a
+    dicas:
+      - Qual é o total? E quanto vale len(gastos)?
+      - "A média é o total dividido pela quantidade de valores. Em Python, a divisão com / sempre dá número com ponto: 6 / 3 dá 2.0."
+    explicacao: O total é 60 e a lista tem 3 gastos. 60 / 3 dá 20.0, porque a divisão com / sempre resulta em número com casa decimal.
+
+revisao:
+  - id: u4-l5-r01
+    versao: 1
+    variacao_de: u4-l5-e01
+    tipo: escolher_resultado
+    objetivo: Prever a soma de um acumulador em outro contexto.
+    conceitos: [acumulador]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      total = 0
+      for preco in [3, 9]:
+          total = total + preco
+      print(total)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          9
+        feedback: O total não guarda só o último preço; ele soma os dois.
+      - id: b
+        texto: |-
+          12
+      - id: c
+        texto: |-
+          0
+        feedback: O bloco do for soma cada preço ao total, que começou em 0.
+    resposta: b
+    dicas:
+      - Quanto vale o total depois de cada volta?
+      - "Um acumulador começa em 0 e recebe cada valor: com [2, 5], ele vale 2 e depois 7."
+    explicacao: O total começa em 0, vale 3 depois da primeira volta e 12 depois da segunda.
+
+  - id: u4-l5-r02
+    versao: 1
+    variacao_de: u4-l5-e06
+    tipo: escolher_resultado
+    objetivo: Prever o maior valor quando ele está no começo da lista.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      maior = 0
+      for nota in [7, 3, 5]:
+          if nota > maior:
+              maior = nota
+      print(maior)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5
+        feedback: O maior só muda quando a nota da vez passa dele. 5 não é maior que 7.
+      - id: b
+        texto: |-
+          7
+      - id: c
+        texto: |-
+          15
+        feedback: Aqui ninguém soma. O maior troca de valor só quando aparece uma nota maior.
+    resposta: b
+    dicas:
+      - Acompanhe o valor de maior a cada volta.
+      - "O if troca o maior só quando o valor da vez passa dele: com [8, 2], o maior vira 8 e não muda mais."
+    explicacao: O maior vira 7 na primeira volta. Depois, nem 3 nem 5 passam de 7, então ele continua 7.

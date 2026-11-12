@@ -1,0 +1,296 @@
+id: u4-l3
+unidade: u4
+ordem: 3
+versao: 1
+titulo: Lista que cresce
+objetivo: Acrescentar valores no fim de uma lista com append e prever como ela fica.
+conceitos: [append, listas]
+
+exercicios:
+  - id: u4-l3-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que o append coloca o valor no fim da lista.
+    conceitos: [append]
+    dificuldade: 1
+    enunciado: O append coloca um valor no fim da lista. O que este programa exibe?
+    codigo: |-
+      tarefas = ["lavar"]
+      tarefas.append("passar")
+      print(tarefas)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          ['passar', 'lavar']
+        feedback: O append coloca o valor novo no fim, depois dos que já estão.
+      - id: b
+        texto: |-
+          ['lavar']
+        feedback: O append muda a própria lista, que passa a ter um valor a mais.
+      - id: c
+        texto: |-
+          ['lavar', 'passar']
+    resposta: c
+    dicas:
+      - Onde o append coloca o valor novo?
+      - "O append põe o valor no fim da lista: depois de lista = [1] e lista.append(2), a lista é [1, 2]."
+    explicacao: O append coloca "passar" no fim da lista, depois de "lavar". A própria lista muda.
+
+  - id: u4-l3-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que o len aumenta depois do append.
+    conceitos: [append, listas]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      nomes = ["Ana", "Bia"]
+      nomes.append("Caio")
+      print(len(nomes))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          2
+        feedback: O append acrescenta um valor, e o len conta a lista já com ele.
+      - id: b
+        texto: |-
+          3
+      - id: c
+        texto: |-
+          4
+        feedback: O append acrescenta um valor só.
+    resposta: b
+    dicas:
+      - Quantos valores a lista tem depois do append?
+      - "Cada append acrescenta um valor: uma lista com 1 valor passa a ter 2."
+    explicacao: A lista começa com dois nomes e o append acrescenta o terceiro. Por isso len(nomes) é 3.
+
+  - id: u4-l3-e03
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever o nome do comando que acrescenta um valor à lista.
+    conceitos: [append]
+    dificuldade: 2
+    enunciado: Complete o programa para acrescentar Natal à lista.
+    codigo: |-
+      cidades = ["Recife"]
+      cidades.___1___("Natal")
+      print(cidades)
+    saida_esperada: |-
+      ['Recife', 'Natal']
+    lacunas:
+      - id: "1"
+        opcoes: ["append", "add", "push"]
+        resposta: "append"
+    dicas:
+      - Qual comando coloca um valor no fim de uma lista em Python?
+      - "Em Python, acrescenta-se à lista com lista.append(valor), escrito depois do nome da lista e de um ponto."
+    explicacao: Em Python, o comando que acrescenta um valor no fim da lista é o append. Outros nomes, como add ou push, dão erro em listas.
+
+  - id: u4-l3-e04
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever a ordem dos valores depois de dois append numa lista vazia.
+    conceitos: [append]
+    dificuldade: 2
+    enunciado: Uma lista pode começar vazia, com []. O que este programa exibe?
+    codigo: |-
+      fila = []
+      fila.append("Rui")
+      fila.append("Ana")
+      print(fila)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          ['Rui', 'Ana']
+      - id: b
+        texto: |-
+          ['Ana', 'Rui']
+        feedback: Cada append coloca o valor no fim. Ana chega depois de Rui.
+      - id: c
+        texto: |-
+          []
+        feedback: A lista começa vazia, mas os dois append acrescentam valores a ela.
+    resposta: a
+    dicas:
+      - Qual nome entrou primeiro na lista?
+      - "Cada append coloca o valor depois dos que já estão, como numa fila: o primeiro a entrar fica na frente."
+    explicacao: A lista começa vazia. Rui entra primeiro e Ana depois, no fim. A lista fica ['Rui', 'Ana'].
+
+  - id: u4-l3-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Perceber que o append muda a lista e não deve ser guardado com =.
+    conceitos: [append]
+    dificuldade: 3
+    enunciado: O programa deveria mostrar [1, 2, 3], mas mostra None. Selecione a linha com o problema.
+    codigo: |-
+      numeros = [1, 2]
+      numeros = numeros.append(3)
+      print(numeros)
+    erro: saida_incorreta
+    resposta: 2
+    correcao: numeros.append(3)
+    saida_esperada: |-
+      [1, 2, 3]
+    dicas:
+      - O append precisa de = para mudar a lista?
+      - "O append muda a própria lista e não devolve nada. Por isso se escreve só lista.append(valor), sem guardar o resultado."
+    explicacao: O append muda a lista e não devolve nada, o None. Guardar esse resultado com = troca a lista por None. Basta escrever numeros.append(3).
+
+  - id: u4-l3-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar um programa que acrescenta um valor e mostra a lista e o tamanho.
+    conceitos: [append, listas]
+    dificuldade: 2
+    enunciado: Monte o programa que acrescenta leite à lista de compras e mostra a lista e quantos itens ela tem.
+    saida_esperada: |-
+      ['pão', 'leite']
+      2
+    blocos:
+      - id: a
+        codigo: 'compras = ["pão"]'
+      - id: b
+        codigo: compras.append("leite")
+      - id: c
+        codigo: print(compras)
+      - id: d
+        codigo: print(len(compras))
+      - id: e
+        codigo: compras.append(leite)
+    resposta:
+      - [a, b, c, d]
+    dicas:
+      - A lista precisa existir antes do append, e o append vem antes dos print.
+      - "Sem aspas, leite seria o nome de uma variável que não existe. Textos vão entre aspas: lista.append(\"ovo\")."
+    explicacao: Primeiro a lista é criada, depois o append acrescenta "leite" e só então os print mostram a lista e o tamanho.
+
+  - id: u4-l3-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Combinar append e a posição -1 para achar o último valor acrescentado.
+    conceitos: [append, indice]
+    dificuldade: 3
+    enunciado: O que este programa exibe?
+    codigo: |-
+      notas = [5]
+      notas.append(8)
+      notas.append(6)
+      print(notas[-1])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5
+        feedback: -1 é a última posição, e o 5 ficou no começo.
+      - id: b
+        texto: |-
+          8
+        feedback: Depois do 8 ainda entrou o 6, no fim.
+      - id: c
+        texto: |-
+          6
+    resposta: c
+    dicas:
+      - Como fica a lista depois dos dois append?
+      - "Cada append coloca o valor no fim, e a posição -1 é sempre o último valor da lista."
+    explicacao: A lista fica [5, 8, 6]. A posição -1 é o último valor, o 6, que foi o último a entrar.
+
+revisao:
+  - id: u4-l3-r01
+    versao: 1
+    variacao_de: u4-l3-e01
+    tipo: escolher_resultado
+    objetivo: Prever o append no fim da lista em outro contexto.
+    conceitos: [append]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      jogos = ["xadrez"]
+      jogos.append("dama")
+      print(jogos)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          ['xadrez', 'dama']
+      - id: b
+        texto: |-
+          ['dama', 'xadrez']
+        feedback: O append coloca o valor novo no fim da lista.
+      - id: c
+        texto: |-
+          ['dama']
+        feedback: O append acrescenta um valor; os que já estavam continuam na lista.
+    resposta: a
+    dicas:
+      - Onde o append coloca o valor novo?
+      - "O append põe o valor depois dos que já estão: [\"a\"] com append(\"b\") vira ['a', 'b']."
+    explicacao: O append coloca "dama" no fim, depois de "xadrez".
+
+  - id: u4-l3-r02
+    versao: 1
+    variacao_de: u4-l3-e02
+    tipo: escolher_resultado
+    objetivo: Contar os valores de uma lista vazia depois de um append.
+    conceitos: [append, listas]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      itens = []
+      itens.append("caneta")
+      print(len(itens))
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          0
+        feedback: A lista começou vazia, mas o append acrescentou um valor.
+      - id: b
+        texto: |-
+          1
+      - id: c
+        texto: |-
+          6
+        feedback: O len de uma lista conta os valores, não as letras.
+    resposta: b
+    dicas:
+      - Quantos valores a lista tem depois do append?
+      - "Uma lista vazia, [], tem len 0. Cada append acrescenta um valor."
+    explicacao: A lista começa vazia e o append acrescenta um valor. Por isso len(itens) é 1.
+
+  - id: u4-l3-r03
+    versao: 1
+    variacao_de: u4-l3-e04
+    tipo: escolher_resultado
+    objetivo: Prever a posição de um valor depois de dois append.
+    conceitos: [append, indice]
+    dificuldade: 2
+    enunciado: O que este programa exibe?
+    codigo: |-
+      senhas = ["A1"]
+      senhas.append("B2")
+      senhas.append("C3")
+      print(senhas[1])
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          A1
+        feedback: A1 está na posição 0. A posição 1 é a segunda.
+      - id: b
+        texto: |-
+          B2
+      - id: c
+        texto: |-
+          C3
+        feedback: C3 entrou por último e ficou na posição 2.
+    resposta: b
+    dicas:
+      - Como fica a lista depois dos dois append?
+      - "Cada append coloca o valor no fim. Contando do 0, a posição 1 é o segundo valor."
+    explicacao: A lista fica ['A1', 'B2', 'C3']. Contando do 0, a posição 1 guarda B2.

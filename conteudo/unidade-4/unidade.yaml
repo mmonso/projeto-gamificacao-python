@@ -1,0 +1,56 @@
+id: u4
+versao: 1
+ordem: 4
+titulo: Listas e repetição
+descricao: Guarde vários valores numa lista e repita comandos para cada um deles.
+conceitos:
+  - id: listas
+    nome: Listas
+    descricao: Uma lista guarda vários valores em ordem, entre colchetes e separados por vírgulas; len diz quantos valores ela tem.
+    cartao:
+      regra: "Uma lista guarda vários valores em ordem, entre colchetes e separados por vírgulas. O len conta quantos são."
+      exemplo: "frutas = [\"maçã\", \"uva\", \"pera\"]\nprint(frutas)\nprint(len(frutas))"
+      saida: "['maçã', 'uva', 'pera']\n3"
+      destaque: "[\"maçã\", \"uva\", \"pera\"]"
+      repare: "O print de uma lista mostra os colchetes, e os textos aparecem com aspas simples."
+      primeiro: "u4-l1-e01"
+  - id: indice
+    nome: Posições na lista
+    descricao: Cada valor tem uma posição, o índice, que começa em 0; lista[0] é o primeiro e lista[-1] é o último.
+    cartao:
+      regra: "Cada valor tem uma posição, que começa em 0. lista[0] é o primeiro valor e lista[-1] é o último."
+      exemplo: "cores = [\"azul\", \"verde\", \"rosa\"]\nprint(cores[0])\nprint(cores[1])\nprint(cores[-1])"
+      saida: "azul\nverde\nrosa"
+      destaque: "cores[0]"
+      repare: "A posição 1 é o segundo valor, não o primeiro: a contagem começa em 0."
+      primeiro: "u4-l2-e01"
+  - id: append
+    nome: Acrescentar à lista
+    descricao: lista.append(valor) coloca um valor no fim da lista, que passa a ter um valor a mais.
+    cartao:
+      regra: "lista.append(valor) coloca o valor no fim da lista. A lista muda: passa a ter um valor a mais."
+      exemplo: "compras = [\"arroz\"]\ncompras.append(\"feijão\")\nprint(compras)\nprint(len(compras))"
+      saida: "['arroz', 'feijão']\n2"
+      destaque: "compras.append(\"feijão\")"
+      repare: "O append não precisa de =: ele muda a própria lista."
+      primeiro: "u4-l3-e01"
+  - id: for
+    nome: Repetir com for
+    descricao: for item in lista executa o bloco recuado uma vez para cada valor da lista, em ordem.
+    cartao:
+      regra: "for nome in lista: executa o bloco recuado uma vez para cada valor, em ordem. A cada volta, nome guarda o valor da vez."
+      exemplo: "for nome in [\"Ana\", \"Bia\"]:\n    print(\"Oi,\", nome)\nprint(\"Pronto\")"
+      saida: "Oi, Ana\nOi, Bia\nPronto"
+      destaque: "for nome in [\"Ana\", \"Bia\"]:"
+      repare: "A linha sem recuo fica fora do for: roda uma vez só, depois de todas as voltas."
+      primeiro: "u4-l4-e01"
+  - id: acumulador
+    nome: Somar numa repetição
+    descricao: Uma variável que começa em 0 e recebe cada valor dentro do for guarda o total no fim.
+    cartao:
+      regra: "Para somar uma lista, comece o total em 0 antes do for e some cada valor dentro dele."
+      exemplo: "total = 0\nfor preco in [10, 5, 3]:\n    total = total + preco\nprint(total)"
+      saida: "18"
+      destaque: "total = total + preco"
+      repare: "O total = 0 fica antes do for. Dentro dele, o total voltaria a 0 a cada volta."
+      primeiro: "u4-l5-e01"

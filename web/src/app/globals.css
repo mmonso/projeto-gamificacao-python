@@ -142,6 +142,7 @@
   .unidade { --u: var(--verde); --u-borda: var(--verde-borda); --u-meio: #8fd3a8; margin-bottom: 28px; }
   .unidade.u2 { --u: #2367c9; --u-borda: #184c97; --u-meio: #9dc0ee; }
   .unidade.u3 { --u: #6d4bc4; --u-borda: #4b2f91; --u-meio: #b9a8e8; }
+  .unidade.u4 { --u: #c25e0a; --u-borda: #8f4405; --u-meio: #f2c08f; }
   .unidade-cabeca {
     position: sticky; top: 56px; z-index: 5; overflow: hidden; background: var(--u); color: #fff;
     border-radius: var(--raio); padding: 10px 16px 14px; box-shadow: 0 5px 0 var(--u-borda); margin-top: 8px;

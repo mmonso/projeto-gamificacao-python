@@ -88,7 +88,7 @@ function Unidade({ u, nome }: { u: UnidadeTrilha; nome: string }) {
   const atual = itens.findIndex((i) => i.tipo === "licao" && i.licao.estado === "atual");
   const feito = atual >= 0 ? atual : liberada ? itens.length - 1 : 0;
   return (
-    <section className={`unidade u${((u.ordem - 1) % 3) + 1} ${liberada ? "" : "bloqueada"}`} aria-labelledby={`unidade-${u.id}`}>
+    <section className={`unidade u${((u.ordem - 1) % 4) + 1} ${liberada ? "" : "bloqueada"}`} aria-labelledby={`unidade-${u.id}`}>
       <div className="unidade-cabeca">
         <p className="rotulo">
           Unidade {u.ordem} · {feitas} de {u.licoes.length}

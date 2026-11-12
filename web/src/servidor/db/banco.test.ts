@@ -50,9 +50,9 @@ describe("migrações e restrições", () => {
 describe("publicação de conteúdo", () => {
   const curso = carregarCurso(join(__dirname, "../../../../conteudo"));
 
-  it("publica as 15 lições com exercícios e gabaritos separados (E04.7)", async () => {
+  it("publica as 20 lições com exercícios e gabaritos separados (E04.7)", async () => {
     const r = await publicarCurso(db, curso);
-    expect(r.publicadas).toHaveLength(15);
+    expect(r.publicadas).toHaveLength(20);
     const [{ n: nEx }] = await db.select({ n: count() }).from(t.exercicios);
     const [{ n: nGab }] = await db.select({ n: count() }).from(t.gabaritos);
     expect(nEx).toBeGreaterThanOrEqual(140);
@@ -64,7 +64,7 @@ describe("publicação de conteúdo", () => {
   it("é idempotente: publicar de novo não duplica versões", async () => {
     const r = await publicarCurso(db, curso);
     expect(r.publicadas).toHaveLength(0);
-    expect(r.jaExistentes).toHaveLength(15);
+    expect(r.jaExistentes).toHaveLength(20);
   });
 });
 

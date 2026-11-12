@@ -1,4 +1,4 @@
-// Percurso do curso inteiro (E07.5): ordem, desbloqueios, recompensas, unidades e revisões nas 15 lições,
+// Percurso do curso inteiro (E07.5): ordem, desbloqueios, recompensas, unidades e revisões nas 20 lições,
 // com PostgreSQL embutido e o conteúdo publicado de ../conteudo.
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
@@ -47,8 +47,8 @@ async function resolverSessao(sessaoId: string) {
 }
 
 describe("conteúdo publicado", () => {
-  it("tem três unidades de cinco lições, com o desafio final em quinto", () => {
-    expect(curso).toHaveLength(3);
+  it("tem quatro unidades de cinco lições, com o desafio final em quinto", () => {
+    expect(curso).toHaveLength(4);
     for (const u of curso) expect(u.licoes.map((l) => l.ordem)).toEqual([1, 2, 3, 4, 5]);
   });
 
@@ -61,7 +61,7 @@ describe("conteúdo publicado", () => {
   });
 });
 
-describe("percurso das 15 lições", () => {
+describe("percurso das 20 lições", () => {
   it("cada lição só começa depois da anterior e libera a próxima; cada unidade completa é celebrada", async () => {
     const ordem = curso.flatMap((u) => u.licoes.map((l) => ({ id: l.id, unidade: u.unidade.id, ultima: l.ordem === u.licoes.length })));
     for (const [i, licao] of ordem.entries()) {
@@ -77,7 +77,7 @@ describe("percurso das 15 lições", () => {
       if (i === 0) expect(r.conquistas).toEqual(["primeira-licao", "primeira-coroa"]);
       else if (i === 4) expect(r.conquistas).toEqual(expect.arrayContaining(["primeira-unidade", "cinco-coroas"]));
       else expect(r.conquistas).not.toContain("primeira-unidade");
-      if (i === 14) expect(r.conquistas).toContain("curso-completo");
+      if (i === ordem.length - 1) expect(r.conquistas).toContain("curso-completo");
     }
 
     const trilha = await obterTrilha(db, LIA);
@@ -86,7 +86,7 @@ describe("percurso das 15 lições", () => {
     expect(trilha.flatMap((u) => u.licoes).every((l) => l.perfeita)).toBe(true);
     const [p] = await db.select().from(t.perfis).where(eq(t.perfis.id, LIA));
     const resumo = await resumoDoAluno(db, p);
-    expect(resumo).toMatchObject({ xpTotal: 300, licoesConcluidas: 15, coracoes: 5 });
+    expect(resumo).toMatchObject({ xpTotal: 400, licoesConcluidas: 20, coracoes: 5 });
     expect(resumo.conquistas).toEqual(expect.arrayContaining(["primeira-licao", "primeira-unidade", "curso-completo"]));
     // Progresso da grade do perfil: lido do banco, com contagens de exercícios distintos acertados de primeira.
     const progresso = await progressoDoAluno(db, LIA);
@@ -94,7 +94,7 @@ describe("percurso das 15 lições", () => {
     expect(progresso.find((c) => c.id === "caca-bugs")!.atual).toBeGreaterThan(0);
     expect(progresso.find((c) => c.id === "encaixou")!.atual).toBeGreaterThan(0);
     expect(progresso.find((c) => c.id === "cinco-coroas")).toMatchObject({ conquistada: true, atual: 5, meta: 5 });
-    expect(progresso.find((c) => c.id === "curso-completo")).toMatchObject({ conquistada: true, atual: 15, meta: 15 });
+    expect(progresso.find((c) => c.id === "curso-completo")).toMatchObject({ conquistada: true, atual: 20, meta: 20 });
   });
 
   it("na revisão, escolher a saída curto aparece para digitar, sem as opções, e diz quando quase acertou", async () => {
@@ -120,7 +120,7 @@ describe("percurso das 15 lições", () => {
     expect(testado, "a revisão deveria ter um item para digitar").toBe(true);
   });
 
-  it("a revisão geral e a recuperação usam conceitos das três unidades", async () => {
+  it("a revisão geral e a recuperação usam conceitos das quatro unidades", async () => {
     const revisao = await iniciarRevisao(db, LIA);
     if (!revisao.ok) throw new Error();
     const r = await resolverSessao(revisao.sessaoId);

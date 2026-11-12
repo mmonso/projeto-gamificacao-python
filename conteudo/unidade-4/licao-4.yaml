@@ -1,0 +1,312 @@
+id: u4-l4
+unidade: u4
+ordem: 4
+versao: 1
+titulo: Repetir com for
+objetivo: Prever quantas vezes e em que ordem o for repete o bloco recuado, e o que fica fora dele.
+conceitos: [for]
+
+exercicios:
+  - id: u4-l4-e01
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever que o for executa o bloco uma vez para cada valor, em ordem.
+    conceitos: [for]
+    dificuldade: 1
+    enunciado: O for repete o bloco recuado para cada valor da lista. O que este programa exibe?
+    codigo: |-
+      frutas = ["uva", "kiwi"]
+      for fruta in frutas:
+          print(fruta)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          uva
+          kiwi
+      - id: b
+        texto: |-
+          ['uva', 'kiwi']
+        feedback: A cada volta, fruta guarda um valor só da lista, e não a lista inteira.
+      - id: c
+        texto: |-
+          uva
+        feedback: O bloco é executado uma vez para cada valor da lista.
+    resposta: a
+    dicas:
+      - Quantos valores a lista tem? O bloco roda uma vez para cada um.
+      - "Na primeira volta, a variável do for guarda o primeiro valor; na segunda, o segundo. for x in [1, 2]: print(x) mostra 1 e depois 2."
+    explicacao: O for executa o print duas vezes. Na primeira volta, fruta guarda "uva"; na segunda, "kiwi".
+
+  - id: u4-l4-e02
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que o bloco do for repete mesmo quando não usa a variável.
+    conceitos: [for]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      for nome in ["Ana", "Bia", "Caio"]:
+          print("Oi")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          Oi
+        feedback: O bloco é executado uma vez para cada um dos três valores.
+      - id: b
+        texto: |-
+          Oi
+          Oi
+          Oi
+      - id: c
+        texto: |-
+          Ana
+          Bia
+          Caio
+        feedback: O print mostra o texto "Oi", que está entre aspas, e não a variável nome.
+    resposta: b
+    dicas:
+      - O que o print mostra? Quantas vezes ele roda?
+      - "O bloco roda uma vez por valor da lista, mesmo que não use a variável: for x in [1, 2]: print(\"-\") mostra - duas vezes."
+    explicacao: A lista tem três valores, então o bloco roda três vezes. O print mostra sempre o texto "Oi".
+
+  - id: u4-l4-e03
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Perceber que a linha sem recuo depois do for roda uma vez só, no fim.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: A última linha não tem recuo. O que este programa exibe?
+    codigo: |-
+      for numero in [1, 2]:
+          print(numero)
+      print("Fim")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          1
+          Fim
+          2
+          Fim
+        feedback: Sem recuo, o print("Fim") está fora do for e não se repete.
+      - id: b
+        texto: |-
+          1
+          2
+          Fim
+      - id: c
+        texto: |-
+          Fim
+        feedback: O bloco recuado roda antes, uma vez para cada número.
+    resposta: b
+    dicas:
+      - Quais linhas estão recuadas, dentro do for?
+      - "Só as linhas recuadas se repetem. Uma linha sem recuo, depois do for, roda uma vez, quando todas as voltas acabam."
+    explicacao: O print recuado roda uma vez para cada número. O print("Fim") não tem recuo, então roda uma vez só, depois das voltas.
+
+  - id: u4-l4-e04
+    versao: 1
+    tipo: completar_lacuna
+    objetivo: Escrever a linha do for com in e dois-pontos.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: Complete a linha do for.
+    codigo: |-
+      for cor ___1___ ["azul", "rosa"]___2___
+          print(cor)
+    saida_esperada: |-
+      azul
+      rosa
+    lacunas:
+      - id: "1"
+        opcoes: ["in", "em", "="]
+        resposta: "in"
+      - id: "2"
+        opcoes: [":", ";", "."]
+        resposta: ":"
+    dicas:
+      - O for usa uma palavra em inglês que quer dizer "em", e a linha termina como a do if.
+      - "A linha do for tem a forma for nome in lista: e termina com dois-pontos, que avisam que um bloco recuado vem a seguir."
+    explicacao: A linha do for é escrita for nome in lista, com in, e termina com dois-pontos, como a do if.
+
+  - id: u4-l4-e05
+    versao: 1
+    tipo: localizar_erro
+    objetivo: Encontrar o bloco do for sem recuo.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      precos = [3, 7]
+      for preco in precos:
+      print(preco)
+    erro: IndentationError
+    resposta: 3
+    correcao: '    print(preco)'
+    saida_esperada: |-
+      3
+      7
+    dicas:
+      - O que vem logo depois da linha do for precisa estar recuado.
+      - "Depois dos dois-pontos do for, as linhas do bloco ficam recuadas com quatro espaços, como no if."
+    explicacao: A linha 3 é o bloco do for e precisa de recuo. Sem ele, o Python mostra um erro de indentação (IndentationError).
+
+  - id: u4-l4-e06
+    versao: 1
+    tipo: ordenar_blocos
+    objetivo: Montar um for com uma linha dentro e uma linha depois do bloco.
+    conceitos: [for]
+    dificuldade: 3
+    enunciado: Monte o programa que mostra cada pedido e, no fim, quantos pedidos são.
+    codigo_antes: |-
+      pedidos = ["suco", "bolo"]
+    saida_esperada: |-
+      Pedido: suco
+      Pedido: bolo
+      2 pedidos
+    blocos:
+      - id: a
+        codigo: 'for pedido in pedidos:'
+      - id: b
+        codigo: '    print("Pedido:", pedido)'
+      - id: c
+        codigo: print(len(pedidos), "pedidos")
+      - id: d
+        codigo: '    print(len(pedidos), "pedidos")'
+      - id: e
+        codigo: print("Pedido:", pedido)
+    resposta:
+      - [a, b, c]
+    dicas:
+      - O que se repete fica recuado dentro do for; o que aparece uma vez só fica sem recuo, depois.
+      - "Uma linha recuada no bloco do for roda uma vez por valor. Sem recuo, depois do bloco, ela roda uma vez só."
+    explicacao: O print recuado mostra cada pedido, uma vez por volta. O total vem sem recuo, depois do bloco, para aparecer uma vez só.
+
+  - id: u4-l4-e07
+    versao: 1
+    tipo: escolher_resultado
+    objetivo: Prever o bloco do for aplicado a cada valor.
+    conceitos: [for]
+    dificuldade: 3
+    enunciado: Um texto vezes um número é repetido. O que este programa exibe?
+    codigo: |-
+      for letra in ["a", "b", "c"]:
+          print(letra * 2)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          aa
+          bb
+          cc
+      - id: b
+        texto: |-
+          abcabc
+        feedback: O bloco trata um valor por vez, e cada print mostra uma linha.
+      - id: c
+        texto: |-
+          a
+          b
+          c
+          a
+          b
+          c
+        feedback: O * 2 repete cada letra na mesma linha, dentro de cada volta.
+    resposta: a
+    dicas:
+      - Em cada volta, letra guarda uma letra só. O que letra * 2 mostra?
+      - "Um texto vezes 2 aparece duas vezes, junto: \"x\" * 2 mostra xx. No for, isso acontece com cada valor, um por linha."
+    explicacao: A cada volta, letra guarda uma letra, e letra * 2 a repete. Cada print mostra uma linha, aa, bb e cc.
+
+revisao:
+  - id: u4-l4-r01
+    versao: 1
+    variacao_de: u4-l4-e01
+    tipo: escolher_resultado
+    objetivo: Prever um for simples em outro contexto.
+    conceitos: [for]
+    dificuldade: 1
+    enunciado: O que este programa exibe?
+    codigo: |-
+      for dia in ["sábado", "domingo"]:
+          print(dia)
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          sábado
+        feedback: O bloco é executado uma vez para cada valor da lista.
+      - id: b
+        texto: |-
+          sábado
+          domingo
+      - id: c
+        texto: |-
+          ['sábado', 'domingo']
+        feedback: A cada volta, dia guarda um valor só, e não a lista inteira.
+    resposta: b
+    dicas:
+      - Quantas vezes o print roda?
+      - "O for roda o bloco uma vez para cada valor, em ordem: for x in [\"a\", \"b\"]: print(x) mostra a e depois b."
+    explicacao: O for roda o print duas vezes, uma com "sábado" e outra com "domingo".
+
+  - id: u4-l4-r02
+    versao: 1
+    variacao_de: u4-l4-e03
+    tipo: escolher_resultado
+    objetivo: Perceber que todas as linhas recuadas se repetem a cada volta.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: As duas linhas do bloco estão recuadas. O que este programa exibe?
+    codigo: |-
+      for numero in [5, 6]:
+          print(numero)
+          print("ok")
+    opcoes_sao: saida
+    opcoes:
+      - id: a
+        texto: |-
+          5
+          ok
+          6
+          ok
+      - id: b
+        texto: |-
+          5
+          6
+          ok
+        feedback: O print("ok") está recuado, então se repete a cada volta.
+      - id: c
+        texto: |-
+          5
+          6
+        feedback: O bloco tem dois print, e os dois rodam a cada volta.
+    resposta: a
+    dicas:
+      - Quais linhas estão dentro do for?
+      - "Todas as linhas recuadas formam o bloco e rodam juntas, na ordem, a cada volta do for."
+    explicacao: Os dois print estão recuados, então rodam juntos a cada volta. Primeiro com 5, depois com 6.
+
+  - id: u4-l4-r03
+    versao: 1
+    variacao_de: u4-l4-e05
+    tipo: localizar_erro
+    objetivo: Encontrar o bloco do for sem recuo em outro contexto.
+    conceitos: [for]
+    dificuldade: 2
+    enunciado: Este programa mostra um erro. Selecione a linha com o problema.
+    codigo: |-
+      for nome in ["Lia", "Davi"]:
+      print("Olá,", nome)
+    erro: IndentationError
+    resposta: 2
+    correcao: '    print("Olá,", nome)'
+    saida_esperada: |-
+      Olá, Lia
+      Olá, Davi
+    dicas:
+      - Repare no recuo da linha de baixo do for.
+      - "Toda linha do bloco do for fica recuada com quatro espaços, logo abaixo da linha que termina com dois-pontos."
+    explicacao: A linha 2 é o bloco do for e precisa de recuo. Sem ele, o Python mostra um erro de indentação.

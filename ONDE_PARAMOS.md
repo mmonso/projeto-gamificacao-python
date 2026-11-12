@@ -13,7 +13,7 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 
 - **Sibi:** app web (Next.js 16 em `web/`, Supabase e Vercel) que ensina Python a adultos brasileiros, com gamificação.
 - **No ar:** https://sibi-three.vercel.app (projeto `sibi` na Vercel, banco `sibi-dev`, ambiente "homologacao").
-- **Conteúdo:** 3 unidades, 15 lições e 143 exercícios. Lições na versão 3; a u1-l4 está na versão 4.
+- **Conteúdo:** 4 unidades, 20 lições e 192 exercícios. A unidade 4 (Listas e repetição: listas, posições, `append`, `for` e acumulador, com o desafio "gastos da semana") está na versão 1; das outras, as lições estão na versão 3 e a u1-l4 na versão 4.
 - **Feito:**
   - onda 1: som, animações de acerto e erro, contagem de acertos seguidos, resultado animado, dicas em dois níveis;
   - termos de uso e política de privacidade, conta só para maiores de 18 anos;
@@ -37,12 +37,18 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 - **Digitar a saída, 12/11/2026:** sem conteúdo novo. Na revisão (sempre) e na prática (metade dos itens, escolhida de forma estável pela sessão), um "escolher a saída" curto (até 4 linhas de 40 caracteres, sem opção de erro) aparece como campo para digitar; 69 dos 77 itens desse tipo se qualificam. A lição principal e a recuperação continuam com opções. Regras em `web/src/modulos/aprendizagem/digitar.ts`: a comparação ignora espaços no fim das linhas e as aspas e travessões que o celular troca sozinho, mas não maiúsculas nem espaços no meio; uma resposta quase certa recebe um comentário ("Confira as maiúsculas…"). A transformação acontece ao servir o item e ao corrigir (`estudo.ts`, `servico.ts`), então nada mudou no banco nem no formato do conteúdo.
 - **Desafio do dia, 12/11/2026:** `/desafio`, sem conta. São 5 perguntas de "qual é a saída?" (77 candidatas, das versões vigentes), iguais para todos no dia de Brasília, do #1 em 12/11/2026. Os candidatos são embaralhados com semente fixa e cada dia pega o bloco seguinte, então nada se repete por uns 15 dias. Uma tentativa por pergunta; o placar marca 🟩 de primeira, 🟨 com dica ou cartão, 🟥 erro. No fim: "Mandar no WhatsApp" (link `/desafio?c=1`), copiar, compartilhar do sistema, contagem até o próximo e convite para a primeira lição. Não dá XP nem grava progresso; só os eventos `desafio_iniciado` e `desafio_concluido` (sem aluno, com `compartilhado`), que aparecem no `npm run db:retencao`. Entradas: tela inicial e Praticar. Regras em `web/src/modulos/desafio/desafio.ts`, servidor em `web/src/servidor/desafio/servico.ts`, motor local em `web/src/componentes/licao/desafio.ts` (a tela é a mesma `Licao.tsx`, com a prop `desafio`). O roteiro de navegador tem o modo `desafio` (também roda em `tudo`) e não registra eventos.
 - **PWA, 12/11/2026:** dá para instalar o Sibi na tela inicial (o Chrome confirma, sem erros de instalação). Manifesto em `web/src/app/manifest.ts` (abre em `/aprender?origem=app`, atalhos para Desafio e Praticar), ícones gerados de `web/src/app/icones/desenho.tsx` (192, 512 e mascarável) e `apple-icon.tsx`. O service worker (`web/public/sw.js`) não guarda telas nem dados: só mostra `offline.html` quando uma navegação falha sem rede; ele só é registrado no site publicado, nunca em localhost. O cartão "Coloque o Sibi na tela inicial" fica no Perfil: botão onde o navegador oferece instalação, passo a passo no iPhone, some quando já está instalado. Notificações ainda não: pedem chaves VAPID, guardar inscrições e um agendador de envio.
+- **Unidade 4, 12/11/2026:** `conteudo/unidade-4` (decisões em `UNIDADE.md`: sem `range`, sem cópia de listas, `IndexError` só como opção de erro). Publicada com `npm run db:publicar`. A trilha agora alterna quatro cores (a 4ª é laranja) e os testes contam 4 unidades e 20 lições.
 
 ## Próximos passos, em ordem
 
 1. **Depois, pela estratégia:**
    - SMTP próprio: **esperando o dono** seguir `PASSO_A_PASSO_EMAIL.md` (senha de app do Gmail colada no painel do Supabase). Quando ele disser "pronto", criar uma conta com endereço novo, conferir se o e-mail chega e se o link abre, e tirar o aviso de e-mail abaixo;
-   - unidade 4 (listas e `for`).
+   - lembrete por e-mail na hora escolhida pelo aluno (depende do SMTP; a estratégia pede a partir da 3ª semana do teste);
+   - cartão de resultado da lição para compartilhar ("Meus programas": o programa do desafio de cada unidade com o nome do aluno, como imagem);
+   - unidade 5 (textos e f-strings, projeto "mensagens personalizadas");
+   - Python rodando no navegador (Pyodide) no modo "rode e mude um número", a partir da unidade 4;
+   - login com Google (o dono precisa criar o cliente OAuth no Google Cloud e colar no Supabase);
+   - notificações do PWA (chaves VAPID, inscrições no banco e um agendador).
 
 ## Avisos do ambiente
 
