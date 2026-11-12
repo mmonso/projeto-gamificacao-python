@@ -163,7 +163,7 @@ export async function submeter(db: Db, alunoId: string, sessaoId: string, pedido
     if (perdeuCoracao) await tx.update(t.perfis).set({ coracoes: coracoes! }).where(eq(t.perfis.id, alunoId));
     const pausada = coracoes === 0 && fila.fila.length > 0;
 
-    await tx.insert(t.submissoes).values({ id: pedido.id, sessaoId: sessao.id, exercicioId: pedido.exercicioId, resposta: pedido.resposta, correta, perdeuCoracao });
+    await tx.insert(t.submissoes).values({ id: pedido.id, sessaoId: sessao.id, exercicioId: pedido.exercicioId, resposta: pedido.resposta, correta, perdeuCoracao, tempoMs: pedido.tempoMs ?? null });
     await registrarEvento(tx, "exercicio_respondido", alunoId, { sessaoId: sessao.id, tipo: sessao.tipo, exercicioId: pedido.exercicioId, correta, primeiraTentativa });
     await tx
       .update(t.itensSessao)

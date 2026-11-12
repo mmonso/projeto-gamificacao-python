@@ -10,6 +10,8 @@ export const pedidoSubmissao = z.object({
   id: z.uuid(),
   exercicioId: z.string().min(1).max(40),
   resposta: respostaEsquema,
+  /** Tempo, em milissegundos, entre o exercício aparecer e o aluno enviar. Opcional: aparelhos antigos não mandam. */
+  tempoMs: z.number().int().min(0).max(60 * 60 * 1000).optional(),
 });
 export type PedidoSubmissao = z.infer<typeof pedidoSubmissao>;
 

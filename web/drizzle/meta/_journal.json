@@ -57,6 +57,13 @@
       "when": 1794495199590,
       "tag": "0007_visitantes",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794511215516,
+      "tag": "0008_tempo_da_resposta",
+      "breakpoints": true
     }
   ]
 }

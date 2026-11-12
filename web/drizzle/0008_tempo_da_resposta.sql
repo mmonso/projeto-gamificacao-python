@@ -1,0 +1,1 @@
+ALTER TABLE "submissoes" ADD COLUMN "tempo_ms" integer;

@@ -7,7 +7,7 @@ import type { ExercicioPublico } from "@/modulos/conteudo/esquema";
  * Rascunho do exercício mostrado e, depois de Verificar, o id do envio. O id fica guardado até o aluno
  * tocar Continuar: numa recarga, o reenvio com ele devolve o resultado gravado ou corrige pela primeira vez.
  */
-export type Guardada = { exercicio: ExercicioPublico; resposta: Resposta; envioId: string | null };
+export type Guardada = { exercicio: ExercicioPublico; resposta: Resposta; envioId: string | null; tempoMs?: number };
 export type Envio = Guardada & { envioId: string };
 
 export type Retomada = { acao: "reenviar"; envio: Envio } | { acao: "rascunho"; resposta: Resposta } | { acao: "nenhuma" };
@@ -19,7 +19,9 @@ export function interpretar(texto: string | null): Guardada | null {
     const resposta = respostaEsquema.safeParse(v?.resposta);
     if (!resposta.success || typeof v.exercicio?.id !== "string" || v.exercicio.tipo !== resposta.data.tipo) return null;
     if (v.envioId !== null && typeof v.envioId !== "string") return null;
-    return { exercicio: v.exercicio, resposta: resposta.data, envioId: v.envioId };
+    // O tempo é guardado junto com o envio, para que o reenvio depois de recarga leve o mesmo valor.
+    const tempoMs = Number.isInteger(v.tempoMs) && v.tempoMs >= 0 ? v.tempoMs : undefined;
+    return { exercicio: v.exercicio, resposta: resposta.data, envioId: v.envioId, ...(tempoMs === undefined ? {} : { tempoMs }) };
   } catch {
     return null;
   }

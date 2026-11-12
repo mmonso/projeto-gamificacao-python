@@ -374,3 +374,20 @@ describe("nova versão publicada durante a sessão (FL-04)", () => {
     expect(s).toMatchObject({ correta: false, solucao: { opcao: e01.resposta } });
   });
 });
+
+describe("tempo da resposta", () => {
+  it("grava o tempo enviado e deixa vazio quando o aparelho não o manda", async () => {
+    const sessaoId = ((await iniciarSessao(db, ANA, "u1-l2")) as { sessaoId: string }).sessaoId;
+    const primeiro = (await atual(ANA, sessaoId)).exercicio!.id;
+    const comTempo = randomUUID();
+    await submeter(db, ANA, sessaoId, { id: comTempo, exercicioId: primeiro, resposta: correta(primeiro), tempoMs: 4200 });
+    const [a] = await db.select({ tempo: t.submissoes.tempoMs }).from(t.submissoes).where(eq(t.submissoes.id, comTempo));
+    expect(a.tempo).toBe(4200);
+
+    const segundo = (await atual(ANA, sessaoId)).exercicio!.id;
+    const semTempo = randomUUID();
+    await submeter(db, ANA, sessaoId, { id: semTempo, exercicioId: segundo, resposta: correta(segundo) });
+    const [b] = await db.select({ tempo: t.submissoes.tempoMs }).from(t.submissoes).where(eq(t.submissoes.id, semTempo));
+    expect(b.tempo).toBeNull();
+  });
+});

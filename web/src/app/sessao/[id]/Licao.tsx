@@ -109,6 +109,15 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
    * resposta tenha mudado: se o primeiro envio chegou ao servidor, vale o resultado gravado (FL-04, passo 2).
    */
   const envioRef = useRef<string | null>(null);
+  /**
+   * Tempo até o envio: começa quando o exercício fica pronto para responder (o cartão do conceito fechado)
+   * e vale o do primeiro envio; Tentar novamente leva o mesmo valor (FL-04).
+   */
+  const inicioRef = useRef(0);
+  const tempoEnvioRef = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    inicioRef.current = performance.now();
+  }, [exercicio?.id, cartaoAberto]);
 
   const tratarErro = useCallback(
     (erro: ErroApi | null, aoFalhar: () => void) => {
@@ -168,7 +177,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
       envioRef.current = envio.envioId;
       setFase("verificando");
       setFalha(null);
-      const r = await motor.submeter({ id: envio.envioId, exercicioId: envio.exercicio.id, resposta: envio.resposta });
+      const r = await motor.submeter({ id: envio.envioId, exercicioId: envio.exercicio.id, resposta: envio.resposta, tempoMs: envio.tempoMs });
       if (!r.ok) {
         if (r.erro?.erro === "desatualizada" || r.erro?.erro === "invalida") return void recarregar();
         return tratarErro(r.erro, () => {
@@ -286,7 +295,11 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   function acaoPrincipal() {
     if (cartaoAberto) avancarCartao();
     else if (fase === "feedback") continuar();
-    else if (podeVerificar && exercicio && resposta) void verificar({ exercicio, resposta, envioId: envioRef.current ?? crypto.randomUUID() });
+    else if (podeVerificar && exercicio && resposta) {
+      // Primeiro envio: mede o tempo agora. Tentar novamente reaproveita o tempo do primeiro.
+      if (!envioRef.current) tempoEnvioRef.current = Math.max(0, Math.round(performance.now() - inicioRef.current));
+      void verificar({ exercicio, resposta, envioId: envioRef.current ?? crypto.randomUUID(), tempoMs: tempoEnvioRef.current });
+    }
     else if (fase === "concluindo" && falha) void concluirLicao();
   }
 

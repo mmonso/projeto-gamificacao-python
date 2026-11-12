@@ -39,3 +39,14 @@ describe("retomar depois de recarga", () => {
     expect(retomar(null, ex1)).toEqual({ acao: "nenhuma" });
   });
 });
+
+describe("tempo guardado com o envio", () => {
+  it("mantém o tempo depois de recarregar e descarta valores inválidos", () => {
+    const bom = JSON.stringify({ exercicio: ex1, resposta: rascunho.resposta, envioId: "a1", tempoMs: 3100 });
+    expect(interpretar(bom)?.tempoMs).toBe(3100);
+    const negativo = JSON.stringify({ exercicio: ex1, resposta: rascunho.resposta, envioId: "a1", tempoMs: -4 });
+    expect(interpretar(negativo)?.tempoMs).toBeUndefined();
+    const sem = JSON.stringify({ exercicio: ex1, resposta: rascunho.resposta, envioId: "a1" });
+    expect(interpretar(sem)).not.toHaveProperty("tempoMs");
+  });
+});

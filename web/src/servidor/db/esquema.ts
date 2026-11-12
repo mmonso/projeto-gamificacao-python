@@ -191,6 +191,8 @@ export const submissoes = pgTable(
     resposta: jsonb("resposta").notNull(),
     correta: boolean("correta").notNull(),
     perdeuCoracao: boolean("perdeu_coracao").notNull().default(false),
+    // Tempo entre o exercício aparecer e o envio (ms). Nulo em respostas anteriores a essa coluna.
+    tempoMs: integer("tempo_ms"),
     criadoEm: criadoEm(),
   },
   (t) => [index("submissoes_sessao").on(t.sessaoId)],
