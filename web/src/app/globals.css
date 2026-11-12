@@ -698,6 +698,8 @@
   .placar-quadrados { font-size: 2rem; letter-spacing: .15em; line-height: 1.2; }
   .legenda-desafio { font-size: .85rem; color: var(--texto-suave); margin: 0 0 20px; }
   .proximo-desafio { font-weight: 800; color: var(--texto-suave); margin: 16px 0 0; }
+  .compartilhar-licao { margin-top: 20px; }
+  .compartilhar-titulo { font-weight: 800; color: var(--texto-suave); margin: 0 0 8px; }
   .convite-desafio {
     margin-top: 24px; padding: 18px; border: 2px solid var(--borda); border-radius: var(--raio);
     background: var(--fundo-suave); text-align: left; width: 100%;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { ResultadoConclusao } from "@/modulos/aprendizagem/contrato";
+import { textoDoResultadoDaLicao } from "@/modulos/aprendizagem/compartilhar";
 import { CONQUISTAS } from "@/modulos/gamificacao/textos";
 import { Icone } from "../Icone";
 import { Mascote } from "../Mascote";
@@ -243,6 +244,49 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
           </button>
         )}
       </div>
+      {!demo && conclusao.tipo === "principal" && conclusao.licaoId && (
+        <CompartilharLicao titulo={titulo} acertosPrimeira={conclusao.acertosPrimeira} total={conclusao.total} sequencia={conclusao.sequencia} />
+      )}
     </main>
+  );
+}
+
+/** Botões para mandar o resultado da lição no WhatsApp ou copiar. O texto não leva nome nem respostas. */
+function CompartilharLicao({ titulo, acertosPrimeira, total, sequencia }: { titulo: string; acertosPrimeira: number; total: number; sequencia: number }) {
+  const [copiado, setCopiado] = useState(false);
+
+  function montarTexto() {
+    return textoDoResultadoDaLicao({ titulo, acertosPrimeira, total, sequencia }, window.location.origin);
+  }
+
+  function whatsapp() {
+    window.open(`https://wa.me/?text=${encodeURIComponent(montarTexto())}`, "_blank", "noopener,noreferrer");
+  }
+
+  async function copiar() {
+    try {
+      await navigator.clipboard.writeText(montarTexto());
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2500);
+    } catch {
+      setCopiado(false);
+    }
+  }
+
+  return (
+    <div className="compartilhar-licao">
+      <p className="compartilhar-titulo">Mostre seu resultado para alguém</p>
+      <div className="acoes">
+        <button type="button" className="botao botao-secundario" onClick={whatsapp}>
+          Mandar no WhatsApp
+        </button>
+        <button type="button" className="botao botao-fantasma" onClick={() => void copiar()}>
+          {copiado ? "Copiado!" : "Copiar resultado"}
+        </button>
+      </div>
+      <p className="so-leitor" aria-live="polite">
+        {copiado ? "Resultado copiado." : ""}
+      </p>
+    </div>
   );
 }

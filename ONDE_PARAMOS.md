@@ -49,7 +49,7 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 1. **Depois, pela estratégia:**
    - SMTP próprio: **esperando o dono** seguir `PASSO_A_PASSO_EMAIL.md` (senha de app do Gmail colada no painel do Supabase). Quando ele disser "pronto", criar uma conta com endereço novo, conferir se o e-mail chega e se o link abre, e tirar o aviso de e-mail abaixo;
    - lembrete por e-mail na hora escolhida pelo aluno (depende do SMTP; a estratégia pede a partir da 3ª semana do teste);
-   - cartão de resultado da lição para compartilhar ("Meus programas": o programa do desafio de cada unidade com o nome do aluno, como imagem);
+   - cartão de resultado da lição como imagem ("Meus programas": o programa do desafio de cada unidade com o nome do aluno). Já feito em texto: o resultado da lição principal tem "Mandar no WhatsApp" e "Copiar resultado", sem nome nem respostas (`modulos/aprendizagem/compartilhar.ts`). Falta a imagem;
    - unidade 5 (textos e f-strings, projeto "mensagens personalizadas");
    - Python rodando no navegador (Pyodide) no modo "rode e mude um número", a partir da unidade 4;
    - login com Google (o dono precisa criar o cliente OAuth no Google Cloud e colar no Supabase);

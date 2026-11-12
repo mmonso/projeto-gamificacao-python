@@ -422,6 +422,13 @@ async function visitante(browser) {
   await Promise.all([page.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), page.keyboard.press("Enter")]);
   conferir(/^\/sessao\//.test(new URL(page.url()).pathname), "o visitante abre a sessão da primeira lição", page.url());
   await fazerLicao(page, "visitante");
+  // Lição principal concluída: o resultado oferece mandar no WhatsApp e copiar (sem nome nem respostas).
+  const oferta = await aguardar(page, () => document.querySelector(".compartilhar-licao"), null, 5000);
+  conferir(Boolean(oferta), "o visitante vê o compartilhar do resultado da lição");
+  const rotulos = await page.evaluate(() => [...document.querySelectorAll(".compartilhar-licao button")].map((b) => b.textContent.trim()));
+  conferir(rotulos.includes("Mandar no WhatsApp") && rotulos.includes("Copiar resultado"), "o compartilhar tem WhatsApp e copiar", rotulos);
+  await semRolagemLateral(page, "resultado da lição (visitante)");
+  await foto(page, "visitante-resultado");
   await page.close();
 }
 

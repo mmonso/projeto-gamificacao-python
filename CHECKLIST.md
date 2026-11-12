@@ -19,7 +19,7 @@ Todos os comandos rodam a partir da pasta indicada. No Windows, use o Git Bash o
 
 | Verificação | Comando | Passa quando |
 |---|---|---|
-| Testes unitários e de integração | `npx vitest run` | 190 testes passando, 0 falhas |
+| Testes unitários e de integração | `npx vitest run` | 194 testes passando, 0 falhas (25 arquivos) |
 | Tipos | `npx tsc --noEmit` | Nenhuma saída |
 | Lint | `npm run lint` | Nenhum erro |
 | Build de produção | `npm run build` | Termina com `BUILD_EXIT=0` e lista as rotas |
@@ -59,7 +59,7 @@ O modo `tudo` cobre: demonstração, desafio do dia, conta de teste e prática. 
 
 Modos separados (rodar quando mexer na área):
 
-- [ ] `visitante`: cria usuários anônimos reais. Rodar só quando mexer no acesso de visitante.
+- [ ] `visitante`: cria usuários anônimos reais. Rodar só quando mexer no acesso de visitante ou no resultado da lição (confere o botão de compartilhar e a rolagem do resultado).
 - [ ] `jornada`: fluxo completo de aprendizagem.
 
 ## 5. Vigilância de abuso
