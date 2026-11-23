@@ -19,7 +19,7 @@ Todos os comandos rodam a partir da pasta indicada. No Windows, use o Git Bash o
 
 | Verificação | Comando | Passa quando |
 |---|---|---|
-| Testes unitários e de integração | `npx vitest run` | 227 testes passando, 0 falhas (31 arquivos) |
+| Testes unitários e de integração | `npx vitest run` | 237 testes passando, 0 falhas (33 arquivos) |
 | Tipos | `npx tsc --noEmit` | Nenhuma saída |
 | Lint | `npm run lint` | Nenhum erro |
 | Build de produção | `npm run build` | Termina com `BUILD_EXIT=0` e lista as rotas |
@@ -87,7 +87,8 @@ Em `web/`: `npm run db:retencao`
 
 ## 8. Fluxos do dono (manual, só se mexer na área)
 
-- [ ] Cadastro com e-mail. Só vale depois do SMTP do dono (`PASSO_A_PASSO_EMAIL.md`).
+- [ ] Cadastro com e-mail: o e-mail "Confirme seu e-mail no Sibi" chega e o link abre o site logado.
+- [ ] Continuar com Google em `/entrar`: escolher a conta volta ao Sibi logado, já com o primeiro nome.
 - [ ] Entrar na conta de teste (`web/.env.local`, nunca no chat).
 - [ ] Desafio do dia abre sem conta e mostra o placar.
 - [ ] Instalar o app (PWA) no celular, pelo card no Perfil.

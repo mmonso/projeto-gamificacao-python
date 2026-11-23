@@ -60,16 +60,32 @@ Passagem de trabalho em 8 de novembro de 2026, para continuar numa nova sessão.
 - Revisão dos commits feitos com o modelo mais barato: o tempo de resposta recusava envios acima de 1 hora, o que travava o aluno (corrigido), e o cronômetro zerava ao reabrir o cartão (agora pausa).
 - **Rotina:** quando o dono perguntar "como está o Sibi?", rodar `db:vigilancia`, `db:retencao` e `db:dificuldade` e responder com números e o que mudar.
 
-**E-mail (12/11/2026, 17h):** o dono criou o Gmail do Sibi e configurou o SMTP no Supabase. Teste feito: um e-mail
-de recuperação de senha para a conta de teste 1 foi aceito e registrado (`auth.users.recovery_sent_at` às 20:05 UTC),
-sem erro de SMTP. **Falta, e o dono pediu para eu fazer pelo navegador na próxima sessão** (ele autorizou estas mudanças
-no painel do Supabase):
-1. Conferir com o dono se o e-mail de teste chegou e se caiu no spam.
-2. Supabase → Authentication → Rate Limits → "Rate limit for sending emails" = 100 por hora.
-3. Supabase → Authentication → Emails → Templates: "Confirm signup" e "Reset Password" com os textos de
-   `PASSO_A_PASSO_EMAIL.md`, parte 4.
-4. Conferir Authentication → URL Configuration (Site URL e Redirect URLs, parte 3 do passo a passo).
-5. Testar um cadastro de ponta a ponta e só então liberar o link para os amigos.
+**E-mail, concluído em 16/11/2026:** SMTP do Gmail do Sibi (pythonsibi@gmail.com) no Supabase; textos de
+"Confirm signup" e "Reset Password" em português (links com `token_hash`, que a rota `auth/confirmar` aceita); Site URL
+`https://sibi-three.vercel.app` e Redirect URL `https://sibi-three.vercel.app/**` (as duas de localhost ficaram, para
+testes locais). O dono **não quis** aumentar o limite de envios: fica o padrão do Supabase. Cadastro testado de ponta a
+ponta com o Gmail pessoal do dono: o e-mail chegou na caixa de entrada e o link abriu o site já logado (credenciais dessa
+conta em `web/.env.local`, `TESTE_CADASTRO_*`).
+
+**Login com Google, 23/11/2026:**
+- Google Cloud, na conta pythonsibi@gmail.com: projeto "Sibi" (`sibi-515617`), Google Auth Platform com público
+  Externo, **em produção** (qualquer conta Google entra; aparece "app não verificado" até uma verificação, que só é
+  necessária se pedirmos logotipo ou escopos além de e-mail e perfil). Branding com página inicial, `/privacidade`,
+  `/termos` e domínios `sibi-three.vercel.app` e `zykqgkwheuxnhylzjqeb.supabase.co`. Cliente OAuth "Sibi web", com retorno
+  `https://zykqgkwheuxnhylzjqeb.supabase.co/auth/v1/callback`. O dono aceitou os termos do Google Cloud e a política de
+  dados de API do Google.
+- Supabase: provedor Google ligado com o ID do cliente; a chave secreta foi colada pelo dono e não está em lugar nenhum
+  do repositório (`client_secret_*.json` está no `.gitignore`).
+- App: botão "Continuar com Google" em `/entrar` e `/cadastro` (`componentes/EntrarComGoogle.tsx`, ação `entrarComGoogle`).
+  O aviso abaixo do botão vale como declaração de 18+ e aceite, como no visitante. Meta, fuso e hora do aceite vão num
+  cookie de 10 minutos (`modulos/conta/entrada-google.ts`) e viram perfil na volta (`servidor/auth/entrada-google.ts`,
+  chamado em `auth/confirmar`), com o primeiro nome do Google. O teto de 50 contas vale também aqui: conta nova sem vaga
+  sai da sessão e vê a mensagem em `/entrar?aviso=sem-vagas`; quem já tem conta entra sempre. Cancelar no Google leva a
+  `/entrar?aviso=google`. Política de privacidade atualizada (versão de 23/11/2026).
+- Testado: até a tela "Escolha uma conta" do Google no site local, o cancelamento, as mensagens e o roteiro `tudo`.
+  **Falta o dono testar a entrada completa no site publicado**, escolhendo uma conta Google.
+- Limite conhecido: um visitante que entra com o Google ganha uma conta nova e perde o progresso de visitante, igual ao
+  cadastro por e-mail. Ligar "Allow manual linking" no Supabase permitiria juntar os dois, se for preciso.
 
 **Pendente da pesquisa do Duolingo, para decidir em outra rodada:**
 - Ação 6, dica ligada ao erro: precisa de conteúdo novo (2 ou 3 erros comuns por exercício).
@@ -80,12 +96,10 @@ no painel do Supabase):
 Abaixo, a lista anterior, sem alterações:
 
 1. **Depois, pela estratégia:**
-   - SMTP próprio: **esperando o dono** seguir `PASSO_A_PASSO_EMAIL.md` (senha de app do Gmail colada no painel do Supabase). Quando ele disser "pronto", criar uma conta com endereço novo, conferir se o e-mail chega e se o link abre, e tirar o aviso de e-mail abaixo;
    - lembrete por e-mail na hora escolhida pelo aluno (depende do SMTP; a estratégia pede a partir da 3ª semana do teste);
    - cartão de resultado da lição como imagem ("Meus programas": o programa do desafio de cada unidade com o nome do aluno). Já feito em texto: o resultado da lição principal tem "Mandar no WhatsApp" e "Copiar resultado", sem nome nem respostas (`modulos/aprendizagem/compartilhar.ts`). Falta a imagem;
    - unidade 5 (textos e f-strings, projeto "mensagens personalizadas");
    - Python rodando no navegador (Pyodide) no modo "rode e mude um número", a partir da unidade 4;
-   - login com Google (o dono precisa criar o cliente OAuth no Google Cloud e colar no Supabase);
    - notificações do PWA (chaves VAPID, inscrições no banco e um agendador).
 
 ## Avisos do ambiente

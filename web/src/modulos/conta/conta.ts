@@ -59,11 +59,21 @@ const esquemaMetadados = z.object({
   termos_aceitos_em: z.iso.datetime({ offset: true }).nullable().catch(null),
 });
 
+/**
+ * Primeiro nome enviado por um provedor de login (Google: full_name ou name), para quem não digitou um nome.
+ * Só o primeiro nome: é como o Sibi chama o aluno, e o sobrenome não é necessário (minimização de dados).
+ */
+export function primeiroNomeDoProvedor(metadados: Record<string, unknown>): string {
+  const completo = [metadados.full_name, metadados.name].find((v): v is string => typeof v === "string" && v.trim() !== "");
+  return completo ? completo.trim().split(/\s+/)[0].slice(0, NOME_MAXIMO) : "";
+}
+
 /** Dados iniciais do perfil a partir dos metadados do usuário, que podem estar ausentes ou incompletos. */
 export function dadosIniciaisDoPerfil(metadados: unknown) {
-  const m = esquemaMetadados.parse(metadados && typeof metadados === "object" ? metadados : {});
+  const bruto = metadados && typeof metadados === "object" ? (metadados as Record<string, unknown>) : {};
+  const m = esquemaMetadados.parse(bruto);
   return {
-    nome: m.nome,
+    nome: m.nome || primeiroNomeDoProvedor(bruto),
     metaDiaria: m.meta_diaria,
     fuso: m.fuso,
     termosAceitosEm: m.termos_aceitos_em ? new Date(m.termos_aceitos_em) : null,
@@ -95,6 +105,7 @@ export const MENSAGENS = {
   linkReenviado: "Se esse e-mail estiver aguardando confirmação, enviamos um novo link.",
   falhaGenerica: "Não foi possível concluir agora. Tente de novo em instantes.",
   visitanteIndisponivel: "O acesso de visitante está desligado no momento. Experimente a lição de demonstração.",
+  googleFalhou: "Não foi possível entrar com o Google. Tente de novo ou use e-mail e senha.",
 } as const;
 
 /**

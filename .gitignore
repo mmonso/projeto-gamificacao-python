@@ -20,3 +20,6 @@ Thumbs.db
 .vscode/*
 !.vscode/settings.json
 .vercel
+
+# Credenciais baixadas do Google Cloud (cliente OAuth): nunca no repositório.
+client_secret_*.json

@@ -34,7 +34,8 @@ export default function PaginaPrivacidade() {
         <dt>Conta</dt>
         <dd>
           E-mail e senha, para criar a conta, entrar e recuperar o acesso. A senha fica com o serviço de autenticação em forma cifrada, e nem nós conseguimos lê-la. Também
-          guardamos a data e a hora em que você declarou ter {idadeMinima} anos ou mais e aceitou estes documentos.
+          guardamos a data e a hora em que você declarou ter {idadeMinima} anos ou mais e aceitou estes documentos. Se você entrar com o Google, não há senha no Sibi: o Google
+          envia seu e-mail, seu nome e o endereço da sua foto de perfil, que ficam com o serviço de autenticação. O app usa só o e-mail e o primeiro nome.
         </dd>
         <dt>Perfil</dt>
         <dd>Nome ou apelido, meta diária, fuso horário e preferência de som, para personalizar o app e contar seus dias de estudo no seu horário.</dd>
@@ -78,6 +79,7 @@ export default function PaginaPrivacidade() {
       <ul>
         <li>Cookies de sessão, necessários para manter você conectado com segurança.</li>
         <li>Um cookie temporário com o e-mail que aguarda confirmação, para reenviar o link do cadastro. Ele dura até 24 horas.</li>
+        <li>Ao continuar com o Google, um cookie de até 10 minutos com a meta, o fuso e a hora do aceite, para gravá-los na conta quando você voltar do Google.</li>
         <li>No armazenamento do navegador: a demonstração em andamento, o nome e a meta escolhidos na introdução e a resposta do exercício que está na tela, para nada se perder numa queda de conexão.</li>
       </ul>
       <p>São todos necessários para o app funcionar. Não usamos cookies de publicidade nem de rastreamento.</p>
@@ -88,6 +90,7 @@ export default function PaginaPrivacidade() {
         <li>Supabase, empresa dos Estados Unidos: banco de dados e autenticação, em servidores em São Paulo.</li>
         <li>Vercel, empresa dos Estados Unidos: hospedagem do site.</li>
         <li>Um provedor de envio de e-mails, para as mensagens de confirmação e de recuperação de acesso.</li>
+        <li>Google, empresa dos Estados Unidos: só se você escolher entrar com o Google, para confirmar quem você é.</li>
       </ul>
       <p>Também podemos entregar dados a autoridades quando a lei exigir.</p>
 

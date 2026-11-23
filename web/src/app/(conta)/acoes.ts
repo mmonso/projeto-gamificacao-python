@@ -19,6 +19,7 @@ import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import { banco } from "@/servidor/db/cliente";
 import { contarContas } from "@/servidor/perfis/vagas";
 import { guardarEmailPendente, lerEmailPendente } from "@/servidor/auth/email-pendente";
+import { guardarEntradaGoogle } from "@/servidor/auth/entrada-google";
 import { criarClienteSupabase, origemDoSite } from "@/servidor/auth/supabase";
 
 export type EstadoFormulario = {
@@ -95,6 +96,27 @@ export async function entrarComoVisitante(_anterior: EstadoFormulario, form: For
   const { error } = await supabase.auth.signInAnonymously({ options: { data: metadados } });
   if (error) return { erro: mensagemDeErroAuth(error.code, "visitante") };
   redirect("/aprender");
+}
+
+/**
+ * Entra (ou cria a conta) com o Google. O botão diz que continuar equivale a declarar a idade mínima e aceitar
+ * os documentos; o aceite, a meta e o fuso vão num cookie curto e viram perfil na volta (auth/confirmar).
+ * O teto de contas é conferido na volta: só lá se sabe se a conta é nova.
+ */
+export async function entrarComGoogle(_anterior: EstadoFormulario, form: FormData): Promise<EstadoFormulario> {
+  const entrada = Object.fromEntries(form);
+  await guardarEntradaGoogle({
+    meta_diaria: esquemaCadastro.shape.metaDiaria.parse(entrada.metaDiaria),
+    fuso: esquemaCadastro.shape.fuso.parse(entrada.fuso),
+    termos_aceitos_em: new Date().toISOString(),
+  });
+  const supabase = await criarClienteSupabase();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: await linkDeConfirmacao(destinoSeguro(entrada.voltar)) },
+  });
+  if (error || !data.url) return { erro: MENSAGENS.googleFalhou };
+  redirect(data.url);
 }
 
 export async function reenviarConfirmacao(): Promise<EstadoFormulario> {

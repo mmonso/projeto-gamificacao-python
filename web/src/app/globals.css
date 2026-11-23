@@ -152,6 +152,11 @@
   .botao:disabled { background: var(--bloqueado); color: var(--bloqueado-icone); box-shadow: var(--sombra-botao) var(--sombra-bloqueado); cursor: not-allowed; }
   .botao-secundario { background: var(--fundo); color: var(--azul); border-color: var(--borda); box-shadow: var(--sombra-botao) var(--borda); }
   .botao-secundario:active:not(:disabled) { box-shadow: 0 0 0 var(--borda); }
+  /* Login com Google: mesma forma do secundário, texto na cor do corpo e o logotipo colorido à esquerda. */
+  .botao-google { background: var(--fundo); color: var(--texto); border-color: var(--borda); box-shadow: var(--sombra-botao) var(--borda); gap: 12px; }
+  .botao-google:active:not(:disabled) { box-shadow: 0 0 0 var(--borda); }
+  .divisor-ou { display: flex; align-items: center; gap: 12px; color: var(--texto-suave); font-size: .9rem; font-weight: 700; }
+  .divisor-ou::before, .divisor-ou::after { content: ""; flex: 1; height: 2px; background: var(--borda); }
   .botao-fantasma { background: transparent; color: var(--azul); box-shadow: none; border-color: transparent; }
   .botao-fantasma:active:not(:disabled) { box-shadow: none; }
   .botao-icone {
