@@ -1,25 +1,23 @@
 import { describe, expect, it } from "vitest";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import { dadosIniciaisDoPerfil, primeiroNomeDoProvedor } from "./conta";
-import { lerEntradaGoogle } from "./entrada-google";
+import { lerPedidoGoogle } from "./entrada-google";
 
-describe("cookie da entrada com Google", () => {
-  const aceite = "2026-11-23T18:00:00.000Z";
+describe("pedido do botão do Google", () => {
+  const base = { credencial: "x".repeat(40), nonce: "n".repeat(32) };
 
-  it("lê meta, fuso e a data do aceite", () => {
-    const valor = JSON.stringify({ meta_diaria: 2, fuso: "America/Sao_Paulo", termos_aceitos_em: aceite });
-    expect(lerEntradaGoogle(valor)).toEqual({ meta_diaria: 2, fuso: "America/Sao_Paulo", termos_aceitos_em: aceite });
+  it("lê token, nonce, meta e fuso", () => {
+    expect(lerPedidoGoogle({ ...base, metaDiaria: "2", fuso: "America/Manaus" })).toEqual({ ...base, metaDiaria: 2, fuso: "America/Manaus" });
   });
 
-  it("meta e fuso inválidos voltam ao padrão, sem perder o aceite", () => {
-    const valor = JSON.stringify({ meta_diaria: 9, fuso: "Lugar/Nenhum", termos_aceitos_em: aceite });
-    expect(lerEntradaGoogle(valor)).toEqual({ meta_diaria: PARAMETROS.metaPadrao, fuso: PARAMETROS.fusoPadrao, termos_aceitos_em: aceite });
+  it("meta e fuso inválidos voltam ao padrão", () => {
+    expect(lerPedidoGoogle({ ...base, metaDiaria: "9", fuso: "Lugar/Nenhum" })).toEqual({ ...base, metaDiaria: PARAMETROS.metaPadrao, fuso: PARAMETROS.fusoPadrao });
   });
 
-  it("sem cookie, corrompido ou sem aceite: null", () => {
-    expect(lerEntradaGoogle(undefined)).toBeNull();
-    expect(lerEntradaGoogle("{não é json")).toBeNull();
-    expect(lerEntradaGoogle(JSON.stringify({ meta_diaria: 1, fuso: "America/Sao_Paulo" }))).toBeNull();
+  it("sem token ou sem nonce: recusado", () => {
+    expect(lerPedidoGoogle({ nonce: base.nonce })).toBeNull();
+    expect(lerPedidoGoogle({ credencial: base.credencial })).toBeNull();
+    expect(lerPedidoGoogle({ ...base, nonce: "curto" })).toBeNull();
   });
 });
 

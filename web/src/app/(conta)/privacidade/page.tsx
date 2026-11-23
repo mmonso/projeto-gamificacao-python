@@ -79,7 +79,6 @@ export default function PaginaPrivacidade() {
       <ul>
         <li>Cookies de sessão, necessários para manter você conectado com segurança.</li>
         <li>Um cookie temporário com o e-mail que aguarda confirmação, para reenviar o link do cadastro. Ele dura até 24 horas.</li>
-        <li>Ao continuar com o Google, um cookie de até 10 minutos com a meta, o fuso e a hora do aceite, para gravá-los na conta quando você voltar do Google.</li>
         <li>No armazenamento do navegador: a demonstração em andamento, o nome e a meta escolhidos na introdução e a resposta do exercício que está na tela, para nada se perder numa queda de conexão.</li>
       </ul>
       <p>São todos necessários para o app funcionar. Não usamos cookies de publicidade nem de rastreamento.</p>
@@ -90,7 +89,10 @@ export default function PaginaPrivacidade() {
         <li>Supabase, empresa dos Estados Unidos: banco de dados e autenticação, em servidores em São Paulo.</li>
         <li>Vercel, empresa dos Estados Unidos: hospedagem do site.</li>
         <li>Um provedor de envio de e-mails, para as mensagens de confirmação e de recuperação de acesso.</li>
-        <li>Google, empresa dos Estados Unidos: só se você escolher entrar com o Google, para confirmar quem você é.</li>
+        <li>
+          Google, empresa dos Estados Unidos: confirma quem você é, se você escolher entrar com o Google. O botão do Google é carregado dos servidores dele nas telas de
+          entrar e de criar conta, então o Google recebe o endereço IP de quem abre essas telas.
+        </li>
       </ul>
       <p>Também podemos entregar dados a autoridades quando a lei exigir.</p>
 

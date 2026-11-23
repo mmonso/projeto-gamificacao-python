@@ -8,7 +8,6 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 import * as t from "@/servidor/db/esquema";
 
 vi.mock("server-only", () => ({}));
-vi.mock("next/headers", () => ({ cookies: async () => ({ set: () => {} }) }));
 vi.mock("@/modulos/conta/vagas", async (original) => {
   const real = await original<typeof import("@/modulos/conta/vagas")>();
   return { ...real, cadastroAberto: (contas: number) => real.cadastroAberto(contas, 3) };

@@ -76,13 +76,18 @@ conta em `web/.env.local`, `TESTE_CADASTRO_*`).
   dados de API do Google.
 - Supabase: provedor Google ligado com o ID do cliente; a chave secreta foi colada pelo dono e não está em lugar nenhum
   do repositório (`client_secret_*.json` está no `.gitignore`).
-- App: botão "Continuar com Google" em `/entrar` e `/cadastro` (`componentes/EntrarComGoogle.tsx`, ação `entrarComGoogle`).
-  O aviso abaixo do botão vale como declaração de 18+ e aceite, como no visitante. Meta, fuso e hora do aceite vão num
-  cookie de 10 minutos (`modulos/conta/entrada-google.ts`) e viram perfil na volta (`servidor/auth/entrada-google.ts`,
-  chamado em `auth/confirmar`), com o primeiro nome do Google. O teto de 50 contas vale também aqui: conta nova sem vaga
-  sai da sessão e vê a mensagem em `/entrar?aviso=sem-vagas`; quem já tem conta entra sempre. Cancelar no Google leva a
-  `/entrar?aviso=google`. Política de privacidade atualizada (versão de 23/11/2026).
-- Testado: até a tela "Escolha uma conta" do Google no site local, o cancelamento, as mensagens e o roteiro `tudo`.
+- App (refeito no mesmo dia): botão **oficial** do Google (Google Identity Services) em `/entrar` e `/cadastro`
+  (`componentes/EntrarComGoogle.tsx`). O Google devolve um token de identidade na própria página, e a ação
+  `entrarComGoogle` o confere no Supabase com `signInWithIdToken` e um nonce (o resumo SHA-256 vai ao Google, o original
+  ao Supabase). Motivo: no primeiro jeito (redirecionamento pelo Supabase) a janela do Google dizia "Fazer login no
+  serviço zykqgkwheuxnhylzjqeb.supabase.co"; agora mostra o endereço do Sibi. Para isso, o cliente OAuth tem as origens
+  JavaScript `https://sibi-three.vercel.app`, `http://localhost:3100` e `http://localhost`. O ID do cliente (público)
+  está em `modulos/conta/entrada-google.ts`. O aviso abaixo do botão vale como 18+ e aceite; meta, fuso e hora do aceite
+  vão junto com o token e viram perfil em `servidor/auth/entrada-google.ts`, com o primeiro nome do Google. Teto de 50
+  contas: conta nova sem vaga sai da sessão e vê a mensagem; quem já tem conta entra sempre. Política de privacidade
+  atualizada (versão de 23/11/2026), incluindo que o botão é carregado dos servidores do Google.
+- Para o nome "Sibi" aparecer no lugar do endereço, falta a verificação de marca no Google, que pede domínio próprio.
+- Testado: botão aparece no site local (celular, 360 px, tema escuro sem faixa branca), roteiro `tudo` e testes.
   **Falta o dono testar a entrada completa no site publicado**, escolhendo uma conta Google.
 - Limite conhecido: um visitante que entra com o Google ganha uma conta nova e perde o progresso de visitante, igual ao
   cadastro por e-mail. Ligar "Allow manual linking" no Supabase permitiria juntar os dois, se for preciso.

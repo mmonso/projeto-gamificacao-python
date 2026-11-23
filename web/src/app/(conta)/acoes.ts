@@ -14,12 +14,13 @@ import {
   primeiroErro,
   type MetadadosCadastro,
 } from "@/modulos/conta/conta";
+import { lerPedidoGoogle } from "@/modulos/conta/entrada-google";
 import { cadastroAberto, MENSAGEM_SEM_VAGAS } from "@/modulos/conta/vagas";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import { banco } from "@/servidor/db/cliente";
 import { contarContas } from "@/servidor/perfis/vagas";
 import { guardarEmailPendente, lerEmailPendente } from "@/servidor/auth/email-pendente";
-import { guardarEntradaGoogle } from "@/servidor/auth/entrada-google";
+import { prepararPerfilDoProvedor } from "@/servidor/auth/entrada-google";
 import { criarClienteSupabase, origemDoSite } from "@/servidor/auth/supabase";
 
 export type EstadoFormulario = {
@@ -99,24 +100,29 @@ export async function entrarComoVisitante(_anterior: EstadoFormulario, form: For
 }
 
 /**
- * Entra (ou cria a conta) com o Google. O botão diz que continuar equivale a declarar a idade mínima e aceitar
- * os documentos; o aceite, a meta e o fuso vão num cookie curto e viram perfil na volta (auth/confirmar).
- * O teto de contas é conferido na volta: só lá se sabe se a conta é nova.
+ * Entra (ou cria a conta) com o Google. O botão oficial do Google entrega um token de identidade, e o Supabase
+ * o confere com o nonce. O aviso abaixo do botão vale como declaração da idade mínima e aceite dos documentos.
+ * Conta nova só ganha perfil se houver vaga no teste; sem vaga, sai da sessão e explica.
  */
 export async function entrarComGoogle(_anterior: EstadoFormulario, form: FormData): Promise<EstadoFormulario> {
   const entrada = Object.fromEntries(form);
-  await guardarEntradaGoogle({
-    meta_diaria: esquemaCadastro.shape.metaDiaria.parse(entrada.metaDiaria),
-    fuso: esquemaCadastro.shape.fuso.parse(entrada.fuso),
+  const pedido = lerPedidoGoogle(entrada);
+  if (!pedido) return { erro: MENSAGENS.googleFalhou };
+
+  const supabase = await criarClienteSupabase();
+  const { data, error } = await supabase.auth.signInWithIdToken({ provider: "google", token: pedido.credencial, nonce: pedido.nonce });
+  if (error || !data.user) return { erro: MENSAGENS.googleFalhou };
+
+  const resultado = await prepararPerfilDoProvedor(banco(), data.user, {
+    meta_diaria: pedido.metaDiaria,
+    fuso: pedido.fuso,
     termos_aceitos_em: new Date().toISOString(),
   });
-  const supabase = await criarClienteSupabase();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: await linkDeConfirmacao(destinoSeguro(entrada.voltar)) },
-  });
-  if (error || !data.url) return { erro: MENSAGENS.googleFalhou };
-  redirect(data.url);
+  if (resultado === "sem-vagas") {
+    await supabase.auth.signOut({ scope: "local" });
+    return { erro: MENSAGEM_SEM_VAGAS };
+  }
+  redirect(destinoSeguro(entrada.voltar));
 }
 
 export async function reenviarConfirmacao(): Promise<EstadoFormulario> {

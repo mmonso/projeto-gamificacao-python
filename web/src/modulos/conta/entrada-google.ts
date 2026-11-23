@@ -1,29 +1,27 @@
-// Entrada com Google (FL-02): o Google não envia meta diária, fuso nem o aceite dos documentos. O site guarda
-// esses dados num cookie curto antes de ir ao Google e os grava no perfil quando o aluno volta.
+// Entrada com Google (FL-02) pelo botão oficial do Google na própria página (Google Identity Services). O Google
+// entrega ao navegador um token de identidade; o servidor o passa ao Supabase (signInWithIdToken), que o confere.
+// Assim a janela do Google mostra o endereço do Sibi, e não o do Supabase.
 import { z } from "zod";
 import { PARAMETROS } from "@/modulos/gamificacao/parametros";
 import { fusoValido } from "@/modulos/gamificacao/dias";
 
-export const COOKIE_ENTRADA_GOOGLE = "sibi-entrada-google";
+/** ID público do cliente OAuth "Sibi web" (Google Cloud, projeto sibi-515617). Não é segredo. */
+export const GOOGLE_CLIENT_ID = "279650063060-23h4m581ntc9huug6f2jprtcge5b8b9a.apps.googleusercontent.com";
 
-/** Tempo para escolher a conta no Google e voltar. */
-export const VALIDADE_ENTRADA_GOOGLE_S = 10 * 60;
-
+/** Dados do Sibi que o Google não envia e que entram no perfil de uma conta nova. */
 export type EntradaGoogle = { meta_diaria: number; fuso: string; termos_aceitos_em: string };
 
-const esquema = z.object({
-  meta_diaria: z.coerce.number().int().min(1).max(3).catch(PARAMETROS.metaPadrao),
+const esquemaPedido = z.object({
+  credencial: z.string().min(20).max(8192),
+  nonce: z.string().min(16).max(128),
+  metaDiaria: z.coerce.number().int().min(1).max(3).catch(PARAMETROS.metaPadrao),
   fuso: z.string().refine(fusoValido).catch(PARAMETROS.fusoPadrao),
-  termos_aceitos_em: z.iso.datetime({ offset: true }),
 });
 
-/** Conteúdo do cookie, ou null se faltar, estiver corrompido ou sem a data do aceite. */
-export function lerEntradaGoogle(valor: string | undefined): EntradaGoogle | null {
-  if (!valor) return null;
-  try {
-    const r = esquema.safeParse(JSON.parse(valor));
-    return r.success ? r.data : null;
-  } catch {
-    return null;
-  }
+export type PedidoGoogle = z.infer<typeof esquemaPedido>;
+
+/** Pedido vindo do botão: token e nonce obrigatórios; meta e fuso inválidos voltam ao padrão. */
+export function lerPedidoGoogle(entrada: Record<string, unknown>): PedidoGoogle | null {
+  const r = esquemaPedido.safeParse(entrada);
+  return r.success ? r.data : null;
 }

@@ -3,22 +3,17 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { EntrarComGoogle } from "@/componentes/EntrarComGoogle";
 import { EntrarComoVisitante } from "@/componentes/EntrarComoVisitante";
-import { Mensagens, Voltar } from "@/componentes/formulario";
-import { destinoSeguro, MENSAGENS } from "@/modulos/conta/conta";
-import { MENSAGEM_SEM_VAGAS } from "@/modulos/conta/vagas";
+import { Voltar } from "@/componentes/formulario";
+import { destinoSeguro } from "@/modulos/conta/conta";
 import { FormularioEntrar } from "./formulario";
 
 export const metadata: Metadata = { title: "Entrar" };
 
-/** Motivo de quem volta do Google sem entrar (auth/confirmar). */
-const AVISOS: Record<string, string> = { "sem-vagas": MENSAGEM_SEM_VAGAS, google: MENSAGENS.googleFalhou };
-
-async function Formulario({ searchParams }: { searchParams: Promise<{ voltar?: string | string[]; aviso?: string | string[] }> }) {
-  const { voltar, aviso } = await searchParams;
+async function Formulario({ searchParams }: { searchParams: Promise<{ voltar?: string | string[] }> }) {
+  const { voltar } = await searchParams;
   const destino = voltar ? destinoSeguro(voltar) : undefined;
   return (
     <>
-      <Mensagens erro={typeof aviso === "string" ? AVISOS[aviso] : undefined} />
       <EntrarComGoogle origem="entrar" voltar={destino} />
       <p className="divisor-ou">ou com e-mail</p>
       <FormularioEntrar voltar={destino} />
