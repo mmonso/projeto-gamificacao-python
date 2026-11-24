@@ -42,11 +42,14 @@ type Props = {
   desafio?: { telaFinal: () => ReactNode };
 };
 
-/** Cartões abertos sozinhos: os de conceito novo, uma única vez por exercício nesta tela. */
-type CartaoAberto = { lista: Cartao[]; indice: number };
+/**
+ * Cartões abertos: os de conceito novo abrem sozinhos, uma única vez por exercício nesta tela, com a saída
+ * escondida até o aluno tocar "Ver a saída". Reabertos pelo botão "Conceito", já chegam com a saída à vista.
+ */
+type CartaoAberto = { lista: Cartao[]; indice: number; vendo: boolean; reaberto: boolean };
 const cartaoNovo = (ex: ExercicioPublico | null): CartaoAberto | null => {
   const lista = ex?.cartoes?.filter((c) => c.novo) ?? [];
-  return lista.length ? { lista, indice: 0 } : null;
+  return lista.length ? { lista, indice: 0, vendo: false, reaberto: false } : null;
 };
 
 const ROTULO_SESSAO: Record<ResultadoConclusao["tipo"], string> = { principal: "Lição", pratica: "Prática", revisao: "Revisão", recuperacao: "Recuperação" };
@@ -252,7 +255,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
   /** Botão "Conceito": reabre os cartões do exercício. Na revisão e na prática, isso conta como dica na agenda. */
   function abrirCartao() {
     if (!exercicio?.cartoes?.length) return;
-    setCartaoAberto({ lista: exercicio.cartoes, indice: 0 });
+    setCartaoAberto({ lista: exercicio.cartoes, indice: 0, vendo: true, reaberto: true });
     if (desafio || (!demo && tipo !== "principal")) void motor.dica(exercicio.id, 0);
   }
 
@@ -265,8 +268,13 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     void chamar("/api/eventos/entenda", { conceitoId, exercicioId: exercicio.id, contexto, ...sessao });
   }
 
+  /** Botão principal com um cartão aberto: primeiro revela a saída, depois passa ao próximo cartão ou ao exercício. */
   function avancarCartao() {
-    setCartaoAberto((c) => (c && c.indice + 1 < c.lista.length ? { ...c, indice: c.indice + 1 } : null));
+    setCartaoAberto((c) => {
+      if (!c) return null;
+      if (!c.vendo) return { ...c, vendo: true };
+      return c.indice + 1 < c.lista.length ? { ...c, indice: c.indice + 1, vendo: c.reaberto } : null;
+    });
   }
 
   async function pedirDica() {
@@ -339,7 +347,9 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
     return <Resultado conclusao={conclusao} titulo={titulo} demo={demo} som={som} />;
   }
 
-  const percentual = progresso.total ? Math.round((progresso.resolvidos / progresso.total) * 100) : 0;
+  // Nos cartões do começo a barra já anda um pouco (design/MELHORIAS_UX.md, C8): ler o conceito também é avançar.
+  const passoCartao = progresso.resolvidos === 0 && cartaoAberto && !cartaoAberto.reaberto ? (cartaoAberto.indice + (cartaoAberto.vendo ? 1 : 0.5)) * 4 : 0;
+  const percentual = Math.max(progresso.total ? Math.round((progresso.resolvidos / progresso.total) * 100) : 0, passoCartao);
   const totalDicas = exercicio?.totalDicas ?? 0;
   const bloqueado = fase !== "respondendo";
 
@@ -366,7 +376,16 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
 
       <main className="licao-corpo" id="conteudo-principal">
         {aviso && <p className="mensagem-aviso mb-4">{aviso}</p>}
-        {exercicio && cartaoAberto && <CartaoConceito key={`${exercicio.id}:${cartaoAberto.indice}`} cartao={cartaoAberto.lista[cartaoAberto.indice]} posicao={cartaoAberto.indice + 1} total={cartaoAberto.lista.length} aoAbrirEntenda={abrirEntenda} />}
+        {exercicio && cartaoAberto && (
+          <CartaoConceito
+            key={`${exercicio.id}:${cartaoAberto.indice}`}
+            cartao={cartaoAberto.lista[cartaoAberto.indice]}
+            posicao={cartaoAberto.indice + 1}
+            total={cartaoAberto.lista.length}
+            vendo={cartaoAberto.vendo}
+            aoAbrirEntenda={abrirEntenda}
+          />
+        )}
         {exercicio ? (
           <div hidden={cartaoAberto !== null}>
             <p className="etiqueta-tipo">
@@ -471,8 +490,8 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
               </p>
             )}
             {cartaoAberto ? (
-              <button type="button" className="botao" onClick={avancarCartao}>
-                {cartaoAberto.indice + 1 < cartaoAberto.lista.length ? "Próximo conceito" : "Entendi"}
+              <button type="button" className={`botao${cartaoAberto.vendo ? "" : " botao-revelar"}`} onClick={avancarCartao}>
+                {!cartaoAberto.vendo ? "Ver a saída" : cartaoAberto.indice + 1 < cartaoAberto.lista.length ? "Próximo conceito" : cartaoAberto.reaberto ? "Voltar ao exercício" : "Entendi, vamos praticar"}
               </button>
             ) : fase === "concluindo" ? (
               <button type="button" className="botao" disabled={!falha} onClick={() => void concluirLicao()}>

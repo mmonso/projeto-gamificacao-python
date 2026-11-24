@@ -416,6 +416,15 @@ def verificar_entenda(rel, pasta, conceitos):
                 rel.erro(o, f"deveria mostrar uma saída, mas dá {r.erro}")
             elif r.saida != _normalizar(str(er["saida"])):
                 rel.erro(o, f"a saída é {er['saida']!r}, mas o código imprime {r.saida!r}")
+            # Jeito certo (opcional): roda sem erro e é diferente do código errado.
+            if er.get("certo") is not None and _texto(rel, o, er.get("certo"), "certo"):
+                if er["certo"].strip() == er["codigo"].strip():
+                    rel.erro(o, "'certo' é igual ao código errado")
+                rc = executar(er["certo"])
+                if rc.erro:
+                    rel.erro(o, f"o código certo falha ao rodar: {rc.erro}")
+                elif er.get("saida") is not None and rc.saida == _normalizar(str(er["saida"])):
+                    rel.erro(o, "o código certo mostra a mesma saída do errado")
     return len(dados)
 
 

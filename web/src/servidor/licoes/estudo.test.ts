@@ -320,7 +320,9 @@ describe("cartões de conceito", () => {
     const { sessaoId } = (await iniciarSessao(db, GABI, "u1-l1")) as { sessaoId: string };
     const primeiro = (await atual(GABI, sessaoId)).exercicio!;
     expect(primeiro.id).toBe("u1-l1-e01");
-    expect(primeiro.cartoes?.filter((c) => c.novo).map((c) => c.conceitoId).sort()).toEqual(["print-texto", "string-aspas"]);
+    // Um cartão só antes do primeiro exercício: o das aspas estreia no u1-l1-e04 (design/MELHORIAS_UX.md, B2).
+    expect(primeiro.cartoes?.filter((c) => c.novo).map((c) => c.conceitoId)).toEqual(["print-texto"]);
+    expect(primeiro.cartoes?.map((c) => c.conceitoId).sort()).toEqual(["print-texto", "string-aspas"]);
     expect(JSON.stringify(primeiro.cartoes)).not.toContain("primeiro");
 
     // Na sessão principal, abrir o cartão é livre: não conta como dica.

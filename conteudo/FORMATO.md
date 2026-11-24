@@ -70,9 +70,11 @@ print-texto:
         Print("Oi")
       erro: NameError       # ou saida: o que o código errado mostra
       porque: "O que deu errado e como corrigir, até 220 caracteres."
+      certo: |-             # opcional: o jeito certo, mostrado com ✓ embaixo do errado
+        print("Oi")
 ```
 
-O verificador roda o passo a passo e confere a saída, e roda cada erro comum: com `erro`, o código precisa dar exatamente esse erro; com `saida`, precisa mostrar exatamente essa saída. Mudar o `entenda.yaml` não muda a versão das lições: a publicação atualiza o cartão do conceito.
+O verificador roda o passo a passo e confere a saída, e roda cada erro comum: com `erro`, o código precisa dar exatamente esse erro; com `saida`, precisa mostrar exatamente essa saída. O `certo`, quando existe, precisa rodar sem erro, ser diferente do código errado e, nos erros com `saida`, mostrar outra coisa. Fica de fora só quando o "erro" é uma expectativa errada e não um código a corrigir (ex.: `//` não arredonda). Mudar o `entenda.yaml` não muda a versão das lições: a publicação atualiza o cartão do conceito.
 
 ## 3. Lição
 

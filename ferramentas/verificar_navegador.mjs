@@ -131,7 +131,10 @@ async function passarCartoes(page, ex) {
       conferir((await page.$(".cartao-conceito .surgir .saida")) === null, "cartão de conceito: a saída fica escondida até pedir");
       conferir(await page.evaluate(() => !document.querySelector("#enunciado")?.offsetParent), `cartão de conceito: o exercício ${ex.id} espera atrás do cartão`);
       await foto(page, "cartao-conceito");
-      await page.evaluate(() => [...document.querySelectorAll(".cartao-conceito button")].find((b) => b.textContent.trim() === "Ver a saída")?.click());
+      conferir((await page.$(".cartao-conceito .entenda")) === null, "cartão de conceito: o Entenda melhor espera a saída ser revelada");
+      const botao = await page.evaluate(() => document.querySelector(".rodape-licao .botao")?.textContent.trim());
+      conferir(botao === "Ver a saída", "cartão de conceito: o botão principal é Ver a saída", botao);
+      await page.evaluate(() => [...document.querySelectorAll(".rodape-licao button")].find((b) => b.textContent.trim() === "Ver a saída")?.click());
       await espera(150);
       conferir((await page.$(".cartao-conceito .surgir .saida")) !== null, "cartão de conceito: Ver a saída mostra a saída e o que reparar");
       await foto(page, "cartao-conceito-saida");
@@ -139,12 +142,16 @@ async function passarCartoes(page, ex) {
       conferir(entenda !== null, "cartão de conceito: tem o Entenda melhor, fechado");
       if (entenda) {
         await entenda.click();
-        await espera(150);
+        await espera(700);
         const corpo = await page.evaluate(() => {
           const c = document.querySelector(".entenda[open] .entenda-corpo");
-          return c ? { etapas: c.querySelectorAll(".entenda-etapas li").length, erros: c.querySelectorAll(".entenda-erro").length } : null;
+          const topo = document.querySelector(".entenda")?.getBoundingClientRect().top ?? 9999;
+          return c
+            ? { etapas: c.querySelectorAll(".entenda-etapas li").length, erros: c.querySelectorAll(".erros-comuns .erro-comum").length, certos: c.querySelectorAll(".marca-erro.certo").length, topo: Math.round(topo) }
+            : null;
         });
-        conferir(corpo !== null && corpo.etapas >= 2 && corpo.erros >= 1, "Entenda melhor abre com passo a passo e erros comuns", corpo);
+        conferir(corpo !== null && corpo.etapas >= 2 && corpo.erros >= 1 && corpo.certos >= 1, "Entenda melhor abre com passo a passo e erros comuns numa caixa, com o jeito certo", corpo);
+        conferir(corpo !== null && corpo.topo < 200, "Entenda melhor: ao abrir, a tela rola até ele", corpo);
         await foto(page, "cartao-entenda");
       }
     }

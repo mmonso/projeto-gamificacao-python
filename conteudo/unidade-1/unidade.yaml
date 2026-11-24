@@ -23,7 +23,8 @@ conceitos:
       saida: "Até amanhã!"
       destaque: "\"Até amanhã!\""
       repare: "Sem a aspa do fim, o Python mostra erro: não sabe onde o texto termina."
-      primeiro: "u1-l1-e01"
+      # Estreia no e04, não no e01: assim a pessoa chega ao primeiro exercício depois de um cartão só.
+      primeiro: "u1-l1-e04"
   - id: ordem-execucao
     nome: Ordem de execução
     descricao: As linhas são executadas de cima para baixo, e cada print exibe uma nova linha.

@@ -19,6 +19,8 @@ booleanos:
         print(true)
       erro: NameError
       porque: "Em minúsculas, true não é o valor verdadeiro: é um nome desconhecido. O certo é True, com T maiúsculo."
+      certo: |-
+        print(True)
 
 comparacao:
   texto: "Leia os sinais em voz alta: > é maior que, < é menor que, >= é maior ou igual, <= é menor ou igual. A diferença entre > e >= aparece quando os valores são iguais: 18 > 18 é falso, mas 18 >= 18 é verdadeiro."
@@ -39,6 +41,8 @@ comparacao:
         print(5 => 3)
       erro: SyntaxError
       porque: "O sinal de maior vem primeiro: escreva >=. A forma => não existe em Python."
+      certo: |-
+        print(5 >= 3)
 
 igualdade:
   texto: "Um = sozinho guarda valor numa variável. Para perguntar se dois valores são iguais, use dois: ==. O != pergunta se são diferentes. Com textos, a comparação é exata: maiúscula, acento e espaço fazem diferença."
@@ -63,6 +67,9 @@ igualdade:
         print(senha = "abc")
       erro: TypeError
       porque: "Com um = só, o Python não compara. Dentro do print isso nem é aceito. Para comparar, use ==."
+      certo: |-
+        senha = "abc"
+        print(senha == "abc")
 
 logicos:
   texto: "and, or e not combinam perguntas. and é exigente: só dá True se as duas partes forem True. or é generoso: basta uma. not inverte o resultado. Pense num ingresso: and é ter ingresso e documento; or é ser estudante ou professor."
@@ -90,6 +97,10 @@ logicos:
       saida: |-
         False
       porque: "Quem queria meia-entrada para menores ou estudantes precisava de or. Com and, as duas coisas teriam que valer ao mesmo tempo."
+      certo: |-
+        idade = 15
+        estudante = True
+        print(idade < 18 or estudante)
 
 if-else:
   texto: "O if é uma bifurcação: o programa faz uma pergunta e segue por um dos dois caminhos. Se a condição for True, roda o bloco do if; se for False, roda o bloco do else. Nunca os dois, e nunca nenhum, quando há else."
@@ -114,6 +125,10 @@ if-else:
             print("Leve água")
       erro: SyntaxError
       porque: "A linha do if termina com dois-pontos. Sem eles, o Python não sabe que um bloco vem a seguir."
+      certo: |-
+        temperatura = 31
+        if temperatura > 28:
+            print("Leve água")
 
 indentacao:
   texto: "Em Python, o recuo no começo da linha não é enfeite: é ele que diz quais linhas pertencem ao if e ao else. Use quatro espaços. Uma linha recuada faz parte do bloco; uma linha sem recuo, depois dele, roda sempre."
@@ -137,3 +152,7 @@ indentacao:
         print("Aprovado")
       erro: IndentationError
       porque: "A linha do bloco precisa de recuo. Sem ele, o Python mostra erro de indentação."
+      certo: |-
+        nota = 9
+        if nota >= 7:
+            print("Aprovado")

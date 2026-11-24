@@ -18,10 +18,14 @@ print-texto:
         Print("Oi")
       erro: NameError
       porque: "O Python diferencia maiúsculas: Print com P maiúsculo não existe. O comando é print, todo em minúsculas."
+      certo: |-
+        print("Oi")
     - codigo: |-
         print "Oi"
       erro: SyntaxError
       porque: "Sem parênteses o Python não entende o comando. O que o print vai mostrar sempre fica entre ( e )."
+      certo: |-
+        print("Oi")
 
 string-aspas:
   texto: "As aspas são como as bordas de uma etiqueta: marcam onde o texto começa e onde termina. Tudo o que está entre elas, inclusive espaços e números, é texto e aparece igualzinho na tela. Pode ser aspas duplas ou simples, desde que abra e feche com o mesmo tipo."
@@ -40,10 +44,14 @@ string-aspas:
         print("Bom dia!)
       erro: SyntaxError
       porque: "Faltou a aspa do fim: o Python não sabe onde o texto termina e mostra erro de sintaxe."
+      certo: |-
+        print("Bom dia!")
     - codigo: |-
         print("Bom dia!')
       erro: SyntaxError
       porque: "Abriu com aspa dupla e tentou fechar com simples. Para o Python, o texto continua aberto."
+      certo: |-
+        print("Bom dia!")
 
 ordem-execucao:
   texto: "Um programa é lido como uma lista de tarefas: de cima para baixo, uma linha de cada vez. Trocar duas linhas de lugar troca a ordem do que aparece. E cada print começa numa linha nova da tela, como se apertasse Enter no fim."
@@ -68,6 +76,9 @@ ordem-execucao:
         Estender
         Lavar
       porque: "O Python não reorganiza nada: se a linha de Estender vem primeiro, ela aparece primeiro, mesmo sem fazer sentido."
+      certo: |-
+        print("Lavar")
+        print("Estender")
 
 print-numero:
   texto: "Números são escritos sem aspas, e aí o Python trata como número de verdade: com eles dá para fazer contas. Quando o print recebe uma conta, ele primeiro calcula e mostra só o resultado, como uma calculadora."
@@ -90,6 +101,8 @@ print-numero:
       saida: |-
         1230
       porque: "Com aspas, 12 e 30 viram textos, e o + cola um texto no outro em vez de somar."
+      certo: |-
+        print(12 + 30)
 
 texto-vs-numero:
   texto: "As aspas mudam a natureza do valor. Sem elas, 7 + 1 é uma conta e o Python responde 8. Com elas, \"7 + 1\" é só uma frase, que aparece letra por letra. Pergunte sempre: isto está entre aspas?"
@@ -109,6 +122,8 @@ texto-vs-numero:
       saida: |-
         10 - 3
       porque: "Quem queria o resultado 7 colocou aspas sem querer. Entre aspas, a conta não é feita."
+      certo: |-
+        print(10 - 3)
 
 print-varios:
   texto: "O print aceita vários valores de uma vez, separados por vírgula. Ele mostra todos na mesma linha e coloca um espaço entre eles. É o jeito mais simples de juntar texto e número numa frase, como num formulário com rótulo e valor."
@@ -128,6 +143,8 @@ print-varios:
         print("Total:" 35)
       erro: SyntaxError
       porque: "Faltou a vírgula entre os valores. Sem ela, o Python não sabe onde termina um e começa o outro."
+      certo: |-
+        print("Total:", 35)
 
 atribuicao:
   texto: "Uma variável é uma etiqueta com nome colada num valor. O sinal = faz a colagem: o nome fica à esquerda e o valor à direita. Depois disso, sempre que o programa usar o nome, o Python troca pelo valor guardado."
@@ -147,6 +164,9 @@ atribuicao:
         "Joana" = cliente
       erro: SyntaxError
       porque: "A ordem é sempre nome = valor. Do jeito invertido, o Python tenta dar valor a um texto e não deixa."
+      certo: |-
+        cliente = "Joana"
+        print(cliente)
 
 variavel-vs-texto:
   texto: "Sem aspas, uma palavra é um nome: o Python procura a variável e mostra o valor dela. Com aspas, é texto e aparece como está. Se a palavra sem aspas nunca recebeu valor, o Python reclama que não conhece aquele nome."
@@ -167,6 +187,8 @@ variavel-vs-texto:
         print(Recife)
       erro: NameError
       porque: "Sem aspas, Recife é tratado como nome de variável. Como nenhuma variável se chama Recife, aparece NameError."
+      certo: |-
+        print("Recife")
 
 nomes-variaveis:
   texto: "Nomes de variáveis seguem regras: só letras, números e o sublinhado _, sem espaço e sem começar com número. Maiúsculas contam: idade e Idade são nomes diferentes. Bons nomes dizem o que guardam, como total_compra."
@@ -186,11 +208,17 @@ nomes-variaveis:
         total compra = 80
       erro: SyntaxError
       porque: "Nome com espaço não vale. Use total_compra."
+      certo: |-
+        total_compra = 80
+        print(total_compra)
     - codigo: |-
         saldo = 50
         print(Saldo)
       erro: NameError
       porque: "Saldo com S maiúsculo é outro nome, que nunca recebeu valor."
+      certo: |-
+        saldo = 50
+        print(saldo)
 
 reatribuicao:
   texto: "Uma variável guarda um valor de cada vez. Quando o mesmo nome recebe um valor novo, a etiqueta sai do valor antigo e vai para o novo. O que veio antes continua valendo para as linhas de antes; dali para baixo, vale o novo."
@@ -216,6 +244,11 @@ reatribuicao:
       saida: |-
         fechado
       porque: "Quem espera ver os dois valores se engana: o print vem depois da troca e mostra só o último."
+      certo: |-
+        status = "aberto"
+        print(status)
+        status = "fechado"
+        print(status)
 
 atualizacao:
   texto: "Em gols = gols + 1, o = não é o igual da matemática. Leia como passa a valer: o Python primeiro calcula o lado direito com o valor atual e depois guarda o resultado no nome. É assim que se conta: pega o que tinha e soma um."
@@ -239,3 +272,7 @@ atualizacao:
       saida: |-
         100
       porque: "A conta é feita, mas o resultado não é guardado em lugar nenhum. Sem saldo = na frente, saldo continua valendo 100."
+      certo: |-
+        saldo = 100
+        saldo = saldo - 30
+        print(saldo)

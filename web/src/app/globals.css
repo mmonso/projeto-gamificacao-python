@@ -763,11 +763,56 @@
   .entenda summary::after { content: "+"; font-size: 1.4rem; line-height: 1; }
   .entenda[open] summary::after { content: "−"; }
   .entenda summary:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
-  .entenda-corpo { padding: 0 16px 16px; }
-  .entenda-corpo > p:first-child { margin-top: 0; }
-  .entenda-etapas { margin: 0 0 12px; padding-left: 1.3em; display: grid; gap: 6px; }
-  .entenda-erro { border-top: 1px solid var(--borda); padding-top: 12px; margin-top: 12px; }
-  .entenda-erro:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
-  .entenda-resultado { margin: 0 0 6px; color: var(--vermelho-texto); font-weight: 800; }
-  .entenda-corpo .codigo, .entenda-corpo .saida { margin-bottom: 10px; font-size: .9rem; }
+  .entenda { scroll-margin-top: 12px; }
+  .entenda-previa { display: block; margin-top: 2px; font-size: .85rem; font-weight: 700; color: var(--texto-suave); }
+  .entenda-corpo { padding: 0 16px 16px; display: grid; gap: 18px; }
+  .entenda-corpo .codigo, .entenda-corpo .saida { margin: 0 0 10px; font-size: .9rem; }
+
+  /* 1. A ideia: conversa, sem caixa */
+  .entenda-ideia { display: flex; gap: 10px; align-items: flex-start; }
+  .entenda-ideia .icone { flex: none; margin-top: 3px; color: var(--amarelo-texto); }
+  .entenda-ideia p { margin: 0; font-size: 1.05rem; line-height: 1.55; }
+
+  /* 2. Passo a passo: etapas numeradas */
+  .entenda-passos { border-top: 1px solid var(--borda); padding-top: 14px; }
+  .entenda-etapas { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+  .entenda-etapas li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.45; }
+  .etapa-numero {
+    flex: none; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-size: .85rem; font-weight: 900; background: var(--azul-claro); color: var(--azul); border: 2px solid var(--azul-tint);
+  }
+
+  /* 3. Erros comuns: caixa própria, vermelha, com o errado (✗) e o certo (✓) */
+  .erros-comuns {
+    border: 2px solid var(--vermelho-tint); border-left: 6px solid var(--vermelho); border-radius: var(--raio-pequeno);
+    background: var(--vermelho-claro); padding: 14px; display: grid; gap: 14px;
+  }
+  .erros-comuns-titulo { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 900; color: var(--vermelho-texto); }
+  .erros-comuns-titulo .icone { color: var(--vermelho); }
+  .erro-comum { display: grid; gap: 6px; }
+  .erro-comum + .erro-comum { border-top: 1px dashed var(--vermelho-tint); padding-top: 14px; }
+  .erro-comum-linha { display: flex; gap: 8px; align-items: flex-start; }
+  .erro-comum-linha .codigo { flex: 1; min-width: 0; margin: 0; }
+  .marca-erro {
+    flex: none; width: 28px; height: 28px; margin-top: 8px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff;
+  }
+  .marca-erro.errado { background: var(--vermelho); }
+  .marca-erro.certo { background: var(--verde-vivo); }
+  .erro-comum-resultado { margin: 0 0 0 36px; font-weight: 800; color: var(--vermelho-texto); }
+  .erro-comum .saida { margin: 0 0 0 36px; }
+  .erro-traducao { font-weight: 700; }
+  .erro-comum-porque { margin: 0 0 0 36px; line-height: 1.5; }
+
+  /* Previsão e "Repare" no cartão */
+  .previsao-pergunta { display: block; font-weight: 800; line-height: 1.4; }
+  .previsao-cartao.acertou .previsao-texto { display: flex; align-items: center; gap: 6px; color: var(--verde-texto); font-style: normal; font-weight: 800; }
+  .previsao-cartao.acertou .icone { flex: none; color: var(--verde-vivo); }
+  .previsao-acerto { font-weight: 900; color: var(--verde-texto); }
+  .repare-cartao { display: flex; gap: 10px; align-items: flex-start; background: var(--amarelo-claro); border: 2px solid var(--amarelo-tint); }
+  .repare-cartao .icone { flex: none; margin-top: 2px; color: var(--amarelo-texto); }
+
+  /* Degradê acima do rodapé fixo da lição: avisa que há conteúdo embaixo do botão. */
+  /* (sombra e não pseudo-elemento, porque o rodapé tem overflow e cortaria o que fica acima dele) */
+  .rodape-licao { box-shadow: 0 -14px 16px -2px var(--fundo); }
+  .rodape-licao.acerto, .rodape-licao.erro { box-shadow: none; }
 }

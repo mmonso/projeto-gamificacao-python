@@ -35,9 +35,9 @@ export const entendaEsquema = z.object({
   texto: texto.max(450),
   /** Exemplo resolvido com etapas nomeadas: o que o Python faz em cada linha. */
   passo_a_passo: z.object({ codigo: texto, saida: texto, etapas: z.array(texto.max(180)).min(2).max(4) }),
-  /** Erros comuns: o código errado, o que acontece (erro ou saída) e por quê. */
+  /** Erros comuns: o código errado, o que acontece (erro ou saída), por quê e, quando existe, o jeito certo. */
   erros: z
-    .array(z.object({ codigo: texto, erro: texto.optional(), saida: texto.optional(), porque: texto.max(220) }).refine((e) => !!e.erro !== !!e.saida))
+    .array(z.object({ codigo: texto, erro: texto.optional(), saida: texto.optional(), porque: texto.max(220), certo: texto.optional() }).refine((e) => !!e.erro !== !!e.saida))
     .min(1)
     .max(2),
 });

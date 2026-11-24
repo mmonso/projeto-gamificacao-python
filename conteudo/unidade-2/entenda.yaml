@@ -22,6 +22,9 @@ tipos-basicos:
       saida: |-
         (2, 50)
       porque: "Em Python, casa decimal usa ponto. Com vírgula, 2,50 vira dois números separados, 2 e 50."
+      certo: |-
+        preco = 2.50
+        print(preco)
 
 divisao:
   texto: "O Python tem duas divisões. A barra / divide de verdade e sempre devolve float, até em contas exatas como 10 / 2, que dá 5.0. A barra dupla // divide e joga fora a parte depois do ponto, como saber quantas caixas cheias dá para montar."
@@ -66,6 +69,8 @@ resto-potencia:
       saida: |-
         0
       porque: "O % não é porcentagem. 50 % 10 não é 5: é o resto de 50 dividido por 10, que é 0."
+      certo: |-
+        print(50 * 10 / 100)
 
 precedencia:
   texto: "O Python segue a ordem da matemática: primeiro potência, depois multiplicação e divisão, por último soma e subtração. Ele não lê a conta da esquerda para a direita. Quando quiser outra ordem, use parênteses, que sempre são feitos primeiro."
@@ -85,6 +90,8 @@ precedencia:
       saida: |-
         8.0
       porque: "Quem espera 3.0 fez a conta da esquerda para a direita. A divisão vem antes: 4 / 2 dá 2.0, e 10 - 2.0 dá 8.0."
+      certo: |-
+        print((10 - 4) / 2)
 
 concatenacao:
   texto: "Com textos, o + não soma: ele cola um texto no fim do outro, como juntar dois pedaços de fita. Ele não acrescenta nada no meio, nem espaço. Se quiser espaço, ele precisa estar dentro das aspas, como qualquer outro caractere."
@@ -106,6 +113,8 @@ concatenacao:
       saida: |-
         Bomdia
       porque: "Faltou o espaço. O + não o coloca sozinho; escreva \"Bom \" + \"dia\" ou use a vírgula do print."
+      certo: |-
+        print("Bom " + "dia")
 
 repeticao-texto:
   texto: "Multiplicar um texto por um número inteiro repete o texto, colado, aquela quantidade de vezes. É útil para desenhar linhas e separadores. Já somar texto com número não funciona, porque o + não sabe misturar os dois tipos."
@@ -124,6 +133,8 @@ repeticao-texto:
         print("ha" + 3)
       erro: TypeError
       porque: "Com +, o Python tenta juntar texto e número e não consegue. Para repetir, use *."
+      certo: |-
+        print("ha" * 3)
 
 erro-tipo:
   texto: "O + funciona entre dois números (soma) ou entre dois textos (junta), mas não entre um texto e um número: aí aparece TypeError. Para mostrar texto e número na mesma frase, o jeito mais simples é separar com vírgula no print."
@@ -142,6 +153,9 @@ erro-tipo:
         print("Idade: " + idade)
       erro: TypeError
       porque: "O + não junta texto com número. Troque por vírgula, ou converta o número com str(idade)."
+      certo: |-
+        idade = 30
+        print("Idade:", idade)
 
 conversao:
   texto: "Às vezes o valor vem no tipo errado, como um número guardado como texto. As funções de conversão resolvem: int() vira inteiro, float() vira número com ponto e str() vira texto. Elas não mudam a variável original; devolvem um valor novo."
@@ -162,3 +176,5 @@ conversao:
         print(int("dois") + 1)
       erro: ValueError
       porque: "O int() só converte textos com algarismos. Uma palavra como \"dois\" não vira número."
+      certo: |-
+        print(int("2") + 1)

@@ -21,6 +21,9 @@ listas:
       saida: |-
         1
       porque: "Faltou a vírgula entre os itens. Sem ela, o Python cola os dois textos num só, e a lista fica com um item."
+      certo: |-
+        tarefas = ["mercado", "academia"]
+        print(len(tarefas))
 
 indice:
   texto: "Cada item da lista tem um endereço, o índice. A contagem começa em 0, não em 1: o primeiro item está na posição 0, o segundo na 1. Para pegar o último sem contar, use -1. Pedir uma posição que não existe dá erro."
@@ -45,6 +48,9 @@ indice:
         print(fila[3])
       erro: IndexError
       porque: "Com três itens, as posições vão de 0 a 2. A posição 3 não existe e dá IndexError."
+      certo: |-
+        fila = ["Rui", "Ana", "Léo"]
+        print(fila[2])
 
 append:
   texto: "O append acrescenta um item no fim da lista, como alguém entrando no fim de uma fila. A própria lista muda e fica com um item a mais. Por isso não se escreve lista = lista.append(...): basta lista.append(...)."
@@ -69,6 +75,10 @@ append:
       saida: |-
         None
       porque: "O append muda a lista e não devolve nada (None). Guardar esse resultado com = troca a lista por None."
+      certo: |-
+        convidados = ["Bia"]
+        convidados.append("Caio")
+        print(convidados)
 
 for:
   texto: "O for repete um bloco de código para cada item da lista, em ordem. A cada volta, a variável do for guarda o item da vez, como um crachá que passa de mão em mão. O que estiver recuado se repete; o que vier depois, sem recuo, roda uma vez só."
@@ -97,6 +107,10 @@ for:
         Treino de ter
         Semana planejada
       porque: "A última linha ficou recuada e passou a fazer parte do for, repetindo a cada volta. Tire o recuo para ela rodar só no fim."
+      certo: |-
+        for dia in ["seg", "ter"]:
+            print("Treino de", dia)
+        print("Semana planejada")
 
 acumulador:
   texto: "Para somar uma lista, use uma variável que acumula, como um cofrinho: começa em 0 antes do for e, a cada volta, recebe o valor da vez. Quando o for termina, ela guarda o total. Começar o cofrinho dentro do for o esvazia a cada volta."
@@ -121,3 +135,8 @@ acumulador:
       saida: |-
         8
       porque: "Com total = 0 dentro do for, o cofrinho é zerado a cada volta e no fim sobra só o último gasto."
+      certo: |-
+        total = 0
+        for gasto in [12, 30, 8]:
+            total = total + gasto
+        print(total)
