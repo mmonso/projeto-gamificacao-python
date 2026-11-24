@@ -15,7 +15,7 @@ const meta = z.coerce.number().int().min(1).max(3);
 export async function salvarMeta(_: EstadoPreferencia, dados: FormData): Promise<EstadoPreferencia> {
   const { aluno } = await obterPerfilAtual();
   const valor = meta.safeParse(dados.get("meta"));
-  if (!valor.success) return { erro: "Escolha uma meta de 1 a 3 sessões." };
+  if (!valor.success) return { erro: "Escolha uma meta de 1 a 3 estudos por dia." };
   await mudarMeta(banco(), aluno.id, valor.data);
   revalidatePath("/perfil");
   return { aviso: "Meta atualizada. Ela vale a partir de hoje." };

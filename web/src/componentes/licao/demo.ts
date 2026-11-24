@@ -99,6 +99,9 @@ export function resultadoDaDemo(estado: EstadoDemo): ResultadoConclusao {
     meta: { feitas: 0, meta: PARAMETROS.metaPadrao, cumpridaAgora: false },
     conquistas: [],
     unidadeConcluida: null,
+    // Conceitos que abriram como novos nesta lição, na ordem em que apareceram.
+    aprendidos: [...new Set(estado.exercicios.flatMap((e) => e.cartoes?.filter((c) => c.novo).map((c) => c.nome) ?? []))],
+    proxima: null,
   };
 }
 

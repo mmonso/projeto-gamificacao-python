@@ -321,6 +321,8 @@ export async function efetivarConclusao(
 
   const trilha = await ordemDaTrilha(tx);
   const posicao = sessao.licaoId ? trilha.indexOf(sessao.licaoId) : -1;
+  const proximaLicaoId = posicao >= 0 ? (trilha[posicao + 1] ?? null) : null;
+  const fechamento = sessao.tipo === "principal" && sessao.licaoId ? await fechamentoDaLicao(tx, sessao.licaoId, proximaLicaoId) : {};
   const resultado: ResultadoConclusao = {
     tipo: sessao.tipo,
     licaoId: sessao.licaoId,
@@ -331,8 +333,9 @@ export async function efetivarConclusao(
     coracoesRecuperados,
     limitePratica: concessao.causa === "pratica_sem_xp",
     voltarSessaoId: sessao.tipo === "recuperacao" ? await licaoParaVoltar(tx, alunoId) : null,
-    proximaLicaoId: posicao >= 0 ? (trilha[posicao + 1] ?? null) : null,
+    proximaLicaoId,
     ...efeitos,
+    ...fechamento,
   };
   await tx.update(t.sessoes).set({ resultado }).where(eq(t.sessoes.id, sessao.id));
   await registrarEvento(tx, sessao.tipo === "principal" || sessao.tipo === "pratica" ? "licao_concluida" : "revisao_concluida", alunoId, {
@@ -344,6 +347,20 @@ export async function efetivarConclusao(
     unidadeConcluida: resultado.unidadeConcluida?.id ?? null,
   });
   return resultado;
+}
+
+/**
+ * Fechamento da lição principal (design/MELHORIAS_UX.md, B3): os conceitos que estrearam nela (o cartão tem
+ * `primeiro` num exercício da lição) e o título da próxima, para "Hoje você aprendeu" e "Na próxima".
+ */
+async function fechamentoDaLicao(tx: Tx, licaoId: string, proximaId: string | null): Promise<Pick<ResultadoConclusao, "aprendidos" | "proxima">> {
+  const novos = await tx
+    .select({ nome: t.conceitos.nome })
+    .from(t.conceitos)
+    .where(sql`${t.conceitos.cartao}->>'primeiro' like ${`${licaoId}-%`}`)
+    .orderBy(sql`${t.conceitos.cartao}->>'primeiro'`);
+  const [proxima] = proximaId ? await tx.select({ id: t.licoes.id, titulo: t.licoes.titulo }).from(t.licoes).where(eq(t.licoes.id, proximaId)) : [];
+  return { aprendidos: novos.map((c) => c.nome), proxima: proxima ?? null };
 }
 
 /** Itens da sessão, para relatórios e testes. */

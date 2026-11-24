@@ -129,6 +129,9 @@ describe("lição piloto do começo ao fim", () => {
     const [a, b] = await Promise.all([concluir(db, ANA, sessaoId), concluir(db, ANA, sessaoId)]);
     expect(a).toEqual(b);
     expect(a).toMatchObject({ licaoId: "u1-l1", primeiraConclusao: true, xp: 20, proximaLicaoId: "u1-l2" });
+    // Fechamento da lição: os conceitos que estrearam nela, na ordem, e a próxima da trilha.
+    expect(a.aprendidos).toEqual(["Exibir texto com print", "Ordem de execução", "Texto entre aspas"]);
+    expect(a.proxima).toMatchObject({ id: "u1-l2" });
     expect(a.acertosPrimeira).toBe(a.total - 1);
     expect(await concluir(db, ANA, sessaoId)).toEqual(a);
     const lancados = await db.select().from(t.lancamentos).where(eq(t.lancamentos.alunoId, ANA));

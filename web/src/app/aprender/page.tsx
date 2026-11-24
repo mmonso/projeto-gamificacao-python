@@ -9,6 +9,7 @@ import { banco } from "@/servidor/db/cliente";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
 import { obterTrilha, type NoTrilha, type UnidadeTrilha } from "@/servidor/licoes/servico";
 import { estadoMiniteste } from "@/servidor/miniteste";
+import { NoRevisao } from "./NoRevisao";
 import { OfertaTransferencia } from "./OfertaTransferencia";
 import { RolarParaAtual } from "./RolarParaAtual";
 
@@ -117,9 +118,7 @@ function Unidade({ u, nome }: { u: UnidadeTrilha; nome: string }) {
               return (
                 <li key={item.chave} style={estilo}>
                   {item.liberada ? (
-                    <Link href="/praticar" className="no revisao" aria-label="Revisão dos conceitos vistos">
-                      <Icone nome="revisao" />
-                    </Link>
+                    <NoRevisao />
                   ) : (
                     <span className="no revisao bloqueada" role="img" aria-label={`Revisão, bloqueada até concluir a lição ${item.depois}`}>
                       <Icone nome="cadeado" />

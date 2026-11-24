@@ -27,7 +27,7 @@ export default function Apresentacao() {
       <Mascote humor="incentivo" tamanho="medio" />
       <h1 className="chamada">Escreva seu primeiro programa em Python. Agora.</h1>
       <PrimeiroPrograma />
-      <p className="subtitulo">A academia diária de Python, em português: 5 minutos por dia para ler, prever e corrigir código.</p>
+      <p className="subtitulo">Python em português, 5 minutos por dia: você lê programas curtinhos e adivinha o que eles fazem. Sem instalar nada.</p>
       <div className="acoes">
         <Suspense fallback={<AcoesVisitante />}>
           <Acoes />

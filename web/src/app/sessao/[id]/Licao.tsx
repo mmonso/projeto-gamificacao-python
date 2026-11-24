@@ -11,6 +11,7 @@ import { textoSeguidas, tituloDoFeedback } from "@/componentes/licao/frases";
 import { atualizarCronometro, CRONOMETRO_VAZIO, tempoDoCronometro, type Cronometro } from "@/componentes/licao/cronometro";
 import { guardar, lerGuardada, retomar, type Envio } from "@/componentes/licao/guardada";
 import { chamar, motorDaSessao, type Motor } from "@/componentes/licao/motor";
+import { ReportarQuestao } from "@/componentes/licao/ReportarQuestao";
 import { Resultado } from "@/componentes/licao/Resultado";
 import { liberarSom, tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
@@ -475,6 +476,13 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                   <Icone nome="coracao" pequeno /> Você perdeu um coração. {resultado.coracoes === 0 ? "Seus corações acabaram." : `Restam ${resultado.coracoes}.`}
                 </p>
               )}
+              <ReportarQuestao
+                key={exercicio.id}
+                exercicioId={exercicio.id}
+                contexto={desafio ? "desafio" : demo ? "demo" : tipo}
+                sessaoId={/^[0-9a-f-]{36}$/i.test(sessaoId) ? sessaoId : undefined}
+                correta={resultado.correta}
+              />
             </div>
             <button type="button" className="botao" onClick={continuar}>
               Continuar
@@ -498,21 +506,29 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                 {falha ? "Tentar novamente" : "Concluindo…"}
               </button>
             ) : (
-              <>
-                <div className="rodape-acoes">
-                  <button type="button" className="botao botao-secundario botao-dica" disabled={bloqueado || dicas.length >= totalDicas} onClick={() => void pedirDica()}>
-                    <Icone nome="lampada" /> Dica{totalDicas - dicas.length > 0 ? ` (${totalDicas - dicas.length})` : ""}
+              // Uma linha só: Dica e Conceito compactos, Verificar largo (design/MELHORIAS_UX.md, C7).
+              <div className="rodape-linha">
+                <button
+                  type="button"
+                  className="botao botao-secundario botao-dica"
+                  disabled={bloqueado || dicas.length >= totalDicas}
+                  onClick={() => void pedirDica()}
+                  aria-label={`Dica${totalDicas - dicas.length > 0 ? `, ${totalDicas - dicas.length} restantes` : ""}`}
+                >
+                  <Icone nome="lampada" />
+                  <span className="rotulo-largo">Dica</span>
+                  {totalDicas - dicas.length > 0 && <span className="contagem-dica">{totalDicas - dicas.length}</span>}
+                </button>
+                {exercicio?.cartoes?.length ? (
+                  <button type="button" className="botao botao-secundario botao-dica" disabled={bloqueado} onClick={abrirCartao} aria-label="Rever o conceito">
+                    <Icone nome="livro" />
+                    <span className="rotulo-largo">Conceito</span>
                   </button>
-                  {exercicio?.cartoes?.length ? (
-                    <button type="button" className="botao botao-secundario botao-dica" disabled={bloqueado} onClick={abrirCartao}>
-                      <Icone nome="livro" /> Conceito
-                    </button>
-                  ) : null}
-                </div>
-                <button type="button" className="botao" disabled={!podeVerificar} onClick={acaoPrincipal}>
+                ) : null}
+                <button type="button" className="botao botao-verificar" disabled={!podeVerificar} onClick={acaoPrincipal}>
                   {fase === "verificando" ? "Verificando…" : falha ? "Tentar novamente" : "Verificar"}
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>

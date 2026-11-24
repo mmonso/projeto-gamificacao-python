@@ -19,7 +19,7 @@ export const PARAMETROS = {
 export const NOMES_META: Record<number, { nome: string; tempo: string }> = {
   1: { nome: "Leve", tempo: "cerca de 5 min" },
   2: { nome: "Firme", tempo: "cerca de 10 min" },
-  3: { nome: "Intensa", tempo: "cerca de 20 min" },
+  3: { nome: "Intensa", tempo: "cerca de 15 min" },
 };
 
 export type TipoSessao = "principal" | "pratica" | "revisao" | "recuperacao";

@@ -77,6 +77,9 @@ export function Indicadores({ resumo, local }: { resumo: ResumoTopo; local: "top
     <div className="indicadores" aria-label="Seus indicadores">
       <button type="button" className="indicador anel-meta" popoverTarget={`meta-${local}`} aria-label={`Meta do dia: ${feitas} de ${resumo.meta}`}>
         <AnelMeta feitas={feitas} meta={resumo.meta} />
+        <span className="anel-conta" aria-hidden="true">
+          {feitas}/{resumo.meta}
+        </span>
       </button>
       <button
         type="button"
@@ -87,26 +90,50 @@ export function Indicadores({ resumo, local }: { resumo: ResumoTopo; local: "top
         <Icone nome="chama" />
         <span aria-hidden="true">{resumo.sequencia}</span>
       </button>
-      <span className="indicador indicador-coracoes" title="Corações">
+      {/* Corações e XP também respondem ao toque e explicam o que são (design/MELHORIAS_UX.md, C4). */}
+      <button type="button" className="indicador indicador-coracoes" popoverTarget={`coracoes-${local}`} aria-label={`${resumo.coracoes} de 5 corações`}>
         <Icone nome="coracao" />
-        <span>{resumo.coracoes}</span>
-        <span className="so-leitor">corações</span>
-      </span>
-      <span className="indicador indicador-xp" title="XP">
+        <span aria-hidden="true">{resumo.coracoes}</span>
+      </button>
+      <button type="button" className="indicador indicador-xp" popoverTarget={`xp-${local}`} aria-label={`${resumo.xpTotal} XP`}>
         <Icone nome="raio" />
-        <span>{resumo.xpTotal}</span>
-        <span className="so-leitor">XP</span>
-      </span>
+        <span aria-hidden="true">{resumo.xpTotal}</span>
+      </button>
+
+      <div id={`coracoes-${local}`} popover="auto" className="pop" aria-label="Corações">
+        <p className="pop-numero pop-coracoes">
+          <Icone nome="coracao" /> {resumo.coracoes}
+          <span>de 5 corações</span>
+        </p>
+        <p className="ajuda">Na lição, cada erro de primeira custa 1 coração. Praticar e revisar não gastam nenhum.</p>
+        <p className="ajuda">{resumo.coracoes < 5 ? "Uma revisão rápida de 5 exercícios devolve 2 corações." : "Seus corações estão cheios."}</p>
+        {resumo.coracoes < 5 && (
+          <div className="pop-acoes">
+            <Link className="botao botao-pequeno" href="/praticar">
+              Recuperar corações
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <div id={`xp-${local}`} popover="auto" className="pop" aria-label="XP">
+        <p className="pop-numero pop-xp">
+          <Icone nome="raio" /> {resumo.xpTotal}
+          <span>XP no total</span>
+        </p>
+        <p className="ajuda">XP são seus pontos de estudo. Cada lição nova vale 20 XP, e cada prática, 10 (até 3 práticas por dia).</p>
+      </div>
 
       <div id={`meta-${local}`} popover="auto" className="pop" aria-label="Meta do dia">
         <p className="pop-titulo">Meta do dia: {NOMES_META[resumo.meta]?.nome}</p>
         <p>
-          {feitas} de {resumo.meta} {plural(resumo.meta, "sessão", "sessões")}
+          {feitas} de {resumo.meta} {plural(resumo.meta, "estudo", "estudos")}
         </p>
         <div className="progresso-meta" aria-hidden="true">
           <span style={{ width: `${(feitas / resumo.meta) * 100}%` }} />
         </div>
-        <p className="ajuda">{faltam <= 0 ? "Meta cumprida! Volte amanhã para manter a sequência." : `${faltam === 1 ? "Falta 1 sessão" : `Faltam ${faltam} sessões`} hoje.`}</p>
+        <p className="ajuda">{faltam <= 0 ? "Meta cumprida! Volte amanhã para manter a sequência." : `${faltam === 1 ? "Falta 1 estudo" : `Faltam ${faltam} estudos`} hoje.`}</p>
+        <p className="ajuda">Uma lição, uma prática ou uma revisão: cada uma conta como 1 estudo.</p>
         <div className="pop-acoes">
           {faltam > 0 && (
             <Link className="botao botao-pequeno" href="/aprender">
@@ -151,7 +178,7 @@ export function CartaoMeta({ resumo }: { resumo: Pick<ResumoAluno, "meta" | "ses
         Meta do dia: {NOMES_META[resumo.meta]?.nome}
       </h3>
       <p>
-        {feitas} de {resumo.meta} {plural(resumo.meta, "sessão", "sessões")}
+        {feitas} de {resumo.meta} {plural(resumo.meta, "estudo", "estudos")}
         {feitas >= resumo.meta ? ". Meta cumprida!" : ""}
       </p>
       <div className="progresso-meta" role="progressbar" aria-label="Meta do dia" aria-valuemin={0} aria-valuemax={resumo.meta} aria-valuenow={feitas}>

@@ -5,7 +5,7 @@ import { sair } from "@/app/(conta)/acoes";
 import { BotaoEnviar } from "@/componentes/formulario";
 import { Icone } from "@/componentes/Icone";
 import { InstalarApp } from "@/componentes/InstalarApp";
-import { CartaoMeta, Moldura, MolduraCarregando } from "@/componentes/Moldura";
+import { CalendarioSemana, CartaoMeta, Moldura, MolduraCarregando } from "@/componentes/Moldura";
 import { DIAS_DE_VISITANTE } from "@/modulos/conta/conta";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
@@ -18,10 +18,14 @@ export const metadata: Metadata = { title: "Perfil" };
 async function Perfil() {
   const { aluno, perfil } = await obterPerfilAtual();
   const [resumo, conquistas] = await Promise.all([resumoDoAluno(banco(), perfil), progressoDoAluno(banco(), perfil.id)]);
+  const ordenadas = [...conquistas].sort((a, b) => Number(b.conquistada) - Number(a.conquistada) || b.atual / b.meta - a.atual / a.meta);
+  const visiveis = ordenadas.filter((c) => c.conquistada || c.atual > 0).slice(0, Math.max(6, ordenadas.filter((c) => c.conquistada).length));
+  const recolhidas = ordenadas.filter((c) => !visiveis.includes(c));
+  // Sem nenhuma em andamento (conta nova), mostra as três primeiras para dar ideia do que existe.
+  if (visiveis.length === 0) visiveis.push(...recolhidas.splice(0, 3));
   return (
     <Moldura atual="perfil" resumo={resumo}>
-      <h1>{perfil.nome || "Seu perfil"}</h1>
-      {aluno.email && <p className="ajuda mb-4 break-all">{aluno.email}</p>}
+      <h1 className="mb-4">{perfil.nome || "Seu perfil"}</h1>
       <div className="pilha">
         {perfil.visitante && <AvisoVisitante criadoEm={perfil.criadoEm} fuso={perfil.fuso} />}
         <div className="estatisticas">
@@ -44,35 +48,35 @@ async function Perfil() {
         <p className="ajuda">
           Hoje: {resumo.xpHoje} XP. Maior sequência: {resumo.maiorSequencia} {resumo.maiorSequencia === 1 ? "dia" : "dias"}.
         </p>
-        <CartaoMeta resumo={resumo} />
+        {/* No desktop, a meta e a semana já ficam no painel ao lado: aqui, só no celular. */}
+        <div className="so-celular pilha">
+          <CartaoMeta resumo={resumo} />
+          <div className="cartao">
+            <h3>Esta semana</h3>
+            <CalendarioSemana semana={resumo.semana} />
+          </div>
+        </div>
 
         <section className="cartao" aria-labelledby="titulo-conquistas">
           <h2 id="titulo-conquistas">
             Conquistas <span className="contagem-conquistas">{conquistas.filter((c) => c.conquistada).length} de {conquistas.length}</span>
           </h2>
+          {/* Primeiro as conquistadas e as que já têm progresso; as que nem começaram ficam recolhidas. */}
           <ul className="conquistas">
-            {conquistas.map((c) => (
-              <li key={c.id} className={`conquista ${c.conquistada ? "" : "bloqueada"}`}>
-                <div className="medalha">
-                  <Icone nome={c.conquistada ? "trofeu" : "cadeado"} />
-                </div>
-                <span className="conquista-nome">{c.nome}</span>
-                <span className="conquista-descricao">{c.descricao}</span>
-                {c.conquistada ? (
-                  <span className="so-leitor">Conquistada.</span>
-                ) : c.meta > 1 ? (
-                  <>
-                    <span className="conquista-barra" aria-hidden="true">
-                      <span style={{ width: `${(c.atual / c.meta) * 100}%` }} />
-                    </span>
-                    <span className="conquista-progresso">
-                      {c.atual} de {c.meta}
-                    </span>
-                  </>
-                ) : null}
-              </li>
+            {visiveis.map((c) => (
+              <Conquista key={c.id} c={c} />
             ))}
           </ul>
+          {recolhidas.length > 0 && (
+            <details className="mais-conquistas">
+              <summary>Ver mais {recolhidas.length} conquistas</summary>
+              <ul className="conquistas">
+                {recolhidas.map((c) => (
+                  <Conquista key={c.id} c={c} />
+                ))}
+              </ul>
+            </details>
+          )}
         </section>
 
         <InstalarApp />
@@ -81,6 +85,7 @@ async function Perfil() {
 
         <section className="cartao pilha" aria-labelledby="titulo-conta">
           <h2 id="titulo-conta">Conta</h2>
+          {aluno.email && <p className="ajuda break-all">Entrou como {aluno.email}</p>}
           {!perfil.visitante && (
             <a className="botao botao-secundario" href="/api/perfil/exportacao" download>
               Exportar meu histórico
@@ -96,6 +101,32 @@ async function Perfil() {
         </section>
       </div>
     </Moldura>
+  );
+}
+
+type ProgressoConquista = Awaited<ReturnType<typeof progressoDoAluno>>[number];
+
+function Conquista({ c }: { c: ProgressoConquista }) {
+  return (
+    <li className={`conquista ${c.conquistada ? "" : "bloqueada"}`}>
+      <div className="medalha">
+        <Icone nome={c.conquistada ? "trofeu" : "cadeado"} />
+      </div>
+      <span className="conquista-nome">{c.nome}</span>
+      <span className="conquista-descricao">{c.descricao}</span>
+      {c.conquistada ? (
+        <span className="so-leitor">Conquistada.</span>
+      ) : c.meta > 1 ? (
+        <>
+          <span className="conquista-barra" aria-hidden="true">
+            <span style={{ width: `${(c.atual / c.meta) * 100}%` }} />
+          </span>
+          <span className="conquista-progresso">
+            {c.atual} de {c.meta}
+          </span>
+        </>
+      ) : null}
+    </li>
   );
 }
 

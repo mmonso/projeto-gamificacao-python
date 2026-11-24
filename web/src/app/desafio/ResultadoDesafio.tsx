@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Mascote } from "@/componentes/Mascote";
 import { marcasDo, type EstadoDesafio } from "@/componentes/licao/desafio";
 import { acertos, fraseDoPlacar, quadradinhos, tempoAteOProximo, textoParaCompartilhar, type Marca } from "@/modulos/desafio/desafio";
+import { guardarPlacarDeHoje } from "./placar-de-hoje";
 
 const NOME_MARCA: Record<Marca, string> = { certa: "acertou", dica: "acertou com ajuda", errada: "errou" };
 
@@ -26,6 +27,7 @@ export function ResultadoDesafio({ estado, comConta }: { estado: EstadoDesafio; 
     setPodeCompartilhar(typeof navigator.share === "function");
     setFalta(tempoAteOProximo());
     /* eslint-enable react-hooks/set-state-in-effect */
+    guardarPlacarDeHoje(estado.numero, quadradinhos(marcas));
     tituloRef.current?.focus({ preventScroll: true });
     const relogio = setInterval(() => setFalta(tempoAteOProximo()), 30_000);
     return () => clearInterval(relogio);

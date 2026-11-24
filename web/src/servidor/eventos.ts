@@ -23,6 +23,8 @@ export type NomeEvento =
   /** Mini-teste da unidade 1, antes de começar e depois de concluir: só acertos e total, sem as respostas. */
   | "miniteste_respondido"
   | "revisao_concluida"
+  /** "Algo errado nesta questão?": motivo de toque, exercício, contexto e, com conta, a sessão (para achar a resposta). */
+  | "questao_reportada"
   /** Desafio do dia, sempre sem aluno: `compartilhado` diz se veio de um link enviado por alguém. */
   | "desafio_iniciado"
   | "desafio_concluido";

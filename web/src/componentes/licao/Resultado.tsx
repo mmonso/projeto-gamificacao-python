@@ -3,10 +3,12 @@
 // na demonstração, o XP aparece como provisório (FL-01, passo 7).
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { comecarLicao } from "@/app/licao/acoes";
 import type { ResultadoConclusao } from "@/modulos/aprendizagem/contrato";
 import { textoDoResultadoDaLicao } from "@/modulos/aprendizagem/compartilhar";
 import { CONQUISTAS } from "@/modulos/gamificacao/textos";
+import { EscolherMeta } from "../EscolherMeta";
 import { Icone } from "../Icone";
 import { AvaliarLicao } from "./AvaliarLicao";
 import { Mascote } from "../Mascote";
@@ -115,16 +117,50 @@ export function TelaCelebracao({ celebracao, aoContinuar, som }: { celebracao: C
   );
 }
 
+/** Para onde o aluno vai depois do resultado: uma tela, ou a próxima lição, que começa direto. */
+type Destino = { pagina: string } | { licao: string };
+
+const CHAVE_XP_EXPLICADO = "sibi-xp-explicado";
+
+/** Explica o XP uma única vez por aparelho (design/MELHORIAS_UX.md, B5). */
+function ExplicacaoXp() {
+  const [mostrar] = useState(() => {
+    try {
+      if (localStorage.getItem(CHAVE_XP_EXPLICADO)) return false;
+      localStorage.setItem(CHAVE_XP_EXPLICADO, "1");
+      return true;
+    } catch {
+      return false;
+    }
+  });
+  if (!mostrar) return null;
+  return (
+    <p className="explicacao-xp">
+      <Icone nome="raio" pequeno /> XP são seus pontos de estudo: cada lição nova vale 20, e cada prática, 10.
+    </p>
+  );
+}
+
 export function Resultado({ conclusao, titulo, demo, som }: { conclusao: ResultadoConclusao; titulo: string; demo: boolean; som: boolean }) {
   const router = useRouter();
   const [fila, setFila] = useState<Celebracao[] | null>(null);
-  const [destino, setDestino] = useState("/aprender");
+  const [destino, setDestino] = useState<Destino>({ pagina: "/aprender" });
+  const [indo, comecarIda] = useTransition();
+  const [erroIda, setErroIda] = useState<string | undefined>();
   const tituloRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => tituloRef.current?.focus(), []);
 
-  function seguir(para: string) {
+  function ir(para: Destino) {
+    if ("pagina" in para) return router.push(para.pagina);
+    comecarIda(async () => {
+      const r = await comecarLicao(para.licao);
+      if (r?.erro) setErroIda(r.erro);
+    });
+  }
+
+  function seguir(para: Destino) {
     const celebracoes = celebracoesDe(conclusao);
-    if (celebracoes.length === 0) return router.push(para);
+    if (celebracoes.length === 0) return ir(para);
     setDestino(para);
     setFila(celebracoes);
   }
@@ -135,7 +171,7 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
         celebracao={fila[0]}
         som={som}
         aoContinuar={() => {
-          if (fila.length === 1) router.push(destino);
+          if (fila.length === 1) ir(destino);
           setFila(fila.slice(1));
         }}
       />
@@ -143,6 +179,7 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
   }
 
   const metaCumprida = conclusao.meta.cumpridaAgora;
+  const metaFeita = metaCumprida || conclusao.meta.feitas >= conclusao.meta.meta;
   const perfeita = conclusao.total > 0 && conclusao.acertosPrimeira === conclusao.total;
   const acendeu = !demo && conclusao.sequenciaAumentou && conclusao.sequencia > 0;
   // Cartões sem informação somem: XP zerado pelo limite diário de prática e sequência na demonstração.
@@ -204,6 +241,25 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
           </div>
         )}
       </div>
+      {mostrarXp && <ExplicacaoXp />}
+      {conclusao.aprendidos && conclusao.aprendidos.length > 0 && (
+        <div className="aprendidos">
+          <p className="rotulo-bloco">Hoje você aprendeu</p>
+          <ul>
+            {conclusao.aprendidos.map((nome) => (
+              <li key={nome}>
+                <Icone nome="check" pequeno /> {nome}
+              </li>
+            ))}
+          </ul>
+          {!demo && conclusao.proxima && (
+            <p className="na-proxima">
+              <strong>Na próxima:</strong> {conclusao.proxima.titulo}
+            </p>
+          )}
+        </div>
+      )}
+      {demo && <EscolherMeta />}
       {demo && <p>Crie uma conta para salvar este XP, começar sua sequência e liberar a próxima lição.</p>}
       {!demo && (metaCumprida || conclusao.meta.feitas < conclusao.meta.meta) && (
         <div className={`meta-resultado ${metaCumprida ? "cumprida" : ""}`}>
@@ -211,15 +267,16 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
             <Icone nome="estrela" pequeno />
             {metaCumprida
               ? "Meta do dia cumprida!"
-              : `Meta do dia: ${conclusao.meta.feitas} de ${conclusao.meta.meta} ${plural(conclusao.meta.meta, "sessão", "sessões")}`}
+              : `Meta do dia: ${conclusao.meta.feitas} de ${conclusao.meta.meta} ${plural(conclusao.meta.meta, "estudo", "estudos")}`}
           </p>
           <div className="progresso-meta" aria-hidden="true">
             <span style={{ width: `${porcentagemMeta}%` }} />
           </div>
         </div>
       )}
-      {!demo && conclusao.primeiraConclusao && conclusao.proximaLicaoId && <p className="mensagem-aviso">A próxima lição foi liberada.</p>}
       {conclusao.limitePratica && <p>Você já recebeu XP de prática três vezes hoje. Pode continuar praticando, sem XP.</p>}
+      {/* A avaliação vem antes dos botões: depois deles, no celular, ficava fora da tela (C1). */}
+      {conclusao.tipo === "principal" && conclusao.licaoId && <AvaliarLicao licaoId={conclusao.licaoId} demo={demo} />}
       <div className="acoes">
         {demo ? (
           <>
@@ -232,20 +289,30 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
           </>
         ) : conclusao.voltarSessaoId ? (
           <>
-            <button type="button" className="botao" onClick={() => seguir(`/sessao/${conclusao.voltarSessaoId}`)}>
+            <button type="button" className="botao" onClick={() => seguir({ pagina: `/sessao/${conclusao.voltarSessaoId}` })}>
               Voltar à lição
             </button>
-            <button type="button" className="botao botao-secundario" onClick={() => seguir("/aprender")}>
+            <button type="button" className="botao botao-secundario" onClick={() => seguir({ pagina: "/aprender" })}>
               Voltar à trilha
             </button>
           </>
+        ) : conclusao.tipo === "principal" && conclusao.proxima ? (
+          // Próxima lição direto daqui (C2). Com a meta do dia ainda aberta, ela é o caminho principal.
+          <div className={`acoes-proxima${metaFeita ? " invertida" : ""}`}>
+            <button type="button" className={metaFeita ? "botao botao-secundario" : "botao"} disabled={indo} onClick={() => seguir({ licao: conclusao.proxima!.id })}>
+              {indo ? "Abrindo…" : `Próxima lição: ${conclusao.proxima.titulo}`}
+            </button>
+            <button type="button" className={metaFeita ? "botao" : "botao botao-secundario"} disabled={indo} onClick={() => seguir({ pagina: "/aprender" })}>
+              Voltar à trilha
+            </button>
+          </div>
         ) : (
-          <button type="button" className="botao" onClick={() => seguir(conclusao.tipo === "principal" ? "/aprender" : "/praticar")}>
+          <button type="button" className="botao" onClick={() => seguir({ pagina: conclusao.tipo === "principal" ? "/aprender" : "/praticar" })}>
             Continuar
           </button>
         )}
+        {erroIda && <p className="mensagem-erro">{erroIda}</p>}
       </div>
-      {conclusao.tipo === "principal" && conclusao.licaoId && <AvaliarLicao licaoId={conclusao.licaoId} demo={demo} />}
       {!demo && conclusao.tipo === "principal" && conclusao.licaoId && (
         <CompartilharLicao titulo={titulo} acertosPrimeira={conclusao.acertosPrimeira} total={conclusao.total} sequencia={conclusao.sequencia} />
       )}

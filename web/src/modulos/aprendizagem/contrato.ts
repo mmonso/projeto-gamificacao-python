@@ -102,6 +102,10 @@ export type ResultadoConclusao = {
   conquistas: Conquista[];
   /** Unidade que esta conclusão completou, para a celebração (CA-44). */
   unidadeConcluida: { id: string; titulo: string } | null;
+  /** Lição principal: nomes dos conceitos que estrearam nela ("Hoje você aprendeu"). Ausente em resultados antigos. */
+  aprendidos?: string[];
+  /** Lição principal: a próxima da trilha, para "Na próxima" e o botão Próxima lição. */
+  proxima?: { id: string; titulo: string } | null;
 };
 
 export type ErroApi = {

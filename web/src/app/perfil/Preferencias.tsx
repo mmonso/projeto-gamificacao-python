@@ -72,7 +72,7 @@ export function Preferencias({ nome, meta, fuso, fusoPendente, som: somInicial }
         <select id="p-meta" name="meta" defaultValue={meta} onChange={() => formMeta.current?.requestSubmit()}>
           {[1, 2, 3].map((n) => (
             <option key={n} value={n}>
-              {NOMES_META[n].nome}: {n} {n === 1 ? "sessão" : "sessões"} por dia ({NOMES_META[n].tempo})
+              {NOMES_META[n].nome}: {n} {n === 1 ? "estudo" : "estudos"} por dia ({NOMES_META[n].tempo})
             </option>
           ))}
         </select>
