@@ -15,6 +15,7 @@ import { ReportarQuestao } from "@/componentes/licao/ReportarQuestao";
 import { Resultado } from "@/componentes/licao/Resultado";
 import { liberarSom, tocar } from "@/componentes/licao/som";
 import { Mascote } from "@/componentes/Mascote";
+import { TextoGlossario } from "@/componentes/TextoGlossario";
 import type { ErroApi, ResultadoConclusao, ResultadoSubmissao } from "@/modulos/aprendizagem/contrato";
 import type { Resposta } from "@/modulos/aprendizagem/corretor";
 import type { CartaoConceito as Cartao, ExercicioPublico } from "@/modulos/conteudo/esquema";
@@ -469,7 +470,9 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
                   <RespostaCorreta ex={exercicio} solucao={resultado.solucao} />
                 </div>
               )}
-              <p className="feedback-texto">{resultado.explicacao}</p>
+              <p className="feedback-texto">
+                <TextoGlossario texto={resultado.explicacao} />
+              </p>
               {!resultado.correta && !desafio && <p className="retorno-neutro">Este exercício volta no fim da lição.</p>}
               {resultado.perdeuCoracao && (
                 <p className="retorno-aviso">

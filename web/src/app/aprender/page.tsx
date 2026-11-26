@@ -96,6 +96,11 @@ function Unidade({ u, nome }: { u: UnidadeTrilha; nome: string }) {
           Unidade {u.ordem} · {feitas} de {u.licoes.length}
         </p>
         <h2 id={`unidade-${u.id}`}>{u.titulo}</h2>
+        {liberada && (
+          <Link href={`/caderno#${u.id}`} className="unidade-caderno" aria-label={`Caderno de conceitos da unidade ${u.ordem}`}>
+            <Icone nome="livro" />
+          </Link>
+        )}
         <span className="unidade-progresso" aria-hidden="true">
           <span style={{ width: `${(feitas / u.licoes.length) * 100}%` }} />
         </span>

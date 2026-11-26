@@ -104,9 +104,12 @@
 }
 
 @layer base {
+  /* Tamanho do texto escolhido no Perfil: a raiz cresce e tudo em rem acompanha (o corpo também é em rem). */
+  :root[data-texto="grande"] { font-size: 112.5%; }
+  :root[data-texto="maior"] { font-size: 125%; }
   body {
     font-family: var(--font-sans);
-    font-size: 17px;
+    font-size: 1.0625rem;
     line-height: 1.45;
     color: var(--texto);
     background: var(--fundo);
@@ -838,7 +841,7 @@
   .boas-vindas { justify-content: flex-start; }
   .boas-vindas-topo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
   .boas-vindas-topo .barra-progresso { flex: 1; }
-  .pular { background: none; border: 0; cursor: pointer; padding: 6px 4px; }
+  .pular-boas-vindas { flex: none; background: none; border: 0; cursor: pointer; padding: 6px 4px; }
   .boas-vindas-passo { display: grid; gap: 14px; text-align: left; }
   .boas-vindas-passo h1 { margin: 0; }
   .boas-vindas-passo .subtitulo { margin: 0; text-align: left; }
@@ -903,6 +906,82 @@
   .mais-conquistas { margin-top: 12px; }
   .mais-conquistas summary { cursor: pointer; font-weight: 800; color: var(--azul); padding: 6px 0; }
   .mais-conquistas .conquistas { margin-top: 10px; }
+
+  /* Caderno de conceitos */
+  .unidade-cabeca { padding-right: 64px; }
+  .unidade-caderno {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; color: #fff; background: rgba(255, 255, 255, .18);
+  }
+  .unidade-caderno:hover { background: rgba(255, 255, 255, .28); }
+  .busca-caderno { display: flex; align-items: center; gap: 10px; border: 2px solid var(--borda); border-radius: var(--raio); padding: 0 14px; background: var(--fundo-suave); }
+  .busca-caderno:focus-within { border-color: var(--azul); }
+  .busca-caderno .icone { flex: none; color: var(--texto-suave); }
+  .busca-caderno input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--texto); font: inherit; padding: 12px 0; outline: none; }
+  .caderno-unidade { --u: var(--verde); }
+  .caderno-unidade.u2 { --u: #2367c9; }
+  .caderno-unidade.u3 { --u: #6d4bc4; }
+  .caderno-unidade.u4 { --u: #c25e0a; }
+  .caderno-selo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--u); color: #fff; font-size: .9rem; }
+  .caderno-lista { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; }
+  .caderno-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 4px; border-radius: 10px; color: var(--texto); text-decoration: none; font-weight: 400; }
+  a.caderno-item:hover { background: var(--fundo-suave); }
+  a.caderno-item .icone { flex: none; color: var(--azul); }
+  .caderno-item.bloqueado { color: var(--texto-suave); }
+  .caderno-item.bloqueado .icone { flex: none; color: var(--bloqueado-icone); }
+  .caderno-descricao { display: block; font-size: .9rem; color: var(--texto-suave); line-height: 1.4; margin-top: 2px; }
+  a.conceito-nome { color: var(--texto); text-decoration: underline; text-decoration-color: var(--borda-forte); text-underline-offset: 3px; }
+
+  /* Escolha segmentada (tamanho do texto) */
+  .segmentado { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+  .segmento { border: 2px solid var(--borda); background: var(--fundo); color: var(--texto); border-radius: 12px; padding: 10px 6px; font: inherit; font-weight: 800; cursor: pointer; }
+  .segmento[aria-pressed="true"] { border-color: var(--azul); background: var(--azul-claro); color: var(--azul); }
+  .segmento.texto-grande { font-size: 1.1rem; }
+  .segmento.texto-maior { font-size: 1.22rem; }
+  /* Rótulos pequenos em caixa alta: nunca abaixo de .8rem (público de 30 a 60 anos) */
+  .unidade-cabeca .rotulo { font-size: .8rem; }
+
+  /* Lembrete diário na agenda */
+  .lembrete-agenda { display: grid; gap: 10px; text-align: left; width: 100%; }
+  .lembrete-agenda.compacto { border: 2px solid var(--borda); border-radius: var(--raio); padding: 14px 16px; }
+  .lembrete-titulo { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 900; font-size: 1.05rem; }
+  .lembrete-titulo .icone { color: var(--azul); }
+  .lembrete-agenda .ajuda { margin: 0; }
+  .lembrete-hora { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+  .lembrete-hora select { width: auto; }
+  .lembrete-botoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lembrete-botoes .botao { width: auto; flex: 1 1 140px; }
+  .lembrete-ok { display: flex; gap: 6px; align-items: center; color: var(--verde-texto); }
+
+  /* Meus erros recentes */
+  .lista-erros { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .erro-recente { border: 2px solid var(--borda); border-radius: var(--raio-pequeno); }
+  .erro-recente summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; justify-content: space-between; padding: 10px 12px; font-weight: 700; }
+  .erro-recente summary::-webkit-details-marker { display: none; }
+  .erro-recente summary::after { content: "+"; font-weight: 900; color: var(--azul); }
+  .erro-recente[open] summary::after { content: "−"; }
+  .erro-recente-corpo { display: grid; gap: 8px; padding: 0 12px 12px; }
+  .erro-recente-corpo .codigo, .erro-recente-corpo .saida { margin: 0; font-size: .9rem; }
+  .erro-recente-corpo form { margin: 0; }
+
+  /* Glossário: palavra que se explica ao toque e a página "Palavras do Python" */
+  .termo {
+    display: inline; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit; cursor: help;
+    text-decoration: underline dotted; text-decoration-color: var(--azul); text-decoration-thickness: 2px; text-underline-offset: 4px;
+  }
+  .termo[aria-expanded="true"] { color: var(--azul); }
+  .termo-definicao {
+    display: block; margin-top: 8px; padding: 8px 12px; border-left: 4px solid var(--azul); border-radius: 0 10px 10px 0;
+    background: var(--azul-claro); color: var(--texto); font-size: .95rem; font-weight: 600; line-height: 1.45;
+  }
+  .termo-definicao strong, .feedback-texto .termo-definicao strong { display: inline; }
+  .termo-exemplo { color: var(--texto-suave); }
+  .glossario { text-align: left; }
+  .lista-glossario { margin: 0; display: grid; gap: 10px; }
+  .lista-glossario div { border: 2px solid var(--borda); border-radius: var(--raio-pequeno); padding: 10px 14px; scroll-margin-top: 16px; }
+  .lista-glossario dt { font-weight: 900; color: var(--azul); }
+  .lista-glossario dd { margin: 2px 0 0; line-height: 1.5; }
+  .lista-glossario code { font-family: var(--fonte-jetbrains, monospace); font-size: .9em; }
 
   .acoes-proxima { display: grid; gap: 12px; }
   .acoes-proxima.invertida > :first-child { order: 2; }

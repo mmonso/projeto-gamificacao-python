@@ -1,6 +1,6 @@
 "use client";
 // Preferências do perfil (F-31): nome, meta diária, fuso horário confirmável e som.
-import { AlternarTema } from "@/componentes/Tema";
+import { AlternarTema, EscolherTamanhoTexto } from "@/componentes/Tema";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { BotaoEnviar, Mensagens } from "@/componentes/formulario";
 import { chamar } from "@/componentes/licao/motor";
@@ -88,6 +88,7 @@ export function Preferencias({ nome, meta, fuso, fusoPendente, som: somInicial }
       </div>
 
       <AlternarTema />
+      <EscolherTamanhoTexto />
 
       <form action={acaoFuso} className="campo">
         <label htmlFor="p-fuso">Fuso horário</label>

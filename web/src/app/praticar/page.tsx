@@ -10,13 +10,16 @@ import { NOMES_DEGRAU } from "@/modulos/gamificacao/dominio";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
 import { banco } from "@/servidor/db/cliente";
 import { resumoDoAluno } from "@/servidor/gamificacao/efeitos";
+import { errosRecentes } from "@/servidor/licoes/erros";
 import { estadoPraticar } from "@/servidor/licoes/revisao";
+import { BlocoCodigo } from "@/componentes/licao/Codigo";
+import { RespostaCorreta } from "@/componentes/licao/Exercicios";
 
 export const metadata: Metadata = { title: "Praticar" };
 
 async function Praticar() {
   const { perfil } = await obterPerfilAtual();
-  const [resumo, praticar] = await Promise.all([resumoDoAluno(banco(), perfil), estadoPraticar(banco(), perfil)]);
+  const [resumo, praticar, erros] = await Promise.all([resumoDoAluno(banco(), perfil), estadoPraticar(banco(), perfil), errosRecentes(banco(), perfil.id)]);
   const vazio = praticar.conceitos.length === 0;
 
   return (
@@ -82,17 +85,48 @@ async function Praticar() {
             </section>
           )}
 
+          {erros.length > 0 && (
+            <section className="cartao" aria-labelledby="titulo-erros">
+              <h2 id="titulo-erros">
+                Meus erros recentes <span className="contagem-conquistas">{erros.length}</span>
+              </h2>
+              <p className="ajuda mb-3">Errar é como se aprende. Toque num erro para ver a resposta certa e a explicação.</p>
+              <ul className="lista-erros">
+                {erros.map((e) => (
+                  <li key={e.exercicioId}>
+                    <details className="erro-recente">
+                      <summary>
+                        <span>{e.exercicio.enunciado}</span>
+                        {e.corrigido && <span className="selo-estado consolidando">Já acertou depois</span>}
+                      </summary>
+                      <div className="erro-recente-corpo">
+                        {e.exercicio.codigo && e.exercicio.tipo !== "completar_lacuna" && <BlocoCodigo codigo={e.exercicio.codigo} />}
+                        <p className="rotulo-bloco">Resposta certa</p>
+                        <RespostaCorreta ex={e.exercicio} solucao={e.solucao} />
+                        <p>{e.explicacao}</p>
+                        <BotaoComecar licaoId={e.licaoId} rotulo="Praticar esta lição" classe="botao botao-secundario botao-pequeno" />
+                      </div>
+                    </details>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section className="cartao">
             <h2>
               Seus conceitos <span className="contagem-conquistas">{praticar.conceitos.length} de {praticar.totalConceitos} vistos</span>
             </h2>
-            <p className="ajuda mb-3">
-              Cada acerto na revisão, sem dica, sobe um degrau: Visto, Praticando, Firmando e Consolidando. A revisão volta depois de 1, 3 e 7 dias; erros e dicas trazem o conceito de volta mais cedo.
-            </p>
+            <p className="ajuda mb-3">Acertar na revisão, sem dica, sobe um degrau. Toque num conceito para rever o cartão.</p>
+            <Link className="botao botao-secundario botao-pequeno mb-3" href="/caderno">
+              <Icone nome="livro" /> Abrir o caderno de conceitos
+            </Link>
             <ul className="lista-conceitos">
               {praticar.conceitos.map((c) => (
                 <li key={c.id}>
-                  <span className="conceito-nome">{c.nome}</span>
+                  <Link className="conceito-nome" href={`/caderno/${c.id}`}>
+                    {c.nome}
+                  </Link>
                   <span className="degraus" role="img" aria-label={`${NOMES_DEGRAU[c.degrau]}, degrau ${c.degrau} de 4`}>
                     {[1, 2, 3, 4].map((n) => (
                       <i key={n} className={n <= c.degrau ? "cheio" : ""} />

@@ -9,6 +9,7 @@ import type { ResultadoConclusao } from "@/modulos/aprendizagem/contrato";
 import { textoDoResultadoDaLicao } from "@/modulos/aprendizagem/compartilhar";
 import { CONQUISTAS } from "@/modulos/gamificacao/textos";
 import { EscolherMeta } from "../EscolherMeta";
+import { LembreteAgenda, lembreteCriado } from "../LembreteAgenda";
 import { Icone } from "../Icone";
 import { AvaliarLicao } from "./AvaliarLicao";
 import { Mascote } from "../Mascote";
@@ -139,6 +140,12 @@ function ExplicacaoXp() {
       <Icone nome="raio" pequeno /> XP são seus pontos de estudo: cada lição nova vale 20, e cada prática, 10.
     </p>
   );
+}
+
+/** Oferece o lembrete diário no resultado, até a pessoa criar um neste aparelho (D3). */
+function OfertaLembrete() {
+  const [oferecer] = useState(() => typeof window !== "undefined" && !lembreteCriado());
+  return oferecer ? <LembreteAgenda compacto /> : null;
 }
 
 export function Resultado({ conclusao, titulo, demo, som }: { conclusao: ResultadoConclusao; titulo: string; demo: boolean; som: boolean }) {
@@ -275,6 +282,7 @@ export function Resultado({ conclusao, titulo, demo, som }: { conclusao: Resulta
         </div>
       )}
       {conclusao.limitePratica && <p>Você já recebeu XP de prática três vezes hoje. Pode continuar praticando, sem XP.</p>}
+      {!demo && conclusao.tipo === "principal" && <OfertaLembrete />}
       {/* A avaliação vem antes dos botões: depois deles, no celular, ficava fora da tela (C1). */}
       {conclusao.tipo === "principal" && conclusao.licaoId && <AvaliarLicao licaoId={conclusao.licaoId} demo={demo} />}
       <div className="acoes">

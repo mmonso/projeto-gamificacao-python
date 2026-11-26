@@ -72,7 +72,7 @@ export function Introducao() {
         <div className="barra-progresso" role="progressbar" aria-label="Boas-vindas" aria-valuemin={1} aria-valuemax={3} aria-valuenow={passo + 1}>
           <span style={{ width: `${((passo + 1) / 3) * 100}%` }} />
         </div>
-        <button type="button" className="link-discreto pular" onClick={irParaLicao}>
+        <button type="button" className="link-discreto pular-boas-vindas" onClick={irParaLicao}>
           Pular
         </button>
       </div>

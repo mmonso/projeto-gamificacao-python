@@ -1,9 +1,11 @@
+"use client";
 // Cartão "Conceito novo": a regra em uma frase, um exemplo que roda e a saída, escondida até o aluno pedir.
 // Embaixo, o "Entenda melhor" fechado, para quem quiser mais explicação. Na lição, quem revela a saída é o
 // botão principal do rodapé ("Ver a saída"); no caderno de conceitos o cartão já chega com a saída à vista.
 import { useRef, useState } from "react";
 import { realcar } from "@/componentes/licao/Codigo";
 import { Icone } from "@/componentes/Icone";
+import { TextoGlossario } from "@/componentes/TextoGlossario";
 import { normalizarSaida } from "@/modulos/aprendizagem/digitar";
 import { traduzirErro } from "@/modulos/aprendizagem/nomes-de-erro";
 import type { CartaoConceito as Cartao, Entenda } from "@/modulos/conteudo/esquema";
@@ -153,7 +155,9 @@ export function CartaoConceito({ cartao, posicao, total, vendo, aoAbrirEntenda, 
       <h1 id="titulo-cartao" tabIndex={-1}>
         {cartao.nome}
       </h1>
-      <p className="regra-cartao">{cartao.regra}</p>
+      <p className="regra-cartao">
+        <TextoGlossario texto={cartao.regra} />
+      </p>
       <p className="rotulo-bloco">Exemplo</p>
       <pre className="codigo">
         <Exemplo cartao={cartao} />
@@ -174,7 +178,7 @@ export function CartaoConceito({ cartao, posicao, total, vendo, aoAbrirEntenda, 
           <p className="repare-cartao">
             <Icone nome="olho" />
             <span>
-              <strong>Repare:</strong> {cartao.repare}
+              <strong>Repare:</strong> <TextoGlossario texto={cartao.repare} limite={1} />
             </span>
           </p>
         </div>

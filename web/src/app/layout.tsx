@@ -3,6 +3,7 @@ import { JetBrains_Mono, Nunito } from "next/font/google";
 import { AvisoConexao } from "@/componentes/AvisoConexao";
 import { RegistrarApp } from "@/componentes/RegistrarApp";
 import { COR_DA_BARRA, SCRIPT_TEMA } from "@/modulos/aparencia/tema";
+import { SCRIPT_TEXTO } from "@/modulos/aparencia/texto";
 import "./globals.css";
 
 const nunito = Nunito({ variable: "--fonte-nunito", subsets: ["latin"], weight: ["400", "600", "700", "800", "900"] });
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // O script do tema muda data-tema antes da hidratação: a diferença no <html> é esperada.
     <html lang="pt-BR" className={`${nunito.variable} ${jetbrains.variable} antialiased`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA + SCRIPT_TEXTO }} />
       </head>
       <body>
         <a className="pular" href="#conteudo-principal">

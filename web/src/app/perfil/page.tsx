@@ -5,6 +5,7 @@ import { sair } from "@/app/(conta)/acoes";
 import { BotaoEnviar } from "@/componentes/formulario";
 import { Icone } from "@/componentes/Icone";
 import { InstalarApp } from "@/componentes/InstalarApp";
+import { LembreteAgenda } from "@/componentes/LembreteAgenda";
 import { CalendarioSemana, CartaoMeta, Moldura, MolduraCarregando } from "@/componentes/Moldura";
 import { DIAS_DE_VISITANTE } from "@/modulos/conta/conta";
 import { obterPerfilAtual } from "@/servidor/auth/sessao";
@@ -77,6 +78,10 @@ async function Perfil() {
               </ul>
             </details>
           )}
+        </section>
+
+        <section className="cartao">
+          <LembreteAgenda />
         </section>
 
         <InstalarApp />
