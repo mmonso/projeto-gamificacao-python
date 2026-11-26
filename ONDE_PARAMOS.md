@@ -92,6 +92,26 @@ conta em `web/.env.local`, `TESTE_CADASTRO_*`).
 - Limite conhecido: um visitante que entra com o Google ganha uma conta nova e perde o progresso de visitante, igual ao
   cadastro por e-mail. Ligar "Allow manual linking" no Supabase permitiria juntar os dois, se for preciso.
 
+**Melhorias de experiência, 24 a 26/11/2026** (lista e motivos em `design/MELHORIAS_UX.md`, todos os blocos feitos):
+- A: "Entenda melhor" em três partes (ideia, passo a passo numerado, erros comuns numa caixa vermelha com o
+  jeito certo, campo `certo` no `entenda.yaml`); botão principal "Ver a saída" antes de "Próximo conceito";
+  um cartão só antes do primeiro exercício (`string-aspas` estreia no u1-l1-e04).
+- B: boas-vindas em `/introducao` (programa, Python e mapa do curso, como funciona), com Pular; meta escolhida
+  no fim da primeira lição; resultado com "Hoje você aprendeu" e "Na próxima"; "estudos" no lugar de "sessões".
+- C: avaliação antes dos botões; "Próxima lição" direto; "Algo errado nesta questão?" (evento
+  `questao_reportada`, aparece no `db:dificuldade`); corações e XP tocáveis; revisão direto da trilha; rodapé
+  numa linha; perfil arrumado.
+- D: `/caderno` (conceitos com busca), `/glossario` e palavras sublinhadas que se explicam, lembrete na agenda
+  (Google ou .ics, sem servidor), "Meus erros recentes" no Praticar, tamanho do texto no Perfil.
+- E: **Python de verdade no aparelho do aluno.** Pyodide 314.0.8 (Python 3.14) em `web/public/pyodide/314.0.8/`,
+  rodando num worker dentro de um iframe `sandbox="allow-scripts"` (`/python/caixa`, origem opaca, CSP que só
+  deixa buscar `/python/` e `/pyodide/`). Corta programa após 5 s, limita a saída, bloqueia import, traduz
+  erros (`modulos/python/erros.ts`), `input()` pergunta na tela. "Experimente" no cartão de conceito (depois de
+  ver a saída) e `/laboratorio` (link no Praticar). Teste próprio: `node ferramentas/verificar_python.mjs`
+  (17 verificações, inclusive que a caixa não alcança API, cookies nem armazenamento do Sibi).
+- Servidor local em modo produção (`next start`) recusa sem `URL_DO_SITE` com https: para conferir telas, use o
+  `npm run dev` com `.next/dev` apagado.
+
 **Pendente da pesquisa do Duolingo, para decidir em outra rodada:**
 - Ação 6, dica ligada ao erro: precisa de conteúdo novo (2 ou 3 erros comuns por exercício).
 - Ação 8, quebra sem alarme com recuperação "3 sessões em até 2 dias": muda a regra da sequência no servidor. Pede teste de regra e decisão sobre o texto.

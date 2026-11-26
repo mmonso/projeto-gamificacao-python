@@ -983,6 +983,39 @@
   .lista-glossario dd { margin: 2px 0 0; line-height: 1.5; }
   .lista-glossario code { font-family: var(--fonte-jetbrains, monospace); font-size: .9em; }
 
+  /* Python de verdade: Experimente e Laboratório */
+  .experimente-abrir { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .experimente { display: grid; gap: 10px; border: 2px solid var(--azul-tint); border-radius: var(--raio); background: var(--azul-claro); padding: 14px; }
+  .experimente-titulo { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 900; color: var(--azul); }
+  .experimente-codigo {
+    width: 100%; font-family: var(--fonte-jetbrains, ui-monospace, monospace); font-size: max(16px, .95rem); line-height: 1.5;
+    background: var(--codigo-fundo); color: var(--codigo-texto); border: 1px solid var(--codigo-borda); border-radius: 12px;
+    padding: 12px 14px; resize: vertical; tab-size: 4; white-space: pre; overflow-x: auto;
+  }
+  .experimente-codigo:focus-visible { outline: 3px solid var(--foco, #ffc23d); outline-offset: 2px; }
+  .experimente-simbolos { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .experimente-simbolos button {
+    flex: none; min-width: 40px; height: 40px; border-radius: 10px; border: 2px solid var(--borda); background: var(--fundo);
+    color: var(--texto); font-family: var(--fonte-jetbrains, monospace); font-size: 1.05rem; font-weight: 700; cursor: pointer;
+  }
+  .experimente-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .experimente-acoes .botao { width: auto; }
+  .experimente-resultado { display: grid; gap: 8px; }
+  .experimente-saida { margin: 0; min-height: 2.6em; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .experimente-erro { border: 2px solid var(--vermelho-tint); border-left: 6px solid var(--vermelho); background: var(--vermelho-claro); border-radius: var(--raio-pequeno); padding: 10px 12px; }
+  .experimente-erro p { margin: 0; }
+  .experimente-erro-titulo { display: flex; align-items: center; gap: 8px; font-weight: 900; color: var(--vermelho-texto); margin-bottom: 4px !important; }
+  .experimente-erro details { margin-top: 6px; font-size: .85rem; color: var(--texto-suave); }
+  .experimente-erro code { font-family: var(--fonte-jetbrains, monospace); overflow-wrap: anywhere; }
+  .experimente-aviso { margin: 0; font-size: .9rem; color: var(--amarelo-texto); }
+  .experimente-entrada { display: grid; gap: 6px; font-weight: 700; }
+  .experimente-entrada-linha { display: flex; gap: 8px; }
+  .experimente-entrada-linha input { flex: 1; min-width: 0; font: inherit; font-size: max(16px, 1rem); }
+  .experimente-entrada-linha .botao { width: auto; }
+  .laboratorio { text-align: left; }
+  .dicas-laboratorio ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+  .dicas-laboratorio code { font-family: var(--fonte-jetbrains, monospace); font-size: .9em; }
+
   .acoes-proxima { display: grid; gap: 12px; }
   .acoes-proxima.invertida > :first-child { order: 2; }
 }

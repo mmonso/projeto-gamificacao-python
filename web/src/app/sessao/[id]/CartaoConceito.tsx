@@ -5,6 +5,7 @@
 import { useRef, useState } from "react";
 import { realcar } from "@/componentes/licao/Codigo";
 import { Icone } from "@/componentes/Icone";
+import { Experimente } from "@/componentes/python/Experimente";
 import { TextoGlossario } from "@/componentes/TextoGlossario";
 import { normalizarSaida } from "@/modulos/aprendizagem/digitar";
 import { traduzirErro } from "@/modulos/aprendizagem/nomes-de-erro";
@@ -137,9 +138,11 @@ type Props = {
   aoAbrirEntenda?: (conceitoId: string) => void;
   /** Caderno de conceitos: sem previsão e com o "Entenda melhor" já aberto. */
   consulta?: boolean;
+  /** Unidade do aluno, para o "Experimente" avisar de recursos que ainda não apareceram no curso. */
+  unidade?: number;
 };
 
-export function CartaoConceito({ cartao, posicao, total, vendo, aoAbrirEntenda, consulta = false }: Props) {
+export function CartaoConceito({ cartao, posicao, total, vendo, aoAbrirEntenda, consulta = false, unidade }: Props) {
   // A previsão existe só nesta tela: não é gravada nem enviada a ninguém.
   const [previsao, setPrevisao] = useState("");
   const palpite = previsao.trim();
@@ -181,6 +184,10 @@ export function CartaoConceito({ cartao, posicao, total, vendo, aoAbrirEntenda, 
               <strong>Repare:</strong> <TextoGlossario texto={cartao.repare} limite={1} />
             </span>
           </p>
+          {/* Depois de prever e ver a saída, dá para mexer no exemplo e rodar Python de verdade (E). */}
+          <div className="mt-4">
+            <Experimente codigoInicial={cartao.exemplo} unidade={unidade} />
+          </div>
         </div>
       ) : (
         // Preveja antes de ver (PRIMM, pesquisa do Duolingo ação 5): escrever o palpite é opcional, mas convida a pensar.

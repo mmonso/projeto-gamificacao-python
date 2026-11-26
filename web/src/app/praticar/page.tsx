@@ -54,6 +54,16 @@ async function Praticar() {
 
           <CartaoDesafio />
 
+          <Link className="cartao cartao-desafio" href="/laboratorio">
+            <span className="cartao-desafio-corpo">
+              <strong>Laboratório de Python</strong>
+              <span className="cartao-desafio-texto">Escreva o programa que quiser e rode Python de verdade, aqui no aparelho.</span>
+            </span>
+            <span className="cartao-desafio-jogar">
+              Abrir <Icone nome="seta" pequeno />
+            </span>
+          </Link>
+
           {resumo.coracoes < 5 ? (
             <CartaoCoracoes coracoes={resumo.coracoes} />
           ) : (

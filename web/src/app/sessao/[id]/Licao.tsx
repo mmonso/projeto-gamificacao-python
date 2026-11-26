@@ -386,6 +386,7 @@ export function Licao({ sessaoId, tipo, titulo, inicial, coracoesIniciais, semCo
             total={cartaoAberto.lista.length}
             vendo={cartaoAberto.vendo}
             aoAbrirEntenda={abrirEntenda}
+            unidade={Number(exercicio.id.match(/^u(\d+)/)?.[1]) || undefined}
           />
         )}
         {exercicio ? (

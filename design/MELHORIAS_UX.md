@@ -6,6 +6,10 @@ especialistas: design visual, ensino para adultos leigos, engenharia e seguranç
 
 Esforço: P = menos de 1 hora, M = meio dia, G = 1 dia ou mais.
 
+**Situação em 26/11/2026:** os blocos A a E foram feitos e publicados (resumo em `ONDE_PARAMOS.md`). Ficou de fora
+só o exercício "rode e mude um número" com correção automática (parte final de E), que pede um tipo de
+exercício novo no conteúdo.
+
 ## A. Cartão de conceito e "Entenda melhor"
 
 | # | O quê | Esforço |

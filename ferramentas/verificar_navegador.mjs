@@ -517,13 +517,16 @@ async function conta(browser) {
   });
   conferir(somAntes !== null && Boolean(rotuloSom), "o perfil tem o controle de som, com nome e estado anunciados", { somAntes, rotuloSom });
   if (somAntes !== null) {
-    await tabAte(page, marcarSom);
+    // O perfil tem muitos controles antes do som (lembrete, conquistas, instalar o app): limite maior de Tabs.
+    const alcancou = await tabAte(page, marcarSom, undefined, 160);
+    conferir(alcancou, "o controle de som é alcançável pelo Tab");
     await page.keyboard.press("Space");
     await espera(800);
     await page.reload({ waitUntil: "networkidle0" });
     const gravado = await lerSom();
     conferir(gravado !== somAntes, "alternar o som pelo teclado fica gravado depois de recarregar", { somAntes, gravado });
-    await tabAte(page, marcarSom);
+    // Volta o som ao estado inicial.
+    await tabAte(page, marcarSom, undefined, 160);
     await page.keyboard.press("Space");
     await espera(800);
   }

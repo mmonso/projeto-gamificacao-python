@@ -19,7 +19,8 @@ Todos os comandos rodam a partir da pasta indicada. No Windows, use o Git Bash o
 
 | Verificação | Comando | Passa quando |
 |---|---|---|
-| Testes unitários e de integração | `npx vitest run` | 237 testes passando, 0 falhas (33 arquivos) |
+| Testes unitários e de integração | `npx vitest run` | 249 testes passando, 0 falhas (36 arquivos) |
+| Python no navegador (caixa isolada) | `node ferramentas/verificar_python.mjs` (servidor em BASE) | 17 verificações, inclusive sem acesso à API, cookies e armazenamento |
 | Tipos | `npx tsc --noEmit` | Nenhuma saída |
 | Lint | `npm run lint` | Nenhum erro |
 | Build de produção | `npm run build` | Termina com `BUILD_EXIT=0` e lista as rotas |
